@@ -1,0 +1,72 @@
+<project name="Zeus" default="default" basedir="C:\projects\OpenSourceZeus" >
+
+  <description>
+    Zeus Agentbuilder toolkit (Open Source)
+  </description>
+
+  <property name="lib" location="lib" />
+  <property name="build" location="build" />
+  <property name="src" value="src" />
+  <property name="project-name" value="zeus" />
+  <property name="dist" value="dist" />
+  <property name="doc" value="doc" />
+  <property name="javadoc" value="${doc}/javadoc" />
+
+  <property name="gnu-regexp" value="${lib}\gnu-regexp.jar" />
+  <property name="jaxb" value="${lib}\jaxb-rt-1.0-ea.jar" />
+  <property name="icu4j" value="${lib}\icu4j.jar" />
+  <property name="jena" value="${lib}\jena.jar" />
+
+  <path id="run-path">
+    <pathelement location="${gnu-regexp}" />
+    <pathelement location="${jaxb}" />
+    <pathelement location="${icu4j}" />
+    <pathelement location="${jena}" />
+  </path>
+
+  <!--Targets-->
+
+  <target name="init" description="Intialise" >
+    <tstamp />
+    <mkdir dir="${build}" />
+  </target>
+
+  <target name="compile" depends="init" description="Compile" >
+    <javac srcdir="${src}" destdir="${build}">
+      <classpath>
+        <path refid="run-path" />
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="makejar" depends="compile" description="Make Jar file" >
+    <jar jarfile="${lib}/${project-name}.jar" basedir="${build}"/>
+  </target>
+
+  <target name="jarfile" depends="makejar,clean"
+   description="Standard Jar compilation" />
+
+  <target name="clean" description="Clean up" >
+    <delete dir="${build}" />
+    <delete dir="${dist}" />
+  </target>
+
+  <target name="default" depends="" description="Get user input" >
+    <input message="Enter target name: "
+     validargs="jarfile,javadoc,clean"
+     addproperty="target.name" />
+    <antcall target="${target.name}" />
+  </target>
+
+  <target name="javadoc" depends="" description="Make javadocs" >
+    <javadoc sourcepath="${src}" destdir="${javadoc}" access="private" >
+      <classpath>
+        <path refid="run-path" />
+      </classpath>
+      <packageset dir="${src}">
+        <include name="**" />
+      </packageset>
+    </javadoc>
+  </target>
+
+</project>

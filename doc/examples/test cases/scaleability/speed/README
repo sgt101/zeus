@@ -1,0 +1,101 @@
+ALL OF THIS STUFF IS HERE UNDER THIS LICENCE:
+/*
+* The contents of this file are subject to the BT "ZEUS" Open Source 
+* Licence (L77741), Version 1.0 (the "Licence"); you may not use this file 
+* except in compliance with the Licence. You may obtain a copy of the Licence
+* from $ZEUS_INSTALL/licence.html or alternatively from
+* http://www.labs.bt.com/projects/agents/zeus/licence.htm
+* 
+* Except as stated in Clause 7 of the Licence, software distributed under the
+* Licence is distributed WITHOUT WARRANTY OF ANY KIND, either express or 
+* implied. See the Licence for the specific language governing rights and 
+* limitations under the Licence.
+* 
+* The Original Code is within the package zeus.*.
+* The Initial Developer of the Original Code is British Telecommunications
+* public limited company, whose registered office is at 81 Newgate Street, 
+* London, EC1A 7AJ, England. Portions created by British Telecommunications 
+* public limited company are Copyright 1996-2001. All Rights Reserved.
+* 
+* THIS NOTICE MUST BE INCLUDED ON ANY COPY OF THIS FILE
+*/
+
+WHAT IS THIS
+------------
+It is a test to see how quickly two Zeus agents can ping/pong over a FIPA transport via
+an ACC agent which is mapping messages to and from them. And how long this can go on for.
+The answer is about 40 times a second, and indefinitely. It was written by Simon Thompson of 
+BTexact research.
+
+INSTRUCTIONS
+------------
+You will need two machines connected by a network, which are either within a firewall, or can see 
+each other over a fire wall. All addresses must be net resolvable. 
+On each machine the file contacts.txt must be set to contain the address of the other machine. This
+means that you will have to make sure that the example is run from different directories on each 
+machine, although it is possible to run from shared drives. For example on my normal machine (the 
+honourable, much loved, but obsolete and soon to be killed, tb-toledo- 132.146.209.68) the contacts.txt file is set
+to : 
+
+
+<alias_address>
+<zeus_name>
+    ping_agent
+</zeus_name>
+<aid>
+(agent-identifier 
+     :name PingAgent@132.146.209.235
+     :addresses (sequence http://132.146.209.235:61000/acc))
+</aid>
+</alias_address>
+
+
+
+whereas the machine I wanted to ping (the tatty, uselessly badly put together, hated and reviled student 
+project machine, tb-vader- 132.146.209.235) has a contacts.txt file that looks like 
+
+
+<alias_address>
+<zeus_name>
+    ping_agent
+</zeus_name>
+<aid>
+(agent-identifier 
+     :name PingAgent@132.146.209.68
+     :addresses (sequence http://132.146.209.68:61000/acc))
+</aid>
+</alias_address>
+
+
+
+So tb-toledo's ACC knows about PingAgent@132.146.209.235 and will forward any messages for "ping_agent" 
+to it via the address http://132.146.209.235:61000/acc. Whereas tb-vader's ACC knows about PingAgent@132.146.209.68 
+http://132.146.209.68:61000/acc. 
+
+Run the batch files *on each machine*:
+
+runServers - will launch the ANServer, the tnserver (not really needed, but the ACC will throw 
+a strop without it) and the ACC agent
+
+run2 - will launch the PingAgent@wherever
+runVis - will launch the facilitator an visualiser
+
+If nothing happens, bad luck, you have failed to set up your classpath, or not installed Java, or 
+failed to install Zeus properly. I will be happy to come and help you (subject to negotiations and
+mutally agreed terms): my rates are $3000 per day + expenses (travel, accom, insurance & misc) 
+minimun booking is 5 days, misc could be nasty (I have expensive tastes) 
+
+I am not joking, but...
+
+as an alternative to shelling out for my help you could always try mailing the Zeus mail list for help!
+
+If however a number of windows and GUI's appear you are in luck, and things are working  Move the button GUI from off the speedo GUI. Make sure that both agencies are running and 
+hit one of the buttons: observe the gui counting out the message exchange rates. 
+
+RESULTS
+-------
+On a twin 400Mhz PII with 1/2Gig RAM and a twin PIII 700 with 256Meg RAM over a 100 Mb ethernet 
+I observed messaging rates at about 18 per second.
+
+I didn't run this experiment for long because I didn't want to annoy everyone here, but I ran it 
+for long enough that several thousand messages were exchanged. 

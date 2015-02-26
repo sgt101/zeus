@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+
+<html>
+
+<head>
+<title>About Agent Name Servers</title>
+</head>
+
+
+<!-- DOCUMENT MAIN BODY -->
+<body>
+
+
+<h3>What is an Agent Name Server?</h3>
+
+An Agent Name Server (ANS) is a utility agent that provides a 'white pages' 
+service, matching agent identities to their actual network location. This role
+is analogous to the Domain Name Servers (DNS) that facilitate Internet 
+communication by translating names into I.P addresses. <br>
+The Zeus ANS is an inherently simple entity, consisting of a communication
+mechanism and a look-up table to hold the names and network locations of all
+the agents that register with it. This information is queried by any agent 
+needing to know the network address of another. <p>
+
+<h3>Connecting to a Name Server</h3>
+
+As the Visualiser does not maintain a registry of known agents it must obtain
+this information from the ANS before it can function properly. There are two ways
+in which the Visualiser can connect to an ANS:
+
+<ol>
+<li><b>Automatically</b> ... the Visualiser can be started from the command line
+with the <b>-quick</b> flag, this will instruct it to immediately connect to
+the ANS specified in its name server file. <br>
+<li><b>Manually</b> ... once the Visualiser has started it can be instructed to
+connect to an ANS by selecting the <b>Connect to Name Servers</b> option from
+the <b>File</b> menu. This will bring up a dialog listing all known name servers,
+from which the user can choose which to connect to.
+</ol>
+
+Once connected to an ANS the Visualiser will be informed of any changes to the 
+name server's registry, (i.e. if new agents appear or existing agents disappear).
+The Visualiser can break its connection with an ANS at any time through the
+<b>Disconnect from Name Servers</b> option from the <b>File</b> menu.
+
+</body>
+
+</html>

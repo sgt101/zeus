@@ -1,0 +1,64 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+
+<html>
+
+<head>
+<title>Saving Sessions</title>
+</head>
+
+
+<!-- DOCUMENT MAIN BODY -->
+<body>
+
+<h3>About the DbProxy Agent</h3>
+
+The information collected by the Visualiser can be saved to a file, to be
+loaded and replayed later. Session persistence is provided by a special
+utility agent called a <FONT COLOR="#FF0000"><i>DbProxy</i></FONT>, which
+in its simplest form can be started with the following syntax: <br>
+
+<pre>java zeus.agents.DbProxy <i>name</i> -s <i>serverfile</i> -p zeus.ext.FlatFile 
+</pre><p>
+
+where <i>name</i> is the identifying name of the DbProxy agent <br>
+and   <i>serverfile</i> contains the address of an Agent Name Server <p>
+
+The reference to <i>zeus.ext.FlatFile</i> instructs the DbProxy to save session 
+information into an ASCII text file, although it is also possible to save 
+sessions to relational databases, (see main documentation for details). <p>
+
+<h3>Saving Visualiser Sessions</h3>
+
+<ul>
+<li> Once a DbProxy is running a new session entry can be created by selecting the
+<b>Save Session</b> option from the <b>Playback</b> menu. <br>
+<li> A dialog will now appear asking for the identifying name of the Proxy
+agent that will store the session; enter its name in the <b>SelectDBProxy</b>
+field. <br>
+<li> You must now choose the name that will be used to identify this session,
+enter this into the <b>Select Table</b> field. This enables one agent to be
+responsible for storing several individual sessions.<br>
+<li> Once the session has been created all agent activity will be logged and
+stored by the DbProxy. The session can be closed by choosing the <b>Close
+Session</b> option from the <b>Playback</b> menu. <i>N.B.</i> Nothing will be
+written to the named file until this option is selected. <br>
+</ul>
+<p>
+
+<h3>Related Options</h3>
+
+<img src="../../../gifs/visualiser/rec.gif" hspace=16> The <b>Record</b> button
+provides a short-cut to the <b>Save Session</b> option. <p>
+
+Instructions for loading a previously saved session are listed
+<a href="../common/loadfromdb.html">here</a>. <p>
+
+Other options from the <b>Playback</b> menu enable previously saved sessions
+to be deleted through the <b>Delete Session</b> option. Alternatively, all the
+saved sessions stored by a particular agent can be cleared by selecting the
+<b>Purge Database</b> option. <p>
+
+
+</body>
+
+</html>

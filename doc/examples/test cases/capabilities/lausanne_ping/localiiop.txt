@@ -1,0 +1,10 @@
+<alias_address>
+<zeus_name>
+    ping_agent
+</zeus_name>
+<aid>
+ (agent-identifier 
+     :name PingAgent@132.146.209.235
+     :addresses (sequence iiop://132.146.209.235:1097/acc))
+</aid>
+</alias_address>

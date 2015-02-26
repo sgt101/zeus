@@ -1,0 +1,2 @@
+start java PCMaker -o pc.ont -s dns.db -gui zeus.agentviewer.AgentViewer -e DellPump
+start java -Xms100000000 -Xmx100000000 zsh.zsh pc.ont 0.2 batch1.scr 

@@ -1,0 +1,16 @@
+(action
+    (agent-identifier
+    :name df@foo.com
+    :addresses (sequence iiop://foo.com/acc))
+    (search 
+    (df-agent-description
+        :ontology (set meeting-scheduler)
+        :language (set FIPA-SL0 KIF)
+        :services (set
+        (service-description
+            :name profiling
+            :type meeting-scheduler-service)))
+    (search-constraints
+        :max-depth 2))))
+
+ 

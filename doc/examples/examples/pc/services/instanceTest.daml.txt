@@ -1,0 +1,7 @@
+<Cusine rdf:ID="cusine"> 
+	<condition>
+ <expression><xsd:string rdf:value="(and (and (= ?rest_quality :cusine.quality) ((< ?rest_quality 0) (:type vegetarian)))"/> </expression>
+	</condition> 
+</Cusine> 
+
+

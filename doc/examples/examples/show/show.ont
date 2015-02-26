@@ -1,0 +1,54 @@
+BEGIN_ONTOLOGY
+  BEGIN_PREAMBLE
+    :system ZEUS-Ontology-Editor
+    :version "1.2.2"
+  END_PREAMBLE
+  BEGIN_FACTS
+    BEGIN_FACT_ITEM
+      :name fortesting
+      :parent ZeusFact
+    END_FACT_ITEM
+    BEGIN_FACT_ITEM
+      :name again
+      :parent fortesting
+      BEGIN_ATTRIBUTE_LIST
+        BEGIN_ATTRIBUTE_ITEM
+          :name name13
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name name21
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name name28
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name name16
+          :type Integer
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+      END_ATTRIBUTE_LIST
+    END_FACT_ITEM
+    BEGIN_FACT_ITEM
+      :name Fact9
+      :parent ZeusFact
+    END_FACT_ITEM
+    BEGIN_FACT_ITEM
+      :name Fact10
+      :parent ZeusFact
+    END_FACT_ITEM
+    BEGIN_FACT_ITEM
+      :name Fact11
+      :parent ZeusFact
+    END_FACT_ITEM
+  END_FACTS
+END_ONTOLOGY

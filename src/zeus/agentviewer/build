@@ -1,0 +1,11 @@
+\rm *.class *.~jav *.dependency
+\rm task\*.class *.~jav *.dependency
+\rm resources\*.class *.~jav *.dependency
+\rm protocol\*.class *.~jav *.dependency
+\rm plansch\*.class *.~jav *.dependency
+\rm msghandler\*.class *.~jav *.dependency
+\rm mail\*.class *.~jav *.dependency
+\rm engine\*.class *.~jav *.dependency
+\rm acquaintances\*.class *.~jav *.dependency
+#javac AgentViewer.java
+#javac BasicAgentViewer.java

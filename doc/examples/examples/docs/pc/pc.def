@@ -1,0 +1,587 @@
+BEGIN_GENERATOR
+  BEGIN_PREAMBLE
+    :system "ZEUS-Agent-Generator"
+    :version "2.0"
+    :ontology ".:pc.ont"
+  END_PREAMBLE
+
+  BEGIN_AGENT_NAME_INDEX
+    AgentId4 NewPrinterMaker
+    AgentId3 PCMaker
+    AgentId2 MonitorMaker
+    AgentId1 MotherBoardMaker
+    AgentId0 PrinterMaker
+  END_AGENT_NAME_INDEX
+
+  BEGIN_AGENT_ICON_INDEX
+    AgentId4 "..:..:..:Zeus archive:1.2.1:gifs:agent.gif"
+    AgentId3 ".:gifs:computer.gif"
+    AgentId2 ".:gifs:monitor.gif"
+    AgentId1 ".:gifs:cpu.gif"
+    AgentId0 ".:gifs:printer.gif"
+  END_AGENT_ICON_INDEX
+
+  BEGIN_TASK_NAME_INDEX
+    AbstractTaskId8 MakeNewPrinter
+    AbstractTaskId7 SendMessage
+    AbstractTaskId6 MakeInkCartridge
+    AbstractTaskId5 MakeTonerCartridge
+    AbstractTaskId4 MakeInkjetPrinter
+    AbstractTaskId3 MakeLaserPrinter
+    AbstractTaskId2 MakeMotherBoard
+    AbstractTaskId1 MakeMonitor
+    AbstractTaskId0 MakeComputer
+  END_TASK_NAME_INDEX
+
+  BEGIN_AGENT_LIST
+    (:name AgentId4
+     :class ZeusAgent
+     :planner_width 1
+     :planner_length 20
+     :doublebook_fraction 0
+     :tasks (AbstractTaskId8
+            )
+    )
+    (:name AgentId3
+     :class ZeusAgent
+     :planner_width 10
+     :planner_length 30
+     :doublebook_fraction 0
+     :tasks (AbstractTaskId0
+            )
+     :initial_facts ((:type KeyBoard
+                      :id kb_uk
+                      :modifiers 0
+                      :attributes ((unit_cost 25)
+                                   (type UK)
+                                   (number 2000)
+                                  )
+                     )
+                     (:type KeyBoard
+                      :id kb_us
+                      :modifiers 0
+                      :attributes ((unit_cost 25)
+                                   (type US)
+                                   (number 2000)
+                                  )
+                     )
+                    )
+     :protocols ((:name "zeus.actors.graphs.ContractNetInitiator"
+                  :type Initiator
+                  :constraints ((:fact (:type ZeusFact
+                                        :id var257
+                                        :modifiers 1
+                                       )
+                                 :type 0
+                                 :strategy "zeus.actors.graphs.LinearInitiatorEvaluator"
+                                 :parameters ("step.default" "2" "noquibble.range" "2" "max.percent" "95" "min.percent" "75")
+                                )
+                               )
+                 )
+                )
+    )
+    (:name AgentId2
+     :class ZeusAgent
+     :planner_width 2
+     :planner_length 25
+     :doublebook_fraction 0
+     :tasks (AbstractTaskId1
+            )
+     :initial_facts ((:type CRT
+                      :id crt
+                      :modifiers 0
+                      :attributes ((unit_cost 60)
+                                   (number 2000)
+                                  )
+                     )
+                     (:type GFXadapter
+                      :id vga_card
+                      :modifiers 0
+                      :attributes ((unit_cost 10)
+                                   (type vga)
+                                   (number 2000)
+                                  )
+                     )
+                     (:type GFXadapter
+                      :id svga_card
+                      :modifiers 0
+                      :attributes ((unit_cost 10)
+                                   (type svga)
+                                   (number 2000)
+                                  )
+                     )
+                    )
+     :protocols ((:name "zeus.actors.graphs.ContractNetRespondent"
+                  :type Respondent
+                  :constraints ((:fact (:type ZeusFact
+                                        :id var268
+                                        :modifiers 1
+                                       )
+                                 :type 0
+                                 :strategy "zeus.actors.graphs.LinearRespondentEvaluator"
+                                 :parameters ("step.default" "2" "noquibble.range" "2" "max.percent" "125" "min.percent" "102")
+                                )
+                               )
+                 )
+                )
+     :acquaintances ((:name AgentId3
+                      :relation superior
+                     )
+                    )
+    )
+    (:name AgentId1
+     :class ZeusAgent
+     :planner_width 2
+     :planner_length 25
+     :doublebook_fraction 0
+     :tasks (AbstractTaskId2
+            )
+     :initial_facts ((:type CPU
+                      :id budget_cpus
+                      :modifiers 0
+                      :attributes ((unit_cost 25)
+                                   (type 300)
+                                   (number 1000)
+                                  )
+                     )
+                     (:type CPU
+                      :id medium_cpus
+                      :modifiers 0
+                      :attributes ((unit_cost 30)
+                                   (type 350)
+                                   (number 1000)
+                                  )
+                     )
+                     (:type CPU
+                      :id fast_cpus
+                      :modifiers 0
+                      :attributes ((unit_cost 35)
+                                   (type 400)
+                                   (number 1000)
+                                  )
+                     )
+                    )
+     :protocols ((:name "zeus.actors.graphs.ContractNetRespondent"
+                  :type Respondent
+                  :constraints ((:fact (:type ZeusFact
+                                        :id var98
+                                        :modifiers 1
+                                       )
+                                 :type 0
+                                 :strategy "zeus.actors.graphs.LinearRespondentEvaluator"
+                                 :parameters ("step.default" "2" "noquibble.range" "2" "max.percent" "115" "min.percent" "107")
+                                )
+                               )
+                 )
+                )
+     :acquaintances ((:name AgentId3
+                      :relation superior
+                     )
+                    )
+    )
+    (:name AgentId0
+     :class ZeusAgent
+     :planner_width 3
+     :planner_length 30
+     :doublebook_fraction 0
+     :tasks (AbstractTaskId6
+             AbstractTaskId5
+             AbstractTaskId4
+             AbstractTaskId3
+            )
+     :initial_facts ((:type PrinterCase
+                      :id case
+                      :modifiers 0
+                      :attributes ((unit_cost 150)
+                                   (type ink)
+                                   (number 2000)
+                                  )
+                     )
+                     (:type PrinterCase
+                      :id case3
+                      :modifiers 0
+                      :attributes ((unit_cost 175)
+                                   (type laser)
+                                   (number 2000)
+                                  )
+                     )
+                    )
+     :protocols ((:name "zeus.actors.graphs.ContractNetRespondent"
+                  :type Respondent
+                  :constraints ((:fact (:type ZeusFact
+                                        :id var288
+                                        :modifiers 1
+                                       )
+                                 :type 0
+                                 :strategy "zeus.actors.graphs.LinearRespondentEvaluator"
+                                 :parameters ("step.default" "2" "noquibble.range" "2" "max.percent" "130" "min.percent" "105")
+                                )
+                               )
+                 )
+                 (:name "zeus.actors.graphs.ContractNetInitiator"
+                  :type Initiator
+                  :constraints ((:fact (:type ZeusFact
+                                        :id var104
+                                        :modifiers 1
+                                       )
+                                 :type 0
+                                 :strategy "zeus.actors.graphs.DefaultInitiatorEvaluator"
+                                 :relations (subordinate)
+                                )
+                               )
+                 )
+                )
+     :acquaintances ((:name AgentId3
+                      :relation superior
+                     )
+                     (:name AgentId4
+                      :relation subordinate
+                     )
+                    )
+    )
+  END_AGENT_LIST
+
+  BEGIN_TASK_LIST
+    (:Primitive AbstractTaskId8
+     :time (1)
+     :cost (0)
+     :consumed_facts ((:type InkCartridge
+                       :id var171
+                       :modifiers 1
+                       :attributes ((unit_cost ?var172)
+                                    (number ?var173)
+                                   )
+                      )
+                      (:type PrinterCase
+                       :id var174
+                       :modifiers 1
+                       :attributes ((unit_cost ?var175)
+                                    (type ?var176)
+                                    (number ?var177)
+                                   )
+                      )
+                     )
+     :produced_facts ((:type Printer
+                       :id var178
+                       :modifiers 1
+                       :attributes ((unit_cost ?var179)
+                                    (type ?var180)
+                                    (number ?var181)
+                                   )
+                      )
+                     )
+    )
+    (:Rulebase AbstractTaskId7
+       (Rule0
+          ?var171 <- (Computer (kb_type ?var172) (cpu_speed ?var174) (unit_cost ?var173) (printer_type ?var175) (number ?var176) (monitor_type ?var177))
+          =>
+          (send_message (type inform) (content ?var171) (receiver PrinterMaker0))
+       )
+    )
+    (:Primitive AbstractTaskId6
+     :time (1)
+     :cost (0)
+     :produced_facts ((:type InkCartridge
+                       :id ink
+                       :modifiers 1
+                       :attributes ((unit_cost ?var198)
+                                    (number ?var199)
+                                   )
+                      )
+                     )
+    )
+    (:Primitive AbstractTaskId5
+     :time ((1 * ?toner.number))
+     :cost ((25 * ?toner.number))
+     :produced_facts ((:type TonerCartridge
+                       :id toner
+                       :modifiers 1
+                       :attributes ((unit_cost ?var201)
+                                    (number ?var202)
+                                   )
+                      )
+                     )
+    )
+    (:Primitive AbstractTaskId4
+     :time ((1 * ?printer.number))
+     :cost ((45 * ?printer.number))
+     :consumed_facts ((:type PrinterCase
+                       :id case
+                       :modifiers 17
+                       :attributes ((unit_cost ?var37)
+                                    (type ?printer.type)
+                                    (number ?printer.number)
+                                   )
+                      )
+                      (:type InkCartridge
+                       :id ink
+                       :modifiers 1
+                       :attributes ((unit_cost ?var204)
+                                    (number (10 * ?printer.number))
+                                   )
+                      )
+                     )
+     :produced_facts ((:type Printer
+                       :id printer
+                       :modifiers 1
+                       :attributes ((unit_cost ?var41)
+                                    (type inkjet)
+                                    (number ?var296)
+                                   )
+                      )
+                     )
+    )
+    (:Primitive AbstractTaskId3
+     :time ((1 * ?printer.number))
+     :cost ((50 * ?printer.number))
+     :consumed_facts ((:type PrinterCase
+                       :id case
+                       :modifiers 17
+                       :attributes ((unit_cost ?var48)
+                                    (type ?printer.type)
+                                    (number ?printer.number)
+                                   )
+                      )
+                      (:type TonerCartridge
+                       :id toner
+                       :modifiers 1
+                       :attributes ((unit_cost ?var208)
+                                    (number ?printer.number)
+                                   )
+                      )
+                     )
+     :produced_facts ((:type Printer
+                       :id printer
+                       :modifiers 1
+                       :attributes ((unit_cost ?var52)
+                                    (type laser)
+                                    (number ?var304)
+                                   )
+                      )
+                     )
+    )
+    (:Primitive AbstractTaskId2
+     :time (1)
+     :cost ((275 * ?mb.number))
+     :consumed_facts ((:type CPU
+                       :id cpu
+                       :modifiers 17
+                       :attributes ((unit_cost ?var128)
+                                    (type ?mb.type)
+                                    (number ?mb.number)
+                                   )
+                      )
+                     )
+     :produced_facts ((:type MotherBoard
+                       :id mb
+                       :modifiers 1
+                       :attributes ((unit_cost ?var288)
+                                    (type ?var290)
+                                    (number ?var289)
+                                   )
+                      )
+                     )
+    )
+    (:Primitive AbstractTaskId1
+     :time ((1 * ?monitor.number))
+     :cost ((if (?monitor.type == sgva) then (120 * ?monitor.number) else (100 * ?monitor.number)))
+     :consumed_facts ((:type CRT
+                       :id crt
+                       :modifiers 1
+                       :attributes ((unit_cost ?var64)
+                                    (number ?monitor.number)
+                                   )
+                      )
+                      (:type GFXadapter
+                       :id card
+                       :modifiers 1
+                       :attributes ((unit_cost ?var67)
+                                    (type ?monitor.type)
+                                    (number ?monitor.number)
+                                   )
+                      )
+                     )
+     :produced_facts ((:type Monitor
+                       :id monitor
+                       :modifiers 1
+                       :attributes ((unit_cost ?var71)
+                                    (type ?var316)
+                                    (number ?var315)
+                                   )
+                      )
+                     )
+    )
+    (:Primitive AbstractTaskId0
+     :time ((1 * ?computer.number))
+     :cost ((?computer.number * 125))
+     :consumed_facts ((:type KeyBoard
+                       :id kb
+                       :modifiers 17
+                       :attributes ((unit_cost ?var75)
+                                    (type ?computer.kb_type)
+                                    (number ?computer.number)
+                                   )
+                      )
+                      (:type Printer
+                       :id printer
+                       :modifiers 1
+                       :attributes ((unit_cost ?var79)
+                                    (type ?computer.printer_type)
+                                    (number ?computer.number)
+                                   )
+                      )
+                      (:type Monitor
+                       :id monitor
+                       :modifiers 1
+                       :attributes ((unit_cost ?var83)
+                                    (type ?computer.monitor_type)
+                                    (number ?computer.number)
+                                   )
+                      )
+                      (:type MotherBoard
+                       :id board
+                       :modifiers 1
+                       :attributes ((unit_cost ?var132)
+                                    (type ?computer.cpu_speed)
+                                    (number ?computer.number)
+                                   )
+                      )
+                     )
+     :produced_facts ((:type Computer
+                       :id computer
+                       :modifiers 1
+                       :attributes ((kb_type ?var338)
+                                    (unit_cost ?var91)
+                                    (cpu_speed ?var337)
+                                    (printer_type ?var339)
+                                    (number ?var336)
+                                    (monitor_type ?var340)
+                                   )
+                      )
+                     )
+     :ordering ((:lhs ?kb
+                 :rhs ?printer
+                )
+                (:lhs ?kb
+                 :rhs ?monitor
+                )
+                (:lhs ?kb
+                 :rhs ?board
+                )
+               )
+    )
+  END_TASK_LIST
+
+  BEGIN_GENERATION_PLAN
+    BEGIN_PREAMBLE
+      :platform "Windows"
+      :directory ".:test"
+    END_PREAMBLE
+    BEGIN_AGENT_LIST
+      (:id AgentId4
+       :generate false
+       :status Saved
+       :has_gui false
+       :dns_file "dns.db"
+      )
+      (:id AgentId3
+       :generate false
+       :status Saved
+       :has_gui true
+       :zeus_external "DellPump"
+       :dns_file "dns.db"
+      )
+      (:id AgentId2
+       :generate false
+       :status Saved
+       :has_gui false
+       :dns_file "dns.db"
+      )
+      (:id AgentId1
+       :generate false
+       :status Saved
+       :has_gui false
+       :dns_file "dns.db"
+      )
+      (:id AgentId0
+       :generate false
+       :status Saved
+       :has_gui false
+       :dns_file "dns.db"
+      )
+    END_AGENT_LIST
+    BEGIN_TASK_LIST
+      (:id AbstractTaskId8
+       :generate false
+       :status Saved
+       :external null
+      )
+      (:id AbstractTaskId7
+       :generate false
+       :status Saved
+       :external null
+      )
+      (:id AbstractTaskId6
+       :generate false
+       :status Saved
+       :external null
+      )
+      (:id AbstractTaskId5
+       :generate false
+       :status Saved
+       :external null
+      )
+      (:id AbstractTaskId4
+       :generate false
+       :status Saved
+       :external null
+      )
+      (:id AbstractTaskId3
+       :generate false
+       :status Saved
+       :external null
+      )
+      (:id AbstractTaskId2
+       :generate false
+       :status Saved
+       :external null
+      )
+      (:id AbstractTaskId1
+       :generate false
+       :status Saved
+       :external null
+      )
+      (:id AbstractTaskId0
+       :generate false
+       :status Saved
+       :external null
+      )
+    END_TASK_LIST
+    BEGIN_NAMESERVER_LIST
+      (:name Nameserver2
+       :is_root true
+       :has_gui false
+       :time_grain 0.5
+      )
+    END_NAMESERVER_LIST
+    BEGIN_FACILITATOR_LIST
+      (:name Facilitator2
+       :period 5.00
+       :has_gui false
+       :dns_file "dns.db"
+      )
+    END_FACILITATOR_LIST
+    BEGIN_VISUALISER_LIST
+      (:name Visualiser2
+       :has_gui false
+       :dns_file "dns.db"
+      )
+    END_VISUALISER_LIST
+    BEGIN_DBPROXY_LIST
+      (:name DbProxy0
+       :has_gui false
+       :dns_file "dns.db"
+      )
+    END_DBPROXY_LIST
+  END_GENERATION_PLAN
+END_GENERATOR

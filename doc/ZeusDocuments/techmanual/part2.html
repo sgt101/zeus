@@ -1,0 +1,169 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>The Zeus Technical Manual</title>
+<LINK REL="STYLESHEET" TYPE="text/css" HREF="zeusdoc.css">
+</head>
+
+<body>
+
+<table width=100% border=0>
+<tr>
+<td><h4>The Zeus Agent Building Toolkit </h4></td>
+<td align=right class="text">Technical Manual</td>
+</tr>
+</table>
+<br>
+<br>
+
+<table border=1 cellspacing=0 width=100% class="smalltext">
+<tr>
+<td width=10%><a class="smalltextlink" href="TOC.html">Contents</a></td>
+<td width=12%><a class="smalltextlink" href="part1.html">Introduction</a></td>
+<td width=12%><b>Zeus Philosophy</b></td>
+<td width=12%><a class="smalltextlink" href="part3.html">Zeus Architecture</a></td>
+<td width=12%><a class="smalltextlink" href="part4.html">Communication</a></td>
+<td width=12%><a class="smalltextlink" href="part5.html">Coordination</a></td>
+<td width=12%><a class="smalltextlink" href="part6.html">Planning and<br>Task Execution</a></td>
+<td width=13%><a class="smalltextlink" href="part7.html">External<br>Applications</a></td>
+</tr>
+</table>
+<br>
+<br>
+
+<h3><a name="1"></a>2  The Zeus Design Philosophy</h3>
+<p class="text">The aim of the ZEUS project was to facilitate the rapid development
+  of new multi-agent applications by abstracting into a toolkit the common principles
+  and components underlying some existing multi-agent systems. The idea was to
+  create a relatively general purpose and customisable, collaborative agent building
+  toolkit that could be used by software engineers with only basic competence
+  in agent technology to create functional multi-agent systems.  Thus, our design
+  philosophy was to encapsulate the following principles:</p>
+<li><p class="text">  Firstly,
+  the toolkit should clearly delineate between <i>domain-level</i> problem solving
+  and <i>agent-level</i> functionality. The latter covers the application-independent
+  multi-agent issues such as communication, co-ordination, task execution and
+  monitoring, exception handling, etc. while the former covers the acquisition,
+  representation and use of domain-specific knowledge in problem solving. The
+  intention being with the agent-level functionality provided, the developers
+  could concentrate on implementing the domain-specific problem solving abilities
+  of their agents.</p>
+<li><p class="text">  Secondly,
+  use of the toolkit should be based on the 'visual programming' paradigm. Hence
+  the toolkit would support the agent creation process by providing structured
+  menus and tables that would enable application developers to configure the functionality
+  and modalities required of their agents as simply as possible.</p>
+<li><p class="text">  Thirdly,
+  the toolkit should support an open design to ensure it is easily extensible.
+  Thus, expert users should be able to easily add to the library of agent level
+  components, and configure new agents using a combination of user-defined and
+  system-supplied components.</p>
+<li><p class="text">  Fourthly,
+  we intended to utilise ‘standardised’ technology wherever feasible, or be designed
+  with standardisation in mind. We felt that standardisation was essential was
+  for the industrial uptake of agent technology. This way, we envisaged components
+  which could later be replaced with little difficulty by ‘more standardised’
+  components. This is typified by our adoption of the most 'standardised' agent
+  communication language currently available.</p>
+<br>
+<br>
+
+<h4>ZEUS Functional Requirements</h4>
+<p class="text">Having briefly described our design philosophy, we now consider
+  the requirements from the viewpoint of a user of the toolkit. Viewed from a
+  user-centred perspective, it was required that the toolkit allow users to</p>
+<ul class="text">
+  <li> <i>configure</i> a number of different agents of varying functionality and behaviour;</p>
+  <li> <i>organise</i> the agents in whatever manner using system-supplied organisational relationships;</p>
+  <li> <i>imbue</i> each agent with selected system-supplied and/or user-defined communicative and co-ordination mechanisms;</p>
+  <li> <i>supply</i> each agent with the appropriate application-specific problem solving code; and</p>
+  <li> automatically <i>generate</i> the executables for the agents.</p>
+</ul>
+<p class="text">In addition, we also felt the toolkit should provide:</p>
+<ul class="text">
+  <li> predefined information discovery agents such as nameserver and facilitator agents
+  <li> extensive facilities for visualising and debugging societies of ZEUS agents
+</ul>
+
+<br>
+<br>
+
+<h4>ZEUS Agent Assumptions</h4>
+<p class="text">It is important to summarise at this point some fundamental
+  assumptions made about the type of agents whose creation the toolkit is designed
+  to facilitate, and also to describe the typical application domains of these
+  agents.  The principal assumptions made regarding the agent behaviour are that
+  the agents are:</p>
+<ol class="text">
+  <li> deliberative, goal-directed and rational;</p>
+  <li> always truthful when dealing with other agents;</p>
+  <li> versatile, i.e. can have many goals and can engage in a variety of tasks; and</p>
+  <li> temporally continuous, i.e. have a well-defined lifecycle rather than being transient.</p>
+</ol>
+
+<p class="text">The agents should be deliberative in the sense that they
+  should explicitly reason about their actions in terms of what goals to pursue,
+  when to adopt new goals and when to abandon existing goals. In addition, the
+  requirement for goal-directed behaviour implies the agents only select actions
+  that they expect in some way to advance the attainment of their desired goals.
+  Furthermore, they only abandon goals when certain either that they cannot achieve
+  the goals or that the motivations for achieving the goals no longer hold. The
+  rationality assumption implies the agents adopt only actions that they expect
+  to maximise their expected utility.  That is, given a choice of actions, an
+  agent would select a subset that it expects can be performed given the available
+  time and resources, and further, that should lead to the maximum possible benefits.</p>
+
+<br>
+<br>
+
+<h4>Typical Application Domains for ZEUS Agents</h4>
+<p class=MsoList style='
+text-align:justify;'>The typical application areas of the agents were expected
+  to be task-oriented domains such as service provisioning, resource/process management,
+  and supply chain management. A number of characteristics of these domains are
+  important:</p>
+<ol class="text">
+<li> firstly, given a goal, an agent creates a plan of action to achieve the goal, and such
+  plans require explicit reasoning about the preconditions and effects of domain
+  actions given limited time and other resources;
+<li> secondly, typical problem solving requires co-operation with other agents;
+<li> thirdly, while the environment of the agent is dynamic, the rate of change of the environment
+  is at least an order of magnitude less than the reasoning time of the agent.
+  That is, there is a less than five percent chance that the external conditions
+  on which a plan of action is based will change while an agent is in the process
+  of creating the plan; and
+<li> finally, the role of agents in such domains is typically to reason about how and when
+  to configure, activate or deactivate external systems that perform the real
+  work in the domain. Thus, domain problem solving is not really embedded within
+  the agent <i>per se</i> but external to it.  The agent, in effect, possesses
+  a logical model of the external system that it uses in making control and management
+  decisions about the system.
+</ol>
+
+<p class="text">The next section describes the ZEUS toolkit that was
+  developed to meet the above requirements. In subsequent sections we provide
+  an example of the use of the toolkit, and then proceed to describe the design
+  and implementation of the main components of ZEUS agents. <br>
+<br>
+ You may also find it useful to consult the accompanying case study documents, 
+ which describe how the packaged example applications were built. </p>
+
+<br>
+
+<br>
+<br>
+<table border=1 cellspacing=0 width=100% class="smalltext">
+<tr>
+<td width=10%><a class="smalltextlink" href="TOC.html">Contents</a></td>
+<td width=12%><a class="smalltextlink" href="part1.html">Introduction</a></td>
+<td width=12%><b>Zeus Philosophy</b></td>
+<td width=12%><a class="smalltextlink" href="part3.html">Zeus Architecture</a></td>
+<td width=12%><a class="smalltextlink" href="part4.html">Communication</a></td>
+<td width=12%><a class="smalltextlink" href="part5.html">Coordination</a></td>
+<td width=12%><a class="smalltextlink" href="part6.html">Planning and<br>Task Execution</a></td>
+<td width=13%><a class="smalltextlink" href="part7.html">External<br>Applications</a></td>
+</tr>
+</table>
+
+</body>
+</html>

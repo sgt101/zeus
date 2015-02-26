@@ -1,0 +1,384 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage Express 2.0">
+<title>About ZEUS v1.03b</title>
+<!-- DOCUMENT MAIN BODY -->
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<p align="center"><img src="gifs/visualiser/logo.jpg" hspace="8"
+width="320" height="180"> </p>
+
+<p align="center">Version 1.03b - May 2000. © 1996-9 <a
+href="http://www.bt.com/">British Telecommunications Plc.</a> </p>
+
+<h3>Introduction</h3>
+
+<p>You have at your fingertips the ZEUS Agent Building Toolkit -
+an integrated development environment for creating multi-agent
+systems. It is the result of several years' work by members of
+the BT Labs' Intelligent Systems Research Group. </p>
+
+<p>It is also the product of an ongoing open source effort under
+this license. <a
+href="https://sourceforge.net/projects/ZeusAgent/">This ZeusAgent
+page </a>at sourceforge should give you some more information on
+what we are up to, and also access to resources such as bug
+fixing and support for your vital technical questions. </p>
+
+<p>So far ZEUS has been used on several projects at BT and by a
+number of external groups. There experiences have driven the
+evolution of the toolkit, and contributed to the system that you
+have today. However, we are keen to continue the development
+process so: </p>
+
+<ul>
+    <li>Do the development tools facilitate the rapid engineering
+        of agent applications? If not - how can the development
+        methodology be improved? </li>
+    <li>Are the prewritten agent components robust and useful? Do
+        they function efficiently and correctly? If not, how can
+        they be improved? </li>
+    <li>Are the agents provided by ZEUS suitable for a variety of
+        distributed applications? And if not, what features need
+        to be added? </li>
+</ul>
+
+<p>Please take the time to complete<a
+href="https://sourceforge.net/survey/survey.php?group_id=6593&amp;survey_id=10565">
+this survey</a>. </p>
+
+<p>News and updates can be found at the <a
+href="http://www.labs.bt.com/projects/agents/zeus/index.htm">ZEUS
+project homepage</a>. </p>
+
+<h4>Version History</h4>
+
+<pre>
+0.5   Oct 97    ZEUS prototype (BCS Computing Award winner)
+1.0   May 99    The first public release of ZEUS
+1.01  Sept 99   Maintenance release
+1.02  Nov 99    First Open Source Release
+1.03b May 00    Maintenance release</pre>
+
+<pre>1.04  XXX XX 	Putative release for this page
+</pre>
+
+<p><br>
+</p>
+
+<h4>What's New since Version 1.00</h4>
+
+<ul>
+    <li>Bug fixes </li>
+    <li>Performance Enhancements </li>
+    <li>New Case Study - The Maze Solver </li>
+    <li>JavaDoc documentation included </li>
+    <li>Online help added to Agent Generator tool </li>
+</ul>
+
+<p><br>
+</p>
+
+<hr width="50%">
+
+<h3>Installation</h3>
+
+<p>The file you have unpacked to obtain this Readme file contains
+one other file: an 'InstallShield' self-extracting archive
+containing the ZEUS toolkit. To extract the toolkit you must have
+a <a href="http://www.javasoft.com/products/jdk/1.2/">Java 1.2</a>
+(aka Java2) runtime environment installed on your system. ZEUS is
+then installed using the following command: </p>
+
+<pre>java zeusinstall</pre>
+
+<p><strong><u>Ensure that the current directory '.' appears in
+your CLASSPATH, otherwise the Java interpreter will not be able
+to run the installer</u></strong> </p>
+
+<p>This will launch the 'InstallShield' installation program that
+should be familiar to PC users, then just follow the onscreen
+instructions. Most of the installation is automatic, although you
+will be prompted to choose where to install the toolkit. </p>
+
+<p>We recommend installing into a directory called 'zeus', (e.g.
+d:\zeus on PCs or /home/you/zeus on Unix). The install directory
+should be a complete path, i.e. including the partition letter on
+PCs, or relative to / on Unix. </p>
+
+<p><b>Important Note for Existing Users: </b>If you already have
+an earlier version of ZEUS installed on your machine the
+installer will overwrite it. So if you have made any changes to
+the examples applications - move them to another location for
+safe-keeping before installing the new version. </p>
+
+<h4>Changing your CLASSPATH</h4>
+
+<p>Before you can run the ZEUS example applications or the ZEUS
+Generator tool you must modify the CLASSPATH environment variable
+used by your Java interpreter so it can locate the ZEUS class
+files. This involves adding the following: </p>
+
+<pre>
+$INSTALL_DIR$/lib/zeus.jar:$INSTALL_DIR$/lib/gnu-regexp.jar
+</pre>
+
+<p>Where $INSTALL_DIR$ is the location you have chosen to install
+ZEUS; the instructions for this process are also displayed during
+the installation process. </p>
+
+<p>your classpath should look something like:</p>
+
+<p>.;..;c:\java1.2\bin\rt.jar;c:\zeus\lib\zeus.jar;c:\zeus\lib\gnu-regexp.jar</p>
+
+<p>In WindowsNT classpaths are changed by opening the System icon
+on the Control Panel. Switch to the Environment pane, and edit
+the Variable and Value fields to set the classpath. Check the
+lists of variable values before making a new entry, and append
+the zeus.jar and gnu-regexp.jar entries to any pre-existing
+setting. if you have no setting then make variable and value into
+something like: </p>
+
+<p>variable := classpath </p>
+
+<p>value := .;..;c:\java1.2\bin\rt.jar;c:\zeus\lib\zeus.jar;c:\zeus\lib\gnu-regexp.jar</p>
+
+<p>press Set, then Apply and then OK. </p>
+
+<p>You can also set a class path by typing </p>
+
+<p>set classpath = &quot;.;..;c:\java1.2\bin\rt.jar;c:\zeus\lib\zeus.jar;c:\zeus\lib\gnu-regexp.jar&quot;</p>
+
+<p>in a dos window. But please note: this setting will only apply
+to that window, and only for the life span of the window. </p>
+
+<p>In UNIX the classpath value is set in .cshrc/.bashrc/.tcsh
+file according to the syntax of those particular shell. Contact
+your sysadmin for help if you are unsure. </p>
+
+<p>Classpath values on Macs are a mystery to me. </p>
+
+<p><br>
+</p>
+
+<hr width="50%">
+
+<h3>The ZEUS Package</h3>
+
+<p>The installation process writes the following directories into
+the specified installation location: </p>
+
+<p><b>api </b><br>
+This directory contains JavaDoc documentation of the application
+programmer's interfaces provided within the top-level ZEUS
+packages. These packages contain classes that developers are
+likely to interact with when writing their own program code. The
+undocumented packages are unlikely to be of interest to
+developers. </p>
+
+<p><b>docs </b><br>
+The ZEUS documentation consists of several large files, and so
+they are not currently included in the standard ZEUS distribution.
+Instead, they can be downloaded from our web pages and saved in
+this directory. The available ZEUS documents are listed and
+hyperlinked <a href="docs/documents.html">here </a>. These
+include several Case Studies that describe how the sample
+applications were built, how they are run, and how they work. </p>
+
+<p><b>examples </b><br>
+This contains the source code and support files for the example
+applications. </p>
+
+<p><b>gifs </b><br>
+This contains the 256-colour icons used throughout the toolkit,
+as well as the embedded graphics within the on-line documentation.
+</p>
+
+<p><b>help </b><br>
+This directory contains the hypertext files of the on-line help
+documentation. As all the help files are written in HTML they can
+also be read off-line using a web browser, the sub-directories
+are organised by subject to facilitate this. </p>
+
+<p><b>lib </b><br>
+This directory contains 2 Java archive (JAR) files: <br>
+zeus.jar - which holds the compiled class code for the toolkit <br>
+gnu-regexp.jar - classes needed by the GNU regular expression
+parser </p>
+
+<p>Both these files must be known to your Java interpreter for
+the toolkit to be used. During the installation you will be shown
+instructions on how to add the locations of these files into your
+CLASSPATH environment variable. </p>
+
+<p><b>source.zip </b><br>
+This is a zip archive file containing all the ZEUS source code.
+As the toolkit has already been compiled into the lib/zeus.jar
+file, this provides a logical way of separating the core ZEUS
+code from the application code written by developers. Hence the
+ZEUS source code is only intended for reference purposes and to
+facilitate debugging. If you intend modifying ZEUS this archive
+can be unzipped into a directory called 'zeus' (to preserve the
+package names) and recompiled. As we retain the canonical version
+of the source code, please send us any bug-fixes or improvements
+you make, and we will consider incorporating them. </p>
+
+<p><b>licence.html </b><br>
+The open source licence under which ZEUS is distributed. </p>
+
+<p><b>readme.html </b><br>
+You're reading it. </p>
+
+<p><b>getting-started.txt </b><br>
+Guidance on what to do once the toolkit is installed. </p>
+
+<p>Another file created during installation, but not written into
+the installation directory is... </p>
+
+<p><b>.zeus.prp </b><br>
+This contains the parameters that configure the ZEUS toolkit, the
+contents of which will only be of interest to advanced users.
+This file is written into your home directory, this is ~ on Unix
+machines, \winnt\profiles\yourname\ on NT machines and c:\windows
+on Windows 95. You can test whether this file can be correctly
+created by running the ZeusPrpTest Java program located in the
+examples directory. The first line of the .zeus.prp file is the
+most important as it tells the ZEUS toolkit where it has been
+installed. If you move the ZEUS directory make sure you update
+this file with its new location. </p>
+
+<p><br>
+</p>
+
+<hr width="50%">
+
+<h3>The ZEUS Mailing List</h3>
+
+<p>We have recently created a mailing list for ZEUS users, which
+is hosted by <a href="http://www.mailbase.ac.uk">Mailbase</a>, a
+UK-based academic mailing list server. The objectives of the
+mailing list are: </p>
+
+<ul>
+    <li>to enable ZEUS users to share information, expertise and
+        ideas </li>
+    <li>to provide a better means of technical support, (all
+        technical queries should be addressed to the list, which
+        will facilitate collaborative problem solving) </li>
+</ul>
+
+<p>All messages sent to the mailing list will be archived and
+readable online from the <a
+href="http://www.mailbase.ac.uk/lists/zeus/">mailing list home
+page</a>. The mailing list has deliberately been left open, so
+you don't have to subscribe to post, and anyone can read the
+archived messages through the web page. But if you'd like to join,
+you'll find instructions listed <a
+href="http://www.mailbase.ac.uk/lists/zeus/join.html">here</a>.
+Our hope is to be able to build a virtual community of ZEUS users
+that will do for collaborative agents what Aglets did for mobile
+agents. </p>
+
+<p><br>
+</p>
+
+<hr width="50%">
+
+<h3>What's Missing</h3>
+
+<p>The v1.03b, just as v1.02, distribution of ZEUS has some
+functionality not present in this release that was present in
+previous versions. The omissions are: </p>
+
+<ul>
+    <li>The Control Tool - although present in the early ZEUS
+        prototypes the inclusion of new Agent Generator
+        components have meant this needs to be reimplemented. </li>
+    <li>The Remote Viewer - this client-server version of the
+        Agent Viewer is shown as one of the options of the
+        Visualiser Hub, but is not yet implemented. </li>
+</ul>
+
+<p>Hopefully the missing components should be ready in time for
+the next maintenance release, along with the remaining gaps in
+the documentation. </p>
+
+<h4>Known Bugs</h4>
+
+<dir>
+    <li>When running the ZEUS Generator in Windows the Java
+        interpreter has been known to occasionally crash - we are
+        unsure whether this fault is a JDK bug or a problem with
+        our code. To avoid frustration we recommend that you save
+        the contents of the Generator frequently. <p>Inevitably
+        some bugs in our own code will exist, so if you find any
+        please send a report of the problem to either <a
+        href="mailto:lyndon@info.bt.co.uk">Lyndon Lee</a> (if you
+        don't want to announce it to the world), or the <a
+        href="mailto:zeus@mailbase.ac.uk">ZEUS mailing list</a> (if
+        you do). The ZEUS team will then start investigating it. </p>
+        <h4>Performance Issues</h4>
+        <p>We have run ZEUS agents successfully on laptop PCs, so
+        high-powered host machines are not anticipated as a
+        requirement. But if there are many agents doing a lot of
+        work, the load can be balanced by distributing them to
+        different machines. </p>
+        <p>But as the ZEUS agents (together with their Java
+        Virtual Machine) have quite a large memory footprint and
+        computational demand you might benefit from the
+        performance enhancements offered by a JIT Java
+        interpreter or the new <a
+        href="http://www.javasoft.com:81/products/hotspot/index.html">HotSpot
+        Virtual Machine</a>. </p>
+        <p><br>
+        </p>
+        <hr width="50%">
+        <h3>ZEUS in a Nutshell</h3>
+        <p>The ZEUS toolkit is implemented by the object code
+        within the zeus.jar file (in the zeus/lib/ directory).
+        Logically, ZEUS consists of three separate functional
+        parts: </p>
+        <ol>
+            <li>an Agent Component Library that implements
+                various aspects of collaborative agent
+                functionality, </li>
+            <li>the Agent Building Environment - a suite of tools
+                that facilitate the construction of multi-agent
+                systems, and </li>
+            <li>Visualisation tools that enable the agent
+                applications to be observed and, where necessary,
+                debugged. </li>
+        </ol>
+        <p>A brief outline of these components is provided by our
+        <a
+        href="http://www.labs.bt.com/projects/agents/zeus/tour1.htm">online
+        ZEUS tour</a>, whilst a more detailed description can be
+        found in the ZEUS Technical Manual. </p>
+        <p align="center">We hope you find ZEUS useful and
+        informative, </p>
+        <p align="center"><i>The Zeus Development Team </i></p>
+        <p align="center"><a href="mailto:ndumudt@info.bt.co.uk"><b>Divine
+        Ndumu </b></a><br>
+        <a href="mailto:jaron@info.bt.co.uk"><b>Jaron Collis </b></a><br>
+        <a href="mailto:gilbert.owusu@bt.com"><b>Gilbert Owusu </b></a><br>
+        <a href="mailto:hyacinth@info.bt.co.uk"><b>Hyacinth Nwana
+        </b></a><br>
+        <a href="mailto:lyndon@info.bt.co.uk"><b>Lyndon Lee </b></a><br>
+        <a href="mailto:sullivam@info.bt.co.uk"><b>Matt Sullivan </b></a><br>
+        <a href="mailto:simon.2.thompson@bt.com"><b>Simon
+        Thompson </b></a><br>
+        <br>
+        </p>
+        <hr width="15%">
+        <p><a
+        href="http://www.labs.bt.com/projects/agents/body.htm">Home
+        Page</a> </p>
+    </li>
+</dir>
+</body>
+</html>

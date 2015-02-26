@@ -1,0 +1,1 @@
+set classpath=.;c:\zeus\lib\gnu-regexp.jar;c:\zeus\lib\zeus.jar;c:\zeus\lib\msql-jdbc-2-0a3.jar

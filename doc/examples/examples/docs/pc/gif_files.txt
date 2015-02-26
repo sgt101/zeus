@@ -1,0 +1,4 @@
+PCMaker = .:gifs:computer.gif
+MonitorMaker = .:gifs:monitor.gif
+MotherBoardMaker = .:gifs:cpu.gif
+PrinterMaker = .:gifs:printer.gif

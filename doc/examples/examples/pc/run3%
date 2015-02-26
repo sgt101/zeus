@@ -1,0 +1,7 @@
+#!/usr/bin/csh
+#This script runs the task agents
+java CartridgeCorp -o ./pc.ont -s dns.db & 
+java Dell -o ./pc.ont -s dns.db -gui zeus.agentviewer.AgentViewer -e DellPump & 
+java Taxan -o ./pc.ont -s dns.db & 
+java Intel -o ./pc.ont -s dns.db & 
+java HP -o ./pc.ont -s dns.db & 

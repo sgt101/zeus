@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='ISO-8859-1'?> 
+ <!DOCTYPE uridef[ 
+  <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+ <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY daml "http://www.daml.org/2001/03/daml+oil">
+  <!ENTITY process "http://www.daml.org/services/daml-s/2001/10/Process">
+  <!ENTITY service "http://www.daml.org/services/daml-s/2001/10/Service">
+  <!ENTITY profile "http://www.daml.org/services/daml-s/2001/10/Profile"> 
+  <!ENTITY country "http://www.daml.ri.cmu.edu/ont/Country.daml">
+  <!ENTITY concepts "http://www.daml.ri.cmu.edu/ont/DAML-S/concepts.daml">
+  <!ENTITY profile "http://www.daml.org/services/daml-s/2001/10/Profile"> 
+  <!ENTITY time "http://www.ai.sri.com/daml/ontologies/sri-basic/1-0/Time.daml">
+  <!ENTITY xsd "http://www.w3.org/2000/10/XMLSchema.xsd">
+  <!ENTITY DEFAULT "http:132.146.209.68\services\MakeTonerCartridge.daml">]> 
+<rdf:RDF 
+ xmlns:rdf ="&rdf;#" 
+ xmlns:profile="&profile;#"
+ xmlns:rdfs =    "&rdfs;#" 
+ xmlns:xsd =    "&xsd;#"
+  xmlns:daml =    "&daml;#"
+  xmlns:service = "&service;#"
+  xmlns:process = "&process;#">
+<daml:ontology rdf:about="http://132.146.209.68/ontologies/pc_ont.daml"/>
+<daml:versionInfo></daml:versionInfo>
+<profile:Profile rdf:ID="MakeTonerCartridge">
+<profile:textDescription>""</profile:textDescription>
+<profile:providedBy><profile:ServiceProvider rdf:ID="PrinterMaker0">
+<profile:name> MakeTonerCartridge</profile:name>
+<profile:phone></profile:phone>
+<profile:fax></profile:fax>
+<profile:email></profile:email>
+<profile:physicalAddress></profile:physicalAddress>
+<profile:webURL>" http://132.146.209.68/services/AbstractTaskId5"</profile:webURL>
+</profile:ServiceProvider>
+</profile:providedBy>
+<profile:geographicRadius></profile:geographicRadius>
+ <daml:imports rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns" /> 
+  <daml:imports rdf:resource="http://www.w3.org/2000/01/rdf-schema" />
+  <daml:imports rdf:resource="http://www.daml.org/2001/03/daml+oil" /> 
+  <daml:imports rdf:resource="http://www.daml.org/services/daml-s/2001/10/Service" />
+  <daml:imports rdf:resource="http://www.daml.org/services/daml-s/2001/10/Process" /> 
+  <daml:imports rdf:resource="http://www.daml.org/services/daml-s/2001/10/Profile" />
+<profile:postcondition>
+<profile:ParameterDescription rdf:ID="TonerCartridge">
+<profile:parameterName>?toner</profile:parameterName>
+<profile:restrictedTo rdf:resource="http://132.146.209.68/ontologies/pc.ont#TonerCartridge#unit_cost#?var201"/>
+<profile:restrictedTo rdf:resource="http://132.146.209.68/ontologies/pc.ont#TonerCartridge#number#?var202"/>
+</profile:ParameterDescription>
+</profile:postcondition>
+</profile:Profile>
+</rdf:RDF>

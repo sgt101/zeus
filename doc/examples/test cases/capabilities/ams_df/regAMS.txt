@@ -1,0 +1,13 @@
+(action
+    (agent-identifier
+    :name ams@132.146.209.68
+    :addresses (sequence iiop://132.146.209.68:2000/acc))
+    (register 
+    (ams-agent-description
+        :name
+        (agent-identifier
+            :name ams@132.146.209.68
+            :addresses (sequence iiop://132.146.209.68:2000/acc))
+        :state active))))
+
+ 

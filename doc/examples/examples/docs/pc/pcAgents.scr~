@@ -1,0 +1,5 @@
+CartridgeCorp -o pc.ont -s dns.db 
+PCMaker -o pc.ont -s dns.db -gui zeus.agentviewer.AgentViewer -e DellPump
+MonitorMaker -o pc.ont -s dns.db -range 15
+MotherBoardMaker -o pc.ont -s dns.db -range 15
+PrinterMaker -o pc.ont -s dns.db -gui zeus.agentviewer.AgentViewer

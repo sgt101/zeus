@@ -1,0 +1,6 @@
+REM This script runs the task agents
+start /min java CartridgeCorp -o .\pc.ont -s dns.db
+start /min java Dell -o .\pc.ont -s dns.db -gui zeus.agentviewer.AgentViewer -e DellPump
+start /min java Taxan -o .\pc.ont -s dns.db
+start /min java Intel -o .\pc.ont -s dns.db
+start /min java HP -o .\pc.ont -s dns.db

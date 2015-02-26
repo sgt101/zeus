@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:simpleType name="Money.amount.type" >
+    <xsd:restriction base="xsd:real" >
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="Message.type.type" >
+    <xsd:restriction base="xsd:string" >
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="Message.sender.type" >
+    <xsd:restriction base="xsd:string" >
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="Message.receiver.type" >
+    <xsd:restriction base="xsd:string" >
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="Message.content.type" >
+    <xsd:restriction base="xsd:string" >
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="Message.reply-with.type" >
+    <xsd:restriction base="xsd:string" >
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="Message.in-reply-to.type" >
+    <xsd:restriction base="xsd:string" >
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="Message.reply-by.type" >
+    <xsd:restriction base="xsd:string" >
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="Message.ontology.type" >
+    <xsd:restriction base="xsd:string" >
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="Message.language.type" >
+    <xsd:restriction base="xsd:string" >
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="Message.protocol.type" >
+    <xsd:restriction base="xsd:string" >
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="Message.conversation-id.type" >
+    <xsd:restriction base="xsd:string" >
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="Message.reply-to.type" >
+    <xsd:restriction base="xsd:string" >
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="Entity.number.type" >
+    <xsd:restriction base="xsd:integer" >
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="Entity.unit_cost.type" >
+    <xsd:restriction base="xsd:real" >
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>

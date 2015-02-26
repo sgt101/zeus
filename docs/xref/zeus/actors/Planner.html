@@ -1,0 +1,1509 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1" /><title>Planner xref</title>
+<link type="text/css" rel="stylesheet" href="../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../apidocs/zeus/actors/Planner.html">View Javadoc</a></div><pre>
+
+<a name="1" href="#1">1</a>   <em class="comment">/*</em>
+<a name="2" href="#2">2</a>   <em class="comment">* The contents of this file are subject to the BT "ZEUS" Open Source </em>
+<a name="3" href="#3">3</a>   <em class="comment">* Licence (L77741), Version 1.0 (the "Licence"); you may not use this file </em>
+<a name="4" href="#4">4</a>   <em class="comment">* except in compliance with the Licence. You may obtain a copy of the Licence</em>
+<a name="5" href="#5">5</a>   <em class="comment">* from $ZEUS_INSTALL/licence.html or alternatively from</em>
+<a name="6" href="#6">6</a>   <em class="comment">* <a href="http://www.labs.bt.com/projects/agents/zeus/licence.htm" target="alexandria_uri">http://www.labs.bt.com/projects/agents/zeus/licence.htm</a></em>
+<a name="7" href="#7">7</a>   <em class="comment">* </em>
+<a name="8" href="#8">8</a>   <em class="comment">* Except as stated in Clause 7 of the Licence, software distributed under the</em>
+<a name="9" href="#9">9</a>   <em class="comment">* Licence is distributed WITHOUT WARRANTY OF ANY KIND, either express or </em>
+<a name="10" href="#10">10</a>  <em class="comment">* implied. See the Licence for the specific language governing rights and </em>
+<a name="11" href="#11">11</a>  <em class="comment">* limitations under the Licence.</em>
+<a name="12" href="#12">12</a>  <em class="comment">* </em>
+<a name="13" href="#13">13</a>  <em class="comment">* The Original Code is within the package zeus.*.</em>
+<a name="14" href="#14">14</a>  <em class="comment">* The Initial Developer of the Original Code is British Telecommunications</em>
+<a name="15" href="#15">15</a>  <em class="comment">* public limited company, whose registered office is at 81 Newgate Street, </em>
+<a name="16" href="#16">16</a>  <em class="comment">* London, EC1A 7AJ, England. Portions created by British Telecommunications </em>
+<a name="17" href="#17">17</a>  <em class="comment">* public limited company are Copyright 1996-9. All Rights Reserved.</em>
+<a name="18" href="#18">18</a>  <em class="comment">* </em>
+<a name="19" href="#19">19</a>  <em class="comment">* THIS NOTICE MUST BE INCLUDED ON ANY COPY OF THIS FILE</em>
+<a name="20" href="#20">20</a>  <em class="comment">*/</em>
+<a name="21" href="#21">21</a>  
+<a name="22" href="#22">22</a>  
+<a name="23" href="#23">23</a>  
+<a name="24" href="#24">24</a>  <em class="comment">/*</em>
+<a name="25" href="#25">25</a>  <em class="comment"> * @(#)Planner.java 1.00</em>
+<a name="26" href="#26">26</a>  <em class="comment"> */</em>
+<a name="27" href="#27">27</a>  
+<a name="28" href="#28">28</a>  <strong>package</strong> <a href="../../zeus/actors/package-summary.html">zeus.actors</a>;
+<a name="29" href="#29">29</a>  
+<a name="30" href="#30">30</a>  <strong>import</strong> java.util.*;
+<a name="31" href="#31">31</a>  <strong>import</strong> <a href="../../zeus/util/package-summary.html">zeus.util</a>.*;
+<a name="32" href="#32">32</a>  <strong>import</strong> <a href="../../zeus/concepts/package-summary.html">zeus.concepts</a>.*;
+<a name="33" href="#33">33</a>  <strong>import</strong> zeus.actors.rtn.util.DelegationStruct;
+<a name="34" href="#34">34</a>  <strong>import</strong> zeus.actors.rtn.Engine;
+<a name="35" href="#35">35</a>  <strong>import</strong> <a href="../../zeus/actors/event/package-summary.html">zeus.actors.event</a>.*;
+<a name="36" href="#36">36</a>  
+<a name="37" href="#37">37</a>  <em>/**<em>*</em></em>
+<a name="38" href="#38">38</a>  <em> * This component implements the agent's Planning and Scheduling mechanism. </em>
+<a name="39" href="#39">39</a>  <em> * Its role is to construct action sequences that will achieve desired input goals.</em>
+<a name="40" href="#40">40</a>  <em> * Hence the Planner is under the control of the {@link Engine} component, which </em>
+<a name="41" href="#41">41</a>  <em> * initiates planning and manages the contracting of any subgoals that the agent </em>
+<a name="42" href="#42">42</a>  <em> * cannot achieve. &lt;p></em>
+<a name="43" href="#43">43</a>  <em> *</em>
+<a name="44" href="#44">44</a>  <em> * Planning operators (actions or tasks) are represented in the classical fashion </em>
+<a name="45" href="#45">45</a>  <em> * as primitive or summary operators.  Primitive operators are defined in terms </em>
+<a name="46" href="#46">46</a>  <em> * of their preconditions, effects, cost, duration and constraints and precondition </em>
+<a name="47" href="#47">47</a>  <em> * order, while summary operators are defined in terms of a graph of existing </em>
+<a name="48" href="#48">48</a>  <em> * primitive tasks. &lt;p></em>
+<a name="49" href="#49">49</a>  <em> *</em>
+<a name="50" href="#50">50</a>  <em> * The Planner utilises classical partial order means end planning in its plan </em>
+<a name="51" href="#51">51</a>  <em> * construction process. So when given a goal the Planner searches its {@link PlanDb}</em>
+<a name="52" href="#52">52</a>  <em> * for an operator with a public effect that unifies (with unification bindings q) </em>
+<a name="53" href="#53">53</a>  <em> * with the desired_effect of the goal.  If multiple operators are found, they are </em>
+<a name="54" href="#54">54</a>  <em> * ranked by cost, and then by duration. Next, the Planner selects the first </em>
+<a name="55" href="#55">55</a>  <em> * ranked operator, constrains its preconditions and effects with q, and then </em>
+<a name="56" href="#56">56</a>  <em> * attempts to schedule the operator into its diary.  If the operator cannot be </em>
+<a name="57" href="#57">57</a>  <em> * scheduled, the Planner backtracks and re-peats the process with the next </em>
+<a name="58" href="#58">58</a>  <em> * applicable operator. &lt;p></em>
+<a name="59" href="#59">59</a>  <em> *</em>
+<a name="60" href="#60">60</a>  <em> * Details on how the Planner functions are provided in the Zeus Technical Manual.</em>
+<a name="61" href="#61">61</a>  <em> */</em>
+<a name="62" href="#62">62</a>  
+<a name="63" href="#63">63</a>  
+<a name="64" href="#64">64</a>  <strong>public</strong> <strong>class</strong> <a href="../../zeus/actors/Planner.html">Planner</a> <strong>extends</strong> <a href="../../zeus/actors/PlanDb.html">PlanDb</a> 
+<a name="65" href="#65">65</a>  {
+<a name="66" href="#66">66</a>     <strong>private</strong> <a href="../../zeus/util/HSet.html">HSet</a>[]  eventMonitor = <strong>new</strong> HSet[6];
+<a name="67" href="#67">67</a>  
+<a name="68" href="#68">68</a>     <strong>public</strong> <strong>static</strong> <strong>final</strong> <strong>int</strong> START   = 0;
+<a name="69" href="#69">69</a>     <strong>public</strong> <strong>static</strong> <strong>final</strong> <strong>int</strong> FAIL    = 1;
+<a name="70" href="#70">70</a>     <strong>public</strong> <strong>static</strong> <strong>final</strong> <strong>int</strong> SUCCEED = 2;
+<a name="71" href="#71">71</a>  
+<a name="72" href="#72">72</a>     <strong>public</strong> <strong>static</strong> <strong>final</strong> <strong>int</strong> CREATE       = 3;
+<a name="73" href="#73">73</a>     <strong>public</strong> <strong>static</strong> <strong>final</strong> <strong>int</strong> DISPOSE      = 4;
+<a name="74" href="#74">74</a>     <strong>public</strong> <strong>static</strong> <strong>final</strong> <strong>int</strong> STATE_CHANGE = 5;
+<a name="75" href="#75">75</a>  
+<a name="76" href="#76">76</a>     <strong>public</strong> <strong>static</strong> <strong>final</strong> <strong>boolean</strong> EXPAND = <strong>true</strong>;
+<a name="77" href="#77">77</a>     <strong>public</strong> <strong>static</strong> <strong>final</strong> <strong>int</strong>     REPLAN = 0;
+<a name="78" href="#78">78</a>     <strong>public</strong> <strong>static</strong> <strong>final</strong> <strong>int</strong>     PLAN   = 1;
+<a name="79" href="#79">79</a>  
+<a name="80" href="#80">80</a>  
+<a name="81" href="#81">81</a>   
+<a name="82" href="#82">82</a>  
+<a name="83" href="#83">83</a>     <em>/**<em>* This object stores the Planner's diary as is a two-dimensional array, with</em></em>
+<a name="84" href="#84">84</a>  <em>       time on one dimension and processors on another. */</em>
+<a name="85" href="#85">85</a>     <strong>protected</strong> <a href="../../zeus/actors/PlanRecord.html">PlanRecord</a>[][] table;
+<a name="86" href="#86">86</a>  
+<a name="87" href="#87">87</a>     <strong>protected</strong> <strong>int</strong>            plannerWidth;
+<a name="88" href="#88">88</a>     <strong>protected</strong> <strong>int</strong>            plannerLength;
+<a name="89" href="#89">89</a>     <strong>protected</strong> <strong>int</strong>            now;
+<a name="90" href="#90">90</a>     <strong>protected</strong> Hashtable      BindTable;
+<a name="91" href="#91">91</a>  
+<a name="92" href="#92">92</a>     <strong>protected</strong> <strong>boolean</strong> user_responded = false;
+<a name="93" href="#93">93</a>     <strong>protected</strong> <strong>long</strong> USER_TIME_OUT = 0;
+<a name="94" href="#94">94</a>     <strong>protected</strong> <a href="../../zeus/actors/AgentContext.html">AgentContext</a> context = <strong>null</strong>;
+<a name="95" href="#95">95</a>  
+<a name="96" href="#96">96</a>  
+<a name="97" href="#97">97</a>     <strong>public</strong> <a href="../../zeus/actors/Planner.html">Planner</a> () {
+<a name="98" href="#98">98</a>      <strong>for</strong>(<strong>int</strong> i = 0; i &lt; eventMonitor.length; i++ )
+<a name="99" href="#99">99</a>           eventMonitor[i] = <strong>new</strong> <a href="../../zeus/util/HSet.html">HSet</a>();
+<a name="100" href="#100">100</a>    }
+<a name="101" href="#101">101</a> 
+<a name="102" href="#102">102</a> 
+<a name="103" href="#103">103</a>    <strong>public</strong> <a href="../../zeus/actors/Planner.html">Planner</a>(<a href="../../zeus/actors/AgentContext.html">AgentContext</a> context, <strong>int</strong> plannerWidth,
+<a name="104" href="#104">104</a>                   <strong>int</strong> plannerLength ) 
+<a name="105" href="#105">105</a>    {
+<a name="106" href="#106">106</a>       Assert.notNull(context);
+<a name="107" href="#107">107</a>       <strong>this</strong>.context = context;
+<a name="108" href="#108">108</a>       context.set(<strong>this</strong>);
+<a name="109" href="#109">109</a> 
+<a name="110" href="#110">110</a>       Core.ERROR(plannerLength > 0 &amp;&amp; plannerWidth > 0, 1005, <strong>this</strong>);
+<a name="111" href="#111">111</a> 
+<a name="112" href="#112">112</a>       table = <strong>new</strong> <a href="../../zeus/actors/PlanRecord.html">PlanRecord</a>[plannerWidth][plannerLength];
+<a name="113" href="#113">113</a>       <strong>this</strong>.plannerLength = plannerLength;
+<a name="114" href="#114">114</a>       <strong>this</strong>.plannerWidth = plannerWidth;
+<a name="115" href="#115">115</a>       now = (<strong>int</strong>) now();
+<a name="116" href="#116">116</a>       BindTable = <strong>new</strong> Hashtable();
+<a name="117" href="#117">117</a> 
+<a name="118" href="#118">118</a>       <strong>for</strong>(<strong>int</strong> i = 0; i &lt; eventMonitor.length; i++ )
+<a name="119" href="#119">119</a>          eventMonitor[i] = <strong>new</strong> <a href="../../zeus/util/HSet.html">HSet</a>();
+<a name="120" href="#120">120</a> 
+<a name="121" href="#121">121</a>       USER_TIME_OUT = (<strong>long</strong>)(0.5 * context.getClockStep());
+<a name="122" href="#122">122</a>    }
+<a name="123" href="#123">123</a> 
+<a name="124" href="#124">124</a>    <strong>public</strong> <a href="../../zeus/actors/AgentContext.html">AgentContext</a> getAgentContext() {
+<a name="125" href="#125">125</a>       <strong>return</strong> context;
+<a name="126" href="#126">126</a>    }
+<a name="127" href="#127">127</a> 
+<a name="128" href="#128">128</a> 
+<a name="129" href="#129">129</a>    <strong>public</strong> <strong>int</strong> getPlannerWidth() {
+<a name="130" href="#130">130</a>       <strong>return</strong>   plannerWidth;
+<a name="131" href="#131">131</a>    }
+<a name="132" href="#132">132</a>    <strong>public</strong> <strong>int</strong> getPlannerLength() {
+<a name="133" href="#133">133</a>      <strong>return</strong> plannerLength;
+<a name="134" href="#134">134</a>    }
+<a name="135" href="#135">135</a> 
+<a name="136" href="#136">136</a>     <em class="comment">//synchronized</em>
+<a name="137" href="#137">137</a>   <strong>int</strong>  anySideEffect(Fact desc, PlanRecord rec,
+<a name="138" href="#138">138</a>                                  <strong>int</strong> position, <strong>int</strong> required) {
+<a name="139" href="#139">139</a>       <strong>return</strong> anySideEffect(desc,rec,<strong>new</strong> Integer(position),required);
+<a name="140" href="#140">140</a>    }
+<a name="141" href="#141">141</a>    
+<a name="142" href="#142">142</a>    
+<a name="143" href="#143">143</a>     <em class="comment">// synchronized </em>
+<a name="144" href="#144">144</a>   <strong>int</strong>  anySideEffect(Fact desc, PlanRecord rec,
+<a name="145" href="#145">145</a>                                   Object precond, <strong>int</strong> required) 
+<a name="146" href="#146">146</a>    {
+<a name="147" href="#147">147</a>       <strong>if</strong> ( !context.getSharePlan() ) <strong>return</strong> required;
+<a name="148" href="#148">148</a>       Core.DEBUG(2,<span class="string">"checking for serendipitous side-effects for "</span> + desc);
+<a name="149" href="#149">149</a> 
+<a name="150" href="#150">150</a>       <strong>int</strong> no = desc.getNumber();
+<a name="151" href="#151">151</a>       <a href="../../zeus/actors/PlanRecord.html">PlanRecord</a> crec;
+<a name="152" href="#152">152</a>       <strong>int</strong> st = rec.getStartTime();
+<a name="153" href="#153">153</a>       <strong>if</strong> ( desc.isa(OntologyDb.ENTITY) ) desc.setNumber(desc.newVar());
+<a name="154" href="#154">154</a>       Enumeration enum = <strong>this</strong>.elements();
+<a name="155" href="#155">155</a>       <strong>while</strong>( required > 0 &amp;&amp; enum.hasMoreElements() ) {
+<a name="156" href="#156">156</a>          crec = (PlanRecord)enum.nextElement();
+<a name="157" href="#157">157</a>          <strong>if</strong> ( crec != rec &amp;&amp; crec.getEndTime() &lt;= st )
+<a name="158" href="#158">158</a>             required = crec.anySideEffect(desc,rec,precond,required);
+<a name="159" href="#159">159</a>       }
+<a name="160" href="#160">160</a>       desc.setNumber(no);
+<a name="161" href="#161">161</a>       <strong>return</strong> required;
+<a name="162" href="#162">162</a>    }
+<a name="163" href="#163">163</a>    
+<a name="164" href="#164">164</a>    
+<a name="165" href="#165">165</a> <em class="comment">// synchronized </em>
+<a name="166" href="#166">166</a>    <strong>public</strong> <a href="../../zeus/concepts/PlannerQueryStruct.html">PlannerQueryStruct</a> canAchieve(Vector goals, String key) 
+<a name="167" href="#167">167</a>    {
+<a name="168" href="#168">168</a>       Core.DEBUG(3,<span class="string">"\nCanAchieve:\n"</span> + goals + <span class="string">"\n"</span>);
+<a name="169" href="#169">169</a> 
+<a name="170" href="#170">170</a>       <a href="../../zeus/concepts/Goal.html">Goal</a> g;
+<a name="171" href="#171">171</a>       <a href="../../zeus/concepts/PlannerQueryStruct.html">PlannerQueryStruct</a> struct = <strong>new</strong> <a href="../../zeus/concepts/PlannerQueryStruct.html">PlannerQueryStruct</a>(goals);
+<a name="172" href="#172">172</a> 
+<a name="173" href="#173">173</a>       <strong>for</strong>(<strong>int</strong> i = 0; i &lt; goals.size(); i++ ) {
+<a name="174" href="#174">174</a>          g = (Goal)goals.elementAt(i);
+<a name="175" href="#175">175</a>          notifyMonitors(g,START,PlanningEvent.PLANNING);
+<a name="176" href="#176">176</a>       }
+<a name="177" href="#177">177</a> 
+<a name="178" href="#178">178</a>       struct.timeout = context.getAcceptTimeout();
+<a name="179" href="#179">179</a> 
+<a name="180" href="#180">180</a>       <em class="comment">// check for Looping i.e. A --> B --> C --> A and</em>
+<a name="181" href="#181">181</a>       <em class="comment">// the goal.fact at the two A's are identical</em>
+<a name="182" href="#182">182</a>       <strong>if</strong> ( loopFound(goals) ) {
+<a name="183" href="#183">183</a>          Core.DEBUG(0,<span class="string">"CanAchieve loop found = "</span> + struct);
+<a name="184" href="#184">184</a>          index(struct);
+<a name="185" href="#185">185</a>          <strong>return</strong> struct;
+<a name="186" href="#186">186</a>       }
+<a name="187" href="#187">187</a> 
+<a name="188" href="#188">188</a>       <em class="comment">// check confirm &amp; reply times</em>
+<a name="189" href="#189">189</a>       <strong>double</strong> ct = Double.MAX_VALUE;
+<a name="190" href="#190">190</a>       <strong>double</strong> rt = Double.MAX_VALUE;
+<a name="191" href="#191">191</a>       <strong>for</strong>(<strong>int</strong> i = 0; i &lt; goals.size(); i++ ) {
+<a name="192" href="#192">192</a>          g = (Goal)goals.elementAt(i);
+<a name="193" href="#193">193</a>          ct = Math.min(ct,g.getConfirmTime().getTime());
+<a name="194" href="#194">194</a>          <strong>if</strong> ( g.getReplyTime() != <strong>null</strong> )
+<a name="195" href="#195">195</a>             rt = Math.min(rt,g.getReplyTime().getTime());
+<a name="196" href="#196">196</a>       }
+<a name="197" href="#197">197</a>       <strong>double</strong> now = now();
+<a name="198" href="#198">198</a>       <strong>if</strong> ( now >= Math.min(ct,rt) ) {
+<a name="199" href="#199">199</a>          Core.DEBUG(0,<span class="string">"CanAchieve rt/ct problem: "</span> + now + <span class="string">"\n"</span> + struct);
+<a name="200" href="#200">200</a>          index(struct);
+<a name="201" href="#201">201</a>          <strong>return</strong> struct;
+<a name="202" href="#202">202</a>       }
+<a name="203" href="#203">203</a> 
+<a name="204" href="#204">204</a>       struct.internal = schedule(key,<strong>null</strong>,<strong>new</strong> Vector(),goals,struct,EXPAND);
+<a name="205" href="#205">205</a>       <strong>if</strong> ( struct.internal.isEmpty() ) {
+<a name="206" href="#206">206</a>          Core.DEBUG(0,<span class="string">"CanAchieve = "</span> + struct);
+<a name="207" href="#207">207</a>          index(struct);
+<a name="208" href="#208">208</a>          <strong>return</strong> struct;
+<a name="209" href="#209">209</a>       }
+<a name="210" href="#210">210</a> 
+<a name="211" href="#211">211</a>       <strong>double</strong> lct = (<strong>double</strong>) latestConfirmTime(goals);
+<a name="212" href="#212">212</a>       <strong>if</strong> ( lct &lt; ct ) {
+<a name="213" href="#213">213</a>          Core.DEBUG(0,<span class="string">"CanAchieve lct &lt; ct "</span> + now + <span class="string">"\n"</span> + struct);
+<a name="214" href="#214">214</a>          reject(struct.goals,struct.internal);
+<a name="215" href="#215">215</a>          struct.internal = <strong>new</strong> Vector();
+<a name="216" href="#216">216</a>          index(struct);
+<a name="217" href="#217">217</a>          <strong>return</strong> struct;
+<a name="218" href="#218">218</a>       }
+<a name="219" href="#219">219</a> 
+<a name="220" href="#220">220</a>       <strong>if</strong> ( !struct.internal.isEmpty() &amp;&amp; !struct.external.isEmpty() ) {
+<a name="221" href="#221">221</a>          <em class="comment">// timeout heuristic</em>
+<a name="222" href="#222">222</a>          <strong>double</strong> t;
+<a name="223" href="#223">223</a>          t = Math.min(ct,rt);
+<a name="224" href="#224">224</a>          t = t - now();
+<a name="225" href="#225">225</a>          t = t/2*struct.external.size();
+<a name="226" href="#226">226</a>          struct.timeout = t;
+<a name="227" href="#227">227</a>       }
+<a name="228" href="#228">228</a>       index(struct);
+<a name="229" href="#229">229</a>       Core.DEBUG(0,<span class="string">"canAchieve = "</span> + struct);
+<a name="230" href="#230">230</a>       <strong>return</strong> struct;
+<a name="231" href="#231">231</a>    }
+<a name="232" href="#232">232</a> 
+<a name="233" href="#233">233</a>    <strong>protected</strong> <strong>boolean</strong> loopFound(Vector goals) {
+<a name="234" href="#234">234</a>       Enumeration enum = BindTable.elements();
+<a name="235" href="#235">235</a>       <a href="../../zeus/concepts/PlannerQueryStruct.html">PlannerQueryStruct</a> struct;
+<a name="236" href="#236">236</a>       Vector stored;
+<a name="237" href="#237">237</a>       <a href="../../zeus/concepts/Goal.html">Goal</a> g1, g2;
+<a name="238" href="#238">238</a>       <a href="../../zeus/concepts/Fact.html">Fact</a> f1, f2;
+<a name="239" href="#239">239</a>       String r1, r2;
+<a name="240" href="#240">240</a>       <a href="../../zeus/concepts/Bindings.html">Bindings</a> b = <strong>new</strong> <a href="../../zeus/concepts/Bindings.html">Bindings</a>(context.whoami());
+<a name="241" href="#241">241</a> 
+<a name="242" href="#242">242</a>       <strong>while</strong>( enum.hasMoreElements() ) {
+<a name="243" href="#243">243</a>          struct = (PlannerQueryStruct) enum.nextElement();
+<a name="244" href="#244">244</a>          stored = struct.goals;
+<a name="245" href="#245">245</a>          <strong>for</strong>( <strong>int</strong> i = 0; i &lt; goals.size(); i++ ) {
+<a name="246" href="#246">246</a>             g1 = (Goal)goals.elementAt(i);
+<a name="247" href="#247">247</a>             f1 = g1.getFact();
+<a name="248" href="#248">248</a>             r1 = g1.getRootId();
+<a name="249" href="#249">249</a>             <strong>for</strong>( <strong>int</strong> j = 0; j &lt; stored.size(); j++, b.clear() ) {
+<a name="250" href="#250">250</a>                g2 = (Goal)stored.elementAt(j);
+<a name="251" href="#251">251</a>                <strong>if</strong> ( g2.getDesiredBy().equals(context.whoami()) ) {
+<a name="252" href="#252">252</a>                   f2 = g2.getFact();
+<a name="253" href="#253">253</a>                   r2 = g2.getRootId();
+<a name="254" href="#254">254</a>                   <strong>if</strong> ( r1.equals(r2) &amp;&amp; f1.un<strong>if</strong>iesWith(f2,b) ) {
+<a name="255" href="#255">255</a>                      Core.DEBUG(0,<span class="string">"Loop found: "</span> + g1 + <span class="string">"\n"</span> + g2);
+<a name="256" href="#256">256</a>                      <strong>return</strong> <strong>true</strong>;
+<a name="257" href="#257">257</a>                   }
+<a name="258" href="#258">258</a>                }
+<a name="259" href="#259">259</a>             }
+<a name="260" href="#260">260</a>          }
+<a name="261" href="#261">261</a>       }
+<a name="262" href="#262">262</a>       <strong>return</strong> false;
+<a name="263" href="#263">263</a>    }
+<a name="264" href="#264">264</a> 
+<a name="265" href="#265">265</a>    <strong>public</strong> <a href="../../zeus/concepts/PlannerQueryStruct.html">PlannerQueryStruct</a> clear_bind(Vector goals) {
+<a name="266" href="#266">266</a>       <strong>if</strong> ( goals.isEmpty() ) <strong>return</strong> <strong>null</strong>;
+<a name="267" href="#267">267</a>       Core.DEBUG(3,<span class="string">"Entering Clear Bind goals\n"</span> +  goals + <span class="string">"\n"</span>);
+<a name="268" href="#268">268</a> 
+<a name="269" href="#269">269</a>       String index = makeIndex(goals);
+<a name="270" href="#270">270</a>       <strong>return</strong> (PlannerQueryStruct) BindTable.remove(index);
+<a name="271" href="#271">271</a>    }
+<a name="272" href="#272">272</a> 
+<a name="273" href="#273">273</a>    <strong>public</strong> <strong>void</strong> reset_bind(Vector goals, <a href="../../zeus/concepts/PlannerQueryStruct.html">PlannerQueryStruct</a> data) {
+<a name="274" href="#274">274</a>       Core.DEBUG(3,<span class="string">"Entering Reset Bind goals\n"</span> +  goals + <span class="string">"\n"</span>);
+<a name="275" href="#275">275</a> 
+<a name="276" href="#276">276</a>       String index = makeIndex(goals);
+<a name="277" href="#277">277</a>       Core.ERROR(BindTable.put(index,data) == <strong>null</strong>,1009,<strong>this</strong>);
+<a name="278" href="#278">278</a>    }
+<a name="279" href="#279">279</a> 
+<a name="280" href="#280">280</a>    <strong>public</strong> Vector bind(Vector goals) {
+<a name="281" href="#281">281</a>       Core.DEBUG(3,<span class="string">"Entering Final Bind goals\n"</span> +  goals + <span class="string">"\n"</span>);
+<a name="282" href="#282">282</a> 
+<a name="283" href="#283">283</a>       String index = makeIndex(goals);
+<a name="284" href="#284">284</a>       <a href="../../zeus/concepts/PlannerQueryStruct.html">PlannerQueryStruct</a> struct = (PlannerQueryStruct) BindTable.get(index);
+<a name="285" href="#285">285</a>       <a href="../../zeus/actors/PlanRecord.html">PlanRecord</a> rec;
+<a name="286" href="#286">286</a>       <a href="../../zeus/concepts/Bindings.html">Bindings</a> b;
+<a name="287" href="#287">287</a>       Core.DEBUG(3,<span class="string">"Final Bind checking record"</span> );
+<a name="288" href="#288">288</a>       <strong>for</strong>(<strong>int</strong> i = 0; i &lt; struct.<strong>int</strong>ernal.size(); i++ ) {
+<a name="289" href="#289">289</a>          rec = (PlanRecord)struct.internal.elementAt(i);
+<a name="290" href="#290">290</a>          b = rec.getBindings();
+<a name="291" href="#291">291</a>          Core.ERROR(struct.bindings.add(b),1010,<strong>this</strong>);
+<a name="292" href="#292">292</a>       }
+<a name="293" href="#293">293</a>       <a href="../../zeus/concepts/Goal.html">Goal</a> g;
+<a name="294" href="#294">294</a>       Vector data = <strong>new</strong> Vector();
+<a name="295" href="#295">295</a>       Core.DEBUG(3,<span class="string">"Final Bind checking costs"</span> );
+<a name="296" href="#296">296</a>       <strong>for</strong>(<strong>int</strong> i = 0; i &lt; goals.size(); i++ ) {
+<a name="297" href="#297">297</a>          g = <strong>new</strong> <a href="../../zeus/concepts/Goal.html">Goal</a>( (Goal)goals.elementAt(i) );
+<a name="298" href="#298">298</a>          g.constrain(struct.bindings);
+<a name="299" href="#299">299</a>          rec = lookUp(g);
+<a name="300" href="#300">300</a>          g.setCost(rec.getCost());
+<a name="301" href="#301">301</a>          data.addElement(g);
+<a name="302" href="#302">302</a>       }
+<a name="303" href="#303">303</a>       Core.DEBUG(3,<span class="string">"Exiting Final Bind goals\n"</span> +  data + <span class="string">"\n"</span> );
+<a name="304" href="#304">304</a>       <strong>return</strong> data;
+<a name="305" href="#305">305</a>    }
+<a name="306" href="#306">306</a> 
+<a name="307" href="#307">307</a> 
+<a name="308" href="#308">308</a> <em class="comment">//synchronized</em>
+<a name="309" href="#309">309</a>    <strong>public</strong> <strong>synchronized</strong> <strong>void</strong> userResponded() {
+<a name="310" href="#310">310</a>       <strong>this</strong>.user_responded = <strong>true</strong>;
+<a name="311" href="#311">311</a>    }
+<a name="312" href="#312">312</a> 
+<a name="313" href="#313">313</a>    <strong>public</strong> <a href="../../zeus/concepts/BindResults.html">BindResults</a> bind(Vector goals, Vector input, <strong>int</strong> mode) {
+<a name="314" href="#314">314</a>       Core.DEBUG(3,<span class="string">"Entering bind..."</span>);
+<a name="315" href="#315">315</a>       String index = makeIndex(goals);
+<a name="316" href="#316">316</a>       <a href="../../zeus/concepts/PlannerQueryStruct.html">PlannerQueryStruct</a> struct = (PlannerQueryStruct) BindTable.get(index);
+<a name="317" href="#317">317</a> 
+<a name="318" href="#318">318</a>       <a href="../../zeus/concepts/Goal.html">Goal</a> g0, g1;
+<a name="319" href="#319">319</a>       <a href="../../zeus/concepts/Fact.html">Fact</a> f0, f1;
+<a name="320" href="#320">320</a>       <a href="../../zeus/actors/PlanRecord.html">PlanRecord</a> rec;
+<a name="321" href="#321">321</a>       Vector[] reduced = <strong>new</strong> Vector[struct.external.size()];
+<a name="322" href="#322">322</a>       <a href="../../zeus/concepts/Bindings.html">Bindings</a> bindings = <strong>new</strong> <a href="../../zeus/concepts/Bindings.html">Bindings</a>(context.whoami());
+<a name="323" href="#323">323</a>       <a href="../../zeus/concepts/BindResults.html">BindResults</a> result = <strong>new</strong> <a href="../../zeus/concepts/BindResults.html">BindResults</a>();
+<a name="324" href="#324">324</a>       <strong>boolean</strong> found = false;
+<a name="325" href="#325">325</a> 
+<a name="326" href="#326">326</a>       Vector absent = <strong>new</strong> Vector();
+<a name="327" href="#327">327</a>       Vector present = <strong>new</strong> Vector();
+<a name="328" href="#328">328</a> 
+<a name="329" href="#329">329</a>       <strong>for</strong>(<strong>int</strong> i = 0; i &lt; struct.external.size(); i++ ) {
+<a name="330" href="#330">330</a>          g0 = (Goal)struct.external.elementAt(i);
+<a name="331" href="#331">331</a>          reduced[i] = sortFeasible(g0.getId(),input);
+<a name="332" href="#332">332</a>          <strong>if</strong> ( reduced[i].isEmpty() )
+<a name="333" href="#333">333</a>             absent.addElement(g0);
+<a name="334" href="#334">334</a>          <strong>else</strong>
+<a name="335" href="#335">335</a>             present.addElement(g0);
+<a name="336" href="#336">336</a>       }
+<a name="337" href="#337">337</a> 
+<a name="338" href="#338">338</a>       <strong>if</strong> ( !absent.isEmpty() ) {
+<a name="339" href="#339">339</a>          Core.DEBUG(3,<span class="string">"From bind..."</span>);
+<a name="340" href="#340">340</a>          Core.DEBUG(3,<span class="string">"PlannerQueryStruct = "</span> + struct);
+<a name="341" href="#341">341</a>          Core.DEBUG(3,<span class="string">"absent = "</span> + absent);
+<a name="342" href="#342">342</a>          <strong>for</strong>( <strong>int</strong> x = 0; x &lt; struct.<strong>int</strong>ernal.size(); x++ ) {
+<a name="343" href="#343">343</a>             rec = (PlanRecord)struct.internal.elementAt(x);
+<a name="344" href="#344">344</a>             Core.DEBUG(3,rec.getConsumedDb());
+<a name="345" href="#345">345</a>          }
+<a name="346" href="#346">346</a> 
+<a name="347" href="#347">347</a>          softFailParentOf(absent,struct,mode);
+<a name="348" href="#348">348</a>          <strong>for</strong>(<strong>int</strong> j = 0; j &lt; present.size(); j++ ) {
+<a name="349" href="#349">349</a>             g1 = (Goal)present.elementAt(j);
+<a name="350" href="#350">350</a>             found = false;
+<a name="351" href="#351">351</a>             <strong>for</strong>(<strong>int</strong> i = 0; !found &amp;&amp; i &lt; struct.external.size(); i++ ) {
+<a name="352" href="#352">352</a>                g0 = (Goal)struct.external.elementAt(i);
+<a name="353" href="#353">353</a>                found = found || g0.getId().equals(g1.getId());
+<a name="354" href="#354">354</a>                <strong>if</strong> ( found ) struct.external.removeElementAt(i--);
+<a name="355" href="#355">355</a>             }
+<a name="356" href="#356">356</a>             <strong>if</strong> ( !found ) present.removeElementAt(j--);
+<a name="357" href="#357">357</a>          }
+<a name="358" href="#358">358</a>       }
+<a name="359" href="#359">359</a> 
+<a name="360" href="#360">360</a>       Core.DEBUG(3,<span class="string">"Present = "</span> + present);
+<a name="361" href="#361">361</a>       Core.DEBUG(3,<span class="string">"Struct = "</span> + struct);
+<a name="362" href="#362">362</a> 
+<a name="363" href="#363">363</a>       <strong>if</strong> ( present.isEmpty() ) {
+<a name="364" href="#364">364</a>          result.rejection = input;
+<a name="365" href="#365">365</a>          result.ok = !struct.internal.isEmpty() ||
+<a name="366" href="#366">366</a>                      !struct.decompositions.isEmpty();
+<a name="367" href="#367">367</a>          result.external = Misc.copyVector(struct.external);
+<a name="368" href="#368">368</a>          <strong>return</strong> result;
+<a name="369" href="#369">369</a>       }
+<a name="370" href="#370">370</a>      
+<a name="371" href="#371">371</a> 
+<a name="372" href="#372">372</a>       <strong>if</strong> ( present.size() != reduced.length ) {
+<a name="373" href="#373">373</a>          reduced = <strong>new</strong> Vector[present.size()];
+<a name="374" href="#374">374</a>          <strong>for</strong>(<strong>int</strong> i = 0; i &lt; present.size(); i++ ) {
+<a name="375" href="#375">375</a>             g0 = (Goal)present.elementAt(i);
+<a name="376" href="#376">376</a>             reduced[i] = sortFeasible(g0.getId(),input);
+<a name="377" href="#377">377</a>          }
+<a name="378" href="#378">378</a>       }
+<a name="379" href="#379">379</a> 
+<a name="380" href="#380">380</a> <em class="comment">/*</em>
+<a name="381" href="#381">381</a> <em class="comment">      AskUser ask_user;</em>
+<a name="382" href="#382">382</a> <em class="comment">      user_responded = false;</em>
+<a name="383" href="#383">383</a> <em class="comment">      long user_timeout = System.currentTimeMillis() + USER_TIME_OUT;</em>
+<a name="384" href="#384">384</a> <em class="comment">      synchronized(this) {</em>
+<a name="385" href="#385">385</a> <em class="comment">         ask_user = new AskUser(reduced,this);</em>
+<a name="386" href="#386">386</a> <em class="comment">         while( !user_responded &amp;&amp; </em>
+<a name="387" href="#387">387</a> <em class="comment">                System.currentTimeMillis() &lt; user_timeout ) {</em>
+<a name="388" href="#388">388</a> <em class="comment">            try {</em>
+<a name="389" href="#389">389</a> <em class="comment">               wait(USER_TIME_OUT);</em>
+<a name="390" href="#390">390</a> <em class="comment">            }</em>
+<a name="391" href="#391">391</a> <em class="comment">            catch(InterruptedException e) {</em>
+<a name="392" href="#392">392</a> <em class="comment">            }</em>
+<a name="393" href="#393">393</a> <em class="comment">         }</em>
+<a name="394" href="#394">394</a> <em class="comment">      }</em>
+<a name="395" href="#395">395</a> <em class="comment">      if ( !user_responded &amp;&amp; ask_user != null &amp;&amp; ask_user.isShowing() )</em>
+<a name="396" href="#396">396</a> <em class="comment">         ask_user.okBtnFn();</em>
+<a name="397" href="#397">397</a> <em class="comment">*/</em>
+<a name="398" href="#398">398</a> 
+<a name="399" href="#399">399</a>       Object[] data;
+<a name="400" href="#400">400</a>       <a href="../../zeus/actors/rtn/util/DelegationStruct.html">DelegationStruct</a>[] ds = <strong>new</strong> <a href="../../zeus/actors/rtn/util/DelegationStruct.html">DelegationStruct</a>[present.size()];
+<a name="401" href="#401">401</a>       <a href="../../zeus/util/Selector.html">Selector</a> selector = <strong>new</strong> <a href="../../zeus/util/Selector.html">Selector</a>(reduced);
+<a name="402" href="#402">402</a>       result.ok = false;
+<a name="403" href="#403">403</a>       <strong>while</strong>( !result.ok &amp;&amp; selector.hasMoreElements() ) {
+<a name="404" href="#404">404</a>          data = (Object[]) selector.nextElement();
+<a name="405" href="#405">405</a>          bindings.clear();
+<a name="406" href="#406">406</a>          result.ok = <strong>true</strong>;
+<a name="407" href="#407">407</a>          <strong>for</strong>(<strong>int</strong> i = 0; i &lt; data.length; i++ ) {
+<a name="408" href="#408">408</a>             ds[i] = (DelegationStruct)data[i];
+<a name="409" href="#409">409</a>             <em class="comment">// assumes only one goal in request</em>
+<a name="410" href="#410">410</a>             g1 = (Goal)ds[i].goals.elementAt(0);
+<a name="411" href="#411">411</a>             g0 = (Goal)present.elementAt(i);
+<a name="412" href="#412">412</a>             f0 = g0.getFact();
+<a name="413" href="#413">413</a>             f1 = g1.getFact();
+<a name="414" href="#414">414</a>             result.ok = f1.unifiesWith(f0,bindings);
+<a name="415" href="#415">415</a>             <strong>if</strong> ( !result.ok )
+<a name="416" href="#416">416</a>                <strong>break</strong>;
+<a name="417" href="#417">417</a>          }
+<a name="418" href="#418">418</a> 
+<a name="419" href="#419">419</a>          Core.DEBUG(3,<span class="string">"Current selection ... "</span>);
+<a name="420" href="#420">420</a>          Core.DEBUG(3,ds);
+<a name="421" href="#421">421</a> 
+<a name="422" href="#422">422</a>          result.ok = result.ok &amp;&amp; bindings.add(struct.bindings);
+<a name="423" href="#423">423</a>          <strong>if</strong> ( result.ok ) {
+<a name="424" href="#424">424</a>             <strong>for</strong>(<strong>int</strong> j = 0; j &lt; struct.<strong>int</strong>ernal.size(); j++ ) {
+<a name="425" href="#425">425</a>                rec = (PlanRecord) struct.internal.elementAt(j);
+<a name="426" href="#426">426</a>                Core.ERROR(rec.applyConstraints(bindings),1011,<strong>this</strong>);
+<a name="427" href="#427">427</a>             }
+<a name="428" href="#428">428</a>             struct.bindings = bindings;
+<a name="429" href="#429">429</a> 
+<a name="430" href="#430">430</a>             <strong>for</strong>( <strong>int</strong> i = 0; i &lt; data.length; i++ ) {
+<a name="431" href="#431">431</a>                ds[i] = (DelegationStruct)data[i];
+<a name="432" href="#432">432</a>                result.selection.addElement(ds[i]);
+<a name="433" href="#433">433</a>             }
+<a name="434" href="#434">434</a>          }
+<a name="435" href="#435">435</a>       }
+<a name="436" href="#436">436</a> 
+<a name="437" href="#437">437</a>       <strong>if</strong> ( result.ok ) {
+<a name="438" href="#438">438</a>          result.rejection = Misc.difference(input,result.selection);
+<a name="439" href="#439">439</a>          resume_planning(ds,struct);
+<a name="440" href="#440">440</a>       }
+<a name="441" href="#441">441</a>       <strong>else</strong> {
+<a name="442" href="#442">442</a>          result.rejection = input;
+<a name="443" href="#443">443</a>          softFailParentOf(struct.external,struct,mode);
+<a name="444" href="#444">444</a>          result.ok = !struct.internal.isEmpty() ||
+<a name="445" href="#445">445</a>                      !struct.decompositions.isEmpty();
+<a name="446" href="#446">446</a>       }
+<a name="447" href="#447">447</a> 
+<a name="448" href="#448">448</a>       result.external = Misc.copyVector(struct.external);
+<a name="449" href="#449">449</a> 
+<a name="450" href="#450">450</a>       Core.DEBUG(3,<span class="string">" Bind struct\n"</span> + struct);
+<a name="451" href="#451">451</a>       Core.DEBUG(3,<span class="string">" Bind goals\n"</span> + goals);
+<a name="452" href="#452">452</a>       Core.DEBUG(3,<span class="string">" Bind bindings\n"</span> + struct.bindings);
+<a name="453" href="#453">453</a>       Core.DEBUG(3,<span class="string">" Bind result\n"</span> +  result + <span class="string">"\n"</span> );
+<a name="454" href="#454">454</a> 
+<a name="455" href="#455">455</a>       <strong>return</strong> result;
+<a name="456" href="#456">456</a>    }
+<a name="457" href="#457">457</a> 
+<a name="458" href="#458">458</a>    <strong>protected</strong> Vector sortFeasible(String gid, Vector input) {
+<a name="459" href="#459">459</a>       Core.DEBUG(3,<span class="string">"sortFeasible input "</span> + gid + <span class="string">"\n"</span> + input);
+<a name="460" href="#460">460</a>       <a href="../../zeus/concepts/Goal.html">Goal</a> g0, g1;
+<a name="461" href="#461">461</a>       Object obj;
+<a name="462" href="#462">462</a>       <a href="../../zeus/actors/rtn/util/DelegationStruct.html">DelegationStruct</a> ds;
+<a name="463" href="#463">463</a>       Vector reduced = <strong>new</strong> Vector();
+<a name="464" href="#464">464</a>       <strong>for</strong>(<strong>int</strong> i = 0; i &lt; input.size(); i++ ) {
+<a name="465" href="#465">465</a>          ds = (DelegationStruct)input.elementAt(i);
+<a name="466" href="#466">466</a>          <em class="comment">// assumes only one goal in goals field</em>
+<a name="467" href="#467">467</a>          g0 = (Goal)ds.goals.elementAt(0);
+<a name="468" href="#468">468</a>          <strong>if</strong> ( gid.equals(g0.getId()) )
+<a name="469" href="#469">469</a>             reduced.addElement(ds);
+<a name="470" href="#470">470</a>       }
+<a name="471" href="#471">471</a>       Core.DEBUG(3,<span class="string">"sortFeasible reduced "</span> + gid + <span class="string">"\n"</span> + reduced);
+<a name="472" href="#472">472</a>       <strong>boolean</strong> changed = <strong>true</strong>;
+<a name="473" href="#473">473</a>       <strong>while</strong>( changed ) {
+<a name="474" href="#474">474</a>          changed = false;
+<a name="475" href="#475">475</a>          <strong>for</strong>( <strong>int</strong> i = 0; i &lt; reduced.size()-1; i++ ) {
+<a name="476" href="#476">476</a>             <em class="comment">// assumes only one goal in goals field</em>
+<a name="477" href="#477">477</a>             ds = (DelegationStruct)reduced.elementAt(i);
+<a name="478" href="#478">478</a>             g0 = (Goal)ds.goals.elementAt(0);
+<a name="479" href="#479">479</a>             ds = (DelegationStruct)reduced.elementAt(i+1);
+<a name="480" href="#480">480</a>             g1 = (Goal)ds.goals.elementAt(0);
+<a name="481" href="#481">481</a>             <strong>if</strong> ( g0.getCost() > g1.getCost() ) {
+<a name="482" href="#482">482</a>                obj = reduced.elementAt(i);
+<a name="483" href="#483">483</a>                reduced.setElementAt(reduced.elementAt(i+1),i);
+<a name="484" href="#484">484</a>                reduced.setElementAt(obj,i+1);
+<a name="485" href="#485">485</a>                changed = <strong>true</strong>;
+<a name="486" href="#486">486</a>             }
+<a name="487" href="#487">487</a>          }
+<a name="488" href="#488">488</a>       }
+<a name="489" href="#489">489</a>       Core.DEBUG(3,<span class="string">"sortFeasible results "</span> + gid + <span class="string">"\n"</span> + reduced);
+<a name="490" href="#490">490</a>       <strong>return</strong> reduced;
+<a name="491" href="#491">491</a>    }
+<a name="492" href="#492">492</a> 
+<a name="493" href="#493">493</a>    <em class="comment">// Assess feasilibility of enactment of a prearranged SLA</em>
+<a name="494" href="#494">494</a>    <strong>public</strong> <a href="../../zeus/concepts/PlannerEnactStruct.html">PlannerEnactStruct</a> enact(<a href="../../zeus/concepts/Goal.html">Goal</a> goal, <a href="../../zeus/concepts/Goal.html">Goal</a> sla) {
+<a name="495" href="#495">495</a>       <a href="../../zeus/concepts/PlannerEnactStruct.html">PlannerEnactStruct</a> es = <strong>new</strong> <a href="../../zeus/concepts/PlannerEnactStruct.html">PlannerEnactStruct</a>();
+<a name="496" href="#496">496</a>       <a href="../../zeus/actors/PlanRecord.html">PlanRecord</a> rec, image;
+<a name="497" href="#497">497</a> 
+<a name="498" href="#498">498</a>       notifyMonitors(goal,START,PlanningEvent.ENACTMENT);
+<a name="499" href="#499">499</a> 
+<a name="500" href="#500">500</a>       rec = lookUp(sla);
+<a name="501" href="#501">501</a>       <strong>if</strong> ( rec == <strong>null</strong> ) {
+<a name="502" href="#502">502</a>          es.ok = false;
+<a name="503" href="#503">503</a>          notifyMonitors(goal,FAIL,PlanningEvent.ENACTMENT);
+<a name="504" href="#504">504</a>          Core.DEBUG(3,<span class="string">"PlannerEnactStruct no sla found for\n"</span> +  sla);
+<a name="505" href="#505">505</a>          <strong>return</strong> es;
+<a name="506" href="#506">506</a>       }
+<a name="507" href="#507">507</a> 
+<a name="508" href="#508">508</a>       rec.enact(es,goal,<strong>null</strong>,goal.getId(),<strong>new</strong> Hashtable());
+<a name="509" href="#509">509</a> 
+<a name="510" href="#510">510</a>       <strong>if</strong> ( es.ok  ) {
+<a name="511" href="#511">511</a>          <strong>for</strong>( <strong>int</strong> i = 0; i &lt; es.images.size(); i++ ) {
+<a name="512" href="#512">512</a>             image = (PlanRecord)es.images.elementAt(i);
+<a name="513" href="#513">513</a>             image.setState(PlanRecord.FIRM);
+<a name="514" href="#514">514</a>          }
+<a name="515" href="#515">515</a>          <strong>if</strong> ( !rec.hasMoreEnactments() )
+<a name="516" href="#516">516</a>             rec.dispose();
+<a name="517" href="#517">517</a>          notifyMonitors(goal,SUCCEED,PlanningEvent.ENACTMENT);
+<a name="518" href="#518">518</a>       }
+<a name="519" href="#519">519</a>       <strong>else</strong> {
+<a name="520" href="#520">520</a>          notifyMonitors(goal,FAIL,PlanningEvent.ENACTMENT);
+<a name="521" href="#521">521</a>       }
+<a name="522" href="#522">522</a>       
+<a name="523" href="#523">523</a>       Core.DEBUG(3,<span class="string">"Final PlannerEnactStruct\n"</span> +  es);
+<a name="524" href="#524">524</a>       <strong>return</strong> es;
+<a name="525" href="#525">525</a>    }
+<a name="526" href="#526">526</a> 
+<a name="527" href="#527">527</a>    <strong>int</strong> latestConfirmTime(Vector goals) {
+<a name="528" href="#528">528</a>       Core.ERROR(goals,1012,<strong>this</strong>);
+<a name="529" href="#529">529</a>       Core.ERROR(!goals.isEmpty(),1013,<strong>this</strong>);
+<a name="530" href="#530">530</a>       <strong>int</strong>  lct = now + plannerLength;
+<a name="531" href="#531">531</a>       <strong>for</strong>( <strong>int</strong> i = 0; i &lt; goals.size(); i++ )
+<a name="532" href="#532">532</a>          lct = Math.min(lct,latestConfirmTime((Goal)goals.elementAt(i)));
+<a name="533" href="#533">533</a>       <strong>return</strong> lct;
+<a name="534" href="#534">534</a>    }
+<a name="535" href="#535">535</a>    <strong>int</strong> latestConfirmTime(<a href="../../zeus/concepts/Goal.html">Goal</a> goal) {
+<a name="536" href="#536">536</a>       <a href="../../zeus/actors/PlanRecord.html">PlanRecord</a> rec;
+<a name="537" href="#537">537</a>       rec = lookUp(goal);
+<a name="538" href="#538">538</a>       <strong>return</strong> rec.latestConfirmTime();
+<a name="539" href="#539">539</a>    }
+<a name="540" href="#540">540</a> 
+<a name="541" href="#541">541</a>    <strong>protected</strong> String makeIndex(Vector goals) {
+<a name="542" href="#542">542</a>       Core.ERROR(goals,1014,<strong>this</strong>);
+<a name="543" href="#543">543</a>       <strong>if</strong> ( goals.isEmpty() ) <strong>return</strong> <strong>null</strong>;
+<a name="544" href="#544">544</a> 
+<a name="545" href="#545">545</a>       String[] Items = <strong>new</strong> String[goals.size()];
+<a name="546" href="#546">546</a>       <strong>for</strong>( <strong>int</strong> i = 0; i &lt; goals.size(); i++ )
+<a name="547" href="#547">547</a>          Items[i] = ((Goal)goals.elementAt(i)).getId();
+<a name="548" href="#548">548</a> 
+<a name="549" href="#549">549</a>       Misc.sort(Items);
+<a name="550" href="#550">550</a> 
+<a name="551" href="#551">551</a>       String index = <strong>new</strong> String();
+<a name="552" href="#552">552</a>       <strong>for</strong>(<strong>int</strong> i = 0; i &lt; Items.length-1; i++ )
+<a name="553" href="#553">553</a>          index += Items[i] + <span class="string">"/"</span>;
+<a name="554" href="#554">554</a>       index += Items[Items.length-1];
+<a name="555" href="#555">555</a> 
+<a name="556" href="#556">556</a>       <strong>return</strong> index;
+<a name="557" href="#557">557</a>    }
+<a name="558" href="#558">558</a> 
+<a name="559" href="#559">559</a>    <strong>protected</strong> <strong>void</strong> index(<a href="../../zeus/concepts/PlannerQueryStruct.html">PlannerQueryStruct</a> Results) {
+<a name="560" href="#560">560</a>       String index = makeIndex(Results.goals);
+<a name="561" href="#561">561</a>       Core.ERROR(BindTable.put(index,Results) == <strong>null</strong>,1015,<strong>this</strong>);
+<a name="562" href="#562">562</a>    }
+<a name="563" href="#563">563</a> 
+<a name="564" href="#564">564</a>    <strong>protected</strong> <strong>void</strong> removeFromIndexTable(Vector goals) {
+<a name="565" href="#565">565</a>      Core.DEBUG(3,<span class="string">"Planner removeFromIndexTable"</span>);
+<a name="566" href="#566">566</a>       String index = makeIndex(goals);
+<a name="567" href="#567">567</a>       BindTable.remove(index);
+<a name="568" href="#568">568</a>    }
+<a name="569" href="#569">569</a> 
+<a name="570" href="#570">570</a>    <strong>public</strong> <strong>void</strong> book(<strong>int</strong> type, Vector goals, Vector records) {
+<a name="571" href="#571">571</a>       Vector rootSet = <strong>new</strong> Vector();
+<a name="572" href="#572">572</a>       <a href="../../zeus/actors/PlanRecord.html">PlanRecord</a> root;
+<a name="573" href="#573">573</a> 
+<a name="574" href="#574">574</a>       <strong>for</strong>(<strong>int</strong> i = 0; i &lt; records.size(); i++ ) {
+<a name="575" href="#575">575</a>          root = ((PlanRecord)records.elementAt(i)).getRoot();
+<a name="576" href="#576">576</a>          <strong>if</strong> ( !rootSet.contains(root) ) rootSet.addElement(root);
+<a name="577" href="#577">577</a>       }
+<a name="578" href="#578">578</a>       <a href="../../zeus/concepts/Goal.html">Goal</a> g;
+<a name="579" href="#579">579</a>       <strong>for</strong>(<strong>int</strong> i = 0; i &lt; goals.size(); i++ ) {
+<a name="580" href="#580">580</a>          g = (Goal)goals.elementAt(i);
+<a name="581" href="#581">581</a>          book(type,g,rootSet);
+<a name="582" href="#582">582</a>          <strong>if</strong> ( type == PlanRecord.FIRM )
+<a name="583" href="#583">583</a>             notifyMonitors(g,SUCCEED,PlanningEvent.PLANNING);
+<a name="584" href="#584">584</a>       }
+<a name="585" href="#585">585</a>       <strong>for</strong>(<strong>int</strong> i = 0; i &lt; rootSet.size(); i++ ) {
+<a name="586" href="#586">586</a>          root = (PlanRecord)rootSet.elementAt(i);
+<a name="587" href="#587">587</a>          root.setState(type);
+<a name="588" href="#588">588</a>       }
+<a name="589" href="#589">589</a>    }
+<a name="590" href="#590">590</a> 
+<a name="591" href="#591">591</a>    <strong>protected</strong> <strong>void</strong> book(<strong>int</strong> type, <a href="../../zeus/concepts/Goal.html">Goal</a> goal, Vector rootSet) {
+<a name="592" href="#592">592</a>       <a href="../../zeus/actors/PlanRecord.html">PlanRecord</a> rec = lookUp(goal);
+<a name="593" href="#593">593</a>       <strong>if</strong> ( rec != <strong>null</strong> ) {
+<a name="594" href="#594">594</a>          rec.setState(type);
+<a name="595" href="#595">595</a>          rootSet.removeElement(rec);
+<a name="596" href="#596">596</a>       }
+<a name="597" href="#597">597</a>    }
+<a name="598" href="#598">598</a> 
+<a name="599" href="#599">599</a>    <strong>public</strong> <strong>void</strong> reject(Vector goals, Vector records) {
+<a name="600" href="#600">600</a> 
+<a name="601" href="#601">601</a>       Core.DEBUG(3,<span class="string">"Planner Reject goals called "</span> + goals);
+<a name="602" href="#602">602</a>       removeFromIndexTable(goals);
+<a name="603" href="#603">603</a>       Vector rootSet = <strong>new</strong> Vector();
+<a name="604" href="#604">604</a>       <a href="../../zeus/actors/PlanRecord.html">PlanRecord</a> root;
+<a name="605" href="#605">605</a> 
+<a name="606" href="#606">606</a>       <strong>for</strong>(<strong>int</strong> i = 0; i &lt; records.size(); i++ ) {
+<a name="607" href="#607">607</a>          root = ((PlanRecord)records.elementAt(i)).getRoot();
+<a name="608" href="#608">608</a>          <strong>if</strong> ( !rootSet.contains(root) ) rootSet.addElement(root);
+<a name="609" href="#609">609</a>       }
+<a name="610" href="#610">610</a>       <a href="../../zeus/concepts/Goal.html">Goal</a> g;
+<a name="611" href="#611">611</a>       <strong>for</strong>(<strong>int</strong> i = 0; i &lt; goals.size(); i++ ) {
+<a name="612" href="#612">612</a>          g = (Goal)goals.elementAt(i);
+<a name="613" href="#613">613</a>          reject(g,rootSet);
+<a name="614" href="#614">614</a>          notifyMonitors(g,FAIL,PlanningEvent.PLANNING);
+<a name="615" href="#615">615</a>       }
+<a name="616" href="#616">616</a>       <strong>for</strong>(<strong>int</strong> i = 0; i &lt; rootSet.size(); i++ ) {
+<a name="617" href="#617">617</a>          root = (PlanRecord)rootSet.elementAt(i);
+<a name="618" href="#618">618</a>          root.dispose();
+<a name="619" href="#619">619</a>       }
+<a name="620" href="#620">620</a>    }
+<a name="621" href="#621">621</a> 
+<a name="622" href="#622">622</a>    <strong>protected</strong> <strong>void</strong> reject(<a href="../../zeus/concepts/Goal.html">Goal</a> goal, Vector rootSet) {
+<a name="623" href="#623">623</a>     <em class="comment">// Core.DEBUG(3,"Planner Reject goals called " + goals);</em>
+<a name="624" href="#624">624</a>       <a href="../../zeus/actors/PlanRecord.html">PlanRecord</a> rec = lookUp(goal);
+<a name="625" href="#625">625</a>       <strong>if</strong> ( rec != <strong>null</strong> ) {
+<a name="626" href="#626">626</a>          rec.dispose();
+<a name="627" href="#627">627</a>          rootSet.removeElement(rec);
+<a name="628" href="#628">628</a>       }
+<a name="629" href="#629">629</a>    }
+<a name="630" href="#630">630</a> 
+<a name="631" href="#631">631</a>    Vector schedule(String key, <a href="../../zeus/actors/PlanRecord.html">PlanRecord</a> parent, Vector path,
+<a name="632" href="#632">632</a>                    Vector goals, <a href="../../zeus/concepts/PlannerQueryStruct.html">PlannerQueryStruct</a> struct, <strong>boolean</strong> mode) {
+<a name="633" href="#633">633</a>       Core.DEBUG(3,<span class="string">"schedule: 0"</span>);
+<a name="634" href="#634">634</a>       Vector lpath;
+<a name="635" href="#635">635</a>       <a href="../../zeus/concepts/Goal.html">Goal</a> goal;
+<a name="636" href="#636">636</a>       Vector sub_records, records = <strong>new</strong> Vector();
+<a name="637" href="#637">637</a>       <strong>for</strong>(<strong>int</strong> i = 0; i &lt; goals.size(); i++ ) {
+<a name="638" href="#638">638</a>          goal = (Goal)goals.elementAt(i);
+<a name="639" href="#639">639</a>          lpath = Misc.copyVector(path);
+<a name="640" href="#640">640</a>          sub_records = schedule(key,parent,lpath,goal,struct,mode);
+<a name="641" href="#641">641</a>          records = Misc.union(records,sub_records);
+<a name="642" href="#642">642</a>       }
+<a name="643" href="#643">643</a>       <strong>return</strong> records;
+<a name="644" href="#644">644</a>    }
+<a name="645" href="#645">645</a> 
+<a name="646" href="#646">646</a>    Vector schedule(String key, <a href="../../zeus/actors/PlanRecord.html">PlanRecord</a> parent, Vector path,
+<a name="647" href="#647">647</a>                    <a href="../../zeus/concepts/Goal.html">Goal</a> goal, <a href="../../zeus/concepts/PlannerQueryStruct.html">PlannerQueryStruct</a> struct, <strong>boolean</strong> mode) {
+<a name="648" href="#648">648</a> 
+<a name="649" href="#649">649</a>       Core.DEBUG(3,<span class="string">"schedule: 1"</span>);
+<a name="650" href="#650">650</a>       <em class="comment">// Attempt to exploit side-effects of children of sister goals</em>
+<a name="651" href="#651">651</a>       <strong>if</strong> ( parent != <strong>null</strong> ) {
+<a name="652" href="#652">652</a>          goal = <strong>new</strong> <a href="../../zeus/concepts/Goal.html">Goal</a>(goal);
+<a name="653" href="#653">653</a>          <a href="../../zeus/concepts/Fact.html">Fact</a> desc = goal.getFact();
+<a name="654" href="#654">654</a>          <strong>int</strong> required = desc.getNumber();
+<a name="655" href="#655">655</a>          required = anySideEffect(desc,parent,goal.getId(),required);
+<a name="656" href="#656">656</a>          <strong>if</strong> ( required == 0 )
+<a name="657" href="#657">657</a>             <strong>return</strong> <strong>new</strong> Vector();
+<a name="658" href="#658">658</a>          <strong>else</strong> {
+<a name="659" href="#659">659</a>             desc.setNumber(required);
+<a name="660" href="#660">660</a>             goal.setFact(desc);
+<a name="661" href="#661">661</a>          }
+<a name="662" href="#662">662</a>       }
+<a name="663" href="#663">663</a> 
+<a name="664" href="#664">664</a>       <strong>if</strong> ( !validTime(goal.getEndTime()) ) {
+<a name="665" href="#665">665</a>          addToExternal(struct.external,goal);
+<a name="666" href="#666">666</a>          <strong>return</strong> <strong>new</strong> Vector();
+<a name="667" href="#667">667</a>       }
+<a name="668" href="#668">668</a> 
+<a name="669" href="#669">669</a>       Vector tasks = context.TaskDb().findAll(goal.getFact(),path);
+<a name="670" href="#670">670</a> 
+<a name="671" href="#671">671</a>       Core.DEBUG(3,<span class="string">"Tasks for: "</span> + goal.getFactType());
+<a name="672" href="#672">672</a>       Core.DEBUG(3,tasks);
+<a name="673" href="#673">673</a> 
+<a name="674" href="#674">674</a>       <strong>return</strong> schedule(key,parent,path,goal,tasks,struct,mode);
+<a name="675" href="#675">675</a>    }
+<a name="676" href="#676">676</a> 
+<a name="677" href="#677">677</a>    <strong>protected</strong> <strong>void</strong> addToExternal(Vector List, <a href="../../zeus/concepts/Goal.html">Goal</a> goal) {
+<a name="678" href="#678">678</a>       Core.DEBUG(3,<span class="string">"Adding to external ... attempt"</span>);
+<a name="679" href="#679">679</a>       String id = goal.getId();
+<a name="680" href="#680">680</a>       <a href="../../zeus/concepts/Goal.html">Goal</a> g;
+<a name="681" href="#681">681</a>       <strong>for</strong>(<strong>int</strong> i = 0; i &lt; List.size(); i++ ) {
+<a name="682" href="#682">682</a>          g = (Goal)List.elementAt(i);
+<a name="683" href="#683">683</a>          <strong>if</strong> ( id.equals(g.getId()) ) <strong>return</strong>;
+<a name="684" href="#684">684</a>       }
+<a name="685" href="#685">685</a>       Core.DEBUG(3,<span class="string">"Adding to external ... done"</span>);
+<a name="686" href="#686">686</a>       List.addElement(goal);
+<a name="687" href="#687">687</a>    }
+<a name="688" href="#688">688</a> 
+<a name="689" href="#689">689</a> 
+<a name="690" href="#690">690</a>    Vector schedule(String key, <a href="../../zeus/actors/PlanRecord.html">PlanRecord</a> parent, Vector path, <a href="../../zeus/concepts/Goal.html">Goal</a> goal,
+<a name="691" href="#691">691</a>                    Vector tasks, <a href="../../zeus/concepts/PlannerQueryStruct.html">PlannerQueryStruct</a> struct, <strong>boolean</strong> mode) {
+<a name="692" href="#692">692</a> 
+<a name="693" href="#693">693</a>       Core.DEBUG(3,<span class="string">"schedule: 2"</span>);
+<a name="694" href="#694">694</a>       Core.DEBUG(3,<span class="string">"schedule: 2 Path0 = "</span> + path);
+<a name="695" href="#695">695</a>       Vector records;
+<a name="696" href="#696">696</a>       <a href="../../zeus/concepts/Task.html">Task</a> t;
+<a name="697" href="#697">697</a> 
+<a name="698" href="#698">698</a>       <strong>if</strong> ( tasks == <strong>null</strong> )
+<a name="699" href="#699">699</a>          tasks = context.TaskDb().findAll(goal.getFact(),path);
+<a name="700" href="#700">700</a> 
+<a name="701" href="#701">701</a>       Core.DEBUG(3,<span class="string">"schedule: 2 Path1 = "</span> + path);
+<a name="702" href="#702">702</a> 
+<a name="703" href="#703">703</a>       <strong>while</strong>( !tasks.isEmpty() ) {
+<a name="704" href="#704">704</a>          t = (Task)tasks.firstElement();
+<a name="705" href="#705">705</a>          records = (t.isPrimitive())
+<a name="706" href="#706">706</a>                    ? schedule_primitive(key,parent,path,goal,tasks,struct,mode)
+<a name="707" href="#707">707</a>                    : schedule_summary(key,parent,path,goal,tasks,struct,mode);
+<a name="708" href="#708">708</a> 
+<a name="709" href="#709">709</a>          <strong>if</strong> ( !records.isEmpty() )
+<a name="710" href="#710">710</a>             <strong>return</strong> records;
+<a name="711" href="#711">711</a>       }
+<a name="712" href="#712">712</a>       addToExternal(struct.external,goal);
+<a name="713" href="#713">713</a>       <strong>return</strong> <strong>new</strong> Vector();
+<a name="714" href="#714">714</a>    }
+<a name="715" href="#715">715</a> 
+<a name="716" href="#716">716</a> 
+<a name="717" href="#717">717</a>    Vector schedule_summary(String key, <a href="../../zeus/actors/PlanRecord.html">PlanRecord</a> parent, Vector path,
+<a name="718" href="#718">718</a>                            <a href="../../zeus/concepts/Goal.html">Goal</a> goal, Vector tasks, <a href="../../zeus/concepts/PlannerQueryStruct.html">PlannerQueryStruct</a> struct,
+<a name="719" href="#719">719</a>                            <strong>boolean</strong> mode) {
+<a name="720" href="#720">720</a> 
+<a name="721" href="#721">721</a>       Core.DEBUG(3,<span class="string">"schedule_summary"</span>);
+<a name="722" href="#722">722</a>       Core.DEBUG(3,<span class="string">"schedule_summary: Path = "</span> + path);
+<a name="723" href="#723">723</a>       <a href="../../zeus/concepts/SummaryTask.html">SummaryTask</a> task = (SummaryTask)tasks.firstElement();
+<a name="724" href="#724">724</a>       tasks.removeElementAt(0);
+<a name="725" href="#725">725</a> 
+<a name="726" href="#726">726</a>       Vector records;
+<a name="727" href="#727">727</a>       String node;
+<a name="728" href="#728">728</a>       <a href="../../zeus/actors/Decomposition.html">Decomposition</a> decomposition;
+<a name="729" href="#729">729</a> 
+<a name="730" href="#730">730</a>       decomposition = <strong>new</strong> <a href="../../zeus/actors/Decomposition.html">Decomposition</a>(<strong>this</strong>,key,parent,path,goal,task);
+<a name="731" href="#731">731</a>       records = expand_summary(decomposition,struct,mode);
+<a name="732" href="#732">732</a>       Core.DEBUG(3,<span class="string">"schedule_summary end:"</span>);
+<a name="733" href="#733">733</a>       Core.DEBUG(3,struct);
+<a name="734" href="#734">734</a>       <strong>return</strong> records;
+<a name="735" href="#735">735</a>    }
+<a name="736" href="#736">736</a> 
+<a name="737" href="#737">737</a>    Vector expand_summary(<a href="../../zeus/actors/Decomposition.html">Decomposition</a> decomposition, <a href="../../zeus/concepts/PlannerQueryStruct.html">PlannerQueryStruct</a> struct,
+<a name="738" href="#738">738</a>                          <strong>boolean</strong> mode) {
+<a name="739" href="#739">739</a> 
+<a name="740" href="#740">740</a>       Core.DEBUG(3,<span class="string">"expand_summary"</span>);
+<a name="741" href="#741">741</a> 
+<a name="742" href="#742">742</a>       Vector records, path, sub_tasks;
+<a name="743" href="#743">743</a>       <a href="../../zeus/concepts/Fact.html">Fact</a>[] consumed, produced;
+<a name="744" href="#744">744</a>       String node, key;
+<a name="745" href="#745">745</a>       Vector all_records = <strong>new</strong> Vector();
+<a name="746" href="#746">746</a>       <a href="../../zeus/actors/PlanRecord.html">PlanRecord</a> rec, parent;
+<a name="747" href="#747">747</a>       <a href="../../zeus/concepts/SuppliedDb.html">SuppliedDb</a> given;
+<a name="748" href="#748">748</a>       <a href="../../zeus/actors/TaskDb.html">TaskDb</a> db = context.TaskDb();
+<a name="749" href="#749">749</a>       <a href="../../zeus/concepts/Goal.html">Goal</a> goal;
+<a name="750" href="#750">750</a> 
+<a name="751" href="#751">751</a>       decomposition.reset();
+<a name="752" href="#752">752</a>       <strong>while</strong>( (node = decomposition.nextNode()) != <strong>null</strong> ) {
+<a name="753" href="#753">753</a>          Core.DEBUG(3,<span class="string">"expand_summary node ... "</span> + node);
+<a name="754" href="#754">754</a>          <strong>if</strong> ( !decomposition.isScheduled(node) &amp;&amp;
+<a name="755" href="#755">755</a>               !decomposition.isQueued(node) ) {
+<a name="756" href="#756">756</a>             consumed = decomposition.getPreconditions(node);
+<a name="757" href="#757">757</a>             produced = decomposition.getPostconditions(node);
+<a name="758" href="#758">758</a>             path = decomposition.getPath(node);
+<a name="759" href="#759">759</a>             goal = decomposition.getGoal(node);
+<a name="760" href="#760">760</a>             Core.DEBUG(3,<span class="string">"expand_summary: goal = "</span> + goal);
+<a name="761" href="#761">761</a>             sub_tasks = db.findAll(consumed,produced,path);
+<a name="762" href="#762">762</a>             key = decomposition.getKey(node);
+<a name="763" href="#763">763</a>             parent = decomposition.getParentRecord(node);
+<a name="764" href="#764">764</a>             records = schedule(key,parent,path,goal,sub_tasks,struct,!EXPAND);
+<a name="765" href="#765">765</a>             Core.DEBUG(3,<span class="string">"expand_summary record:"</span>);
+<a name="766" href="#766">766</a>             Core.DEBUG(3,records);
+<a name="767" href="#767">767</a>             <strong>if</strong> ( !records.isEmpty() ) {
+<a name="768" href="#768">768</a>                decomposition.setRecords(node,records);
+<a name="769" href="#769">769</a>                all_records = Misc.union(all_records,records);
+<a name="770" href="#770">770</a>             }
+<a name="771" href="#771">771</a>             <strong>else</strong> {
+<a name="772" href="#772">772</a>                struct.decompositions.put(goal.getId(),decomposition);
+<a name="773" href="#773">773</a>                given = decomposition.getSuppliedDb(node);
+<a name="774" href="#774">774</a>                goal.setSuppliedDb(given);
+<a name="775" href="#775">775</a>                decomposition.setQueued(node,<strong>true</strong>);
+<a name="776" href="#776">776</a>             }
+<a name="777" href="#777">777</a>          }
+<a name="778" href="#778">778</a>       }
+<a name="779" href="#779">779</a>       <strong>if</strong> ( decomposition.allNodesScheduled() ) {
+<a name="780" href="#780">780</a>          decomposition.enforceLinks();
+<a name="781" href="#781">781</a>          decomposition.reset();
+<a name="782" href="#782">782</a>          <strong>while</strong>( (node = decomposition.nextNode()) != <strong>null</strong> ) {
+<a name="783" href="#783">783</a>             Core.DEBUG(3,<span class="string">"expand_summary node: "</span> + node);
+<a name="784" href="#784">784</a>             rec = decomposition.getRecord(node); <em class="comment">// REM ALL RECS</em>
+<a name="785" href="#785">785</a>             Core.DEBUG(3,<span class="string">"expand_summary getRecord: "</span> + rec);
+<a name="786" href="#786">786</a>             <strong>if</strong> ( rec != <strong>null</strong> ) {
+<a name="787" href="#787">787</a>                key = decomposition.getKey(node);
+<a name="788" href="#788">788</a>                path = decomposition.getPath(node);
+<a name="789" href="#789">789</a>                records = schedule_children(key,rec,path,struct,mode);
+<a name="790" href="#790">790</a>                all_records = Misc.union(all_records,records);
+<a name="791" href="#791">791</a>             }
+<a name="792" href="#792">792</a>          }
+<a name="793" href="#793">793</a>       }
+<a name="794" href="#794">794</a>       Core.DEBUG(3,<span class="string">"expand_summary end"</span>);
+<a name="795" href="#795">795</a>       Core.DEBUG(3,struct);
+<a name="796" href="#796">796</a>       <strong>return</strong> all_records;
+<a name="797" href="#797">797</a>    }
+<a name="798" href="#798">798</a> 
+<a name="799" href="#799">799</a>    Vector schedule_primitive(String key, <a href="../../zeus/actors/PlanRecord.html">PlanRecord</a> parent, Vector path,
+<a name="800" href="#800">800</a>                              <a href="../../zeus/concepts/Goal.html">Goal</a> goal, Vector tasks, <a href="../../zeus/concepts/PlannerQueryStruct.html">PlannerQueryStruct</a> struct,
+<a name="801" href="#801">801</a>                              <strong>boolean</strong> mode) {
+<a name="802" href="#802">802</a> 
+<a name="803" href="#803">803</a>       Core.DEBUG(3,<span class="string">"schedule_primitive"</span>);
+<a name="804" href="#804">804</a>       <a href="../../zeus/concepts/PrimitiveTask.html">PrimitiveTask</a> task = (PrimitiveTask)tasks.firstElement();
+<a name="805" href="#805">805</a>       tasks.removeElementAt(0);
+<a name="806" href="#806">806</a> 
+<a name="807" href="#807">807</a>       <a href="../../zeus/actors/PlanRecord.html">PlanRecord</a> rec;
+<a name="808" href="#808">808</a>       <strong>int</strong> stime, etime, duration, top, lstime, ttime;
+<a name="809" href="#809">809</a>       <strong>boolean</strong> space_found;
+<a name="810" href="#810">810</a>       <a href="../../zeus/concepts/Fact.html">Fact</a> consumed;
+<a name="811" href="#811">811</a>       Vector sub_records;
+<a name="812" href="#812">812</a>       Vector records = <strong>new</strong> Vector();
+<a name="813" href="#813">813</a> 
+<a name="814" href="#814">814</a>       <a href="../../zeus/actors/ResourceDb.html">ResourceDb</a> db = context.ResourceDb();
+<a name="815" href="#815">815</a>       <a href="../../zeus/concepts/SuppliedDb.html">SuppliedDb</a> given = goal.getSuppliedDb();
+<a name="816" href="#816">816</a> 
+<a name="817" href="#817">817</a>       etime = goal.getEndTime();
+<a name="818" href="#818">818</a>       ttime = task.getTime();
+<a name="819" href="#819">819</a>       <strong>if</strong> ( goal.isContinuous() ) {
+<a name="820" href="#820">820</a>          stime = goal.getStartTime();
+<a name="821" href="#821">821</a>          lstime = stime-ttime;
+<a name="822" href="#822">822</a>          duration = etime - lstime;
+<a name="823" href="#823">823</a>          <strong>if</strong> ( duration/ttime &lt; goal.getInvocations() )
+<a name="824" href="#824">824</a>             <strong>return</strong> records;
+<a name="825" href="#825">825</a>       }
+<a name="826" href="#826">826</a>       <strong>else</strong> {
+<a name="827" href="#827">827</a>          lstime = etime-ttime;
+<a name="828" href="#828">828</a>          duration = ttime;
+<a name="829" href="#829">829</a>       }
+<a name="830" href="#830">830</a> 
+<a name="831" href="#831">831</a>       <strong>if</strong> ( !validTime(etime)  ) <strong>return</strong> records;
+<a name="832" href="#832">832</a>       <strong>if</strong> ( !validTime(lstime) ) <strong>return</strong> records;
+<a name="833" href="#833">833</a> 
+<a name="834" href="#834">834</a>       <em class="comment">// check local &amp; negation</em>
+<a name="835" href="#835">835</a>       <strong>for</strong>(<strong>int</strong> i = 0; i &lt; task.countPreconditions(); i++ ) {
+<a name="836" href="#836">836</a>          consumed = task.getPrecondition(i);
+<a name="837" href="#837">837</a>          <strong>if</strong> ( consumed.isLocal() ) {
+<a name="838" href="#838">838</a>             <em class="comment">// Locals can be obtained from either the ResourceDb</em>
+<a name="839" href="#839">839</a> 	    <em class="comment">// or the SuppliedDb</em>
+<a name="840" href="#840">840</a>             Core.DEBUG(3,<span class="string">"Checking consumed:\n"</span> + consumed.pprint());
+<a name="841" href="#841">841</a>             Core.DEBUG(3,<span class="string">"IsLocal: true"</span>);
+<a name="842" href="#842">842</a> 
+<a name="843" href="#843">843</a>             <a href="../../zeus/concepts/Fact.html">Fact</a> x1 = <strong>null</strong>, x2 = <strong>null</strong>, x = <strong>null</strong>;
+<a name="844" href="#844">844</a>             <strong>if</strong> ( given != <strong>null</strong> ) {
+<a name="845" href="#845">845</a>                x1 = given.evalLocal(consumed);
+<a name="846" href="#846">846</a>                Core.DEBUG(3,<span class="string">"SuppliedDb contains fact:\n"</span> + x1.pprint());
+<a name="847" href="#847">847</a>             }
+<a name="848" href="#848">848</a>             x2 = db.evalLocal(consumed);
+<a name="849" href="#849">849</a>             <strong>if</strong> ( x1 == <strong>null</strong> &amp;&amp; x2 == <strong>null</strong> )
+<a name="850" href="#850">850</a>                <strong>return</strong> records;
+<a name="851" href="#851">851</a> 
+<a name="852" href="#852">852</a>             <strong>if</strong> ( x1 != <strong>null</strong> &amp;&amp; x2 != <strong>null</strong> ) {
+<a name="853" href="#853">853</a>                Core.ERROR(x1.disjoin(x2),1016,<strong>this</strong>);
+<a name="854" href="#854">854</a>                x = x1;
+<a name="855" href="#855">855</a>             }
+<a name="856" href="#856">856</a>             <strong>else</strong> <strong>if</strong> ( x1 == <strong>null</strong> )
+<a name="857" href="#857">857</a>                x = x2;
+<a name="858" href="#858">858</a>             <strong>else</strong>
+<a name="859" href="#859">859</a>                x = x1;
+<a name="860" href="#860">860</a> 
+<a name="861" href="#861">861</a>             Core.DEBUG(3,<span class="string">"Db contains fact:\n"</span> + x.pprint());
+<a name="862" href="#862">862</a>             <a href="../../zeus/concepts/Bindings.html">Bindings</a> b = <strong>new</strong> <a href="../../zeus/concepts/Bindings.html">Bindings</a>(context.whoami());
+<a name="863" href="#863">863</a>             consumed.unifiesWith(x,b);
+<a name="864" href="#864">864</a>             task.resolve(b);
+<a name="865" href="#865">865</a>             Core.DEBUG(3,<span class="string">"IsLocal bindings: "</span> + b);
+<a name="866" href="#866">866</a>          }
+<a name="867" href="#867">867</a>          <strong>else</strong> <strong>if</strong> ( consumed.isNegative() ) {
+<a name="868" href="#868">868</a>             Core.DEBUG(3,<span class="string">"Checking negative:\n"</span> + consumed.pprint());
+<a name="869" href="#869">869</a>             Core.DEBUG(3,<span class="string">"IsNegative: true"</span>);
+<a name="870" href="#870">870</a> 
+<a name="871" href="#871">871</a>             <strong>if</strong> ( !db.evalNegative(consumed) )
+<a name="872" href="#872">872</a>                <strong>return</strong> records;
+<a name="873" href="#873">873</a> 
+<a name="874" href="#874">874</a>             Core.DEBUG(3,<span class="string">"Db does not contain fact:\n"</span> + consumed.pprint());
+<a name="875" href="#875">875</a>          }
+<a name="876" href="#876">876</a>       }
+<a name="877" href="#877">877</a> 
+<a name="878" href="#878">878</a>       <strong>for</strong>(top = etime-1; validTime(top-duration); top-- ) {
+<a name="879" href="#879">879</a>          <strong>for</strong>(<strong>int</strong> proc = 0; proc &lt; plannerWidth; proc++ ) {
+<a name="880" href="#880">880</a>             space_found = <strong>true</strong>;
+<a name="881" href="#881">881</a>             <strong>for</strong>(<strong>int</strong> i = top; space_found &amp;&amp; i > top-duration; i-- )
+<a name="882" href="#882">882</a>                space_found = isFreeCell(proc,i) &amp; space_found;
+<a name="883" href="#883">883</a>             <strong>if</strong> ( space_found ) {
+<a name="884" href="#884">884</a>                rec = <strong>new</strong> <a href="../../zeus/actors/PlanRecord.html">PlanRecord</a>(<strong>this</strong>,key,parent,goal,task,proc,
+<a name="885" href="#885">885</a>                                     top-duration+1,top+1);
+<a name="886" href="#886">886</a>                rec.setPath(Misc.copyVector(path));
+<a name="887" href="#887">887</a>                rec.setAlternativeTasks(tasks);
+<a name="888" href="#888">888</a> 
+<a name="889" href="#889">889</a>                <strong>for</strong>(<strong>int</strong> i = top; i > top-duration; i-- )
+<a name="890" href="#890">890</a>                   assignCell(proc,i,rec);
+<a name="891" href="#891">891</a> 
+<a name="892" href="#892">892</a>                struct.internal.addElement(rec);
+<a name="893" href="#893">893</a>                records.addElement(rec);
+<a name="894" href="#894">894</a>                path.addElement(goal.getFact());
+<a name="895" href="#895">895</a> 
+<a name="896" href="#896">896</a>                sub_records = schedule_children(key,rec,path,struct,mode);
+<a name="897" href="#897">897</a>                records = Misc.union(records,sub_records);
+<a name="898" href="#898">898</a>                <strong>return</strong> records;
+<a name="899" href="#899">899</a>             }
+<a name="900" href="#900">900</a>          }
+<a name="901" href="#901">901</a>       }
+<a name="902" href="#902">902</a> 
+<a name="903" href="#903">903</a>       <em class="comment">// !space_found</em>
+<a name="904" href="#904">904</a> 
+<a name="905" href="#905">905</a>       Core.DEBUG(3,<span class="string">"Space not found for: "</span> + goal.getFactType());
+<a name="906" href="#906">906</a>       Core.DEBUG(3,<span class="string">"tduration = "</span> + duration);
+<a name="907" href="#907">907</a>       Core.DEBUG(3,<span class="string">"tetime = "</span> + etime);
+<a name="908" href="#908">908</a>       Core.DEBUG(3,<span class="string">"tlstime = "</span> + lstime);
+<a name="909" href="#909">909</a> 
+<a name="910" href="#910">910</a>       <strong>return</strong> records;
+<a name="911" href="#911">911</a>    }
+<a name="912" href="#912">912</a> 
+<a name="913" href="#913">913</a>    <strong>protected</strong> Vector schedule_children(String key, <a href="../../zeus/actors/PlanRecord.html">PlanRecord</a> rec, Vector path,
+<a name="914" href="#914">914</a>                                       <a href="../../zeus/concepts/PlannerQueryStruct.html">PlannerQueryStruct</a> struct, <strong>boolean</strong> mode) {
+<a name="915" href="#915">915</a> 
+<a name="916" href="#916">916</a>       Vector external, subgoals, sub_records, lpath;
+<a name="917" href="#917">917</a>       Vector records = <strong>new</strong> Vector();
+<a name="918" href="#918">918</a>       <a href="../../zeus/actors/ResourceDb.html">ResourceDb</a> db = context.ResourceDb();
+<a name="919" href="#919">919</a>       <a href="../../zeus/concepts/SuppliedDb.html">SuppliedDb</a> given = rec.getSuppliedDb();
+<a name="920" href="#920">920</a> 
+<a name="921" href="#921">921</a>       <strong>if</strong> ( mode == EXPAND ) {
+<a name="922" href="#922">922</a>          external = struct.external;
+<a name="923" href="#923">923</a>          struct.external = <strong>new</strong> Vector();
+<a name="924" href="#924">924</a>          <strong>do</strong> {
+<a name="925" href="#925">925</a>             <strong>if</strong> ( given != <strong>null</strong> )
+<a name="926" href="#926">926</a>                given.allocateResources(rec);
+<a name="927" href="#927">927</a>             subgoals = db.allocateResources(rec);
+<a name="928" href="#928">928</a>             <strong>if</strong> ( !subgoals.isEmpty() ) {
+<a name="929" href="#929">929</a>                lpath = Misc.copyVector(path);
+<a name="930" href="#930">930</a>                sub_records = schedule(key,rec,lpath,subgoals,struct,mode);
+<a name="931" href="#931">931</a>                records = Misc.union(records,sub_records);
+<a name="932" href="#932">932</a>             }
+<a name="933" href="#933">933</a>          } <strong>while</strong> ( struct.external.isEmpty() &amp;&amp; !subgoals.isEmpty() );
+<a name="934" href="#934">934</a>          struct.external = Misc.union(struct.external,external);
+<a name="935" href="#935">935</a>       }
+<a name="936" href="#936">936</a>       <strong>return</strong> records;
+<a name="937" href="#937">937</a>    }
+<a name="938" href="#938">938</a> 
+<a name="939" href="#939">939</a> 
+<a name="940" href="#940">940</a>    <strong>protected</strong> <strong>void</strong> resume_planning(<a href="../../zeus/actors/rtn/util/DelegationStruct.html">DelegationStruct</a>[] ds,
+<a name="941" href="#941">941</a>                                   <a href="../../zeus/concepts/PlannerQueryStruct.html">PlannerQueryStruct</a> struct) {
+<a name="942" href="#942">942</a>       <a href="../../zeus/concepts/Goal.html">Goal</a> g;
+<a name="943" href="#943">943</a>       <strong>boolean</strong> found;
+<a name="944" href="#944">944</a>       <a href="../../zeus/actors/Decomposition.html">Decomposition</a> decomposition = <strong>null</strong>;
+<a name="945" href="#945">945</a>       String key;
+<a name="946" href="#946">946</a>       Vector path, records;
+<a name="947" href="#947">947</a>       <a href="../../zeus/actors/PlanRecord.html">PlanRecord</a> rec = <strong>null</strong>;
+<a name="948" href="#948">948</a> 
+<a name="949" href="#949">949</a>       Core.DEBUG(3,<span class="string">"resume_planning ... ds/struct"</span>);
+<a name="950" href="#950">950</a>       Core.DEBUG(3,ds);
+<a name="951" href="#951">951</a>       Core.DEBUG(3,struct);
+<a name="952" href="#952">952</a> 
+<a name="953" href="#953">953</a>       String consumer, consumer_id;
+<a name="954" href="#954">954</a>       String producer, producer_id;
+<a name="955" href="#955">955</a>       String use_ref;
+<a name="956" href="#956">956</a>       <strong>int</strong> amount, start;
+<a name="957" href="#957">957</a>       <strong>boolean</strong> consumed;
+<a name="958" href="#958">958</a> 
+<a name="959" href="#959">959</a>       struct.external.removeAllElements();
+<a name="960" href="#960">960</a>       <strong>for</strong>(<strong>int</strong> i = 0; i &lt; ds.length; i++ ) {
+<a name="961" href="#961">961</a>          <em class="comment">// assume only one goal in request</em>
+<a name="962" href="#962">962</a>          g = (Goal)ds[i].goals.elementAt(0);
+<a name="963" href="#963">963</a> 
+<a name="964" href="#964">964</a>          decomposition = (Decomposition)struct.decompositions.remove(g.getId());
+<a name="965" href="#965">965</a>          <strong>if</strong> ( decomposition == <strong>null</strong> ) {
+<a name="966" href="#966">966</a>             found = false;
+<a name="967" href="#967">967</a>             <strong>for</strong>(<strong>int</strong> j = 0; !found &amp;&amp; j &lt; struct.<strong>int</strong>ernal.size(); j++ ) {
+<a name="968" href="#968">968</a>                rec = (PlanRecord)struct.internal.elementAt(j);
+<a name="969" href="#969">969</a>                found = rec.hasSubgoal(g.getId());
+<a name="970" href="#970">970</a>             }
+<a name="971" href="#971">971</a>             Core.ERROR(found,1017,<strong>this</strong>);
+<a name="972" href="#972">972</a> 
+<a name="973" href="#973">973</a>             producer = ds[i].agent;
+<a name="974" href="#974">974</a>             producer_id = g.getId();
+<a name="975" href="#975">975</a>             consumer = context.whoami();
+<a name="976" href="#976">976</a>             consumer_id = rec.getGoal().getId();
+<a name="977" href="#977">977</a>             use_ref = context.newId(<span class="string">"used"</span>);
+<a name="978" href="#978">978</a>             start = rec.getStartTime();
+<a name="979" href="#979">979</a>             <strong>int</strong> precond_position = rec.getConsumedPosition(producer_id);
+<a name="980" href="#980">980</a>             consumed = rec.isPreconditionConsumed(precond_position);
+<a name="981" href="#981">981</a>             amount = rec.getAmountUsed(precond_position);
+<a name="982" href="#982">982</a>             Core.ERROR(amount > 0,1031,<strong>this</strong>);
+<a name="983" href="#983">983</a> 
+<a name="984" href="#984">984</a>             g.addConsumer(producer, producer_id, consumer, consumer_id,
+<a name="985" href="#985">985</a>                           use_ref, ds[i].key, start, amount, consumed);
+<a name="986" href="#986">986</a> 
+<a name="987" href="#987">987</a>             rec.getConsumedDb().update(producer_id+<span class="string">"/"</span>+use_ref, producer_id);
+<a name="988" href="#988">988</a> 
+<a name="989" href="#989">989</a>             path = rec.getChildPath();
+<a name="990" href="#990">990</a>             key = rec.getKey();
+<a name="991" href="#991">991</a>             schedule_children(key,rec,path,struct,EXPAND);
+<a name="992" href="#992">992</a>          }
+<a name="993" href="#993">993</a>          <strong>else</strong> {
+<a name="994" href="#994">994</a>             String node = decomposition.getNodeWithGoalId(g.getId());
+<a name="995" href="#995">995</a>             Core.DEBUG(3,<span class="string">"getNodeWithGoalId "</span> + g.getId() + <span class="string">" "</span> + node);
+<a name="996" href="#996">996</a>             decomposition.setImage(node,g,ds[i].agent,ds[i].key);
+<a name="997" href="#997">997</a>             expand_summary(decomposition,struct,EXPAND);
+<a name="998" href="#998">998</a>          }
+<a name="999" href="#999">999</a>       }
+<a name="1000" href="#1000">1000</a>    }
+<a name="1001" href="#1001">1001</a> 
+<a name="1002" href="#1002">1002</a>    <strong>public</strong> <strong>void</strong> goalConfirmed(Vector original_goals, Vector confirmed_goals,
+<a name="1003" href="#1003">1003</a>                              Vector selection) {
+<a name="1004" href="#1004">1004</a>       <a href="../../zeus/concepts/Goal.html">Goal</a> g, g1;
+<a name="1005" href="#1005">1005</a>       Vector records;
+<a name="1006" href="#1006">1006</a>       <a href="../../zeus/actors/rtn/util/DelegationStruct.html">DelegationStruct</a> ds;
+<a name="1007" href="#1007">1007</a>       <a href="../../zeus/concepts/ProducerRecord.html">ProducerRecord</a> pr;
+<a name="1008" href="#1008">1008</a>       <a href="../../zeus/concepts/ConsumerRecord.html">ConsumerRecord</a> cr;
+<a name="1009" href="#1009">1009</a>       <a href="../../zeus/actors/PlanRecord.html">PlanRecord</a> rec;
+<a name="1010" href="#1010">1010</a>       <a href="../../zeus/actors/ConsumedDb.html">ConsumedDb</a> cdb;
+<a name="1011" href="#1011">1011</a>       <a href="../../zeus/actors/ProducedDb.html">ProducedDb</a> pdb;
+<a name="1012" href="#1012">1012</a>       <strong>boolean</strong> test;
+<a name="1013" href="#1013">1013</a>       <a href="../../zeus/concepts/SuppliedDb.html">SuppliedDb</a> given;
+<a name="1014" href="#1014">1014</a> <em class="comment">/*</em>
+<a name="1015" href="#1015">1015</a> <em class="comment">   REM: some check may be made with original_goals</em>
+<a name="1016" href="#1016">1016</a> <em class="comment">*/</em>
+<a name="1017" href="#1017">1017</a>       <strong>for</strong>(<strong>int</strong> i = 0; i &lt; confirmed_goals.size(); i++ ) {
+<a name="1018" href="#1018">1018</a>          g = (Goal)confirmed_goals.elementAt(i);
+<a name="1019" href="#1019">1019</a> 
+<a name="1020" href="#1020">1020</a>          records = g.getProducerRecords();
+<a name="1021" href="#1021">1021</a>          <strong>for</strong>(<strong>int</strong> j = 0; records != <strong>null</strong> &amp;&amp; j &lt; records.size(); j++ ) {
+<a name="1022" href="#1022">1022</a>             pr = (ProducerRecord)records.elementAt(j);
+<a name="1023" href="#1023">1023</a>             <strong>if</strong> ( pr.consumer.equals(context.whoami()) ) {
+<a name="1024" href="#1024">1024</a>                rec = (PlanRecord)<strong>this</strong>.get(pr.consumer_id);
+<a name="1025" href="#1025">1025</a>                Core.ERROR(rec,1001,<strong>this</strong>);
+<a name="1026" href="#1026">1026</a>                cdb = rec.getConsumedDb();
+<a name="1027" href="#1027">1027</a>                test = cdb.update(pr.producer_id+<span class="string">"/"</span>+pr.use_ref,pr.use_ref);
+<a name="1028" href="#1028">1028</a>                Core.ERROR(test,1002,<strong>this</strong>);
+<a name="1029" href="#1029">1029</a>             }
+<a name="1030" href="#1030">1030</a>             <strong>else</strong> {
+<a name="1031" href="#1031">1031</a>                <strong>for</strong>(<strong>int</strong> k = 0; k &lt; selection.size(); k++ ) {
+<a name="1032" href="#1032">1032</a>                   ds = (DelegationStruct)selection.elementAt(k);
+<a name="1033" href="#1033">1033</a>                   <em class="comment">// Assumes one element only in ds.goals</em>
+<a name="1034" href="#1034">1034</a>                   g1 = (Goal)ds.goals.elementAt(0);
+<a name="1035" href="#1035">1035</a>                   given = g1.getSuppliedDb();
+<a name="1036" href="#1036">1036</a>                   <strong>if</strong> ( given != <strong>null</strong> &amp;&amp; given.isReserved(pr.supply_ref) )
+<a name="1037" href="#1037">1037</a>                      g1.addProducer(pr);
+<a name="1038" href="#1038">1038</a>                }
+<a name="1039" href="#1039">1039</a>             }
+<a name="1040" href="#1040">1040</a>          }
+<a name="1041" href="#1041">1041</a> 
+<a name="1042" href="#1042">1042</a>          records = g.getConsumerRecords();
+<a name="1043" href="#1043">1043</a>          <strong>for</strong>(<strong>int</strong> j = 0; records != <strong>null</strong> &amp;&amp; j &lt; records.size(); j++ ) {
+<a name="1044" href="#1044">1044</a>             cr = (ConsumerRecord)records.elementAt(j);
+<a name="1045" href="#1045">1045</a>             <strong>if</strong> ( cr.producer.equals(context.whoami()) ) {
+<a name="1046" href="#1046">1046</a>                rec = (PlanRecord)<strong>this</strong>.get(cr.producer_id);
+<a name="1047" href="#1047">1047</a>                Core.ERROR(rec,1003,<strong>this</strong>);
+<a name="1048" href="#1048">1048</a>                pdb = rec.getProducedDb();
+<a name="1049" href="#1049">1049</a>                Core.DEBUG(3,<span class="string">"CdB replacing "</span> + cr.producer_id + <span class="string">" with "</span> +
+<a name="1050" href="#1050">1050</a>                                  cr.consumer_id+<span class="string">"/"</span>+cr.use_ref);
+<a name="1051" href="#1051">1051</a>                Core.DEBUG(3,records);
+<a name="1052" href="#1052">1052</a>                Core.DEBUG(3,rec);
+<a name="1053" href="#1053">1053</a>                
+<a name="1054" href="#1054">1054</a>                test = pdb.replaceOrAdd(cr.producer_id,
+<a name="1055" href="#1055">1055</a>                                        cr.consumer_id + <span class="string">"/"</span> + cr.use_ref,
+<a name="1056" href="#1056">1056</a>                                        cr.start, cr.amount, cr.consumed );
+<a name="1057" href="#1057">1057</a>                Core.DEBUG(3,<span class="string">"Replacement is "</span> + test);
+<a name="1058" href="#1058">1058</a>                Core.ERROR(test,1004,<strong>this</strong>);
+<a name="1059" href="#1059">1059</a>             }
+<a name="1060" href="#1060">1060</a>             <strong>else</strong> {
+<a name="1061" href="#1061">1061</a>                <strong>for</strong>(<strong>int</strong> k = 0; k &lt; selection.size(); k++ ) {
+<a name="1062" href="#1062">1062</a>                   ds = (DelegationStruct)selection.elementAt(k);
+<a name="1063" href="#1063">1063</a>                   <em class="comment">// Assumes one element only in ds.goals</em>
+<a name="1064" href="#1064">1064</a>                   g1 = (Goal)ds.goals.elementAt(0);
+<a name="1065" href="#1065">1065</a>                   g1.addConsumer(cr);
+<a name="1066" href="#1066">1066</a>                }
+<a name="1067" href="#1067">1067</a>             }
+<a name="1068" href="#1068">1068</a>          }
+<a name="1069" href="#1069">1069</a>       }
+<a name="1070" href="#1070">1070</a>    }
+<a name="1071" href="#1071">1071</a> 
+<a name="1072" href="#1072">1072</a>    <strong>protected</strong> <strong>boolean</strong> validTime(<strong>int</strong> t) {  
+<a name="1073" href="#1073">1073</a>       <strong>return</strong> (now + plannerLength >= t &amp;&amp; t >= now);
+<a name="1074" href="#1074">1074</a>    }
+<a name="1075" href="#1075">1075</a> 
+<a name="1076" href="#1076">1076</a>    <strong>protected</strong> <strong>boolean</strong> validProc(<strong>int</strong> proc) {
+<a name="1077" href="#1077">1077</a>       <strong>return</strong> ( proc >= 0 &amp;&amp; proc &lt; plannerWidth);
+<a name="1078" href="#1078">1078</a>    }
+<a name="1079" href="#1079">1079</a> 
+<a name="1080" href="#1080">1080</a>    <strong>protected</strong> <strong>boolean</strong> isFreeCell(<strong>int</strong> proc, <strong>int</strong> t) {
+<a name="1081" href="#1081">1081</a>       Core.ERROR(proc >= 0 &amp;&amp; proc &lt; plannerWidth, 1018,<strong>this</strong>);
+<a name="1082" href="#1082">1082</a>       Core.ERROR(now + plannerLength > t &amp;&amp; t >= now, 1019,<strong>this</strong>);
+<a name="1083" href="#1083">1083</a>       <strong>return</strong> (table[proc][t-now] == <strong>null</strong>);
+<a name="1084" href="#1084">1084</a>    }
+<a name="1085" href="#1085">1085</a> 
+<a name="1086" href="#1086">1086</a>     <em>/**<em>* </em></em>
+<a name="1087" href="#1087">1087</a> <em>        1.3 promoted to public - used to decide which job to execute</em>
+<a name="1088" href="#1088">1088</a> <em>    */</em>
+<a name="1089" href="#1089">1089</a>     <em class="comment">//synchronized</em>
+<a name="1090" href="#1090">1090</a>   <strong>public</strong> <strong>void</strong> shuffle() {
+<a name="1091" href="#1091">1091</a>       checkRecords();
+<a name="1092" href="#1092">1092</a>       <strong>for</strong>(<strong>int</strong> i = 0; i &lt; plannerWidth; i++ ) {
+<a name="1093" href="#1093">1093</a>          <strong>for</strong>(<strong>int</strong> j = 0; j &lt; plannerLength-1; j++ )
+<a name="1094" href="#1094">1094</a>             assignCell(i,j+now,table[i][j+1]);
+<a name="1095" href="#1095">1095</a>          assignCell(i,plannerLength-1+now,<strong>null</strong>);
+<a name="1096" href="#1096">1096</a>       }
+<a name="1097" href="#1097">1097</a>       now++;
+<a name="1098" href="#1098">1098</a>    }
+<a name="1099" href="#1099">1099</a> 
+<a name="1100" href="#1100">1100</a> <em class="comment">//synchronized</em>
+<a name="1101" href="#1101">1101</a>     <strong>synchronized</strong> <strong>void</strong>  executeEarliest() {
+<a name="1102" href="#1102">1102</a>       <a href="../../zeus/actors/PlanRecord.html">PlanRecord</a> rec;
+<a name="1103" href="#1103">1103</a>       Enumeration enum  = <strong>this</strong>.elements();
+<a name="1104" href="#1104">1104</a>       <strong>while</strong>( enum.hasMoreElements() ) {
+<a name="1105" href="#1105">1105</a>          rec = (PlanRecord)enum.nextElement();
+<a name="1106" href="#1106">1106</a>          <strong>if</strong> ( rec.getState() == PlanRecord.FIRM &amp;&amp;
+<a name="1107" href="#1107">1107</a>               rec.isDiscrete() &amp;&amp;
+<a name="1108" href="#1108">1108</a>               rec.getStartTime() > now &amp;&amp;
+<a name="1109" href="#1109">1109</a>               rec.hasEnoughResources() )
+<a name="1110" href="#1110">1110</a>             executeEarliest(rec);
+<a name="1111" href="#1111">1111</a>       }
+<a name="1112" href="#1112">1112</a>    }
+<a name="1113" href="#1113">1113</a>    
+<a name="1114" href="#1114">1114</a>    
+<a name="1115" href="#1115">1115</a>    <em class="comment">//synchronized           </em>
+<a name="1116" href="#1116">1116</a>     <strong>synchronized</strong> <strong>void</strong> executeEarliest(<a href="../../zeus/actors/PlanRecord.html">PlanRecord</a> rec) {
+<a name="1117" href="#1117">1117</a>       <strong>int</strong> stime, etime, duration, top;
+<a name="1118" href="#1118">1118</a>       <strong>boolean</strong> space_found;
+<a name="1119" href="#1119">1119</a> 
+<a name="1120" href="#1120">1120</a>       etime = rec.getEndTime();
+<a name="1121" href="#1121">1121</a>       stime = rec.getStartTime();
+<a name="1122" href="#1122">1122</a>       duration = etime - stime;
+<a name="1123" href="#1123">1123</a> 
+<a name="1124" href="#1124">1124</a>       <strong>if</strong> ( !validTime(etime) ) <strong>return</strong>;
+<a name="1125" href="#1125">1125</a>       <strong>if</strong> ( !validTime(stime) ) <strong>return</strong>;
+<a name="1126" href="#1126">1126</a> 
+<a name="1127" href="#1127">1127</a>       <strong>for</strong>( top = now+1; top &lt; stime; top++ ) {
+<a name="1128" href="#1128">1128</a>          <strong>for</strong>( <strong>int</strong> proc = 0; proc &lt; plannerWidth; proc++ ) {
+<a name="1129" href="#1129">1129</a>             space_found = <strong>true</strong>;
+<a name="1130" href="#1130">1130</a>             <strong>for</strong>( <strong>int</strong> i = top; i &lt; top+duration; i++ ) {
+<a name="1131" href="#1131">1131</a>                space_found = space_found &amp;&amp; (isFreeCell(proc,i) ||
+<a name="1132" href="#1132">1132</a>                              rec.isOnCell(proc,i));
+<a name="1133" href="#1133">1133</a>                <strong>if</strong> ( !space_found ) <strong>break</strong>;
+<a name="1134" href="#1134">1134</a>             }
+<a name="1135" href="#1135">1135</a>             <strong>if</strong> ( space_found ) {
+<a name="1136" href="#1136">1136</a>                Core.DEBUG(3,<span class="string">"Reassigning rec "</span> + rec.getId() +
+<a name="1137" href="#1137">1137</a>                                  <span class="string">" from ["</span> + stime + <span class="string">","</span> + etime + <span class="string">"] to ["</span> +
+<a name="1138" href="#1138">1138</a>                                  top + <span class="string">","</span> + (top+duration) +<span class="string">"]"</span>);
+<a name="1139" href="#1139">1139</a>                rec.reassign(proc,top);
+<a name="1140" href="#1140">1140</a>                <strong>for</strong>(<strong>int</strong> i = top; i &lt; top+duration; i++ )
+<a name="1141" href="#1141">1141</a>                   assignCell(proc,i,rec);
+<a name="1142" href="#1142">1142</a>                <strong>return</strong>;
+<a name="1143" href="#1143">1143</a>             }
+<a name="1144" href="#1144">1144</a>          }
+<a name="1145" href="#1145">1145</a>       }
+<a name="1146" href="#1146">1146</a>    }
+<a name="1147" href="#1147">1147</a> 
+<a name="1148" href="#1148">1148</a> 
+<a name="1149" href="#1149">1149</a>     <em class="comment">// synchronized</em>
+<a name="1150" href="#1150">1150</a>    <strong>synchronized</strong> <strong>boolean</strong> incrementProcessorTime(<a href="../../zeus/actors/PlanRecord.html">PlanRecord</a> rec,<strong>int</strong> time) {
+<a name="1151" href="#1151">1151</a>       <strong>if</strong> ( !validTime(time) ) <strong>return</strong> false;
+<a name="1152" href="#1152">1152</a>       <strong>if</strong> ( isFreeCell(rec.getProc(),time) ) {
+<a name="1153" href="#1153">1153</a>          rec.incrementTime(time);
+<a name="1154" href="#1154">1154</a>          assignCell(rec.getProc(),time,rec);
+<a name="1155" href="#1155">1155</a>          <strong>return</strong> <strong>true</strong>;
+<a name="1156" href="#1156">1156</a>       }
+<a name="1157" href="#1157">1157</a>       <strong>else</strong> {
+<a name="1158" href="#1158">1158</a>          <em class="comment">// shift other records to different processors if possible</em>
+<a name="1159" href="#1159">1159</a>          <em class="comment">// then rec.incrementTime()</em>
+<a name="1160" href="#1160">1160</a>       }
+<a name="1161" href="#1161">1161</a>       <strong>return</strong> false;
+<a name="1162" href="#1162">1162</a>    }
+<a name="1163" href="#1163">1163</a> 
+<a name="1164" href="#1164">1164</a> 
+<a name="1165" href="#1165">1165</a>     <em>/**<em>* </em></em>
+<a name="1166" href="#1166">1166</a> <em>        start Firmly booked tasks &amp; cancel Tentatively booked ones</em>
+<a name="1167" href="#1167">1167</a> <em>        1.3 - promoted to public </em>
+<a name="1168" href="#1168">1168</a> <em>        // synched ?</em>
+<a name="1169" href="#1169">1169</a> <em>        */</em>
+<a name="1170" href="#1170">1170</a>    <strong>synchronized</strong> <strong>public</strong> <strong>void</strong> checkRecords() { 
+<a name="1171" href="#1171">1171</a>       <a href="../../zeus/actors/PlanRecord.html">PlanRecord</a> rec, root;
+<a name="1172" href="#1172">1172</a>       <a href="../../zeus/actors/ExecutionMonitor.html">ExecutionMonitor</a> monitor = context.ExecutionMonitor();
+<a name="1173" href="#1173">1173</a>       <strong>for</strong>( <strong>int</strong> i = 0; i &lt; plannerWidth; i++ ) {
+<a name="1174" href="#1174">1174</a>          <strong>if</strong> ( (rec = table[i][0]) != <strong>null</strong> ) {
+<a name="1175" href="#1175">1175</a>             <strong>switch</strong>( rec.getState() ) {
+<a name="1176" href="#1176">1176</a>                <strong>case</strong> PlanRecord.JEOPARDY:
+<a name="1177" href="#1177">1177</a>                <strong>case</strong> PlanRecord.AGREEMENT:
+<a name="1178" href="#1178">1178</a>                   <strong>break</strong>;
+<a name="1179" href="#1179">1179</a>                <strong>case</strong> PlanRecord.TEMP:
+<a name="1180" href="#1180">1180</a>                <strong>case</strong> PlanRecord.TENTATIVE:
+<a name="1181" href="#1181">1181</a>                   <em class="comment">// NOTIFY MONITORS FREE CELL</em>
+<a name="1182" href="#1182">1182</a>                   root = rec.getRoot();
+<a name="1183" href="#1183">1183</a>                   root.dispose();
+<a name="1184" href="#1184">1184</a>                   <strong>break</strong>;
+<a name="1185" href="#1185">1185</a>                <strong>case</strong> PlanRecord.FIRM:
+<a name="1186" href="#1186">1186</a>                   <strong>if</strong> ( rec.exec() )
+<a name="1187" href="#1187">1187</a>                      ; <em class="comment">// NOTIFY MONITORS START CELL</em>
+<a name="1188" href="#1188">1188</a>                   <strong>break</strong>;
+<a name="1189" href="#1189">1189</a>                <strong>case</strong> PlanRecord.RUNNING:
+<a name="1190" href="#1190">1190</a>                   <strong>if</strong> ( rec.overRun() )
+<a name="1191" href="#1191">1191</a>                      ; <em class="comment">// NOTIFY MONITORS STOP CELL</em>
+<a name="1192" href="#1192">1192</a>                   <strong>else</strong> 
+<a name="1193" href="#1193">1193</a>                      <strong>break</strong>;
+<a name="1194" href="#1194">1194</a>                <strong>case</strong> PlanRecord.FAILED:
+<a name="1195" href="#1195">1195</a>                   <em class="comment">// NOTIFY MONITORS CELL FAILED</em>
+<a name="1196" href="#1196">1196</a>                   root = rec.getRoot();
+<a name="1197" href="#1197">1197</a>                   root.dispose();
+<a name="1198" href="#1198">1198</a>                   <strong>break</strong>;
+<a name="1199" href="#1199">1199</a>                <strong>case</strong> PlanRecord.COMPLETED:
+<a name="1200" href="#1200">1200</a>                   <em class="comment">// NOTIFY MONITORS CELL COMPLETED</em>
+<a name="1201" href="#1201">1201</a>                   rec.dispose();
+<a name="1202" href="#1202">1202</a>                   <strong>break</strong>;
+<a name="1203" href="#1203">1203</a>             }
+<a name="1204" href="#1204">1204</a>          }
+<a name="1205" href="#1205">1205</a>       }
+<a name="1206" href="#1206">1206</a>       <strong>if</strong> ( context.getExecuteEarliest() ) executeEarliest();
+<a name="1207" href="#1207">1207</a>    }
+<a name="1208" href="#1208">1208</a>  
+<a name="1209" href="#1209">1209</a>  
+<a name="1210" href="#1210">1210</a>    <strong>public</strong> <strong>void</strong> notifyReceived(<a href="../../zeus/concepts/Fact.html">Fact</a> f1, String goalId, String subgoalId) {
+<a name="1211" href="#1211">1211</a>     <strong>try</strong> {
+<a name="1212" href="#1212">1212</a>       Core.DEBUG(3,<span class="string">"NotifyReceived...\n"</span> + f1.pprint());
+<a name="1213" href="#1213">1213</a>       <a href="../../zeus/actors/PlanRecord.html">PlanRecord</a> rec = (PlanRecord)<strong>this</strong>.get(goalId);
+<a name="1214" href="#1214">1214</a>       Core.ERROR(rec,1020,<strong>this</strong>);
+<a name="1215" href="#1215">1215</a>       context.ResourceDb().add(f1);
+<a name="1216" href="#1216">1216</a>       rec.preconditionExists(subgoalId);}
+<a name="1217" href="#1217">1217</a>       <strong>catch</strong> (Exception e) { 
+<a name="1218" href="#1218">1218</a>         e.printStackTrace(); 
+<a name="1219" href="#1219">1219</a>       }
+<a name="1220" href="#1220">1220</a>       
+<a name="1221" href="#1221">1221</a>    }
+<a name="1222" href="#1222">1222</a> 
+<a name="1223" href="#1223">1223</a>    <strong>protected</strong> <strong>void</strong> assignCell(<strong>int</strong> proc, <strong>int</strong> t, <a href="../../zeus/actors/PlanRecord.html">PlanRecord</a> rec) {
+<a name="1224" href="#1224">1224</a>       Core.ERROR(proc >= 0 &amp;&amp; proc &lt; plannerWidth,1021,<strong>this</strong>);
+<a name="1225" href="#1225">1225</a>       Core.ERROR(now + plannerLength > t &amp;&amp; t >= now,1022,<strong>this</strong>);
+<a name="1226" href="#1226">1226</a>       table[proc][t-now] = rec;
+<a name="1227" href="#1227">1227</a>    }
+<a name="1228" href="#1228">1228</a> 
+<a name="1229" href="#1229">1229</a>    <strong>void</strong> freeCell( <strong>int</strong> proc, <strong>int</strong> t) {
+<a name="1230" href="#1230">1230</a>       Core.ERROR(proc >= 0 &amp;&amp; proc &lt; plannerWidth,1023,<strong>this</strong>);
+<a name="1231" href="#1231">1231</a>       <strong>if</strong> ( now + plannerLength > t &amp;&amp; t >= now ) {
+<a name="1232" href="#1232">1232</a>          table[proc][t-now] = <strong>null</strong>;
+<a name="1233" href="#1233">1233</a>       }
+<a name="1234" href="#1234">1234</a>    }
+<a name="1235" href="#1235">1235</a> 
+<a name="1236" href="#1236">1236</a>    <strong>void</strong> freeCells(<strong>int</strong> proc, <strong>int</strong> s, <strong>int</strong> e) {
+<a name="1237" href="#1237">1237</a>       <strong>for</strong>(<strong>int</strong> i = s; i &lt; e; i++ ) freeCell(proc,i);
+<a name="1238" href="#1238">1238</a>    }
+<a name="1239" href="#1239">1239</a> 
+<a name="1240" href="#1240">1240</a>    <strong>public</strong> <a href="../../zeus/concepts/Goal.html">Goal</a> recreateSubgoal(<a href="../../zeus/concepts/Goal.html">Goal</a> goal) {
+<a name="1241" href="#1241">1241</a>       <a href="../../zeus/actors/PlanRecord.html">PlanRecord</a> rec;
+<a name="1242" href="#1242">1242</a>       String goalId = goal.getId();
+<a name="1243" href="#1243">1243</a>       Enumeration enum = <strong>this</strong>.elements();
+<a name="1244" href="#1244">1244</a>       <strong>while</strong>( enum.hasMoreElements() ) {
+<a name="1245" href="#1245">1245</a>          rec = (PlanRecord) enum.nextElement();
+<a name="1246" href="#1246">1246</a>          <strong>if</strong> ( rec.hasSubgoal(goalId) )
+<a name="1247" href="#1247">1247</a>             <strong>return</strong> rec.recreateSubgoal(goal);
+<a name="1248" href="#1248">1248</a>       }
+<a name="1249" href="#1249">1249</a>       <a href="../../zeus/concepts/Goal.html">Goal</a> g = <strong>new</strong> <a href="../../zeus/concepts/Goal.html">Goal</a>(goal);
+<a name="1250" href="#1250">1250</a>       g.setId(context.newId(<span class="string">"subgoal"</span>));
+<a name="1251" href="#1251">1251</a>       g.setImage(goal.getId());
+<a name="1252" href="#1252">1252</a>       g.setConfirmTime(<strong>new</strong> <a href="../../zeus/util/Time.html">Time</a>(now() +
+<a name="1253" href="#1253">1253</a>                        context.getReplanPeriod()));
+<a name="1254" href="#1254">1254</a>       <strong>return</strong> g;
+<a name="1255" href="#1255">1255</a>    }
+<a name="1256" href="#1256">1256</a> 
+<a name="1257" href="#1257">1257</a> 
+<a name="1258" href="#1258">1258</a>    <strong>public</strong> <strong>void</strong> reconfirmParentOf(Vector goals) {
+<a name="1259" href="#1259">1259</a>       <strong>for</strong>( <strong>int</strong> i = 0; i &lt; goals.size(); i++ )
+<a name="1260" href="#1260">1260</a>          reconfirmParentOf( (Goal)goals.elementAt(i) );
+<a name="1261" href="#1261">1261</a>    }
+<a name="1262" href="#1262">1262</a> 
+<a name="1263" href="#1263">1263</a>    
+<a name="1264" href="#1264">1264</a>    <strong>public</strong> <strong>void</strong> reconfirmParentOf(<a href="../../zeus/concepts/Goal.html">Goal</a> g) {
+<a name="1265" href="#1265">1265</a>       <a href="../../zeus/actors/PlanRecord.html">PlanRecord</a> rec;
+<a name="1266" href="#1266">1266</a>       String goalId = g.getId();
+<a name="1267" href="#1267">1267</a>       Enumeration enum = <strong>this</strong>.elements();
+<a name="1268" href="#1268">1268</a>       <strong>while</strong>( enum.hasMoreElements() ) {
+<a name="1269" href="#1269">1269</a>          rec = (PlanRecord) enum.nextElement();
+<a name="1270" href="#1270">1270</a>          <strong>if</strong> ( rec.hasSubgoal(goalId) ) {
+<a name="1271" href="#1271">1271</a>             rec.reconfirm();
+<a name="1272" href="#1272">1272</a>             <strong>return</strong>;
+<a name="1273" href="#1273">1273</a>          }
+<a name="1274" href="#1274">1274</a>          <strong>else</strong> <strong>if</strong> ( rec.getGoal().getId().equals(goalId) ) {
+<a name="1275" href="#1275">1275</a>             <strong>if</strong> ( rec.getParent() != <strong>null</strong> ) {
+<a name="1276" href="#1276">1276</a>                rec.getParent().reconfirm();
+<a name="1277" href="#1277">1277</a>                <strong>return</strong>;
+<a name="1278" href="#1278">1278</a>             }
+<a name="1279" href="#1279">1279</a>          }
+<a name="1280" href="#1280">1280</a>       }
+<a name="1281" href="#1281">1281</a>       Core.DEBUG(3,<span class="string">"reconfirmParentOf error ...  "</span> + g);
+<a name="1282" href="#1282">1282</a>       Core.ERROR(<strong>null</strong>,1024,<strong>this</strong>);
+<a name="1283" href="#1283">1283</a>    }
+<a name="1284" href="#1284">1284</a>    
+<a name="1285" href="#1285">1285</a>    
+<a name="1286" href="#1286">1286</a>    <strong>public</strong> <strong>void</strong> failParentOf(Vector goals) {
+<a name="1287" href="#1287">1287</a>       <strong>for</strong>( <strong>int</strong> i = 0; i &lt; goals.size(); i++ )
+<a name="1288" href="#1288">1288</a>          failParentOf( (Goal)goals.elementAt(i) );
+<a name="1289" href="#1289">1289</a>    }
+<a name="1290" href="#1290">1290</a>    
+<a name="1291" href="#1291">1291</a>    
+<a name="1292" href="#1292">1292</a>    <strong>public</strong> <strong>void</strong> failParentOf(<a href="../../zeus/concepts/Goal.html">Goal</a> g) {
+<a name="1293" href="#1293">1293</a>       <a href="../../zeus/actors/PlanRecord.html">PlanRecord</a> rec;
+<a name="1294" href="#1294">1294</a>       String goalId = g.getId();
+<a name="1295" href="#1295">1295</a>       Enumeration enum = <strong>this</strong>.elements();
+<a name="1296" href="#1296">1296</a>       <strong>while</strong>( enum.hasMoreElements() ) {
+<a name="1297" href="#1297">1297</a>          rec = (PlanRecord) enum.nextElement();
+<a name="1298" href="#1298">1298</a>          <strong>if</strong> ( rec.hasSubgoal(goalId) ) {
+<a name="1299" href="#1299">1299</a>             rec.setState(PlanRecord.FAILED);
+<a name="1300" href="#1300">1300</a>             <strong>return</strong>;
+<a name="1301" href="#1301">1301</a>          }
+<a name="1302" href="#1302">1302</a>       }
+<a name="1303" href="#1303">1303</a>       Core.DEBUG(3,<span class="string">"failParentOf error ...  "</span> + g);
+<a name="1304" href="#1304">1304</a> <em class="comment">//      Core.ERROR(null,1025,this);</em>
+<a name="1305" href="#1305">1305</a>    }
+<a name="1306" href="#1306">1306</a>    
+<a name="1307" href="#1307">1307</a>    
+<a name="1308" href="#1308">1308</a>    <strong>void</strong> softFailParentOf(Vector goals, <a href="../../zeus/concepts/PlannerQueryStruct.html">PlannerQueryStruct</a> struct, <strong>int</strong> mode) {
+<a name="1309" href="#1309">1309</a>       Core.DEBUG(3,<span class="string">"softFailParentOf Goal = "</span> + goals);
+<a name="1310" href="#1310">1310</a>       Core.DEBUG(3,<span class="string">"softFailParentOf PlannerQueryStruct = "</span> + struct);
+<a name="1311" href="#1311">1311</a> 
+<a name="1312" href="#1312">1312</a>       <a href="../../zeus/actors/PlanRecord.html">PlanRecord</a> rec = <strong>null</strong>;
+<a name="1313" href="#1313">1313</a>       <a href="../../zeus/concepts/Goal.html">Goal</a> g, goal = <strong>null</strong>;
+<a name="1314" href="#1314">1314</a>       String goalId;
+<a name="1315" href="#1315">1315</a>       <strong>boolean</strong> found;
+<a name="1316" href="#1316">1316</a>       <a href="../../zeus/actors/Decomposition.html">Decomposition</a> decomposition;
+<a name="1317" href="#1317">1317</a> 
+<a name="1318" href="#1318">1318</a>       <strong>for</strong>(<strong>int</strong> i = 0; i &lt; goals.size(); i++ ) {
+<a name="1319" href="#1319">1319</a>          g = (Goal)goals.elementAt(i);
+<a name="1320" href="#1320">1320</a>          goalId = g.getId();
+<a name="1321" href="#1321">1321</a> 
+<a name="1322" href="#1322">1322</a>          <em class="comment">// remove unachievable goal (g) from external list</em>
+<a name="1323" href="#1323">1323</a>          <strong>for</strong>(<strong>int</strong> j = 0; j &lt; struct.external.size(); j++ ) {
+<a name="1324" href="#1324">1324</a>             goal = (Goal)struct.external.elementAt(j);
+<a name="1325" href="#1325">1325</a>             <strong>if</strong> ( goalId.equals(goal.getId()) ) {
+<a name="1326" href="#1326">1326</a>                struct.external.removeElementAt(j--);
+<a name="1327" href="#1327">1327</a>                <strong>break</strong>;
+<a name="1328" href="#1328">1328</a>             }
+<a name="1329" href="#1329">1329</a>          }
+<a name="1330" href="#1330">1330</a>                
+<a name="1331" href="#1331">1331</a>          decomposition = (Decomposition)struct.decompositions.remove(g.getId());
+<a name="1332" href="#1332">1332</a>          <strong>if</strong> ( decomposition != <strong>null</strong> ) {
+<a name="1333" href="#1333">1333</a>             <em class="comment">// decomposition.softFail(struct,mode);</em>
+<a name="1334" href="#1334">1334</a>          }
+<a name="1335" href="#1335">1335</a>          <strong>else</strong> {
+<a name="1336" href="#1336">1336</a>             found = false;
+<a name="1337" href="#1337">1337</a>             <strong>for</strong>(<strong>int</strong> j = 0; !found &amp;&amp; j &lt; struct.<strong>int</strong>ernal.size(); j++ ) {
+<a name="1338" href="#1338">1338</a>                rec = (PlanRecord) struct.internal.elementAt(j);
+<a name="1339" href="#1339">1339</a>                found = rec.hasSubgoal(goalId);
+<a name="1340" href="#1340">1340</a>             }
+<a name="1341" href="#1341">1341</a>             <strong>if</strong> ( found ) <em class="comment">// swapped !found to found</em>
+<a name="1342" href="#1342">1342</a>                rec.softFail(struct,mode);
+<a name="1343" href="#1343">1343</a>          }
+<a name="1344" href="#1344">1344</a>       }
+<a name="1345" href="#1345">1345</a> 
+<a name="1346" href="#1346">1346</a>       <em class="comment">// check records for validity</em>
+<a name="1347" href="#1347">1347</a>       <strong>for</strong>(<strong>int</strong> i = 0; i &lt; struct.<strong>int</strong>ernal.size(); i++ ) {
+<a name="1348" href="#1348">1348</a>          rec = (PlanRecord)struct.internal.elementAt(i);
+<a name="1349" href="#1349">1349</a>          <strong>if</strong> ( !containsRecord(rec) )
+<a name="1350" href="#1350">1350</a>             struct.internal.removeElementAt(i--);
+<a name="1351" href="#1351">1351</a>       }
+<a name="1352" href="#1352">1352</a>       <em class="comment">// check decompositions for validity</em>
+<a name="1353" href="#1353">1353</a>       Enumeration enum = struct.decompositions.keys();
+<a name="1354" href="#1354">1354</a>       <strong>while</strong>( enum.hasMoreElements() ) {
+<a name="1355" href="#1355">1355</a>          goalId = (String)enum.nextElement();
+<a name="1356" href="#1356">1356</a>          found = false;
+<a name="1357" href="#1357">1357</a>          <strong>for</strong>(<strong>int</strong> i = 0; !found &amp;&amp; i &lt; struct.external.size(); i++ ) {
+<a name="1358" href="#1358">1358</a>             goal = (Goal)struct.external.elementAt(i);
+<a name="1359" href="#1359">1359</a>             found = goalId.equals(goal.getId());
+<a name="1360" href="#1360">1360</a>          }
+<a name="1361" href="#1361">1361</a>          <strong>if</strong> ( !found ) struct.decompositions.remove(goalId);
+<a name="1362" href="#1362">1362</a>       }
+<a name="1363" href="#1363">1363</a>    }
+<a name="1364" href="#1364">1364</a> 
+<a name="1365" href="#1365">1365</a>    <em>/**<em>*</em></em>
+<a name="1366" href="#1366">1366</a> <em>    * Use a PlanningMonitor if your code needs to react to changes in the Planner</em>
+<a name="1367" href="#1367">1367</a> <em>    */</em>
+<a name="1368" href="#1368">1368</a>    <strong>public</strong> <strong>void</strong> addPlanningMonitor(<a href="../../zeus/actors/event/PlanningMonitor.html">PlanningMonitor</a> monitor, <strong>long</strong> type) {
+<a name="1369" href="#1369">1369</a>       <strong>if</strong> ( (type &amp; PlanningEvent.START_MASK) != 0 )
+<a name="1370" href="#1370">1370</a>          eventMonitor[START].add(monitor);
+<a name="1371" href="#1371">1371</a>       <strong>if</strong> ( (type &amp; PlanningEvent.FAIL_MASK) != 0 )
+<a name="1372" href="#1372">1372</a>          eventMonitor[FAIL].add(monitor);
+<a name="1373" href="#1373">1373</a>       <strong>if</strong> ( (type &amp; PlanningEvent.SUCCEED_MASK) != 0 )
+<a name="1374" href="#1374">1374</a>          eventMonitor[SUCCEED].add(monitor);
+<a name="1375" href="#1375">1375</a>    }
+<a name="1376" href="#1376">1376</a> 
+<a name="1377" href="#1377">1377</a>    <strong>public</strong> <strong>void</strong> removePlanningMonitor(<a href="../../zeus/actors/event/PlanningMonitor.html">PlanningMonitor</a> monitor, <strong>long</strong> type) {
+<a name="1378" href="#1378">1378</a>       <strong>if</strong> ( (type &amp; PlanningEvent.START_MASK) != 0 )
+<a name="1379" href="#1379">1379</a>          eventMonitor[START].remove(monitor);
+<a name="1380" href="#1380">1380</a>       <strong>if</strong> ( (type &amp; PlanningEvent.FAIL_MASK) != 0 )
+<a name="1381" href="#1381">1381</a>          eventMonitor[FAIL].remove(monitor);
+<a name="1382" href="#1382">1382</a>       <strong>if</strong> ( (type &amp; PlanningEvent.SUCCEED_MASK) != 0 )
+<a name="1383" href="#1383">1383</a>          eventMonitor[SUCCEED].remove(monitor);
+<a name="1384" href="#1384">1384</a>    }
+<a name="1385" href="#1385">1385</a> 
+<a name="1386" href="#1386">1386</a>    <em>/**<em>*</em></em>
+<a name="1387" href="#1387">1387</a> <em>    * Use a PlanStepMonitor if your code needs to react to state changes in a</em>
+<a name="1388" href="#1388">1388</a> <em>    * particular plan</em>
+<a name="1389" href="#1389">1389</a> <em>    */</em>
+<a name="1390" href="#1390">1390</a>    <strong>public</strong> <strong>void</strong> addPlanStepMonitor(<a href="../../zeus/actors/event/PlanStepMonitor.html">PlanStepMonitor</a> monitor, <strong>long</strong> type,
+<a name="1391" href="#1391">1391</a>                                   <strong>boolean</strong> notify_previous) {
+<a name="1392" href="#1392">1392</a>       addPlanStepMonitor(monitor,type);
+<a name="1393" href="#1393">1393</a>       <strong>if</strong> ( !not<strong>if</strong>y_previous ) <strong>return</strong>;
+<a name="1394" href="#1394">1394</a> 
+<a name="1395" href="#1395">1395</a>       Enumeration enum = elements();
+<a name="1396" href="#1396">1396</a>       <a href="../../zeus/actors/PlanRecord.html">PlanRecord</a> record;
+<a name="1397" href="#1397">1397</a>       <a href="../../zeus/actors/event/PlanStepEvent.html">PlanStepEvent</a> event;
+<a name="1398" href="#1398">1398</a> 
+<a name="1399" href="#1399">1399</a>       <strong>while</strong>( enum.hasMoreElements() ) {
+<a name="1400" href="#1400">1400</a>          record = (PlanRecord)enum.nextElement();
+<a name="1401" href="#1401">1401</a>          event = <strong>new</strong> <a href="../../zeus/actors/event/PlanStepEvent.html">PlanStepEvent</a>(<strong>this</strong>,record,PlanStepEvent.CREATE_MASK);
+<a name="1402" href="#1402">1402</a>          monitor.planStepCreatedEvent(event);
+<a name="1403" href="#1403">1403</a>       }
+<a name="1404" href="#1404">1404</a>    }
+<a name="1405" href="#1405">1405</a> 
+<a name="1406" href="#1406">1406</a>    <strong>public</strong> <strong>void</strong> addPlanStepMonitor(<a href="../../zeus/actors/event/PlanStepMonitor.html">PlanStepMonitor</a> monitor, <strong>long</strong> type) {
+<a name="1407" href="#1407">1407</a>       <strong>if</strong> ( (type &amp; PlanStepEvent.CREATE_MASK) != 0 )
+<a name="1408" href="#1408">1408</a>          eventMonitor[CREATE].add(monitor);
+<a name="1409" href="#1409">1409</a>       <strong>if</strong> ( (type &amp; PlanStepEvent.DISPOSE_MASK) != 0 )
+<a name="1410" href="#1410">1410</a>          eventMonitor[DISPOSE].add(monitor);
+<a name="1411" href="#1411">1411</a>       <strong>if</strong> ( (type &amp; PlanStepEvent.STATE_CHANGE_MASK) != 0 )
+<a name="1412" href="#1412">1412</a>          eventMonitor[STATE_CHANGE].add(monitor);
+<a name="1413" href="#1413">1413</a>    }
+<a name="1414" href="#1414">1414</a> 
+<a name="1415" href="#1415">1415</a>    <strong>public</strong> <strong>void</strong> removePlanStepMonitor(<a href="../../zeus/actors/event/PlanStepMonitor.html">PlanStepMonitor</a> monitor, <strong>long</strong> type) {
+<a name="1416" href="#1416">1416</a>       <strong>if</strong> ( (type &amp; PlanStepEvent.CREATE_MASK) != 0 )
+<a name="1417" href="#1417">1417</a>          eventMonitor[CREATE].remove(monitor);
+<a name="1418" href="#1418">1418</a>       <strong>if</strong> ( (type &amp; PlanStepEvent.DISPOSE_MASK) != 0 )
+<a name="1419" href="#1419">1419</a>          eventMonitor[DISPOSE].remove(monitor);
+<a name="1420" href="#1420">1420</a>       <strong>if</strong> ( (type &amp; PlanStepEvent.STATE_CHANGE_MASK) != 0 )
+<a name="1421" href="#1421">1421</a>          eventMonitor[STATE_CHANGE].remove(monitor);
+<a name="1422" href="#1422">1422</a>    }
+<a name="1423" href="#1423">1423</a> 
+<a name="1424" href="#1424">1424</a>    <strong>void</strong> notifyMonitors(<a href="../../zeus/concepts/Goal.html">Goal</a> goal, <strong>int</strong> event_type, <strong>int</strong> sub_type) {
+<a name="1425" href="#1425">1425</a>       <strong>if</strong> ( eventMonitor[event_type].isEmpty() ) <strong>return</strong>;
+<a name="1426" href="#1426">1426</a> 
+<a name="1427" href="#1427">1427</a>       Enumeration enum = eventMonitor[event_type].elements();
+<a name="1428" href="#1428">1428</a>       <a href="../../zeus/actors/event/PlanningMonitor.html">PlanningMonitor</a> monitor;
+<a name="1429" href="#1429">1429</a>       <a href="../../zeus/actors/event/PlanningEvent.html">PlanningEvent</a> event;
+<a name="1430" href="#1430">1430</a>       <strong>switch</strong>(event_type) {
+<a name="1431" href="#1431">1431</a>          <strong>case</strong> START:
+<a name="1432" href="#1432">1432</a>               event = <strong>new</strong> <a href="../../zeus/actors/event/PlanningEvent.html">PlanningEvent</a>(<strong>this</strong>,goal,PlanningEvent.START_MASK,sub_type);
+<a name="1433" href="#1433">1433</a>               <strong>while</strong>( enum.hasMoreElements() ) {
+<a name="1434" href="#1434">1434</a>                  monitor = (PlanningMonitor)enum.nextElement();
+<a name="1435" href="#1435">1435</a>                  monitor.planningStartedEvent(event);
+<a name="1436" href="#1436">1436</a>               }
+<a name="1437" href="#1437">1437</a>               <strong>break</strong>;
+<a name="1438" href="#1438">1438</a>          <strong>case</strong> FAIL:
+<a name="1439" href="#1439">1439</a>               event = <strong>new</strong> <a href="../../zeus/actors/event/PlanningEvent.html">PlanningEvent</a>(<strong>this</strong>,goal,PlanningEvent.FAIL_MASK,sub_type);
+<a name="1440" href="#1440">1440</a>               <strong>while</strong>( enum.hasMoreElements() ) {
+<a name="1441" href="#1441">1441</a>                  monitor = (PlanningMonitor)enum.nextElement();
+<a name="1442" href="#1442">1442</a>                  monitor.planningFailedEvent(event);
+<a name="1443" href="#1443">1443</a>               }
+<a name="1444" href="#1444">1444</a>               <strong>break</strong>;
+<a name="1445" href="#1445">1445</a>          <strong>case</strong> SUCCEED:
+<a name="1446" href="#1446">1446</a>               event = <strong>new</strong> <a href="../../zeus/actors/event/PlanningEvent.html">PlanningEvent</a>(<strong>this</strong>,goal,PlanningEvent.SUCCEED_MASK,sub_type);
+<a name="1447" href="#1447">1447</a>               <strong>while</strong>( enum.hasMoreElements() ) {
+<a name="1448" href="#1448">1448</a>                  monitor = (PlanningMonitor)enum.nextElement();
+<a name="1449" href="#1449">1449</a>                  monitor.planningSucceededEvent(event);
+<a name="1450" href="#1450">1450</a>               }
+<a name="1451" href="#1451">1451</a>               <strong>break</strong>;
+<a name="1452" href="#1452">1452</a>       }
+<a name="1453" href="#1453">1453</a>    }
+<a name="1454" href="#1454">1454</a> 
+<a name="1455" href="#1455">1455</a>    <strong>void</strong> notifyMonitors(<a href="../../zeus/actors/PlanRecord.html">PlanRecord</a> record, <strong>int</strong> type) {
+<a name="1456" href="#1456">1456</a>       <strong>if</strong> ( eventMonitor[type].isEmpty() ) <strong>return</strong>;
+<a name="1457" href="#1457">1457</a> 
+<a name="1458" href="#1458">1458</a>       Enumeration enum = eventMonitor[type].elements();
+<a name="1459" href="#1459">1459</a>       Core.ERROR(enum,2001,<strong>this</strong>);
+<a name="1460" href="#1460">1460</a>       <a href="../../zeus/actors/event/PlanStepMonitor.html">PlanStepMonitor</a> monitor;
+<a name="1461" href="#1461">1461</a>       <a href="../../zeus/actors/event/PlanStepEvent.html">PlanStepEvent</a> event;
+<a name="1462" href="#1462">1462</a>       <strong>switch</strong>(type) {
+<a name="1463" href="#1463">1463</a>          <strong>case</strong> CREATE:
+<a name="1464" href="#1464">1464</a>               event = <strong>new</strong> <a href="../../zeus/actors/event/PlanStepEvent.html">PlanStepEvent</a>(<strong>this</strong>,record,PlanStepEvent.CREATE_MASK);
+<a name="1465" href="#1465">1465</a>               <strong>while</strong>( enum.hasMoreElements() ) {
+<a name="1466" href="#1466">1466</a>                  monitor = (PlanStepMonitor)enum.nextElement();
+<a name="1467" href="#1467">1467</a>                  monitor.planStepCreatedEvent(event);
+<a name="1468" href="#1468">1468</a>               }
+<a name="1469" href="#1469">1469</a>               <strong>break</strong>;
+<a name="1470" href="#1470">1470</a>          <strong>case</strong> DISPOSE:
+<a name="1471" href="#1471">1471</a>               event = <strong>new</strong> <a href="../../zeus/actors/event/PlanStepEvent.html">PlanStepEvent</a>(<strong>this</strong>,record,PlanStepEvent.DISPOSE_MASK);
+<a name="1472" href="#1472">1472</a>               <strong>while</strong>( enum.hasMoreElements() ) {
+<a name="1473" href="#1473">1473</a>                  monitor = (PlanStepMonitor)enum.nextElement();
+<a name="1474" href="#1474">1474</a>                  monitor.planStepDisposedEvent(event);
+<a name="1475" href="#1475">1475</a>               }
+<a name="1476" href="#1476">1476</a>               <strong>break</strong>;
+<a name="1477" href="#1477">1477</a>          <strong>case</strong> STATE_CHANGE:
+<a name="1478" href="#1478">1478</a>               event = <strong>new</strong> <a href="../../zeus/actors/event/PlanStepEvent.html">PlanStepEvent</a>(<strong>this</strong>,record,PlanStepEvent.STATE_CHANGE_MASK);
+<a name="1479" href="#1479">1479</a>               <strong>while</strong>( enum.hasMoreElements() ) {
+<a name="1480" href="#1480">1480</a>                  monitor = (PlanStepMonitor)enum.nextElement();
+<a name="1481" href="#1481">1481</a>                  monitor.planStepStateChangedEvent(event);
+<a name="1482" href="#1482">1482</a>               }
+<a name="1483" href="#1483">1483</a>               <strong>break</strong>;
+<a name="1484" href="#1484">1484</a>       }
+<a name="1485" href="#1485">1485</a>    }
+<a name="1486" href="#1486">1486</a>    
+<a name="1487" href="#1487">1487</a>    
+<a name="1488" href="#1488">1488</a>    <em>/**<em>* </em></em>
+<a name="1489" href="#1489">1489</a> <em>    now introduced to prevent the need for a call back to the context object </em>
+<a name="1490" href="#1490">1490</a> <em>    to get timeing - decouples the Planner a bit..</em>
+<a name="1491" href="#1491">1491</a> <em>    */</em>
+<a name="1492" href="#1492">1492</a>    <strong>protected</strong> <strong>double</strong> now () { 
+<a name="1493" href="#1493">1493</a>     <strong>return</strong> context.now(); 
+<a name="1494" href="#1494">1494</a>    }
+<a name="1495" href="#1495">1495</a>    
+<a name="1496" href="#1496">1496</a> }
+</pre>
+<hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
+</html>
+

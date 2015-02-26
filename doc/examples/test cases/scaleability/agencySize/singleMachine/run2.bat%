@@ -1,0 +1,3 @@
+REM This script runs the task agents
+start /min java Target -o .\messageSpeedTest.ont -s dns.db -e zeus.test.scalability.speed.MessageSpeedTesterTarget
+start /min java Source -o .\messageSpeedTest.ont -s dns.db -e zeus.test.scalability.speed.MessageSpeedTesterSource

@@ -1,0 +1,64 @@
+                       The ZEUS Agent Building Toolkit
+                         Version 1.02 November 1999
+
+                               ---------------
+                               GETTING STARTED
+                               ---------------
+
+So, the ZEUS toolkit has been installed, and you've updated your system's
+CLASSPATH environment variables to include the Zeus JAR files. 
+What next?
+
+First time users of ZEUS are advised to start by trying the example agent
+applications included with the distribution. The examples illustrate how
+to run ZEUS agents, as well as providing subjects for the Visualisation
+tools to display.  The Agent Viewer may prove particularly useful in
+helping novice users understand how the agents are functioning.
+
+The example applications are contained in their own separate directories,
+which can be found in the zeus/examples directory, namely:
+
+fruitmarket  - an agent based trading simulation
+pc           - a PC manufacture supply chain
+faultdemo    - a reactive fault resolution simulation using rules
+multimaze    - a multiple agent version of the above
+
+A short introduction and instructions on how to run each demo can be found
+in the README.txt file included in each directory.  In addition, the Case
+Study documents provide a guided tour of the sample applications.
+
+A description of how the agents (and their constituent components) work is
+provided by the ZEUS Technical Manual. This also explains the conceptual
+basis of ZEUS agents, and the levels of abstraction present within
+the toolkit class package.
+
+
+
+Using the Agent Generator
+-------------------------
+
+Once you feel you comfortable with how the example applications work you may
+experiment and edit some of the the agents or tasks using the Agent Generator
+tool.  This is the best means of learning how to build agent applications,
+(rather than trying to implement a completely new agent application from
+scratch).
+
+The ZEUS Agent Generator tool is started by entering the following command:
+
+java zeus.generator.AgentGenerator
+(there is a PC batchfile called zeus.bat containing the same command, 
+PC users might want to copy this into a directory referred by %PATH%)
+
+If ZEUS has been installed properly a window should appear entitled 'ZEUS
+Agent Generator'.  If not, your Java runtime environment probably can not
+find the class files that implement the Agent Generator, take another look
+at the installation instructions, and then recheck your CLASSPATH settings.
+
+Instructions on using the ZEUS Agent Generator can be found in the ZEUS
+Application Realisation Guide document.
+
+
+Have fun!
+
+
+

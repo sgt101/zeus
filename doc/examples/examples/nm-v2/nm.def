@@ -1,0 +1,378 @@
+BEGIN_GENERATOR
+  BEGIN_PREAMBLE
+    :system "ZEUS-Agent-Generator"
+    :version "1.0_b1"
+    :ontology ".:nm.ont"
+  END_PREAMBLE
+
+  BEGIN_AGENT_NAME_INDEX
+    AgentId8 ScoobyAgent
+    AgentId7 BugsAgent
+    AgentId6 ShaggyAgent
+    AgentId5 RenAgent
+    AgentId4 UIA
+    AgentId3 FSM
+    AgentId2 FTM
+    AgentId1 FAA
+    AgentId0 VCW
+  END_AGENT_NAME_INDEX
+
+  BEGIN_AGENT_ICON_INDEX
+    AgentId8 ".:..zeus:gifs:agent.gif"
+    AgentId7 ".:..zeus:gifs:agent.gif"
+    AgentId6 ".:..zeus:gifs:agent.gif"
+    AgentId5 ".:..zeus:gifs:agent.gif"
+    AgentId4 ".:....zeus:gifs:visualiser:agent.gif"
+    AgentId3 ".:....zeus:gifs:visualiser:agent.gif"
+    AgentId2 ".:....zeus:gifs:visualiser:agent.gif"
+    AgentId1 ".:....zeus:gifs:visualiser:agent.gif"
+    AgentId0 ".:....zeus:gifs:visualiser:agent.gif"
+  END_AGENT_ICON_INDEX
+
+  BEGIN_TASK_NAME_INDEX
+    AbstractTaskId7 MonitorNetwork
+    AbstractTaskId6 LookupFaultTable
+    AbstractTaskId5 LookupVCPath
+    AbstractTaskId4 FT_monitor
+    AbstractTaskId3 VCW_monitor
+    AbstractTaskId2 FAA_path_manager
+    AbstractTaskId1 FSM_request_routing
+    AbstractTaskId0 UIA_request_manager
+  END_TASK_NAME_INDEX
+
+  BEGIN_AGENT_LIST
+(:name AgentId8
+     :class ZeusAgent
+     :planner_width 1
+     :planner_length 20
+     :doublebook_fraction 0
+     :tasks (AbstractTaskId7
+            )
+    )
+(:name AgentId7
+     :class ZeusAgent
+     :planner_width 1
+     :planner_length 20
+     :doublebook_fraction 0
+     :tasks (AbstractTaskId7
+            )
+    )
+(:name AgentId6
+     :class ZeusAgent
+     :planner_width 1
+     :planner_length 20
+     :doublebook_fraction 0
+     :tasks (AbstractTaskId7
+            )
+    )
+(:name AgentId5
+     :class ZeusAgent
+     :planner_width 1
+     :planner_length 20
+     :doublebook_fraction 0
+     :tasks (AbstractTaskId7
+            )
+    )
+(:name AgentId4
+     :class ZeusAgent
+     :planner_width 1
+     :planner_length 20
+     :doublebook_fraction 0
+     :tasks (AbstractTaskId0
+            )
+    )
+(:name AgentId3
+     :class ZeusAgent
+     :planner_width 1
+     :planner_length 20
+     :doublebook_fraction 0
+     :tasks (AbstractTaskId1
+            )
+    )
+(:name AgentId2
+     :class ZeusAgent
+     :planner_width 1
+     :planner_length 20
+     :doublebook_fraction 0
+     :tasks (AbstractTaskId6
+             AbstractTaskId4
+            )
+    )
+(:name AgentId1
+     :class ZeusAgent
+     :planner_width 1
+     :planner_length 20
+     :doublebook_fraction 0
+     :tasks (AbstractTaskId2
+            )
+    )
+(:name AgentId0
+     :class ZeusAgent
+     :planner_width 1
+     :planner_length 20
+     :doublebook_fraction 0
+     :tasks (AbstractTaskId5
+             AbstractTaskId3
+            )
+    )
+  END_AGENT_LIST
+
+  BEGIN_TASK_LIST
+    (:Rulebase AbstractTaskId7
+       (notify_ftm
+          ?element_status <- (NetworkElementStatus)
+          =>
+          (send_message (receiver FTM) (content ?element_status) (type inform))
+          (retract ?element_status)
+       )
+    )
+(:Primitive AbstractTaskId6
+     :time (1)
+     :cost (0)
+     :consumed_facts ((:type VCPath
+                       :id path
+                       :modifiers 5
+                       :attributes ((element_4 ?node_status.element_4)
+                                    (element_3 ?node_status.element_3)
+                                    (element_2 ?node_status.element_2)
+                                    (element_1 ?node_status.element_1)
+                                    (id ?node_status.id)
+                                   )
+                      )
+                     )
+     :produced_facts ((:type NodeStatus
+                       :id node_status
+                       :modifiers 1
+                       :attributes ((status_4 ?var388)
+                                    (status_3 ?var389)
+                                    (status_2 ?var390)
+                                    (status_1 ?var391)
+                                    (element_4 ?var392)
+                                    (element_3 ?var393)
+                                    (element_2 ?var394)
+                                    (element_1 ?var395)
+                                    (id ?var396)
+                                   )
+                      )
+                     )
+    )
+(:Primitive AbstractTaskId5
+     :time (1)
+     :cost (0)
+     :produced_facts ((:type VCPath
+                       :id path
+                       :modifiers 1
+                       :attributes ((element_4 ?var376)
+                                    (element_3 ?var377)
+                                    (element_2 ?var378)
+                                    (element_1 ?var379)
+                                    (id ?var380)
+                                   )
+                      )
+                     )
+    )
+    (:Rulebase AbstractTaskId4
+       (activate_fault_table_look_up
+          (VCPath (id ?id))
+          =>
+          (achieve (fact (NodeStatus (id ?id))) (end_time 3) (confirm_time 1))
+       )
+       (route_results
+          ?path <- (VCPath (id ?id))
+          ?node_status <- (NodeStatus (id ?id))
+          =>
+          (send_message (receiver FAA) (content ?node_status) (type inform))
+          (retract ?path ?node_status)
+       )
+       (update_fsm
+          ?element_status <- (NetworkElementStatus)
+          =>
+          (send_message (receiver FSM) (content ?element_status) (type inform))
+       )
+    )
+    (:Rulebase AbstractTaskId3
+       (activate_db_lookup
+          ?request <- (MonitorRequest (id ?id))
+          =>
+          (achieve (fact (VCPath (id ?id))) (end_time 3) (confirm_time 1))
+          (retract ?request)
+       )
+       (route_results
+          ?path <- (VCPath)
+          =>
+          (send_message (receiver FAA) (content ?path) (type inform))
+          (retract ?path)
+       )
+    )
+    (:Rulebase AbstractTaskId2
+       (route_request
+          ?request <- (MonitorRequest)
+          =>
+          (send_message (receiver VCW) (content ?request) (type inform))
+          (retract ?request)
+       )
+       (route_response_to_FTM
+          ?path <- (VCPath)
+          =>
+          (send_message (receiver FTM) (content ?path) (type inform))
+          (retract ?path)
+       )
+       (route_response_to_FSM
+          ?node_status <- (NodeStatus)
+          =>
+          (send_message (receiver FSM) (content ?node_status) (type inform))
+          (retract ?node_status)
+       )
+    )
+    (:Rulebase AbstractTaskId1
+       (route_request
+          ?request <- (MonitorRequest)
+          =>
+          (send_message (receiver FAA) (content ?request) (type inform))
+          (retract ?request)
+       )
+       (route_response
+          ?node_status <- (NodeStatus)
+          =>
+          (send_message (receiver UIA) (content ?node_status) (type inform))
+          (retract ?node_status)
+       )
+       (route_monitor_info
+          ?element_status <- (NetworkElementStatus)
+          =>
+          (send_message (receiver UIA) (content ?element_status) (type inform))
+          (retract ?element_status)
+       )
+    )
+    (:Rulebase AbstractTaskId0
+       (forward_user_request
+          ?monitor_request <- (MonitorRequest)
+          =>
+          (send_message (receiver FSM) (content ?monitor_request) (type inform))
+          (retract ?monitor_request)
+       )
+       (notify_user
+          ?node_status <- (NodeStatus (status_4 ?s4) (status_3 ?s3) (status_2 ?s2) (status_1 ?s1) (element_4 ?e4) (element_3 ?e3) (element_2 ?e2) (element_1 ?e1) (id ?id))
+          =>
+          (println t Path ?id "has status" ?s1 "at node" ?e1 "; status" ?s2 "at node" ?e2 "; status" ?s3 "at node" ?e3 "; status" ?s4 "at node" ?e4)
+          (retract ?node_status)
+       )
+    )
+  END_TASK_LIST
+
+  BEGIN_GENERATION_PLAN
+    BEGIN_PREAMBLE
+      :platform "Windows"
+      :directory "."
+    END_PREAMBLE
+    BEGIN_AGENT_LIST
+      (:id AgentId8
+       :generate false
+       :status Saved
+       :has_gui false
+       :zeus_external "NE_ExternalDbInterface"
+       :dns_file "dns.db"
+      )
+      (:id AgentId7
+       :generate false
+       :status Saved
+       :has_gui false
+       :zeus_external "NE_ExternalDbInterface"
+       :dns_file "dns.db"
+      )
+      (:id AgentId6
+       :generate false
+       :status Saved
+       :has_gui false
+       :zeus_external "NE_ExternalDbInterface"
+       :dns_file "dns.db"
+      )
+      (:id AgentId5
+       :generate false
+       :status Saved
+       :has_gui false
+       :zeus_external "NE_ExternalDbInterface"
+       :dns_file "dns.db"
+      )
+      (:id AgentId4
+       :generate false
+       :status Saved
+       :has_gui false
+       :zeus_external "UIA_Interface"
+       :dns_file "dns.db"
+      )
+      (:id AgentId3
+       :generate false
+       :status Saved
+       :has_gui false
+       :dns_file "dns.db"
+      )
+      (:id AgentId2
+       :generate false
+       :status Saved
+       :has_gui false
+       :dns_file "dns.db"
+      )
+      (:id AgentId1
+       :generate false
+       :status Saved
+       :has_gui false
+       :dns_file "dns.db"
+      )
+      (:id AgentId0
+       :generate false
+       :status Saved
+       :has_gui false
+       :dns_file "dns.db"
+      )
+    END_AGENT_LIST
+    BEGIN_TASK_LIST
+      (:id AbstractTaskId7
+       :generate false
+       :status Saved
+      )
+      (:id AbstractTaskId6
+       :generate false
+       :status Saved
+      )
+      (:id AbstractTaskId5
+       :generate false
+       :status Saved
+      )
+      (:id AbstractTaskId4
+       :generate false
+       :status Saved
+      )
+      (:id AbstractTaskId3
+       :generate false
+       :status Saved
+      )
+      (:id AbstractTaskId2
+       :generate false
+       :status Saved
+      )
+      (:id AbstractTaskId1
+       :generate false
+       :status Saved
+      )
+      (:id AbstractTaskId0
+       :generate false
+       :status Saved
+      )
+    END_TASK_LIST
+    BEGIN_NAMESERVER_LIST
+      (:name Nameserver0
+       :is_root true
+       :has_gui false
+       :address_output_file "dns.db"
+       :time_grain 1.0
+      )
+    END_NAMESERVER_LIST
+    BEGIN_VISUALISER_LIST
+      (:name Visualiser0
+       :has_gui false
+       :dns_file "dns.db"
+      )
+    END_VISUALISER_LIST
+  END_GENERATION_PLAN
+END_GENERATOR

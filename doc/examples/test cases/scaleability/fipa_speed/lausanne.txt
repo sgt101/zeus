@@ -1,0 +1,10 @@
+<alias_address>
+<zeus_name>
+    ping_agent
+</zeus_name>
+<aid>
+ (agent-identifier 
+     :name acl_ping@beta.lausanne.agentcities.org
+     :addresses (sequence http://liasun17.epfl.ch:8080/acc))
+</aid>
+</alias_address>

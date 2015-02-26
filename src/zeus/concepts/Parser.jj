@@ -1,0 +1,2598 @@
+options {
+  STATIC = false;
+}
+
+PARSER_BEGIN(Parser)
+
+package zeus.concepts;
+
+import java.util.*;
+import java.io.*;
+import java.lang.reflect.*;
+import zeus.util.*;
+import zeus.concepts.fn.*;
+import zeus.generator.code.*;
+import zeus.generator.*;
+import zeus.rete.Action;
+import zeus.rete.Pattern;
+import zeus.rete.Rule;
+import zeus.rete.ReteFact;
+
+public class Parser {
+}
+
+PARSER_END(Parser)
+
+/* WHITE SPACE */
+
+SKIP :
+{
+  " "
+| "\t"
+| "\n"
+| "\r"
+| "\f"
+}
+
+/* COMMENTS */
+MORE :
+{
+  "//" : IN_SINGLE_LINE_COMMENT
+|
+  <"/**" ~["/"]> { input_stream.backup(1); } : IN_FORMAL_COMMENT
+|
+  "/*" : IN_MULTI_LINE_COMMENT
+}
+
+<IN_SINGLE_LINE_COMMENT>
+SPECIAL_TOKEN :
+{
+  <SINGLE_LINE_COMMENT: "\n" | "\r" | "\r\n" > : DEFAULT
+}
+
+<IN_FORMAL_COMMENT>
+SPECIAL_TOKEN :
+{
+  <FORMAL_COMMENT: "*/" > : DEFAULT
+}
+
+<IN_MULTI_LINE_COMMENT>
+SPECIAL_TOKEN :
+{
+  <MULTI_LINE_COMMENT: "*/" > : DEFAULT
+}
+
+<IN_SINGLE_LINE_COMMENT,IN_FORMAL_COMMENT,IN_MULTI_LINE_COMMENT>
+MORE :
+{
+  < ~[] >
+}
+
+/* RESERVED WORDS AND LITERALS */
+
+TOKEN: {
+
+  < EQ: "==" >
+| < LE: "<=" >
+| < GE: ">=" >
+| < NE: "!=" >
+| < GT: ">" >
+| < LT: "<" >
+
+| < PLUS: "+" >
+| < MINUS: "-" >
+
+| < MULTIPLY: "*" >
+| < DIVIDE: "/" >
+| < REMAINDER: "%" >
+| < POWER: "^" >
+
+| < AND: "&&" >
+| < OR: "||" >
+| < NOT: "!" >
+
+| <UNOT: "~" >
+| <UAND: "&">
+| <UOR: "|">
+
+| < LBRACKET: "(" >
+| < RBRACKET: ")" >
+
+| < LCURLY: "{" >
+| < RCURLY: "}" >
+
+| <COMMA: "," >
+| <TCOLON: "::" >
+
+| < VCHR: "?" >
+| < CCHR: "@" >
+| < ASEP: "." >
+
+| < IMPLIES: "=>">
+| < FACT_MARKER: "<-">
+
+| < IF: "if" >
+| < THEN: "then" >
+| < ELSE: "else" >
+
+| < ATTRIBUTE: ":attribute" >
+| < VALUE: ":value" >
+| < RESTRICTIONS: ":restrictions" >
+| < TYPE: ":type" >
+| < FID:  ":id" >
+| < MODIFIERS:  ":modifiers" >
+| < ATTRIBUTES:  ":attributes" >
+| < AGENT: ":agent">
+| < ABILITY: ":ability">
+| < FACT: ":fact">
+| < TIME: ":time">
+| < COST: ":cost">
+| < RELATION: ":relation">
+| < ABILITIES: ":abilities">
+| < NAME: ":name">
+| < HOST: ":host">
+| < PORT: ":port">
+| < CLASS: ":class">
+| < PLANNER_WIDTH: ":planner_width">
+| < PLANNER_LENGTH: ":planner_length">
+| < DOUBLE_BOOK_FRACTION: ":doublebook_fraction">
+| < TASKS: ":tasks" >
+| < PRIMITIVE: ":Primitive" >
+| < SUMMARY:   ":Summary" >
+| < BEHAVIOUR: ":Rulebase" >
+| < SCRIPT:    ":PlanScript" >
+| < INITIAL_FACTS: ":initial_facts">
+| < PROTOCOLS: ":protocols">
+| < STRATEGY: ":strategy">
+| < PARAMETERS: ":parameters">
+| < AGENTS: ":agents">
+| < RELATIONS: ":relations">
+| < ACQUAINTANCES: ":acquaintances">
+| < LHS: ":lhs">
+| < RHS: ":rhs">
+| < PRODUCER: ":producer">
+| < CONSUMER: ":consumer">
+| < PRODUCER_ID: ":producer_id">
+| < CONSUMER_ID: ":consumer_id">
+| < USE_REF: ":use_ref">
+| < COMMS_KEY: ":comms_key">
+| < START: ":start">
+| < AMOUNT: ":amount">
+| < CONSUMED: ":consumed">
+| < STATUS: ":status">
+| < IMAGE: ":image">
+| < INVOCATIONS: ":invocations">
+| < DESIRED: ":desired_by">
+| < START_TIME: ":start_time">
+| < END_TIME: ":end_time">
+| < PRIORITY: ":priority">
+| < ROOT_ID: ":root_id">
+| < MEDIA: ":media" >
+| < REPLY_TIME: ":reply_time" >
+| < CONFIRM_TIME: ":confirm_time" >
+| < USER_DATA_TYPE: ":user_data_type" >
+| < USER_DATA: ":user_data" >
+| < CONTEXT: ":context">
+| < GIVEN: ":given">
+| < PRODUCER_RECORDS: ":producer_records">
+| < CONSUMER_RECORDS: ":consumer_records">
+| < SUPPLY_REF: ":supply_ref">
+| < HASHTABLE: ":hashtable">
+| < OWNER: ":owner" >
+| < ITEM: ":item" >
+| < OK: ":ok">
+| < IMAGES: ":images">
+| < VECTOR: ":vector">
+| < EXTERNAL: ":external">
+| < TABLE: ":table">
+| < GOALS: ":goals">
+| < ASSERT_GOAL: "Goal">
+| < MESSAGE: "Message">
+| < INTERNAL: ":internal">
+| < TIMEOUT: ":timeout">
+| < DECOMPOSITIONS: ":decompositions">
+| < CONSUMED_FACTS: ":consumed_facts">
+| < PRODUCED_FACTS: ":produced_facts">
+| < CONSTRAINTS: ":constraints">
+| < ORDERING: ":ordering">
+| < GROUP: ":group">
+| < IS_CONDITIONAL: ":is_conditional">
+| < IS_AUTORUN: ":is_autorun">
+| < GOAL: ":goal">
+| < TASK: ":task">
+| < STATE: ":state">
+| < PARENT: ":parent">
+| < CHILDREN: ":children">
+| < SIBLINGS: ":siblings">
+| < PARENTS: ":parents">
+| < GOAL_ID: ":goal_id">
+| < LINK: ":link">
+| < SUPPLIER: ":supplier">
+| < RESERVATIONS: ":reservations">
+| < NODES: ":nodes">
+| < LINKS: ":links">
+| < LEFT_NODE: ":left_node">
+| < LEFT_GROUP: ":left_group">
+| < LEFT_ARG: ":left_arg">
+| < RIGHT_NODE: ":right_node">
+| < RIGHT_GROUP: ":right_group">
+| < RIGHT_ARG: ":right_arg">
+
+// Rete grammar literals
+
+| < TEST: "test">
+| < NEGATION: "not">
+| < ASSERT: "assert">
+| < SEND_MESSAGE: "send_message">
+| < EXECUTE: "execute">
+| < ACHIEVE: "achieve">
+| < BUY: "buy">
+| < SELL: "sell">
+| < RETRACT: "retract">
+| < MODIFY: "modify">
+| < PRINT: "print">
+| < PRINTLN: "println">
+| < BIND: "bind">
+// | < IF: "if">
+// | < THEN: "then">
+// | < ELSE: "else">
+| < WHILE: "while">
+| < DO: "do">
+| < OPEN: "open">
+| < CLOSE: "close">
+| < SYSTEM_CALL: "system">
+| < READ: "read">
+| < READLN: "readln">
+| < CALL: "call">
+
+// Generator grammar literals
+
+| < GENERATE: ":generate">
+| < DATABASE: ":database">
+| < HAS_GUI: ":has_gui">
+| < ZEUS_EXTERNAL: ":zeus_external">
+| < DNS_FILE: ":dns_file">
+| < IS_ROOT: ":is_root">
+| < ADDRESS_OUTPUT_FILE: ":address_output_file">
+| < TIME_GRAIN: ":time_grain">
+| < PERIOD: ":period">
+| < ONTOLOGY: ":ontology">
+| < PATH: ":path">
+| < BEGIN_GENERATOR: "BEGIN_GENERATOR">
+| < BEGIN_PREAMBLE: "BEGIN_PREAMBLE">
+| < SYSTEM: ":system">
+| < VERSION: ":version">
+| < END_PREAMBLE: "END_PREAMBLE">
+| < BEGIN_AGENT_NAME_INDEX: "BEGIN_AGENT_NAME_INDEX">
+| < END_AGENT_NAME_INDEX: "END_AGENT_NAME_INDEX">
+| < BEGIN_AGENT_ICON_INDEX: "BEGIN_AGENT_ICON_INDEX">
+| < END_AGENT_ICON_INDEX: "END_AGENT_ICON_INDEX">
+| < BEGIN_TASK_NAME_INDEX: "BEGIN_TASK_NAME_INDEX">
+| < END_TASK_NAME_INDEX: "END_TASK_NAME_INDEX">
+| < BEGIN_AGENT_LIST: "BEGIN_AGENT_LIST">
+| < END_AGENT_LIST: "END_AGENT_LIST">
+| < BEGIN_TASK_LIST: "BEGIN_TASK_LIST">
+| < END_TASK_LIST: "END_TASK_LIST">
+| < BEGIN_GENERATIONPLAN: "BEGIN_GENERATION_PLAN">
+| < END_GENERATIONPLAN: "END_GENERATION_PLAN">
+| < PLATFORM: ":platform">
+| < DIRECTORY: ":directory">
+| < BEGIN_NAMESERVER_LIST: "BEGIN_NAMESERVER_LIST">
+| < END_NAMESERVER_LIST: "END_NAMESERVER_LIST">
+| < BEGIN_FACILITATOR_LIST: "BEGIN_FACILITATOR_LIST">
+| < END_FACILITATOR_LIST: "END_FACILITATOR_LIST">
+| < BEGIN_VISUALISER_LIST: "BEGIN_VISUALISER_LIST">
+| < END_VISUALISER_LIST: "END_VISUALISER_LIST">
+| < BEGIN_DBPROXY_LIST: "BEGIN_DBPROXY_LIST">
+| < END_DBPROXY_LIST: "END_DBPROXY_LIST">
+| < END_GENERATOR: "END_GENERATOR">
+}
+
+/* LITERALS */
+
+TOKEN: {
+  < OPAQUE:  "#" (~["#"])* "#">
+| < BOOLEAN: ("true" | "false") >
+| < ID:      <LETTER> (<LETTER>|<DIGIT>|"$"|"."|"-"|":"|"/")* > /** . added 23/1/01 - added 21/03/01 : added 26/1/03 / added 26/1/03*/
+| < INTEGER: <DECIMAL> (["l","L"])? >
+| < REAL:
+        (["0"-"9"])+ "." (["0"-"9"])* (<EXPONENT>)? (["f","F","d","D"])?
+      | "." (["0"-"9"])+ (<EXPONENT>)? (["f","F","d","D"])?
+      | (["0"-"9"])+ <EXPONENT> (["f","F","d","D"])?
+      | (["0"-"9"])+ (<EXPONENT>)? ["f","F","d","D"]
+  >
+| < DATE: ( ("0")?["1"-"9"] | ["1"-"2"] ["0"-"9"] | "30" | "31" )
+            ["-","/"]
+          ( ("0")?["1"-"9"] | "10" | "11" | "12" )
+            ["-","/"]
+          (<DIGIT>)+
+  >
+| < TIMEFN: ( ("0")?["0"-"9"] | "1" ["0"-"9"] | "2" ["0"-"3"] )
+             ":" ["0"-"5"]["0"-"9"]
+           ( ":" ["0"-"5"]["0"-"9"] )?
+  >
+| < LITERAL:
+      "\""
+      (   (~["\"","\\","\n","\r"])
+        | ("\\"
+            ( ["n","t","b","r","f","\\","'","\""]
+            | ["0"-"7"] ( ["0"-"7"] )?
+            | ["0"-"3"] ["0"-"7"] ["0"-"7"]
+            )
+          )
+      )*
+      "\""
+  >
+| < VARIABLE: <VCHR> <ID> >
+| < OBJECT:   <CCHR> <ID> >
+| < FIELD:    (<VARIABLE>|<OBJECT>)(<ASEP> <ID>)+ >
+
+| < #EXPONENT: ["e","E"] (["+","-"])? (["0"-"9"])+ >
+| < #LETTER: ["a"-"z", "_", "A"-"Z"] >
+| < #DIGIT: ["0"-"9"] >
+| < #DECIMAL: "0" | ["1"-"9"] (["0"-"9"])* >
+}
+
+void end_of_file():
+{}
+{
+<EOF>
+}
+
+AbilityDbItem abilityDbItem(OntologyDb db):
+{
+Token t;
+AbilitySpec a;
+}
+{
+<LBRACKET>
+    <AGENT> t = <ID>
+    <ABILITY> a = abilitySpec(db)
+  <RBRACKET>
+  {
+     return new AbilityDbItem(t.image,a);
+  }
+}
+
+Vector abilityDbItemList(OntologyDb db):
+{
+Vector result = new Vector();
+AbilityDbItem a = null;
+}
+{
+  (
+    a = abilityDbItem(db)
+    { result.addElement(a); }
+  )*
+  { return result; }
+}
+
+AbilitySpec abilitySpec(OntologyDb db):
+{
+Fact f;
+Token t,n;
+double c;
+
+}
+{
+<LBRACKET>
+    <FACT> f = fact(db)
+    <TIME> t = <INTEGER>
+    <COST> c = Real()
+    <NAME> n = <ID>
+  <RBRACKET>
+  {
+     return new AbilitySpec(n.image,f,Integer.parseInt(t.image),c);
+  }
+}
+
+Vector abilitySpecList(OntologyDb db):
+{
+Vector result = new Vector();
+AbilitySpec a = null;
+}
+{
+  (
+    a = abilitySpec(db)
+    { result.addElement(a); }
+  )*
+  { return result; }
+}
+
+Restriction restriction (OntologyDb db) : 
+{
+Token taskName, factName, attributeName, attributeValue;
+}
+{
+<LBRACKET>
+  <TASK> taskName = <ID> 
+  <FACT> factName = <VARIABLE>
+  <ATTRIBUTE> attributeName = <ID> 
+  <VALUE> attributeValue = <LITERAL>
+<RBRACKET>
+{
+	Restriction r = new Restriction(taskName.image, factName.image,
+					attributeName.image,
+					attributeValue.image); 
+	return (r); 
+}
+}
+
+Acquaintance acquaintance(OntologyDb db):
+{
+Token name, relation;
+AbilitySpec a;
+Vector data = new Vector();
+}
+{
+<LBRACKET>
+  <NAME> name = <ID>
+  <RELATION> relation = <ID>
+  [
+    <ABILITIES>
+    <LBRACKET>
+      (
+        a = abilitySpec(db)
+        {
+           data.addElement(a);
+        }
+      )+
+    <RBRACKET>
+  ]
+  <RBRACKET>
+  {
+     return new Acquaintance(name.image,relation.image,data);
+  }
+}
+
+Address address():
+{
+Token name, host, port, type;
+}
+{
+  <LBRACKET>
+    <NAME> name = <ID>
+    <HOST> host = <LITERAL>
+    <PORT> port = <INTEGER>
+    <TYPE> type = <ID>
+  <RBRACKET>
+  {
+     return new ZeusAddress(name.image,
+        Misc.literalToString(host.image),
+	Integer.parseInt(port.image),type.image);
+  }
+}
+
+Vector addressList():
+{
+Vector result = new Vector();
+Address a = null;
+}
+{
+(
+  (
+    a = address()
+    { result.addElement(a); }
+  )*
+)
+  { return result; }
+}
+
+AgentDescription agentDescription(OntologyDb db):
+{
+Token name, xclass, width, length, book;
+Vector tasks = new Vector();
+Vector protocols = new Vector();
+Vector acquaintances = new Vector();
+Vector facts = new Vector();
+Vector restrictions = new Vector(); 
+Token t = null;
+Acquaintance a = null;
+ProtocolInfo p = null;
+Fact f = null;
+Restriction r = null;
+}
+{
+<LBRACKET>
+    <NAME> name = <ID>
+    <CLASS> xclass = <ID>
+    <PLANNER_WIDTH> width = <INTEGER>
+    <PLANNER_LENGTH> length = <INTEGER>
+    <DOUBLE_BOOK_FRACTION> book = <INTEGER>
+    [
+      LOOKAHEAD(2)
+      <TASKS>
+      <LBRACKET>
+        (
+          t = <ID>
+          {
+             tasks.addElement(t.image);
+          }
+	)+
+      <RBRACKET>
+    ]
+    [
+      LOOKAHEAD(2)
+      <INITIAL_FACTS>
+      <LBRACKET>
+        (
+         f = fact(db)
+         {
+            facts.addElement(f);
+         }
+	)+
+      <RBRACKET>
+    ]
+    [
+      LOOKAHEAD(2)
+      <PROTOCOLS>
+      <LBRACKET>
+        (
+         p = protocolInfo(db)
+         {
+            protocols.addElement(p);
+         }
+	)+
+      <RBRACKET>
+    ]
+    [
+      LOOKAHEAD(2)
+      <ACQUAINTANCES>
+      <LBRACKET>
+        (
+         a = acquaintance(db)
+         {
+            acquaintances.addElement(a);
+         }
+	)+
+      <RBRACKET>
+    ]
+    [
+      <RESTRICTIONS>
+      <LBRACKET>
+        ( 
+          r = restriction (db)
+	  { 
+	    restrictions.addElement (r); 
+          }
+        )+
+      <RBRACKET>
+    ]
+<RBRACKET>
+    {
+       AgentDescription agent = new AgentDescription();
+       agent.setName(name.image);
+       agent.setAgentClass(xclass.image);
+       agent.setPlannerWidth(Integer.parseInt(width.image));
+       agent.setPlannerLength(Integer.parseInt(length.image));
+       agent.setDoublebookFraction(Integer.parseInt(book.image));
+       agent.setTasks(tasks);
+       agent.setInitialFacts(facts);
+       agent.setProtocols(protocols);
+       agent.setAcquaintances(acquaintances);
+       agent.setRestrictions (restrictions); 
+       return agent;
+   }
+}
+
+
+ConsumerRecord consumerRecord():
+{
+Token p, pid, c, cid, u, k, s, a, b;
+}
+{
+<LBRACKET>
+    <PRODUCER>    p   = <ID>
+    <PRODUCER_ID> pid = <ID>
+    <CONSUMER>    c   = <ID>
+    <CONSUMER_ID> cid = <ID>
+    <USE_REF>     u   = <ID>
+    <COMMS_KEY>   k   = <ID>
+    <START>       s   = <INTEGER>
+    <AMOUNT>      a   = <INTEGER>
+    <CONSUMED>    b   = <BOOLEAN>
+  <RBRACKET>
+  {
+     return new ConsumerRecord(p.image,pid.image,
+        c.image,cid.image,u.image,k.image,
+	Integer.parseInt(s.image),Integer.parseInt(a.image),
+	(Boolean.valueOf(b.image)).booleanValue());
+  }
+}
+
+Fact fact(OntologyDb db):
+{
+Token type, id, mod, attribute;
+ValueFunction value = null;
+Fact f = null;
+}
+{
+  <LBRACKET>
+    <TYPE>      type = <ID>
+    <FID>       id   = <ID>
+    <MODIFIERS> mod  = <INTEGER>
+    {
+       int modifiers = Integer.parseInt(mod.image);
+       f = db.getFact(Fact.isVariable(modifiers),type.image);
+       f.setModifiers(modifiers);
+       f.setId(id.image);
+    }
+    [
+      <ATTRIBUTES>
+      <LBRACKET>
+      (
+        <LBRACKET>
+          attribute = <ID>
+	  value = Expression(db)
+        <RBRACKET>
+        {
+          f.setValue(attribute.image,value);
+        }
+      )+
+      <RBRACKET>
+    ]
+  <RBRACKET>
+  {
+    return f;
+  }
+}
+
+Vector factList(OntologyDb db):
+{
+Vector result = new Vector();
+Fact f = null;
+}
+{
+  (
+    f = fact(db)
+    { result.addElement(f); }
+  )*
+  { return result; }
+}
+
+FactSummary factSummary(OntologyDb db):
+{
+Fact f;
+Token t;
+}
+{
+<LBRACKET>
+    <FACT>   f = fact(db)
+    <STATUS> t = <ID>
+  <RBRACKET>
+  {
+     return new FactSummary(f,t.image);
+  }
+}
+
+Goal goal(OntologyDb db):
+{
+Token id, t, s, e, p, d, lhs, rhs;
+Goal goal = null;
+Fact f = null;
+Vector temp = new Vector();
+String user_object = null;
+String user_type = null;
+ResolutionContext context = null;
+SuppliedDb given = null;
+ProducerRecord producer = null;
+ConsumerRecord consumer = null;
+double c;
+}
+{
+<LBRACKET>
+    <FID>     id = <ID>
+    <DESIRED> d  = <ID>
+    <TYPE>    t  = <BOOLEAN>
+    <FACT>    f  = fact(db)
+    {
+       goal = new Goal((Boolean.valueOf(t.image)).booleanValue(),
+          id.image,f,d.image);
+    }
+    [
+      <IMAGE> t = <ID>
+      {
+         goal.setImage(t.image);
+      }
+    ]
+    [
+      <START_TIME> s = <INTEGER>
+      {
+         goal.setStartTime(Integer.parseInt(s.image));
+      }
+    ]
+    <END_TIME>  e = <INTEGER>
+    <COST>      c = Real()
+    <PRIORITY>  p = <INTEGER>
+    {
+       goal.setEndTime(Integer.parseInt(e.image));
+       goal.setCost(c);
+       goal.setPriority(Integer.parseInt(p.image));
+    }
+    [
+      <INVOCATIONS> t = <INTEGER>
+      {
+         goal.setInvocations(Integer.parseInt(t.image));
+      }
+    ]
+    [
+      <ROOT_ID> t = <ID>
+      {
+         goal.setRootId(t.image);
+      }
+    ]
+    [
+      <MEDIA>
+      {
+         temp.removeAllElements();
+      }
+      <LBRACKET>
+      (
+        lhs = <LITERAL> rhs = <LITERAL>
+        {
+           temp.addElement(Misc.literalToString(lhs.image));
+           temp.addElement(Misc.literalToString(rhs.image));
+        }
+      )+
+      <RBRACKET>
+      {
+         String[] array = Misc.stringArray(temp);
+         goal.setTargetMedia(array);
+      }
+    ]
+    [
+      <REPLY_TIME> t = <REAL>
+      {
+         goal.setReplyTime((Double.valueOf(t.image)).doubleValue());
+      }
+    ]
+    [
+      <CONFIRM_TIME> t = <REAL>
+      {
+         goal.setConfirmTime((Double.valueOf(t.image)).doubleValue());
+      }
+    ]
+    [
+      <USER_DATA_TYPE> t = <LITERAL>
+      {
+         user_type = Misc.literalToString(t.image);
+         goal.setUserDataType(user_type);
+      }
+      [
+         <USER_DATA> t = <OPAQUE>
+
+         {
+            user_object = Misc.opaqueToString(t.image);
+            try {
+               Class x = Class.forName(user_type);
+               Class[] parameter_types = new Class[1];
+               Object[] arglist = new Object[1];
+               parameter_types[0] = Class.forName("java.lang.String");
+               arglist[0] = user_object;
+
+               Constructor ct = x.getConstructor(parameter_types);
+               Object user_data = ct.newInstance(arglist);
+               goal.setUserData(user_data);
+            }
+            catch(Throwable err) {
+               Core.USER_ERROR("Error creating user data: " + err);
+            }
+         }
+      ]
+    ]
+    [
+      <CONTEXT> context = resolutionContext(db)
+      {
+         goal.setResolutionContext(context);
+      }
+    ]
+    [
+      <GIVEN> <LBRACKET> given = suppliedDb(db) <RBRACKET>
+      {
+         goal.setSuppliedDb(given);
+      }
+    ]
+    [
+      <PRODUCER_RECORDS>
+      <LBRACKET>
+      (
+        producer = producerRecord()
+        {
+           goal.addProducer(producer);
+        }
+      )+
+     <RBRACKET>
+    ]
+    [
+      <CONSUMER_RECORDS>
+      <LBRACKET>
+      (
+        consumer = consumerRecord()
+        {
+           goal.addConsumer(consumer);
+        }
+      )+
+      <RBRACKET>
+    ]
+  <RBRACKET>
+  {
+     return goal;
+  }
+}
+
+Vector goalList(OntologyDb db):
+{
+Vector result = new Vector();
+Goal g = null;
+}
+{
+  (
+    g = goal(db)
+    { result.addElement(g); }
+  )*
+  { return result; }
+}
+
+GoalSummary goalSummary():
+{
+Token id, type, status, owner, item;
+}
+{
+<LBRACKET>
+    <FID>    id     = <ID>
+    <TYPE>   type   = <ID>
+    <STATUS> status = <ID>
+    <OWNER>  owner  = <ID>
+    <ITEM>   item   = <ID>
+  <RBRACKET>
+  {
+     return new GoalSummary(id.image,type.image,status.image,
+        owner.image,item.image);
+  }
+}
+
+
+ProducerRecord producerRecord():
+{
+ProducerRecord record = null;
+Token s, u, k, p, pid, c, cid;
+}
+{
+<LBRACKET>
+    <SUPPLY_REF>  s   = <ID>
+    <USE_REF>     u   = <ID>
+    <COMMS_KEY>   k   = <ID>
+    <PRODUCER>    p   = <ID>
+    <PRODUCER_ID> pid = <ID>
+    <CONSUMER>    c   = <ID>
+    <CONSUMER_ID> cid = <ID>
+  <RBRACKET>
+  {
+     return new ProducerRecord(s.image,u.image,k.image,
+        p.image,pid.image,c.image,cid.image);
+   }
+}
+
+ProtocolInfo protocolInfo(OntologyDb db):
+{
+StrategyInfo info = null;
+Vector constraints = new Vector();
+Token name, type;
+}
+{
+<LBRACKET>
+    <NAME> name = <LITERAL>
+    <TYPE> type = <ID>
+    <CONSTRAINTS>
+    <LBRACKET>
+    (
+      info = strategyInfo(db)
+      {
+         constraints.addElement(info);
+      }
+    )+
+    <RBRACKET>
+  <RBRACKET>
+  {
+     return new ProtocolInfo(Misc.literalToString(name.image),
+        type.image,constraints);
+  }
+}
+
+StrategyInfo strategyInfo(OntologyDb db):
+{
+StrategyInfo info = null;
+Token name, type, key, value;
+Hashtable param;
+Vector agents = new Vector();
+Vector relations = new Vector();
+Fact f = null;
+int type_val = StrategyInfo.USE;
+}
+{
+<LBRACKET>
+    <FACT> f = fact(db)
+    <TYPE> type = <INTEGER>
+    {
+       type_val = Integer.parseInt(type.image);
+       if ( type_val == StrategyInfo.NO_USE )
+          info = new StrategyInfo(f);
+    }
+    [
+      <STRATEGY> name = <LITERAL>
+      {
+         info = new StrategyInfo(f,Misc.literalToString(name.image));
+      }
+      [
+        <PARAMETERS> <LBRACKET>
+        {
+           param = new Hashtable();
+        }
+        (
+          key = <LITERAL> value = <LITERAL>
+          {
+             param.put(Misc.literalToString(key.image),
+	               Misc.literalToString(value.image));
+          }
+        )+
+        <RBRACKET>
+        {
+           info.setParameters(param);
+        }
+      ]
+    ]
+    [
+      <AGENTS>
+      <LBRACKET>
+        (
+	  name = <ID>
+          {
+             agents.addElement(name.image);
+          }
+	)*
+      <RBRACKET>
+      {
+         info.setAgents(agents);
+      }
+    ]
+    [
+      <RELATIONS>
+      <LBRACKET>
+      (
+        name = <ID>
+        {
+           relations.addElement(name.image);
+        }
+      )*
+      <RBRACKET>
+      {
+         info.setRelations(relations);
+      }
+    ]
+  <RBRACKET>
+  {
+     return info;
+  }
+}
+
+Relationship relationship():
+{
+Token name, relation;
+}
+{
+<LBRACKET>
+  <NAME>     name     = <ID>
+  <RELATION> relation = <ID>
+  <RBRACKET>
+  {
+     return new Relationship(name.image,relation.image);
+  }
+}
+
+Vector relationshipList():
+{
+Vector result = new Vector();
+Relationship r = null;
+}
+{
+  (
+    r = relationship()
+    { result.addElement(r); }
+  )*
+  { return result; }
+}
+
+ReportRec reportRec(OntologyDb db):
+{
+Token n, g, t, a, s, o, r, e;
+double c;
+ReportRec rec = null;
+Vector consumed = new Vector();
+Vector produced = new Vector();
+Fact f;
+}
+{
+<LBRACKET>
+    <NAME>    n = <ID>
+    <GOAL>    g = <ID>
+    <TASK>    t = <ID>
+    <AGENT>   a = <ID>
+    <STATE>   s = <INTEGER>
+    <OWNER>   o = <ID>
+    <ROOT_ID> r = <ID>
+    {
+       rec = new ReportRec(n.image,g.image);
+       rec.setTask(t.image);
+       rec.setAgent(a.image);
+       rec.setState(Integer.parseInt(s.image));
+       rec.setOwner(o.image);
+       rec.setRootId(r.image);
+    }
+    [
+      <PARENT> n = <ID>
+      {
+         rec.setParent(n.image);
+      }
+    ]
+    <START_TIME> s = <INTEGER>
+    <END_TIME>   e = <INTEGER>
+    <COST>       c = Real()
+    {
+       rec.setStartTime(Integer.parseInt(s.image));
+       rec.setEndTime(Integer.parseInt(e.image));
+       rec.setCost(c);
+    }
+    [
+      <CHILDREN>
+      <LBRACKET>
+      (
+        t = <ID>
+        {
+           rec.addChild(t.image);
+        }
+      )+
+      <RBRACKET>
+    ]
+    [
+      <SIBLINGS>
+      <LBRACKET>
+      (
+        t = <ID>
+        {
+           rec.addSibling(t.image);
+        }
+      )+
+      <RBRACKET>
+    ]
+    [
+      <PARENTS>
+      <LBRACKET>
+      (
+        t = <ID>
+        {
+           rec.addParent(t.image);
+        }
+      )+
+      <RBRACKET>
+    ]
+    [
+      <CONSUMED_FACTS>
+      <LBRACKET>
+      (
+        f = fact(db)
+        {
+           consumed.addElement(f);
+        }
+      )+
+      <RBRACKET>
+      {
+         rec.setPreconditions(consumed);
+      }
+    ]
+    [
+      <PRODUCED_FACTS>
+      <LBRACKET>
+      (
+        f = fact(db)
+        {
+           produced.addElement(f);
+        }
+      )+
+      <RBRACKET>
+      {
+         rec.setPostconditions(produced);
+      }
+    ]
+  <RBRACKET>
+  {
+     return rec;
+  }
+}
+
+ReservationEntry reservationEntry():
+{
+Token id, st, co, am, ag, gd, ck;
+}
+{
+<LBRACKET>
+    <FID>       id = <ID>
+    <START>     st = <INTEGER>
+    <CONSUMED>  co = <BOOLEAN>
+    <AMOUNT>    am = <INTEGER>
+    <AGENT>     ag = <ID>
+    <GOAL_ID>   gd = <ID>
+    <COMMS_KEY> ck = <ID>
+  <RBRACKET>
+  {
+     return new ReservationEntry(id.image,
+        Integer.parseInt(st.image),
+	(Boolean.valueOf(co.image)).booleanValue(),
+        Integer.parseInt(am.image), ag.image, gd.image, ck.image);
+  }
+}
+
+RoutingRecord routingRecord():
+{
+Token p, pid, c, cid, uid, key;
+}
+{
+<LBRACKET>
+    <PRODUCER>    p   = <ID>
+    <PRODUCER_ID> pid = <ID>
+    <CONSUMER>    c   = <ID>
+    <CONSUMER_ID> cid = <ID>
+    <USE_REF>     uid = <ID>
+    <COMMS_KEY>   key = <ID>
+  <RBRACKET>
+  {
+     return new RoutingRecord(p.image,pid.image,c.image,
+        cid.image,uid.image,key.image);
+  }
+}
+
+SuppliedDb suppliedDb(OntologyDb db):
+{
+SuppliedDb suppliedDb = new SuppliedDb(db);
+SuppliedItem item = null;
+}
+{
+(
+    item = suppliedItem(db)
+    {
+       suppliedDb.add(item);
+    }
+  )*
+  {
+     return suppliedDb;
+  }
+}
+
+SuppliedItem suppliedItem(OntologyDb db):
+{
+Token fid, lid, sid;
+Fact f = null;
+SuppliedItem item = null;
+ReservationEntry entry;
+}
+{
+<LBRACKET>
+    <FID>      fid = <ID>
+    <LINK>     lid = <LITERAL>
+    <FACT>     f   = fact(db)
+    <SUPPLIER> sid = <ID>
+    {
+       item = new SuppliedItem(fid.image,Misc.literalToString(lid.image),sid.image,f);
+    }
+    [
+      <RESERVATIONS>
+      <LBRACKET>
+      (
+        entry = reservationEntry()
+        {
+           Core.ERROR(item.reserve(entry),1,"Parser:suppliedItem");
+        }
+      )+
+      <RBRACKET>
+    ]
+  <RBRACKET>
+  {
+     return item;
+  }
+}
+
+ResolutionContext resolutionContext(OntologyDb db):
+{
+Fact f = null;
+ResolutionContext context = new ResolutionContext();
+}
+{
+(
+    f = fact(db)
+    {
+       context.add(f);
+    }
+  )*
+  {
+     return context;
+  }
+}
+
+AbstractTask abstractTask(OntologyDb db):
+{
+AbstractTask t = null;
+}
+{
+(
+  LOOKAHEAD(2)
+  t = primitiveTask(db)
+  |
+  LOOKAHEAD(2)
+  t = summaryTask(db)
+  |
+  LOOKAHEAD(2)
+  t = reteKB(db)
+  |
+  LOOKAHEAD(2)
+  t = planScript(db)
+)
+  {
+     return t;
+  }
+}
+
+PrimitiveTask primitiveTask(OntologyDb db):
+{
+Token t;
+ValueFunction time = null, cost = null, fn = null;
+Vector produced = new Vector();
+Vector consumed = new Vector();
+Vector ordering = new Vector();
+Vector constraints = new Vector();
+Fact f = null;
+Ordering order = null;
+}
+{
+<LBRACKET>
+    <PRIMITIVE> t = <ID>
+    <TIME> <LBRACKET> time = Expression(db) <RBRACKET>
+    <COST> <LBRACKET> cost = Expression(db) <RBRACKET>
+    [
+      <CONSUMED_FACTS>
+      <LBRACKET>
+      (
+        f = fact(db)
+        {
+           consumed.addElement(f);
+        }
+      )+
+      <RBRACKET>
+    ]
+    [
+      <PRODUCED_FACTS>
+      <LBRACKET>
+      (
+        f = fact(db)
+        {
+           produced.addElement(f);
+        }
+      )+
+      <RBRACKET>
+    ]
+    [
+      <CONSTRAINTS>
+      <LBRACKET>
+      (
+        <LBRACKET> fn = Expression(db) <RBRACKET>
+        {
+           constraints.addElement(fn);
+        }
+      )+
+      <RBRACKET>
+    ]
+    [
+      <ORDERING>
+      <LBRACKET>
+      (
+        order = ordering()
+        {
+           ordering.addElement(order);
+        }
+      )+
+      <RBRACKET>
+    ]
+  <RBRACKET>
+  {
+     return new PrimitiveTask(t.image,time,cost,produced,
+        consumed,constraints,ordering);
+  }
+}
+
+SummaryTask summaryTask(OntologyDb db):
+{
+Token name;
+ValueFunction cost = null, time = null, fn = null;
+Vector nodes = new Vector();
+Vector links = new Vector();
+Vector constraints = new Vector();
+TaskNode node = null;
+TaskLink link = null;
+}
+{
+<LBRACKET>
+    <SUMMARY> name = <ID>
+    <IS_AUTORUN> <BOOLEAN>
+    <TIME> <LBRACKET> time = Expression(db) <RBRACKET>
+    <COST> <LBRACKET> cost = Expression(db) <RBRACKET>
+    [
+      <NODES>
+      <LBRACKET>
+      (
+        node = taskNode(db)
+        {
+           nodes.addElement(node);
+        }
+      )+
+      <RBRACKET>
+    ]
+    [
+    <LINKS>
+    <LBRACKET>
+    (
+      link = taskLink()
+      {
+         links.addElement(link);
+      }
+    )+
+    <RBRACKET>
+    ]
+    [
+    <CONSTRAINTS>
+    <LBRACKET>
+    (
+      <LBRACKET> fn = Expression(db) <RBRACKET>
+      {
+         constraints.addElement(fn);
+      }
+    )+
+    <RBRACKET>
+    ]
+  <RBRACKET>
+  {
+     return new SummaryTask(name.image, time, cost,
+        nodes, links, constraints);
+  }
+}
+
+PlanScript planScript(OntologyDb db):
+{
+Token name, autorun;
+ValueFunction cost = null, time = null, fn = null;
+Vector nodes = new Vector();
+Vector links = new Vector();
+Vector constraints = new Vector();
+TaskNode node = null;
+TaskLink link = null;
+}
+{
+<LBRACKET>
+    <SCRIPT>     name = <ID>
+    <IS_AUTORUN> autorun = <BOOLEAN>
+    <TIME> <LBRACKET> time = Expression(db) <RBRACKET>
+    <COST> <LBRACKET> cost = Expression(db) <RBRACKET>
+    [
+      <NODES>
+      <LBRACKET>
+      (
+        node = taskNode(db)
+        {
+           nodes.addElement(node);
+        }
+      )+
+      <RBRACKET>
+    ]
+    [
+    <LINKS>
+    <LBRACKET>
+    (
+      link = taskLink()
+      {
+         links.addElement(link);
+      }
+    )+
+    <RBRACKET>
+    ]
+    [
+    <CONSTRAINTS>
+    <LBRACKET>
+    (
+      <LBRACKET> fn = Expression(db) <RBRACKET>
+      {
+         constraints.addElement(fn);
+      }
+    )+
+    <RBRACKET>
+    ]
+  <RBRACKET>
+  {
+     return new PlanScript(name.image, (Boolean.valueOf(autorun.image)).booleanValue(),
+                           time, cost, nodes, links, constraints);
+  }
+}
+
+
+TaskLink taskLink():
+{
+Token lhs, rhs, larg, rarg, lgrp, rgrp;
+}
+{
+<LBRACKET>
+    <LEFT_NODE>   lhs  = <ID>
+    <LEFT_GROUP>  lgrp = <ID>
+    <LEFT_ARG>    larg = <VARIABLE>
+    <RIGHT_NODE>  rhs  = <ID>
+    <RIGHT_GROUP> rgrp = <ID>
+    <RIGHT_ARG>   rarg = <VARIABLE>
+  <RBRACKET>
+  {
+     return new TaskLink(lhs.image,lgrp.image,larg.image,
+                         rhs.image,rgrp.image,rarg.image);
+  }
+}
+
+TaskNode taskNode(OntologyDb db):
+{
+Token id, type;
+Fact f;
+Vector data = new Vector();
+TaskNode node = null;
+}
+{
+<LBRACKET>
+    <NAME>           id = <ID>
+    <IS_CONDITIONAL> type = <BOOLEAN>
+    {
+       if ( (Boolean.valueOf(type.image)).booleanValue() )
+          node = new ConditionalNode(id.image);
+       else
+          node = new TaskNode(id.image);
+    }
+    [
+      <CONSUMED_FACTS>
+      <LBRACKET>
+      (
+        <LBRACKET>
+	   <GROUP> id = <ID>
+           {
+              data.removeAllElements();
+           }
+           <LBRACKET>
+           (
+             f = fact(db)
+             {
+                data.addElement(f);
+             }
+           )*
+           <RBRACKET>
+           {
+              node.setPreconditions(id.image,data);
+           }
+        <RBRACKET>
+      )+
+      <RBRACKET>
+    ]
+    [
+      <PRODUCED_FACTS>
+      <LBRACKET>
+      (
+        <LBRACKET>
+	   <GROUP> id = <ID>
+           {
+              data.removeAllElements();
+           }
+           <LBRACKET>
+           (
+             f = fact(db)
+             {
+                data.addElement(f);
+             }
+           )*
+           <RBRACKET>
+           {
+              node.setPostconditions(id.image,data);
+           }
+        <RBRACKET>
+      )+
+      <RBRACKET>
+    ]
+  <RBRACKET>
+  {
+     return node;
+  }
+}
+
+AbstractTask reteKB(OntologyDb db) :
+{ ReteKB kb;
+  Token t;
+  Rule r;
+}
+{
+  <LBRACKET> <BEHAVIOUR> t = <ID>
+  {  kb = new ReteKB(t.image); }
+  (
+     r = reteRule(db)
+     {  kb.addRule(r); }
+  )*
+  <RBRACKET>
+  { return kb; }
+}
+
+Rule reteRule(OntologyDb db) :
+{ Token t;
+  Rule r;
+  Pattern p;
+  Action a;
+}
+{
+   <LBRACKET> t = <ID>
+   {
+      r = new Rule(t.image);
+   }
+   [ t = <INTEGER>
+      {
+         r.setSalience(Integer.parseInt(t.image));
+      }
+   ]
+   (
+      p = retePattern(db)
+      {
+         r.addPattern(p);
+      }
+   )*
+   <IMPLIES>
+   (
+      a = reteAction(db)
+      {
+         r.addAction(a);
+      }
+   )+
+   <RBRACKET>
+   {  return r; }
+}
+
+Pattern retePattern(OntologyDb db) :
+{
+  VarFn id = null;
+  Pattern p = null;
+  ValueFunction value = null;
+  ReteFact rete_fact;
+  Token t;
+}
+{
+(
+   LOOKAHEAD(2)
+   <LBRACKET>
+      <TEST> value = ConditionalOrExpression(db)
+   <RBRACKET>
+   {
+      if ( !(value instanceof LogicalFn) && !(value instanceof DefinedFn) &&
+           !(value instanceof MethodCallFn) )
+         throw new ParseException("Non-logical value in rete-test pattern");
+      p = new Pattern(Pattern.TEST,value);
+   }
+|  LOOKAHEAD(2)
+   <LBRACKET>
+      <NEGATION> rete_fact = reteFact(db)
+   <RBRACKET>
+   {
+      p = new Pattern(Pattern.NOT,rete_fact);
+   }
+|  [ t = <VARIABLE> <FACT_MARKER>
+     {
+        id = new VarFn(t.image);
+     }
+   ]
+   rete_fact = reteFact(db)
+   {
+      p = new Pattern(rete_fact);
+      if ( id != null ) p.setId(id);
+   }
+)
+   { return p; }
+}
+
+Vector reteFactList(OntologyDb db) :
+{ Vector result = new Vector();
+  ReteFact f;
+}
+{
+  (
+    f = reteFact(db)
+    { result.addElement(f); }
+  )*
+  { return result; }
+}
+
+ReteFact reteFact(OntologyDb db) :
+{ Token t;
+  ReteFact f;
+  ValueFunction value;
+  String[] attributes = null;
+}
+{
+   <LBRACKET>
+   (
+      t = <ID>
+      {
+        if ( !db.hasFact(t.image) )
+           throw new ParseException("Rete pattern - fact type " + t.image +
+              " not present in current ontology");
+        f = new ReteFact(t.image);
+        attributes = db.getNetAttributesOnlyFor(t.image);
+      }
+   )
+   (
+     <LBRACKET> t = <ID> value = Expression(db) <RBRACKET>
+      {
+         if ( !Misc.member(t.image,attributes) )
+            throw new ParseException("Rete pattern: " + t.image +
+	                             " is not an attribute of " + f);
+         f.setValue(t.image,value);
+      }
+   )*
+   <RBRACKET>
+   {  return f; }
+}
+
+void reteGoal(OntologyDb db, Action a) :
+{ Token t;
+  ReteFact f;
+  ValueFunction value;
+  boolean found = false;
+}
+{
+(
+   <LBRACKET>
+     t = <ID>
+     {
+        if ( !Misc.member(t.image,OntologyDb.GOAL_ATTRIBUTES) )
+           throw new ParseException("Rete goal - attribute " +
+              t.image + " not present in current ontology");
+     }
+     (
+        LOOKAHEAD( { getToken(0).image.equals(OntologyDb.GOAL_FACT) } )
+        f = reteFact(db)
+        {
+           if ( found )
+              throw new ParseException("Rete goal - attribute " +
+                 t.image + " can only be used once");
+           found = true;
+           a.head = f;
+        }
+        |
+	value = Expression(db)
+        {
+	   a.table.put(t.image,value);
+	}
+     )
+   <RBRACKET>
+)+
+}
+
+String messageAttribute() :
+{
+  String attribute = "";
+  Token t = null;
+}
+{
+  t = <ID>
+  { attribute = t.image; }
+  ( LOOKAHEAD(2) <MINUS> t = <ID>
+    {
+      attribute += "-" + t.image;
+    }
+  )*
+  { return attribute; }
+}
+
+Action reteAction(OntologyDb db) :
+{ Token t;
+  Action a = null;
+  ValueFunction value, value1, value2;
+  Vector items = null;
+  ReteFact rete_fact;
+  String attribute = null;
+}
+{
+   <LBRACKET>
+   (
+      <ASSERT> rete_fact = reteFact(db)
+      {
+         a = new Action(Action.ASSERT);
+         a.head = rete_fact;
+      }
+      | <SEND_MESSAGE>
+        {
+           a = new Action(Action.MESSAGE);
+        }
+        (
+           <LBRACKET>
+	      attribute = messageAttribute()
+	      value = Expression(db)
+	   <RBRACKET>
+           {
+              if ( !Misc.member(attribute,Performative.ATTRIBUTE_TYPES) )
+                 throw new ParseException("Illegal message attribute: " + attribute);
+
+              a.table.put(attribute,value);
+           }
+        )+
+      | (
+           ( t = <ACHIEVE>
+             { a = new Action(Action.ACHIEVE); }
+	   | t = <BUY>
+             { a = new Action(Action.BUY); }
+	   | t = <SELL>
+             { a = new Action(Action.SELL); }
+           )
+           reteGoal(db,a)
+        )
+      | t = <RETRACT>
+      {
+         a = new Action(t.image);
+      }
+      (
+         t = <VARIABLE>
+         {
+            a.items.addElement(new VarFn(t.image));
+         }
+      )+
+      | <MODIFY> t = <VARIABLE>
+      {
+         a = new Action(Action.MODIFY);
+         a.head = new VarFn(t.image);
+      }
+      (
+         <LBRACKET> t = <ID> value = Expression(db) <RBRACKET>
+         {
+            a.table.put(t.image,value);
+         }
+      )+
+      | (t = <PRINT> | t = <PRINTLN>) value = Expression(db)
+      {
+        a = new Action(t.image);
+        a.head = value;
+      }
+      (
+         value = Expression(db)
+         {
+            a.items.addElement(value);
+         }
+      )+
+      | ( t = <EXECUTE> | t = <CLOSE> ) value = Expression(db)
+      {
+         a = new Action(t.image);
+         a.head = value;
+      }
+      | <BIND> t = <VARIABLE> value = Expression(db)
+      {
+         a = new Action(Action.BIND);
+         a.head = new VarFn(t.image);
+         a.sub_head = value;
+      }
+      | <IF> value = ConditionalOrExpression(db) <THEN>
+        items = reteActionList(db)
+        {
+           if ( !(value instanceof LogicalFn) )
+              throw new ParseException("Non-logical value in \'if\' expression");
+
+           a = new Action(Action.IF);
+           a.head = value;
+           a.items = items;
+        }
+	[
+	  <ELSE> items = reteActionList(db)
+          {
+             a.sub_items = items;
+          }
+	]
+
+      | <WHILE> value = ConditionalOrExpression(db) <DO>
+        items = reteActionList(db)
+	{
+           if ( !(value instanceof LogicalFn) )
+              throw new ParseException("Non-logical value in \'while\' expression");
+
+           a = new Action(Action.WHILE);
+           a.head = value;
+           a.items = items;
+        }
+
+      | <OPEN>
+        value = Expression(db)
+	value1 = Expression(db)
+        value2 = Expression(db)
+      {
+         a = new Action(Action.OPEN);
+         a.head = value;
+         a.sub_head = value1;
+         a.sub_sub_head = value2;
+      }
+      | (t = <READ> | t = <READLN> )
+        value = Expression(db)
+        value1 = Expression(db)
+        {
+           a = new Action(t.image);
+           a.head = value;
+           a.sub_head = value1;
+        }
+      | <SYSTEM_CALL>
+      {
+        a = new Action(Action.SYSTEM);
+      }
+      (
+         value = Expression(db)
+         {
+            a.items.addElement(value);
+         }
+      )+
+   )
+   <RBRACKET>
+   {  return a; }
+}
+
+
+Vector retePatternList(OntologyDb db) :
+{ Vector result = new Vector();
+  Pattern p;
+}
+{
+  (
+    p = retePattern(db)
+    { result.addElement(p); }
+  )*
+  { return result; }
+}
+
+Vector reteActionList(OntologyDb db) :
+{ Vector result = new Vector();
+  Action a;
+}
+{
+  (
+    a = reteAction(db)
+    { result.addElement(a); }
+  )+
+  { return result; }
+}
+
+
+TaskSummary taskSummary(OntologyDb db):
+{
+AbstractTask t = null;
+Token id;
+}
+{
+<LBRACKET>
+    <TASK>   t  = abstractTask(db)
+    <STATUS> id = <ID>
+  <RBRACKET>
+  {
+     return new TaskSummary(t,id.image);
+  }
+}
+
+Ordering ordering():
+{
+Token lhs = null, rhs = null;
+}
+{
+<LBRACKET>
+    <LHS> lhs = <VARIABLE>
+    <RHS> rhs = <VARIABLE>
+  <RBRACKET>
+  {
+     return new Ordering(lhs.image,rhs.image);
+  }
+}
+
+AgentInfo agentInfo(GeneratorModel genmodel,
+                    GenerationPlan genplan):
+{
+AgentInfo info = null;
+Token id, generate, status, gui, tok;
+}
+{
+<LBRACKET>
+  <FID>      id       = <ID>
+  <GENERATE> generate = <BOOLEAN>
+  <STATUS>   status   = <ID>
+  <HAS_GUI>  gui      = <BOOLEAN>
+  {
+     String file = genplan.getOntologyFilename();
+     String name = genmodel.getAgentName(id.image);
+     info = new AgentInfo(id.image,name,file);
+     info.generate = (Boolean.valueOf(generate.image)).booleanValue();
+     info.status = status.image;
+     info.has_gui = (Boolean.valueOf(gui.image)).booleanValue();
+  }
+  [
+    <HOST> tok = <LITERAL>
+    {
+       info.host = Misc.literalToString(tok.image);
+    }
+  ]
+  [
+    <DATABASE> tok = <LITERAL>
+    {
+       info.database = Misc.literalToString(tok.image);
+    }
+  ]
+  [
+    <ZEUS_EXTERNAL> tok = <LITERAL>
+    {
+       info.zeus_external = Misc.literalToString(tok.image);
+    }
+  ]
+  [
+    <DNS_FILE> tok = <LITERAL>
+    {
+       info.dns_file = Misc.literalToString(tok.image);
+    }
+  ]
+  <RBRACKET>
+  {
+     return info;
+  }
+}
+
+DbProxyInfo dbProxyInfo():
+{
+DbProxyInfo info = null;
+Token id, gui, tok;
+}
+{
+<LBRACKET>
+  <NAME>    id =  <ID>
+  <HAS_GUI> gui = <BOOLEAN>
+  {
+     info = new DbProxyInfo(id.image);
+     info.has_gui = (Boolean.valueOf(gui.image)).booleanValue();
+  }
+  [
+    <HOST> tok = <LITERAL>
+    {
+       info.host = Misc.literalToString(tok.image);
+    }
+  ]
+  [
+    <ZEUS_EXTERNAL> tok = <LITERAL>
+    {
+       info.zeus_external = Misc.literalToString(tok.image);
+    }
+  ]
+  [
+    <DNS_FILE> tok = <LITERAL>
+    {
+       info.dns_file = Misc.literalToString(tok.image);
+    }
+  ]
+  [
+    <PATH> tok = <LITERAL>
+    {
+       info.path = Misc.literalToString(tok.image);
+    }
+  ]
+  <RBRACKET>
+  {
+     return info;
+  }
+}
+
+FacilitatorInfo facilitatorInfo(GenerationPlan genplan):
+{
+FacilitatorInfo info = null;
+Token id, gui, tok;
+double period;
+}
+{
+<LBRACKET>
+  <NAME>    id     = <ID>
+  <PERIOD>  period = Real()
+  <HAS_GUI> gui    = <BOOLEAN>
+  {
+     String file = genplan.getOntologyFilename();
+     info = new FacilitatorInfo(id.image,file);
+     info.period = Double.toString(period);
+     info.has_gui = (Boolean.valueOf(gui.image)).booleanValue();
+  }
+  [
+    <HOST> tok = <LITERAL>
+    {
+       info.host = Misc.literalToString(tok.image);
+    }
+  ]
+  [
+    <ZEUS_EXTERNAL> tok = <LITERAL>
+    {
+       info.zeus_external = Misc.literalToString(tok.image);
+    }
+  ]
+  [
+    <DNS_FILE> tok = <LITERAL>
+    {
+       info.dns_file = Misc.literalToString(tok.image);
+    }
+  ]
+  <RBRACKET>
+  {
+     return info;
+  }
+}
+
+VisualiserInfo visualiserInfo(GenerationPlan genplan):
+{
+VisualiserInfo info = null;
+Token id, period, gui, tok;
+}
+{
+<LBRACKET>
+  <NAME>    id     = <ID>
+  <HAS_GUI> gui    = <BOOLEAN>
+  {
+     String file = genplan.getOntologyFilename();
+     info = new VisualiserInfo(id.image,file);
+     info.has_gui = (Boolean.valueOf(gui.image)).booleanValue();
+  }
+  [
+    <HOST> tok = <LITERAL>
+    {
+       info.host = Misc.literalToString(tok.image);
+    }
+  ]
+  [
+    <ZEUS_EXTERNAL> tok = <LITERAL>
+    {
+       info.zeus_external = Misc.literalToString(tok.image);
+    }
+  ]
+  [
+    <DNS_FILE> tok = <LITERAL>
+    {
+       info.dns_file = Misc.literalToString(tok.image);
+    }
+  ]
+  <RBRACKET>
+  {
+     return info;
+  }
+}
+
+NameserverInfo nameserverInfo():
+{
+NameserverInfo info = null;
+Token id, root, gui, tok;
+double grain;
+}
+{
+<LBRACKET>
+  <NAME>    id   = <ID>
+  <IS_ROOT> root = <BOOLEAN>
+  <HAS_GUI> gui  = <BOOLEAN>
+  {
+     info = new NameserverInfo(id.image,
+        (Boolean.valueOf(root.image)).booleanValue());
+     info.has_gui = (Boolean.valueOf(gui.image)).booleanValue();
+  }
+  [
+    <HOST> tok = <LITERAL>
+    {
+       info.host = Misc.literalToString(tok.image);
+    }
+  ]
+  [
+    <ZEUS_EXTERNAL> tok = <LITERAL>
+    {
+       info.zeus_external = Misc.literalToString(tok.image);
+    }
+  ]
+  [
+    <DNS_FILE> tok = <LITERAL>
+    {
+       info.dns_file = Misc.literalToString(tok.image);
+    }
+  ]
+  [
+    <ADDRESS_OUTPUT_FILE> tok = <LITERAL>
+    {
+       info.address_output_file = Misc.literalToString(tok.image);
+    }
+  ]
+  [
+    <TIME_GRAIN> grain = Real()
+    {
+       info.time_grain = Double.toString(grain);
+    }
+  ]
+  <RBRACKET>
+  {
+     return info;
+  }
+}
+
+Vector taskList(OntologyDb db):
+{
+Vector result = new Vector();
+AbstractTask t = null;
+}
+{
+  (
+    t =  abstractTask(db)
+    { result.addElement(t); }
+  )*
+  { return result; }
+}
+
+
+TaskInfo taskInfo(GeneratorModel genmodel):
+{
+TaskInfo info = null;
+Token id, generate, status,external;
+}
+{
+<LBRACKET>
+  <FID>      id       = <ID>
+  <GENERATE> generate = <BOOLEAN>
+  <STATUS>   status   = <ID>
+
+  {
+     String name = genmodel.getTaskName(id.image);
+     info = new TaskInfo(id.image,name);
+     info.generate = (Boolean.valueOf(generate.image)).booleanValue();
+     info.status = status.image;
+    
+ 
+  }
+   ( <EXTERNAL> external = <ID>
+        { info.task_external = external.image;} )*
+  <RBRACKET>
+  {    return info;}
+}
+
+
+void generator(FileHandler filer, GeneratorModel genmodel,
+	       GenerationPlan genplan, OntologyDb db, String dir):
+{
+AgentDescription agent = null;
+AbstractTask task = null;
+Token version, file, id, name, platform, directory;
+AgentInfo agentInfo = null;
+TaskInfo taskInfo = null;
+NameserverInfo nameserverInfo = null;
+FacilitatorInfo facilitatorInfo = null;
+VisualiserInfo visualiserInfo = null;
+DbProxyInfo dbProxyInfo = null;
+String filename;
+char sys_char = File.separatorChar;
+char zeus_char = SystemProps.getProperty("file.separator").charAt(0);
+}
+{
+  <BEGIN_GENERATOR>
+    <BEGIN_PREAMBLE>
+      <SYSTEM>   <LITERAL>
+      <VERSION>  version = <LITERAL>
+      <ONTOLOGY> file = <LITERAL>
+    <END_PREAMBLE>
+     {
+        String ver = Misc.literalToString(version.image);
+        if ( !ver.equals(SystemProps.getProperty("version.id")) )
+           filer.__setWarning("File and system versions are different");
+
+        filename = Misc.literalToString(file.image);
+        filename = filename.replace(zeus_char,sys_char);
+        if ( filename.startsWith(".") )
+           filename = dir + File.separator + filename;
+
+        int status = db.openFile(new File(filename));
+        if ( (status & OntologyDb.ERROR_MASK) != 0 ) {
+           filer.__setError("File I/O Error: " + db.getError());
+           throw new ParseException("Error reading ontology database: " + filename +
+	                            "\n" + db.getError());
+        }
+        else if ( (status & OntologyDb.WARNING_MASK) != 0 ) {
+           filer.__setWarning(db.getWarning());
+        }
+     }
+    <BEGIN_AGENT_NAME_INDEX>
+    (
+      id = <ID> name = <ID>
+      {
+         genmodel.addAgentName(id.image,name.image);
+      }
+    )*
+    <END_AGENT_NAME_INDEX>
+
+    [
+      <BEGIN_AGENT_ICON_INDEX>
+      (
+        id = <ID> name = <LITERAL>
+        {
+          filename = Misc.literalToString(name.image);
+          filename = filename.replace(zeus_char,sys_char);
+          if ( filename.startsWith(".") )
+             filename = dir + File.separator + filename;
+
+           genmodel.setAgentIcon(id.image,filename);
+        }
+      )*
+      <END_AGENT_ICON_INDEX>
+    ]
+
+    <BEGIN_TASK_NAME_INDEX>
+    (
+      id = <ID> name = <ID>
+      {
+         genmodel.addTaskName(id.image,name.image);
+      }
+    )*
+    <END_TASK_NAME_INDEX>
+
+    <BEGIN_AGENT_LIST>
+    (
+      agent = agentDescription(db)
+      {
+         genmodel.addAgent(agent);
+      }
+    )*
+    <END_AGENT_LIST>
+
+    <BEGIN_TASK_LIST>
+    (
+      task = abstractTask(db)
+      {
+         genmodel.addTask(task);
+      }
+    )*
+    <END_TASK_LIST>
+
+    <BEGIN_GENERATIONPLAN>
+      <BEGIN_PREAMBLE>
+        <PLATFORM>  platform  = <LITERAL>
+	<DIRECTORY> directory = <LITERAL>
+      <END_PREAMBLE>
+      {
+         filename = Misc.literalToString(directory.image);
+         filename = filename.replace(zeus_char,sys_char);
+         if ( filename.startsWith(".") )
+            filename = dir +  File.separator + filename;
+
+         genplan.setPlatform(Misc.literalToString(platform.image));
+         genplan.setDirectory(filename);
+      }
+      [
+        <BEGIN_AGENT_LIST>
+        (
+          agentInfo = agentInfo(genmodel,genplan)
+          {
+             genplan.setAgent(agentInfo);
+          }
+        )+
+        <END_AGENT_LIST>
+      ]
+      [
+        <BEGIN_TASK_LIST>
+        (
+          taskInfo = taskInfo(genmodel)
+          {
+             genplan.setTask(taskInfo);
+          }
+        )+
+        <END_TASK_LIST>
+      ]
+      [
+        <BEGIN_NAMESERVER_LIST>
+        (
+          nameserverInfo = nameserverInfo()
+          {
+             genplan.setNameserver(nameserverInfo);
+          }
+        )+
+        <END_NAMESERVER_LIST>
+      ]
+      [
+        <BEGIN_FACILITATOR_LIST>
+        (
+          facilitatorInfo = facilitatorInfo(genplan)
+          {
+             genplan.setFacilitator(facilitatorInfo);
+          }
+        )+
+        <END_FACILITATOR_LIST>
+      ]
+      [
+        <BEGIN_VISUALISER_LIST>
+        (
+          visualiserInfo = visualiserInfo(genplan)
+          {
+             genplan.setVisualiser(visualiserInfo);
+          }
+        )+
+        <END_VISUALISER_LIST>
+      ]
+      [
+         <BEGIN_DBPROXY_LIST>
+        (
+          dbProxyInfo = dbProxyInfo()
+	  {
+             genplan.setDbProxy(dbProxyInfo);
+          }
+        )+
+       <END_DBPROXY_LIST>
+     ]
+    <END_GENERATIONPLAN>
+  <END_GENERATOR>
+}
+
+ValueFunction Expression(OntologyDb db):
+{
+ValueFunction fn = null;
+}
+{
+(
+  fn = ConditionalOrExpression(db) 
+  [
+    LOOKAHEAD(<TCOLON>)
+    <TCOLON> fn = constraint(fn,db)
+  ]
+)
+  { return fn; }
+}
+
+ValueFunction ConditionalOrExpression(OntologyDb db):
+{
+ValueFunction x = null, y = null;
+}
+{
+x = ConditionalAndExpression(db)
+  (
+     LOOKAHEAD(<OR>)
+     <OR> y = ConditionalAndExpression(db)
+     {  x = new LogicalOrFn(x,y);  }
+  )*
+  { return x; }
+}
+
+ValueFunction ConditionalAndExpression(OntologyDb db):
+{
+ValueFunction x = null, y = null;
+}
+{
+x = InclusiveOrExpression(db)
+  (
+     LOOKAHEAD(<AND>)
+     <AND> y = InclusiveOrExpression(db)
+     {  x = new LogicalAndFn(x,y);  }
+  )*
+  { return x; }
+}
+
+ValueFunction InclusiveOrExpression(OntologyDb db):
+{
+ValueFunction x = null, y = null;
+}
+{
+x = AndExpression(db)
+  (
+     LOOKAHEAD(<UOR>)
+     <UOR> y = AndExpression(db)
+     {  x = new OrFn(x,y);  }
+  )*
+  { return x; }
+}
+
+ValueFunction AndExpression(OntologyDb db):
+{
+ValueFunction x = null, y = null;
+}
+{
+x = RelationalExpression(db)
+  (
+     LOOKAHEAD(<UAND>)
+     <UAND> y = RelationalExpression(db)
+     {  x = new AndFn(x,y);  }
+  )*
+  { return x; }
+}
+
+ValueFunction RelationalExpression(OntologyDb db):
+{
+ValueFunction x = null, y = null;
+Token t;
+}
+{
+x = AdditiveExpression(db)
+  (
+     LOOKAHEAD(2)
+     (t = <EQ> |  t = <NE> | t = <LT> | t = <GT> | t = <LE> | t = <GE>)
+     y = AdditiveExpression(db)
+     {  x= new ComparisonFn(x,y,t.image); }
+  )*
+  { return x; }
+}
+
+ValueFunction AdditiveExpression(OntologyDb db):
+{
+ValueFunction x = null, y = null;
+Token t;
+}
+{
+x = MultiplicativeExpression(db)
+  (  LOOKAHEAD(<PLUS>|<MINUS>)
+     ( t = <PLUS> | t = <MINUS> ) y = MultiplicativeExpression(db)
+     {  x = new ArithmeticFn(x,y,t.image);  }
+  )*
+  { return x; }
+}
+
+ValueFunction MultiplicativeExpression(OntologyDb db):
+{
+ValueFunction x = null, y = null;
+Token t;
+}
+{
+x = UnaryExpression(db)
+  (
+     LOOKAHEAD(<MULTIPLY>|<DIVIDE>|<REMAINDER>)
+     ( t = <MULTIPLY> | t = <DIVIDE> | t = <REMAINDER> )
+     y = UnaryExpression(db)
+     {  x = new ArithmeticFn(x,y,t.image); }
+  )*
+  { return x; }
+}
+
+ValueFunction UnaryExpression(OntologyDb db):
+{
+ValueFunction x = null, y = null;
+Token t;
+Fact f;
+}
+{
+(
+  ( t = <PLUS> | t = <MINUS> ) x = UnaryExpression(db)
+  {  x = new ArithmeticFn(new IntFn("0"),x,t.image); }
+|
+  <NOT> x = UnaryExpression(db)
+  {  x = new LogicalNotFn(x);  }
+|
+  ( t = <LE> | t = <GE> | t = <NE> | t = <GT> | t = <LT> | t = <UNOT> )
+  x = UnaryExpression(db)
+  {  x = new ConstraintFn(t.image,x);  }
+
+| LOOKAHEAD(2) f = fact(db)
+  { x = new FactFn(f); }
+
+| x = Literal(db)
+| <IF>   x = ConditionalOrExpression(db)
+  <THEN> y = Expression(db)
+  {  x = new ImplyFn(x,y);  }
+  [
+     LOOKAHEAD(<ELSE>)
+     <ELSE> y = Expression(db)
+     {  x = new ElseFn(x,y); }
+  ]
+|
+  <LBRACKET> x = Expression(db) <RBRACKET>
+)
+  { return x; }
+}
+
+ValueFunction Literal(OntologyDb db):
+{
+Token t;
+ValueFunction x = null;
+Vector data = null;
+}
+{
+(
+  t = <INTEGER>
+  { x = new IntFn(t.image); }
+| t = <REAL>
+  { x = new RealFn(t.image); }
+| t = <DATE>
+  { x = new DateFn(t.image); }
+| t = <TIMEFN>
+  { x = new TimeFn(t.image); }
+| t = <VARIABLE>
+  { x = new VarFn(t.image); }
+| t = <OBJECT>
+  { x = new TypeFn(t.image); }
+| t = <LITERAL>
+  { x = new IdFn(Misc.literalToString(t.image)); }
+| t = <BOOLEAN>
+  { x = BoolFn.newBoolFn(t.image); }
+| <LCURLY> data = expression_list(db) <RCURLY>
+  { x = new VectorFn(data); }
+| LOOKAHEAD(2) x = method(db)
+| LOOKAHEAD(2) x = function(db)
+| t = <FIELD>
+  { x = new FieldFn(t.image); }
+| t = <ID>
+  { x = new IdFn(t.image); }
+)
+  { return x; }
+}
+
+Vector expression_list(OntologyDb db):
+{
+Vector data = new Vector();
+ValueFunction fn = null;
+}
+{
+  [
+    fn = Expression(db)
+    { data.addElement(fn); }
+    (
+      <COMMA>
+      fn = Expression(db)
+      { data.addElement(fn); }
+    )*
+  ]
+  { return data; }
+}
+
+ValueFunction function(OntologyDb db):
+{
+Vector data = null;
+Token id;
+}
+{
+  id = <ID>  		// function name
+  <LBRACKET>
+  data = expression_list(db)     // parameter list
+  <RBRACKET>
+
+  {  return new DefinedFn(id.image,data); }
+}
+
+ValueFunction method(OntologyDb db):
+{
+Vector data = null;
+Token id;
+}
+{
+  id = <FIELD>  		// object.field.subfield.method
+  <LBRACKET>
+  data = expression_list(db)     // parameter list
+  <RBRACKET>
+
+  {  return new MethodCallFn(id.image,data); }
+}
+
+ValueFunction constraint(ValueFunction fn, OntologyDb db):
+{
+Vector data = null;
+Token id;
+}
+{
+  id = <ID>  		// function name
+  <LBRACKET>
+  data = expression_list(db)     // parameter list
+  <RBRACKET>
+
+  {  return new ConstraintBFn(fn,id.image,data); }
+}
+
+
+double Real():
+{
+Token t;
+double x = 0;
+}
+{
+(
+  t = <INTEGER>
+  { x = (Double.valueOf(t.image)).doubleValue(); }
+| t = <REAL>
+  { x = (Double.valueOf(t.image)).doubleValue(); }
+)
+  { return x; }
+}

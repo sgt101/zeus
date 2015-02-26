@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+
+<ruleset name="iservice">
+  <description>
+    iService project code style rules.
+  </description>
+
+  <rule ref="rulesets/imports.xml" >
+    <exclude name="UnusedImports" />
+  </rule>
+
+  <rule ref="rulesets/basic.xml" >
+    <exclude name="OverrideBothEqualsAndHashcodeRule" />
+  </rule>
+
+  <rule ref="rulesets/naming.xml" >
+    <exclude name="ShortVariable" />
+    <exclude name="LongVariable" />
+  </rule>
+
+  <rule ref="rulesets/strictexception.xml" >
+  </rule>
+
+  <rule ref="rulesets/design.xml" >
+    <exclude name="ConstructorCallsOverridableMethodRule" />
+    <exclude name="UseSingletonRule" />
+  </rule>
+
+  <rule ref="rulesets/controversial.xml" >
+    <exclude name="OnlyOneReturn" />
+    <exclude name="UnnecessaryConstructorRule" />
+  </rule>
+
+  <rule ref="rulesets/braces.xml" >
+  </rule>
+
+  <rule ref="rulesets/unusedcode.xml" >
+  </rule>
+
+  <rule ref="rulesets/codesize.xml" >
+  </rule>
+
+  <rule ref="rulesets/coupling.xml" >
+  </rule>
+
+  <rule ref="rulesets/strings.xml" >
+  </rule>
+
+</ruleset>

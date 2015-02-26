@@ -1,0 +1,76 @@
+
+/*
+* The contents of this file are subject to the BT "ZEUS" Open Source 
+* Licence (L77741), Version 1.0 (the "Licence"); you may not use this file 
+* except in compliance with the Licence. You may obtain a copy of the Licence
+* from $ZEUS_INSTALL/licence.html or alternatively from
+* http://www.labs.bt.com/projects/agents/zeus/licence.htm
+* 
+* Except as stated in Clause 7 of the Licence, software distributed under the
+* Licence is distributed WITHOUT WARRANTY OF ANY KIND, either express or 
+* implied. See the Licence for the specific language governing rights and 
+* limitations under the Licence.
+* 
+* The Original Code is within the package zeus.*.
+* The Initial Developer of the Original Code is British Telecommunications
+* public limited company, whose registered office is at 81 Newgate Street, 
+* London, EC1A 7AJ, England. Portions created by British Telecommunications 
+* public limited company are Copyright 1996-2001. All Rights Reserved.
+* 
+* THIS NOTICE MUST BE INCLUDED ON ANY COPY OF THIS FILE
+*/
+
+import zeus.actors.*;
+import zeus.agents.*;
+import java.util.*;
+import javax.swing.*; 
+
+/** 
+this class is the external of the dummy agent in the FIPA example for 
+AgentManagement (Annex A p 22 XC000023G @ www.fipa.org). Basically it provides a GUI with 
+some buttons, which you click to send the messages in the example
+*/
+public class dummyExternal extends JFrame implements ZeusExternal, ActionListener {
+    
+    private AgentContext context = null; 
+    private JButton sendReqRegAMS = new JButton("Send Request Register AMS"); 
+    private JButton sendReqRegDF = new JButton ("Send Request Register DF"); 
+    private JButton sendSearchDF = new JButton ("Send Search Scheduler"); 
+    private JButton sendModify = new JButton ("Send Modify Scheduler"); 
+    
+    /** this button has the note (fails) because in the example 
+    given by FIPA a propose is sent, and the DF should respond 
+    not understood*/
+    private JButton sendDeregisterPropose  = new JButton ("Send Deregister (fails)"); 
+    
+    public void exec(AgentContext context) { 
+        this.context = context;  
+        setSize (250,600); 
+
+        GridLayout layout = new GridLayout(1,5); 
+        getContentPane().setLayout(layout); 
+        getContentPane().add (sendReqRegAMS); 
+        getContentPane().add (sendReqRegDF); 
+        getContentPane().add (sendSearchDF); 
+        getContentPane().add (sendModify); 
+        getContentPane().add (sendDeregisterPropose); 
+        sendReqRegAMS.addActionListener(this); 
+        sendReqRegDF.addActionListener(this); 
+        sendSearchDF.addActionListener(this); 
+        sendModify.addActionListener(this); 
+        sendDeregisterPropose.addActionListener(this); 
+        this.setVisible(true); 
+        repaint();
+   
+    }
+    
+ 
+ 
+ public void ActionPerformed (ActionEvent ae) { 
+    System.out.println(ae.paramString()); 
+ }
+    
+
+    
+    
+}

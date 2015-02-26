@@ -1,0 +1,558 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1" /><title>FIPA_DF_Services xref</title>
+<link type="text/css" rel="stylesheet" href="../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../apidocs/zeus/agents/FIPA_DF_Services.html">View Javadoc</a></div><pre>
+
+<a name="1" href="#1">1</a>   <em class="comment">/*</em>
+<a name="2" href="#2">2</a>   <em class="comment"> * The contents of this file are subject to the BT "ZEUS" Open Source</em>
+<a name="3" href="#3">3</a>   <em class="comment"> * Licence (L77741), Version 1.0 (the "Licence"); you may not use this file</em>
+<a name="4" href="#4">4</a>   <em class="comment"> * except in compliance with the Licence. You may obtain a copy of the Licence</em>
+<a name="5" href="#5">5</a>   <em class="comment"> * from $ZEUS_INSTALL/licence.html or alternatively from</em>
+<a name="6" href="#6">6</a>   <em class="comment"> * <a href="http://www.labs.bt.com/projects/agents/zeus/licence.htm" target="alexandria_uri">http://www.labs.bt.com/projects/agents/zeus/licence.htm</a></em>
+<a name="7" href="#7">7</a>   <em class="comment"> *</em>
+<a name="8" href="#8">8</a>   <em class="comment"> * Except as stated in Clause 7 of the Licence, software distributed under the</em>
+<a name="9" href="#9">9</a>   <em class="comment"> * Licence is distributed WITHOUT WARRANTY OF ANY KIND, either express or</em>
+<a name="10" href="#10">10</a>  <em class="comment"> * implied. See the Licence for the specific language governing rights and</em>
+<a name="11" href="#11">11</a>  <em class="comment"> * limitations under the Licence.</em>
+<a name="12" href="#12">12</a>  <em class="comment"> *</em>
+<a name="13" href="#13">13</a>  <em class="comment"> * The Original Code is within the package zeus.*.</em>
+<a name="14" href="#14">14</a>  <em class="comment"> * The Initial Developer of the Original Code is British Telecommunications</em>
+<a name="15" href="#15">15</a>  <em class="comment"> * public limited company, whose registered office is at 81 Newgate Street,</em>
+<a name="16" href="#16">16</a>  <em class="comment"> * London, EC1A 7AJ, England. Portions created by British Telecommunications</em>
+<a name="17" href="#17">17</a>  <em class="comment"> * public limited company are Copyright 1996-2001. All Rights Reserved.</em>
+<a name="18" href="#18">18</a>  <em class="comment"> *java</em>
+<a name="19" href="#19">19</a>  <em class="comment"> * THIS NOTICE MUST BE INCLUDED ON ANY COPY OF THIS FILE</em>
+<a name="20" href="#20">20</a>  <em class="comment"> */</em>
+<a name="21" href="#21">21</a>  <strong>package</strong> <a href="../../zeus/agents/package-summary.html">zeus.agents</a>;
+<a name="22" href="#22">22</a>  <strong>import</strong> <a href="../../zeus/actors/package-summary.html">zeus.actors</a>.*;
+<a name="23" href="#23">23</a>  <strong>import</strong> <a href="../../zeus/concepts/package-summary.html">zeus.concepts</a>.*;
+<a name="24" href="#24">24</a>  <strong>import</strong> zeus.util.GenSym;
+<a name="25" href="#25">25</a>  <strong>import</strong> java.net.*;
+<a name="26" href="#26">26</a>  <strong>import</strong> java.util.*;
+<a name="27" href="#27">27</a>  <strong>import</strong> <a href="../../JADE_SL/package-summary.html">JADE_SL</a>.*;
+<a name="28" href="#28">28</a>  <strong>import</strong> <a href="../../JADE_SL/lang/sl/package-summary.html">JADE_SL.lang.sl</a>.*;
+<a name="29" href="#29">29</a>  <strong>import</strong> <a href="../../JADE_SL/abs/package-summary.html">JADE_SL.abs</a>.*;
+<a name="30" href="#30">30</a>  <strong>import</strong> <a href="../../JADE_SL/onto/basic/package-summary.html">JADE_SL.onto.basic</a>.*;
+<a name="31" href="#31">31</a>  <strong>import</strong> <a href="../../zeus/util/package-summary.html">zeus.util</a>.*;
+<a name="32" href="#32">32</a>  
+<a name="33" href="#33">33</a>  <em>/**<em>*</em></em>
+<a name="34" href="#34">34</a>  <em> * FIPA_DF_Services is used by the ACC agent to wrap the Facilitator</em>
+<a name="35" href="#35">35</a>  <em> * so that it can be accessed exernally.</em>
+<a name="36" href="#36">36</a>  <em> *</em>
+<a name="37" href="#37">37</a>  <em> *This class was tested against the Agentcities test suit, <a href="http://leap.crm-paris.com/agentcities/Services/Testsuite.jsp" target="alexandria_uri">http://leap.crm-paris.com/agentcities/Services/Testsuite.jsp</a></em>
+<a name="38" href="#38">38</a>  <em> *</em>
+<a name="39" href="#39">39</a>  <em> */</em>
+<a name="40" href="#40">40</a>  <strong>public</strong> <strong>class</strong> FIPA_DF_Services <strong>extends</strong> FIPA_Services {
+<a name="41" href="#41">41</a>      
+<a name="42" href="#42">42</a>      <strong>private</strong> String NOT_AUTHORISED = <span class="string">"not authorised"</span>;
+<a name="43" href="#43">43</a>      <strong>private</strong> String UNEXPECTED = <span class="string">"zeus didn't expect that"</span>;
+<a name="44" href="#44">44</a>      <strong>private</strong> <a href="../../zeus/util/GenSym.html">GenSym</a> rand = <strong>new</strong> <a href="../../zeus/util/GenSym.html">GenSym</a>(<span class="string">"df"</span>);
+<a name="45" href="#45">45</a>      
+<a name="46" href="#46">46</a>      <em class="comment">// fear not, hack was just used to test the class, I left it in incase I wanted to try some more tests...</em>
+<a name="47" href="#47">47</a>      String hack = <strong>new</strong> String(<span class="string">" (set (df-agent-description :name (agent-identifier :name pingagent@adastralcity.agentcities.net) :services (set (service-description :name ping :type ping_acl_alpha_v1.0 ))  :protocol FIPA-Request  :ontology Agentcities   :language Ping   :ownership &#47;&#47;\&quot;Simon&#47;&#47;\&quot;)   "</span>);
+<a name="48" href="#48">48</a>      
+<a name="49" href="#49">49</a>      <em class="comment">// registered_agents is used to store all normal agents</em>
+<a name="50" href="#50">50</a>      <strong>private</strong> Hashtable registered_agents = <strong>new</strong> Hashtable();
+<a name="51" href="#51">51</a>      
+<a name="52" href="#52">52</a>      <em class="comment">// registered_dfs is used to store all the dfs that have registered themselves</em>
+<a name="53" href="#53">53</a>      <strong>private</strong> Hashtable registered_dfs = <strong>new</strong> Hashtable();
+<a name="54" href="#54">54</a>      <strong>private</strong> <a href="../../JADE_SL/lang/sl/SLCodec.html">SLCodec</a> codec = <strong>new</strong> <a href="../../JADE_SL/lang/sl/SLCodec.html">SLCodec</a>();
+<a name="55" href="#55">55</a>      String ABILITY_KEY = <span class="string">"ACC_FIPA_DF_KEY"</span>;
+<a name="56" href="#56">56</a>      String SERVICE_KEY = <span class="string">"ACC_DAMLS_KEY"</span>;
+<a name="57" href="#57">57</a>      <strong>public</strong> <strong>void</strong> exec(<a href="../../zeus/actors/AgentContext.html">AgentContext</a> context) {
+<a name="58" href="#58">58</a>          <strong>this</strong>.context = context;
+<a name="59" href="#59">59</a>          <strong>this</strong>.type = <strong>new</strong> String(<span class="string">"df"</span>);
+<a name="60" href="#60">60</a>          debug(<span class="string">"trying registration"</span>);
+<a name="61" href="#61">61</a>          registerAlias(<strong>this</strong>.type);
+<a name="62" href="#62">62</a>          setName();
+<a name="63" href="#63">63</a>          setRegister();
+<a name="64" href="#64">64</a>          setDeregister();
+<a name="65" href="#65">65</a>          setModify();
+<a name="66" href="#66">66</a>          setSearch();
+<a name="67" href="#67">67</a>          
+<a name="68" href="#68">68</a>        <em class="comment">/*<em class="comment">  String[] pattern2 = { "type", "inform","in-reply-to", ABILITY_KEY };</em></em>
+<a name="69" href="#69">69</a>  <em class="comment">        context.MsgHandler().addRule(new MessageRuleImpl(context.newId("Rule"), pattern2,this,"abilityReceived") );*/</em>
+<a name="70" href="#70">70</a>          String[] serviceDesc = {<span class="string">"type"</span>,<span class="string">"inform"</span>, <span class="string">"content"</span>,<span class="string">"&#47;&#47;A(.*)daml(.*)&#47;&#47;Z"</span>,<span class="string">"in-reply-to"</span>,SERVICE_KEY};
+<a name="71" href="#71">71</a>          context.MsgHandler().addRule(<strong>new</strong> MessageRuleImpl(context.<strong>new</strong>Id(<span class="string">"Rule"</span>), serviceDesc,<strong>this</strong>,<span class="string">"serviceDescriptionReceived"</span>));
+<a name="72" href="#72">72</a>      }
+<a name="73" href="#73">73</a>      
+<a name="74" href="#74">74</a>      
+<a name="75" href="#75">75</a>      
+<a name="76" href="#76">76</a>     
+<a name="77" href="#77">77</a>      
+<a name="78" href="#78">78</a>      <strong>private</strong> String getServiceName(<a href="../../zeus/concepts/Performative.html">Performative</a> msg) {
+<a name="79" href="#79">79</a>          
+<a name="80" href="#80">80</a>          String type;
+<a name="81" href="#81">81</a>          
+<a name="82" href="#82">82</a>          String description = msg.getContent();
+<a name="83" href="#83">83</a>          String serviceDir = SystemProps.getProperty(<span class="string">"http_root"</span>);
+<a name="84" href="#84">84</a>          
+<a name="85" href="#85">85</a>          <strong>if</strong>(description.indexOf(<span class="string">"&lt;service:serviceProfile "</span>) > 0) {
+<a name="86" href="#86">86</a>              type = <span class="string">"Profile"</span>;
+<a name="87" href="#87">87</a>          }
+<a name="88" href="#88">88</a>          <strong>else</strong> <strong>if</strong>(description.indexOf(<span class="string">"&lt;service:Service"</span>) > 0 &amp;&amp;
+<a name="89" href="#89">89</a>          description.indexOf(<span class="string">"&lt;service:presents"</span>) > 0) {
+<a name="90" href="#90">90</a>              type = <span class="string">"Instance"</span>;
+<a name="91" href="#91">91</a>          }
+<a name="92" href="#92">92</a>          <strong>else</strong> {
+<a name="93" href="#93">93</a>              System.out.println(<span class="string">"Unknown type of description"</span>);
+<a name="94" href="#94">94</a>              <strong>return</strong> (<span class="string">"unknown"</span>);
+<a name="95" href="#95">95</a>          }
+<a name="96" href="#96">96</a>          
+<a name="97" href="#97">97</a>          <strong>int</strong> nameBegin = description.indexOf(<span class="string">"service:serviceProfile "</span>);
+<a name="98" href="#98">98</a>          nameBegin = description.indexOf(<span class="string">"rdf:ID"</span>, nameBegin);
+<a name="99" href="#99">99</a>          nameBegin = description.indexOf(<span class="string">"\&quot;"</span>, nameBegin) + 1;
+<a name="100" href="#100">100</a>         
+<a name="101" href="#101">101</a>         <strong>int</strong> nameEnd = description.indexOf(<span class="string">"\&quot;"</span>, nameBegin);
+<a name="102" href="#102">102</a>         
+<a name="103" href="#103">103</a>         String name = description.substring(nameBegin, nameEnd);
+<a name="104" href="#104">104</a>         <strong>return</strong> name;
+<a name="105" href="#105">105</a>         
+<a name="106" href="#106">106</a>     }
+<a name="107" href="#107">107</a>     
+<a name="108" href="#108">108</a>     <em>/**<em>*</em></em>
+<a name="109" href="#109">109</a> <em>     *this is a message that is likely to have the name of the task in it</em>
+<a name="110" href="#110">110</a> <em>     */</em>
+<a name="111" href="#111">111</a>     <strong>public</strong> <strong>void</strong> serviceDescriptionReceived(<a href="../../zeus/concepts/Performative.html">Performative</a> perf) {
+<a name="112" href="#112">112</a>         System.out.println(<span class="string">"GOT SERVICE DESCRIPTION!!!!"</span>);
+<a name="113" href="#113">113</a>         <em class="comment">//    Vector List = ZeusParser.abilitySpecList(context.OntologyDb(),perf.getContent());</em>
+<a name="114" href="#114">114</a>         String agent = perf.getSender();
+<a name="115" href="#115">115</a>         DF_Description desc = <strong>new</strong> DF_Description();
+<a name="116" href="#116">116</a>         Vector language = <strong>new</strong> Vector();
+<a name="117" href="#117">117</a>         language.addElement(<span class="string">"FIPA-SL"</span>);
+<a name="118" href="#118">118</a>         language.addElement(<span class="string">"Zeus"</span>);
+<a name="119" href="#119">119</a>         desc.setLanguage(language);
+<a name="120" href="#120">120</a>         Vector protocols = <strong>new</strong> Vector();
+<a name="121" href="#121">121</a>         protocols.addElement(<span class="string">"FIPA-Inform-Protocol"</span>);
+<a name="122" href="#122">122</a>         protocols.addElement(<span class="string">"FIPA-Request-Protocol"</span>);
+<a name="123" href="#123">123</a>         protocols.addElement(<span class="string">"FIPA-Iterated-ContractNet-Protocol"</span>);
+<a name="124" href="#124">124</a>         desc.setProtocol(protocols);
+<a name="125" href="#125">125</a>         Vector ontos = <strong>new</strong> Vector();
+<a name="126" href="#126">126</a>         ontos.addElement(<span class="string">"agentcities"</span>);
+<a name="127" href="#127">127</a>         desc.setOntology(ontos);
+<a name="128" href="#128">128</a>         <a href="../../zeus/concepts/Address.html">Address</a> addr = context.getMailBox().getAddress();
+<a name="129" href="#129">129</a>         String host = addr.getHost(); 
+<a name="130" href="#130">130</a>         desc.setName(<strong>new</strong> FIPA_AID_Address (perf.getSender(), host  ));
+<a name="131" href="#131">131</a>         FIPA_Service_Description service = <strong>new</strong> FIPA_Service_Description();
+<a name="132" href="#132">132</a>         service.setOwnership(agent);
+<a name="133" href="#133">133</a>         service.setType(<span class="string">"Backward-Chain-Task"</span>);
+<a name="134" href="#134">134</a>         String sname = getServiceName(perf);
+<a name="135" href="#135">135</a>         System.out.println(<span class="string">"sname = "</span> + sname);
+<a name="136" href="#136">136</a>         <strong>if</strong> (!sname.equals(<span class="string">"Profile"</span>)) {
+<a name="137" href="#137">137</a>             service.setName(sname);
+<a name="138" href="#138">138</a>             protocols = <strong>new</strong> Vector();
+<a name="139" href="#139">139</a>             protocols.addElement(<span class="string">"FIPA-Iterated-ContractNet-Protocol"</span>);
+<a name="140" href="#140">140</a>             service.setProtocol(protocols);
+<a name="141" href="#141">141</a>             service.setLanguage(language);
+<a name="142" href="#142">142</a>             service.setOntology(ontos);
+<a name="143" href="#143">143</a>             Vector props = <strong>new</strong> Vector();
+<a name="144" href="#144">144</a>             String content = perf.getContent();
+<a name="145" href="#145">145</a>             <em class="comment">//classification, domain, scope</em>
+<a name="146" href="#146">146</a>             String classification = <strong>new</strong> String(); 
+<a name="147" href="#147">147</a>             String domain = <span class="string">"Leisure"</span>;
+<a name="148" href="#148">148</a>             String scope = <span class="string">"Local"</span>; 
+<a name="149" href="#149">149</a>             <strong>if</strong> (sname == <span class="string">"BookTable"</span>) classification =<span class="string">"Restaurant"</span>; 
+<a name="150" href="#150">150</a>             <strong>if</strong> (sname == <span class="string">"BookTicket"</span>) classification = <span class="string">"Entertainment"</span>; 
+<a name="151" href="#151">151</a>             <strong>if</strong> (sname == <span class="string">"BookRoom"</span>) classification = <span class="string">"Hotel"</span>;
+<a name="152" href="#152">152</a>             service.setAgentcitiesProperties(classification,domain,scope);
+<a name="153" href="#153">153</a>             <strong>if</strong> (!inServiceList(agent+sname)) {
+<a name="154" href="#154">154</a>                 System.out.println(<span class="string">"sname "</span> + sname +<span class="string">" not in service list"</span>);
+<a name="155" href="#155">155</a>                 desc.addService(service);
+<a name="156" href="#156">156</a>                 addServiceList(agent+sname);
+<a name="157" href="#157">157</a>                 System.out.println(<span class="string">"sname "</span>+ sname +<span class="string">" added to service list"</span>);
+<a name="158" href="#158">158</a>                 String key = agent+sname;
+<a name="159" href="#159">159</a>                 registered_agents.put(key,desc);
+<a name="160" href="#160">160</a>             }
+<a name="161" href="#161">161</a>             <strong>else</strong>{
+<a name="162" href="#162">162</a>                 System.out.println(<span class="string">"sname "</span> + sname + <span class="string">"was in service list"</span>);
+<a name="163" href="#163">163</a> 
+<a name="164" href="#164">164</a>             }
+<a name="165" href="#165">165</a>         }
+<a name="166" href="#166">166</a>         
+<a name="167" href="#167">167</a>     }
+<a name="168" href="#168">168</a>         Hashtable serviceList = <strong>new</strong> Hashtable();
+<a name="169" href="#169">169</a>         
+<a name="170" href="#170">170</a>         <strong>private</strong> <strong>void</strong> addServiceList(String name) {
+<a name="171" href="#171">171</a>             
+<a name="172" href="#172">172</a>             serviceList.put(name,name);
+<a name="173" href="#173">173</a>         }
+<a name="174" href="#174">174</a>         
+<a name="175" href="#175">175</a>         
+<a name="176" href="#176">176</a>         <strong>private</strong> <strong>boolean</strong> inServiceList(String name) {
+<a name="177" href="#177">177</a>             <strong>return</strong> (serviceList.containsValue(name));
+<a name="178" href="#178">178</a>         }
+<a name="179" href="#179">179</a>         
+<a name="180" href="#180">180</a>         <em>/**<em>*</em></em>
+<a name="181" href="#181">181</a> <em>         *the problem is to get the name of the task and to register it</em>
+<a name="182" href="#182">182</a> <em>         *here</em>
+<a name="183" href="#183">183</a> <em>         *Perhaps we this should be triggered by the second message?</em>
+<a name="184" href="#184">184</a> <em>         */</em>
+<a name="185" href="#185">185</a>         <strong>public</strong> <strong>void</strong> abilityReceived(<a href="../../zeus/concepts/Performative.html">Performative</a> perf) {
+<a name="186" href="#186">186</a>             System.out.println(<span class="string">"ADDING SERVICES"</span>);
+<a name="187" href="#187">187</a>             Vector List = ZeusParser.abilitySpecList(context.OntologyDb(),perf.getContent());
+<a name="188" href="#188">188</a>             String agent = perf.getSender();
+<a name="189" href="#189">189</a>             DF_Description desc = <strong>new</strong> DF_Description();
+<a name="190" href="#190">190</a>             Vector language = <strong>new</strong> Vector();
+<a name="191" href="#191">191</a>             language.addElement(<span class="string">"FIPA-SL"</span>);
+<a name="192" href="#192">192</a>             language.addElement(<span class="string">"Zeus"</span>);
+<a name="193" href="#193">193</a>             desc.setLanguage(language);
+<a name="194" href="#194">194</a>             Vector protocols = <strong>new</strong> Vector();
+<a name="195" href="#195">195</a>             protocols.addElement(<span class="string">"FIPA-Inform-Protocol"</span>);
+<a name="196" href="#196">196</a>             protocols.addElement(<span class="string">"FIPA-Request-Protocol"</span>);
+<a name="197" href="#197">197</a>             protocols.addElement(<span class="string">"FIPA-Iterated-ContractNet-Protocol"</span>);
+<a name="198" href="#198">198</a>             desc.setProtocol(protocols);
+<a name="199" href="#199">199</a>             Vector ontos = <strong>new</strong> Vector();
+<a name="200" href="#200">200</a>             ontos.addElement(<span class="string">"agentcities"</span>);
+<a name="201" href="#201">201</a>             desc.setOntology(ontos);
+<a name="202" href="#202">202</a>             
+<a name="203" href="#203">203</a>             FIPA_Service_Description service = <strong>new</strong> FIPA_Service_Description();
+<a name="204" href="#204">204</a>             service.setOwnership(agent);
+<a name="205" href="#205">205</a>             service.setType(<span class="string">"Backward-Chain-Task"</span>);
+<a name="206" href="#206">206</a>             service.setName(rand.newId(perf.getSender()));
+<a name="207" href="#207">207</a>             protocols = <strong>new</strong> Vector();
+<a name="208" href="#208">208</a>             protocols.addElement(<span class="string">"FIPA-Iterated-ContractNet-Protocol"</span>);
+<a name="209" href="#209">209</a>             service.setProtocol(protocols);
+<a name="210" href="#210">210</a>             service.setLanguage(language);
+<a name="211" href="#211">211</a>             service.setOntology(ontos);
+<a name="212" href="#212">212</a>             Vector props = <strong>new</strong> Vector();
+<a name="213" href="#213">213</a>             String content = perf.getContent();
+<a name="214" href="#214">214</a>             <a href="../../zeus/concepts/AbilitySpec.html">AbilitySpec</a> spec = ZeusParser.abilitySpec(context.getOntologyDb(), content);
+<a name="215" href="#215">215</a>             props.addElement(spec.getFact().toSL());
+<a name="216" href="#216">216</a>             
+<a name="217" href="#217">217</a>             <em class="comment">//   props.addElement(perf.getContent());</em>
+<a name="218" href="#218">218</a>             service.setAgentcitiesProperties(<span class="string">"none"</span>,<span class="string">"none"</span>,<span class="string">"none"</span>);
+<a name="219" href="#219">219</a>             desc.addService(service);
+<a name="220" href="#220">220</a>             
+<a name="221" href="#221">221</a>             String key = rand.newId();
+<a name="222" href="#222">222</a>             registered_agents.put(key,desc);
+<a name="223" href="#223">223</a>         }
+<a name="224" href="#224">224</a>         
+<a name="225" href="#225">225</a>         
+<a name="226" href="#226">226</a>         <em>/**<em>*</em></em>
+<a name="227" href="#227">227</a> <em>         * method for handleing a registration message to the df</em>
+<a name="228" href="#228">228</a> <em>         */</em>
+<a name="229" href="#229">229</a>         <strong>public</strong> <strong>void</strong> handleRegister(<a href="../../zeus/concepts/Performative.html">Performative</a> perf) {
+<a name="230" href="#230">230</a>             <strong>try</strong> {
+<a name="231" href="#231">231</a>                 <em class="comment">// parse the content</em>
+<a name="232" href="#232">232</a>                 String content = perf.getContent();
+<a name="233" href="#233">233</a>                 String agreeCont = <strong>new</strong> String(content);
+<a name="234" href="#234">234</a>                 <a href="../../JADE_SL/abs/AbsContentElement.html">AbsContentElement</a> slcontent = codec.decode(SLOntology.getInstance(),content);
+<a name="235" href="#235">235</a>                 <a href="../../JADE_SL/abs/AbsAgentAction.html">AbsAgentAction</a> act = (AbsAgentAction) slcontent.getAbsObject(<span class="string">"ACTION"</span>);
+<a name="236" href="#236">236</a>                 <em class="comment">// check and see if it is a registration message, if it is then agree to register,</em>
+<a name="237" href="#237">237</a>                 <em class="comment">// otherwise send a not understood</em>
+<a name="238" href="#238">238</a>                 <strong>if</strong> (act != <strong>null</strong>) {
+<a name="239" href="#239">239</a>                     <strong>if</strong> (act.getTypeName().equalsIgnoreCase(<span class="string">"register"</span>)) {
+<a name="240" href="#240">240</a>                         sendAgree(perf);
+<a name="241" href="#241">241</a>                     }
+<a name="242" href="#242">242</a>                     <strong>else</strong> {
+<a name="243" href="#243">243</a>                         simpleReply(perf,UNEXPECTED,<span class="string">"not_understood"</span>);
+<a name="244" href="#244">244</a>                     }
+<a name="245" href="#245">245</a>                 }
+<a name="246" href="#246">246</a>                 <a href="../../JADE_SL/abs/AbsConcept.html">AbsConcept</a> absActor = (AbsConcept) slcontent.getAbsObject(<span class="string">"ACTOR"</span>);
+<a name="247" href="#247">247</a>                 <a href="../../JADE_SL/abs/AbsAggregate.html">AbsAggregate</a> agentAddresses = (AbsAggregate) absActor.getAbsObject(<span class="string">"addresses"</span>);
+<a name="248" href="#248">248</a>                 <a href="../../JADE_SL/abs/AbsPrimitive.html">AbsPrimitive</a> agentName = (AbsPrimitive) absActor.getAbsObject(<span class="string">"name"</span>);
+<a name="249" href="#249">249</a>                 String addr = SL_Util.makeAddressString(agentName,agentAddresses);
+<a name="250" href="#250">250</a>                 <strong>boolean</strong> proceed = checkAuthority(<span class="string">"df"</span>, agentName, agentAddresses, perf);
+<a name="251" href="#251">251</a>                 <strong>if</strong> (!proceed) {
+<a name="252" href="#252">252</a>                     simpleReply(perf, NOT_AUTHORISED,<span class="string">"refuse"</span>);
+<a name="253" href="#253">253</a>                 }
+<a name="254" href="#254">254</a>                 <em class="comment">//rand.newId("reg");</em>
+<a name="255" href="#255">255</a>                 <strong>if</strong> (agentName.getString().equals(<span class="string">"df"</span>)) {
+<a name="256" href="#256">256</a>                     registered_dfs.put(addr, makeDescription(act));
+<a name="257" href="#257">257</a>                 }
+<a name="258" href="#258">258</a>                 <strong>else</strong> {
+<a name="259" href="#259">259</a>                     registered_agents.put(addr, makeDescription(act));}
+<a name="260" href="#260">260</a>                 informDone(perf);
+<a name="261" href="#261">261</a>             } <strong>catch</strong> (Exception e) {
+<a name="262" href="#262">262</a>                 e.printStackTrace();
+<a name="263" href="#263">263</a>             }
+<a name="264" href="#264">264</a>         }
+<a name="265" href="#265">265</a>         
+<a name="266" href="#266">266</a>         
+<a name="267" href="#267">267</a>         
+<a name="268" href="#268">268</a>         
+<a name="269" href="#269">269</a>         
+<a name="270" href="#270">270</a>         <strong>public</strong> DF_Description makeDescription(<a href="../../JADE_SL/abs/AbsConcept.html">AbsConcept</a> act) {
+<a name="271" href="#271">271</a>             <strong>try</strong> {
+<a name="272" href="#272">272</a>                 <a href="../../JADE_SL/abs/AbsConcept.html">AbsConcept</a> target_descr = (AbsConcept) act.getAbsObject(<span class="string">"_SL.UNNAMED0"</span>); <em class="comment">// dangerous?</em>
+<a name="273" href="#273">273</a>                 <a href="../../JADE_SL/abs/AbsConcept.html">AbsConcept</a> desName = (AbsConcept) target_descr.getAbsObject(<span class="string">"name"</span>);
+<a name="274" href="#274">274</a>                 <a href="../../JADE_SL/abs/AbsPrimitive.html">AbsPrimitive</a> targName = (AbsPrimitive) desName.getAbsObject(<span class="string">"name"</span>);
+<a name="275" href="#275">275</a>                 <a href="../../JADE_SL/abs/AbsAggregate.html">AbsAggregate</a> targAddresses =  (AbsAggregate) desName.getAbsObject(<span class="string">"addresses"</span>);
+<a name="276" href="#276">276</a>                 FIPA_AID_Address agent = <strong>new</strong> FIPA_AID_Address(SL_Util.makeAddressString(targName, targAddresses));
+<a name="277" href="#277">277</a>                 <a href="../../JADE_SL/abs/AbsAggregate.html">AbsAggregate</a> targLanguage = (AbsAggregate) target_descr.getAbsObject(<span class="string">"language"</span>);
+<a name="278" href="#278">278</a>                 <a href="../../JADE_SL/abs/AbsAggregate.html">AbsAggregate</a> targProtocol = (AbsAggregate) target_descr.getAbsObject(<span class="string">"protocol"</span>);
+<a name="279" href="#279">279</a>                 <a href="../../JADE_SL/abs/AbsAggregate.html">AbsAggregate</a> targOntology = (AbsAggregate) target_descr.getAbsObject(<span class="string">"ontology"</span>);
+<a name="280" href="#280">280</a>                 <a href="../../JADE_SL/abs/AbsAggregate.html">AbsAggregate</a> targServices = (AbsAggregate) target_descr.getAbsObject(<span class="string">"services"</span>);
+<a name="281" href="#281">281</a>                 DF_Description desc = <strong>new</strong> DF_Description();
+<a name="282" href="#282">282</a>                 desc.setName(agent);
+<a name="283" href="#283">283</a>                 desc.setLanguage(SL_Util.makeVector(targLanguage));
+<a name="284" href="#284">284</a>                 desc.setProtocol(SL_Util.makeVector(targProtocol));
+<a name="285" href="#285">285</a>                 desc.setOntology(SL_Util.makeVector(targOntology));
+<a name="286" href="#286">286</a>                 <em class="comment">//may be more than one service...</em>
+<a name="287" href="#287">287</a>                 Iterator iter = (targServices).iterator();
+<a name="288" href="#288">288</a>                 <strong>while</strong> (iter.hasNext()) {
+<a name="289" href="#289">289</a>                     <a href="../../JADE_SL/abs/AbsConcept.html">AbsConcept</a> current = (AbsConcept) iter.next();
+<a name="290" href="#290">290</a>                     FIPA_Service_Description service = <strong>new</strong> FIPA_Service_Description(current);
+<a name="291" href="#291">291</a>                     desc.addService(service);
+<a name="292" href="#292">292</a>                 }
+<a name="293" href="#293">293</a>                 <strong>return</strong> (desc);}
+<a name="294" href="#294">294</a>             <strong>catch</strong> (Exception e) {
+<a name="295" href="#295">295</a>                 <em class="comment">// probably an empty param</em>
+<a name="296" href="#296">296</a>                 <strong>return</strong> (<strong>null</strong>);
+<a name="297" href="#297">297</a>             }
+<a name="298" href="#298">298</a>             
+<a name="299" href="#299">299</a>         }
+<a name="300" href="#300">300</a>         
+<a name="301" href="#301">301</a>         
+<a name="302" href="#302">302</a>         
+<a name="303" href="#303">303</a>         <strong>public</strong> <strong>boolean</strong> checkAuthority(String agent, <a href="../../JADE_SL/abs/AbsPrimitive.html">AbsPrimitive</a> attempter, <a href="../../JADE_SL/abs/AbsAggregate.html">AbsAggregate</a> attempterAddresses, <a href="../../zeus/concepts/Performative.html">Performative</a> perf) {
+<a name="304" href="#304">304</a>             <strong>return</strong> <strong>true</strong>; <em class="comment">// v. poor!</em>
+<a name="305" href="#305">305</a>         }
+<a name="306" href="#306">306</a>         
+<a name="307" href="#307">307</a>         
+<a name="308" href="#308">308</a>         <strong>public</strong> <strong>void</strong> handleDeregister(<a href="../../zeus/concepts/Performative.html">Performative</a> perf) {
+<a name="309" href="#309">309</a>             debug(<span class="string">"handleDeregister in df called"</span>);
+<a name="310" href="#310">310</a>             <strong>try</strong> {
+<a name="311" href="#311">311</a>                 <em class="comment">// parse the content</em>
+<a name="312" href="#312">312</a>                 String content = perf.getContent();
+<a name="313" href="#313">313</a>                 String agreeCont = <strong>new</strong> String(content);
+<a name="314" href="#314">314</a>                 <a href="../../JADE_SL/abs/AbsContentElement.html">AbsContentElement</a> slcontent = codec.decode(SLOntology.getInstance(),content);
+<a name="315" href="#315">315</a>                 <a href="../../JADE_SL/abs/AbsAgentAction.html">AbsAgentAction</a> act = (AbsAgentAction) slcontent.getAbsObject(<span class="string">"ACTION"</span>);
+<a name="316" href="#316">316</a>                 <em class="comment">// check and see if it is a deregistration message, if it is then agree to register,</em>
+<a name="317" href="#317">317</a>                 <em class="comment">// otherwise send a not understood</em>
+<a name="318" href="#318">318</a>                 <strong>if</strong> (act != <strong>null</strong>) {
+<a name="319" href="#319">319</a>                     <strong>if</strong> (act.getTypeName().equalsIgnoreCase(<span class="string">"deregister"</span>)) {
+<a name="320" href="#320">320</a>                         sendAgree(perf);
+<a name="321" href="#321">321</a>                     }
+<a name="322" href="#322">322</a>                     <strong>else</strong> {
+<a name="323" href="#323">323</a>                         simpleReply(perf,UNEXPECTED,<span class="string">"not_understood"</span>);
+<a name="324" href="#324">324</a>                     }
+<a name="325" href="#325">325</a>                 }
+<a name="326" href="#326">326</a>                 String name = <strong>new</strong> String();
+<a name="327" href="#327">327</a>                 <a href="../../JADE_SL/abs/AbsConcept.html">AbsConcept</a> absActor = (AbsConcept) slcontent.getAbsObject(<span class="string">"ACTOR"</span>);
+<a name="328" href="#328">328</a>                 <a href="../../JADE_SL/abs/AbsAggregate.html">AbsAggregate</a> agentAddresses = (AbsAggregate) absActor.getAbsObject(<span class="string">"addresses"</span>);
+<a name="329" href="#329">329</a>                 <a href="../../JADE_SL/abs/AbsPrimitive.html">AbsPrimitive</a> agentName = (AbsPrimitive) absActor.getAbsObject(<span class="string">"name"</span>);
+<a name="330" href="#330">330</a>                 <strong>boolean</strong> proceed = checkAuthority(<span class="string">"df"</span>, agentName, agentAddresses, perf);
+<a name="331" href="#331">331</a>                 <strong>if</strong> (!proceed) {
+<a name="332" href="#332">332</a>                     simpleReply(perf, NOT_AUTHORISED,<span class="string">"refuse"</span>);
+<a name="333" href="#333">333</a>                 }
+<a name="334" href="#334">334</a>                 String searchAddr = SL_Util.makeAddressString(agentName,agentAddresses);
+<a name="335" href="#335">335</a>                 Enumeration allAddresses = registered_agents.keys();
+<a name="336" href="#336">336</a>                 <strong>while</strong> (allAddresses.hasMoreElements()) {
+<a name="337" href="#337">337</a>                     String current = (String) allAddresses.nextElement();
+<a name="338" href="#338">338</a>                     <strong>if</strong> (current.equals(searchAddr)) {
+<a name="339" href="#339">339</a>                         registered_agents.remove(current);
+<a name="340" href="#340">340</a>                         informDone(perf);
+<a name="341" href="#341">341</a>                         <strong>return</strong>;
+<a name="342" href="#342">342</a>                     }
+<a name="343" href="#343">343</a>                 }
+<a name="344" href="#344">344</a>             } <strong>catch</strong> (Exception e) {
+<a name="345" href="#345">345</a>                 e.printStackTrace();
+<a name="346" href="#346">346</a>             }
+<a name="347" href="#347">347</a>         }
+<a name="348" href="#348">348</a>         
+<a name="349" href="#349">349</a>         
+<a name="350" href="#350">350</a>         
+<a name="351" href="#351">351</a>         
+<a name="352" href="#352">352</a>         
+<a name="353" href="#353">353</a>         
+<a name="354" href="#354">354</a>         <strong>public</strong> <strong>void</strong> handleModify(<a href="../../zeus/concepts/Performative.html">Performative</a> perf) {
+<a name="355" href="#355">355</a>             debug(<span class="string">"handleModify in df called"</span>);
+<a name="356" href="#356">356</a>             <strong>try</strong> {
+<a name="357" href="#357">357</a>                 <em class="comment">// always banned.</em>
+<a name="358" href="#358">358</a>                 String content = perf.getContent();
+<a name="359" href="#359">359</a>                 String agreeCont = <strong>new</strong> String(content);
+<a name="360" href="#360">360</a>                 <a href="../../JADE_SL/abs/AbsContentElement.html">AbsContentElement</a> slcontent = codec.decode(SLOntology.getInstance(),content);
+<a name="361" href="#361">361</a>                 <a href="../../JADE_SL/abs/AbsAgentAction.html">AbsAgentAction</a> act = (AbsAgentAction) slcontent.getAbsObject(<span class="string">"ACTION"</span>);
+<a name="362" href="#362">362</a>                 <strong>if</strong> (act != <strong>null</strong>) {
+<a name="363" href="#363">363</a>                     <strong>if</strong> (act.getTypeName().equalsIgnoreCase(<span class="string">"modify"</span>)) {
+<a name="364" href="#364">364</a>                         <a href="../../JADE_SL/abs/AbsConcept.html">AbsConcept</a> absActor = (AbsConcept) slcontent.getAbsObject(<span class="string">"ACTOR"</span>);
+<a name="365" href="#365">365</a>                         <a href="../../JADE_SL/abs/AbsAggregate.html">AbsAggregate</a> agentAddresses = (AbsAggregate) absActor.getAbsObject(<span class="string">"addresses"</span>);
+<a name="366" href="#366">366</a>                         <a href="../../JADE_SL/abs/AbsPrimitive.html">AbsPrimitive</a> agentName = (AbsPrimitive) absActor.getAbsObject(<span class="string">"name"</span>);
+<a name="367" href="#367">367</a>                         String searchAddr = SL_Util.makeAddressString(agentName,agentAddresses);
+<a name="368" href="#368">368</a>                         Enumeration allAddresses = registered_agents.keys();
+<a name="369" href="#369">369</a>                         <strong>while</strong> (allAddresses.hasMoreElements()) {
+<a name="370" href="#370">370</a>                             String current = (String) allAddresses.nextElement();
+<a name="371" href="#371">371</a>                             <strong>if</strong> (current.equals(searchAddr)) {
+<a name="372" href="#372">372</a>                                 registered_agents.remove(current);
+<a name="373" href="#373">373</a>                                 registered_agents.put(searchAddr, makeDescription(act));
+<a name="374" href="#374">374</a>                                 informDone(perf);
+<a name="375" href="#375">375</a>                                 <strong>return</strong>;
+<a name="376" href="#376">376</a>                             }
+<a name="377" href="#377">377</a>                         }}
+<a name="378" href="#378">378</a>                     <strong>else</strong> {
+<a name="379" href="#379">379</a>                         simpleReply(perf,UNEXPECTED,<span class="string">"not_understood"</span>);
+<a name="380" href="#380">380</a>                     }
+<a name="381" href="#381">381</a>                 }
+<a name="382" href="#382">382</a>             } <strong>catch</strong> (Exception e ) {
+<a name="383" href="#383">383</a>                 e.printStackTrace();
+<a name="384" href="#384">384</a>             }
+<a name="385" href="#385">385</a>         }
+<a name="386" href="#386">386</a>         
+<a name="387" href="#387">387</a>         
+<a name="388" href="#388">388</a>         
+<a name="389" href="#389">389</a>         
+<a name="390" href="#390">390</a>         <strong>public</strong> <strong>void</strong> handleSearch(<a href="../../zeus/concepts/Performative.html">Performative</a> perf) {
+<a name="391" href="#391">391</a>             <strong>try</strong> {
+<a name="392" href="#392">392</a>                 debug(<span class="string">"In handle search"</span>);
+<a name="393" href="#393">393</a>                 Enumeration members = registered_agents.elements();
+<a name="394" href="#394">394</a>                 String content = perf.getContent();
+<a name="395" href="#395">395</a>                 debug(<span class="string">"content = "</span> + content);
+<a name="396" href="#396">396</a>                 <a href="../../JADE_SL/abs/AbsContentElement.html">AbsContentElement</a> slcontent = codec.decode(SLOntology.getInstance(),content);
+<a name="397" href="#397">397</a>                 <a href="../../JADE_SL/abs/AbsAgentAction.html">AbsAgentAction</a> act = (AbsAgentAction) slcontent.getAbsObject(<span class="string">"ACTION"</span>);
+<a name="398" href="#398">398</a>                 <em class="comment">// should check policy</em>
+<a name="399" href="#399">399</a>                 <strong>if</strong> (act != <strong>null</strong>) {
+<a name="400" href="#400">400</a>                     System.out.println(<span class="string">"not a null action"</span>);
+<a name="401" href="#401">401</a>                     <strong>if</strong> (act.getTypeName().equalsIgnoreCase(<span class="string">"search"</span>)) {
+<a name="402" href="#402">402</a>                         System.out.println(<span class="string">"action is search"</span>);
+<a name="403" href="#403">403</a>                         sendAgree(perf);
+<a name="404" href="#404">404</a>                         <em class="comment">// agree not sent in initail version</em>
+<a name="405" href="#405">405</a>                     }
+<a name="406" href="#406">406</a>                     <strong>else</strong> {
+<a name="407" href="#407">407</a>                         System.out.println(<span class="string">"was not a search!"</span>);
+<a name="408" href="#408">408</a>                         simpleReply(perf,UNEXPECTED,<span class="string">"not_understood"</span>);
+<a name="409" href="#409">409</a>                     }
+<a name="410" href="#410">410</a>                 }
+<a name="411" href="#411">411</a>                 <strong>else</strong> {
+<a name="412" href="#412">412</a>                     System.out.println(<span class="string">"was a null action!"</span>); }
+<a name="413" href="#413">413</a>                 <strong>if</strong> (!registered_dfs.isEmpty()) {
+<a name="414" href="#414">414</a>                     Enumeration allDfs = registered_dfs.keys();
+<a name="415" href="#415">415</a>                     <strong>while</strong> (allDfs.hasMoreElements()) {
+<a name="416" href="#416">416</a>                         <em class="comment">// set thread timeout</em>
+<a name="417" href="#417">417</a>                         <em class="comment">// set handling rules</em>
+<a name="418" href="#418">418</a>                         <em class="comment">// go, go</em>
+<a name="419" href="#419">419</a>                     }
+<a name="420" href="#420">420</a>                 }
+<a name="421" href="#421">421</a>                 DF_Description toMatch = makeDescription(act);
+<a name="422" href="#422">422</a>                 String results = getDescriptions(toMatch);
+<a name="423" href="#423">423</a>                 <a href="../../zeus/concepts/Performative.html">Performative</a> inform = <strong>new</strong> <a href="../../zeus/concepts/Performative.html">Performative</a>(<span class="string">"inform"</span>);
+<a name="424" href="#424">424</a>                 inform.setSender(<span class="string">"df"</span>);
+<a name="425" href="#425">425</a>                 inform.setReceiver(perf.getSender());
+<a name="426" href="#426">426</a>                 inform.setLanguage(<span class="string">"FIPA-SL0"</span>);
+<a name="427" href="#427">427</a>                 inform.setProtocol(<span class="string">"FIPA-Request"</span>);
+<a name="428" href="#428">428</a>                 inform.setOntology(<span class="string">"FIPA-Agent-Management"</span>);
+<a name="429" href="#429">429</a>                 inform.setConversationId(perf.getConversationId());
+<a name="430" href="#430">430</a>                 inform.setInReplyTo(perf.getReplyWith());
+<a name="431" href="#431">431</a>                 String in = perf.getContent();
+<a name="432" href="#432">432</a>                 String rcontent = <strong>new</strong> String(<span class="string">"((result "</span>+ in.substring(1,in.length()-1) + <span class="string">" (set "</span> );
+<a name="433" href="#433">433</a>                 rcontent += results;
+<a name="434" href="#434">434</a>                 rcontent+= <span class="string">")))"</span>;
+<a name="435" href="#435">435</a>                 inform.setContent(rcontent);
+<a name="436" href="#436">436</a>                 inform.send(context);
+<a name="437" href="#437">437</a>             }
+<a name="438" href="#438">438</a>             <strong>catch</strong> (Exception e) {
+<a name="439" href="#439">439</a>                 e.printStackTrace() ;<em class="comment">// for now</em>
+<a name="440" href="#440">440</a>             }
+<a name="441" href="#441">441</a>         }
+<a name="442" href="#442">442</a>         
+<a name="443" href="#443">443</a>         <em>/**<em>*</em></em>
+<a name="444" href="#444">444</a> <em>         *returns a string that contains the df_descriptions that are matches for this df_description.</em>
+<a name="445" href="#445">445</a> <em>         */</em>
+<a name="446" href="#446">446</a>         <strong>public</strong> String getDescriptions(DF_Description toMatch) {
+<a name="447" href="#447">447</a>             Enumeration allDescriptions = registered_agents.elements();
+<a name="448" href="#448">448</a>             String results = <strong>new</strong> String();
+<a name="449" href="#449">449</a>             <em class="comment">// case one : the description is constrained</em>
+<a name="450" href="#450">450</a>             <strong>if</strong> (toMatch != <strong>null</strong>) {
+<a name="451" href="#451">451</a>                 <strong>while</strong> (allDescriptions.hasMoreElements()) {
+<a name="452" href="#452">452</a>                     DF_Description desc = (DF_Description) allDescriptions.nextElement();
+<a name="453" href="#453">453</a>                     <strong>if</strong> (toMatch.match(desc)) {
+<a name="454" href="#454">454</a>                         results+=desc.toString() +<span class="string">" "</span>;
+<a name="455" href="#455">455</a>                     }}
+<a name="456" href="#456">456</a>             }
+<a name="457" href="#457">457</a>             <em class="comment">// no constraints : avoid a null pointer</em>
+<a name="458" href="#458">458</a>             <strong>else</strong> {
+<a name="459" href="#459">459</a>                 <strong>while</strong> (allDescriptions.hasMoreElements()) {
+<a name="460" href="#460">460</a>                     DF_Description desc = (DF_Description) allDescriptions.nextElement();
+<a name="461" href="#461">461</a>                     results+=desc.toString() +<span class="string">" "</span>;
+<a name="462" href="#462">462</a>                 }
+<a name="463" href="#463">463</a>             }
+<a name="464" href="#464">464</a>             <strong>return</strong> results;
+<a name="465" href="#465">465</a>         }
+<a name="466" href="#466">466</a>         
+<a name="467" href="#467">467</a>         
+<a name="468" href="#468">468</a>         
+<a name="469" href="#469">469</a>         
+<a name="470" href="#470">470</a>         <strong>public</strong> String agentDescToSL(<a href="../../zeus/concepts/Fact.html">Fact</a> fact) {
+<a name="471" href="#471">471</a>             <strong>return</strong> <strong>new</strong> String();
+<a name="472" href="#472">472</a>         }
+<a name="473" href="#473">473</a>         
+<a name="474" href="#474">474</a>         
+<a name="475" href="#475">475</a>         <strong>public</strong> <strong>void</strong> informDone(<a href="../../zeus/concepts/Performative.html">Performative</a> perf) {
+<a name="476" href="#476">476</a>             String content = perf.getContent();
+<a name="477" href="#477">477</a>             <a href="../../zeus/concepts/Performative.html">Performative</a> inform = <strong>new</strong> <a href="../../zeus/concepts/Performative.html">Performative</a>(<span class="string">"inform"</span>);
+<a name="478" href="#478">478</a>             inform.setSender(<span class="string">"df"</span>);
+<a name="479" href="#479">479</a>             inform.setReceiver(perf.getSender());
+<a name="480" href="#480">480</a>             inform.setLanguage(<span class="string">"FIPA-SL0"</span>);
+<a name="481" href="#481">481</a>             inform.setProtocol(<span class="string">"FIPA-Request"</span>);
+<a name="482" href="#482">482</a>             inform.setOntology(<span class="string">"FIPA-Agent-Management"</span>);
+<a name="483" href="#483">483</a>             inform.setConversationId(perf.getConversationId());
+<a name="484" href="#484">484</a>             inform.setInReplyTo(perf.getReplyWith());
+<a name="485" href="#485">485</a>             inform.setContent(<span class="string">"(done"</span> + content + <span class="string">")"</span>);
+<a name="486" href="#486">486</a>             send(inform);
+<a name="487" href="#487">487</a>         }
+<a name="488" href="#488">488</a>         
+<a name="489" href="#489">489</a>         <em>/**<em>*</em></em>
+<a name="490" href="#490">490</a> <em>         *  simpleReply lets you reply to a message using the result convention of FIPA</em>
+<a name="491" href="#491">491</a> <em>         * what I mean is: in FIPA there are alot of messages like "refuse original reason"</em>
+<a name="492" href="#492">492</a> <em>         * or "not_understood original reason", and this method lets you send them</em>
+<a name="493" href="#493">493</a> <em>         * pretty simply</em>
+<a name="494" href="#494">494</a> <em>         **/</em>
+<a name="495" href="#495">495</a>         <strong>public</strong> <strong>void</strong> simpleReply(<a href="../../zeus/concepts/Performative.html">Performative</a> inPerf, String reason, String replyType) {
+<a name="496" href="#496">496</a>             <a href="../../zeus/concepts/Performative.html">Performative</a> outPerf = <strong>new</strong> <a href="../../zeus/concepts/Performative.html">Performative</a>(replyType);
+<a name="497" href="#497">497</a>             outPerf.setReceiver(inPerf.getSender());
+<a name="498" href="#498">498</a>             outPerf.setSender(<span class="string">"df"</span>);
+<a name="499" href="#499">499</a>             outPerf.setLanguage(<span class="string">"FIPA-SL0"</span>);
+<a name="500" href="#500">500</a>             outPerf.setProtocol(<span class="string">"FIPA-Request"</span>);
+<a name="501" href="#501">501</a>             outPerf.setOntology(<span class="string">"FIPA-Agent-Management"</span>);
+<a name="502" href="#502">502</a>             outPerf.setConversationId(inPerf.getConversationId());
+<a name="503" href="#503">503</a>             outPerf.setInReplyTo(inPerf.getReplyWith());
+<a name="504" href="#504">504</a>             String content = inPerf.getContent();
+<a name="505" href="#505">505</a>             
+<a name="506" href="#506">506</a>             <em class="comment">// needs rewriting with SLParser</em>
+<a name="507" href="#507">507</a>             FIPA_DF_Management_Content cont = ZeusParser.FIPA_DF_Management_Content(content);
+<a name="508" href="#508">508</a>             cont.setResult(reason);
+<a name="509" href="#509">509</a>             outPerf.setContent(cont.toString());
+<a name="510" href="#510">510</a>         }
+<a name="511" href="#511">511</a>         
+<a name="512" href="#512">512</a>         
+<a name="513" href="#513">513</a>         <em>/**<em>*</em></em>
+<a name="514" href="#514">514</a> <em>         *make an "agree" response in SL</em>
+<a name="515" href="#515">515</a> <em>         **/</em>
+<a name="516" href="#516">516</a>         <strong>public</strong> <strong>void</strong> sendAgree(<a href="../../zeus/concepts/Performative.html">Performative</a> perf) {
+<a name="517" href="#517">517</a>             <a href="../../zeus/concepts/Performative.html">Performative</a> agree = <strong>new</strong> <a href="../../zeus/concepts/Performative.html">Performative</a>(<span class="string">"agree"</span>);
+<a name="518" href="#518">518</a>             agree.setContent( perf.getContent().substring(0,perf.getContent().length() -1)+<span class="string">"true)"</span>);
+<a name="519" href="#519">519</a>             agree.setLanguage(<span class="string">"FIPA-SL0"</span>);
+<a name="520" href="#520">520</a>             agree.setProtocol(<span class="string">"FIPA-Request"</span>);
+<a name="521" href="#521">521</a>             agree.setOntology(<span class="string">"FIPA-Agent-Management"</span>);
+<a name="522" href="#522">522</a>             agree.setConversationId(perf.getConversationId());
+<a name="523" href="#523">523</a>             agree.setInReplyTo(perf.getReplyWith());
+<a name="524" href="#524">524</a>             agree.setReceiver(perf.getSender());
+<a name="525" href="#525">525</a>             agree.setSender(<span class="string">"df"</span>);
+<a name="526" href="#526">526</a>             agree.send(context);
+<a name="527" href="#527">527</a>         }
+<a name="528" href="#528">528</a>         
+<a name="529" href="#529">529</a>         
+<a name="530" href="#530">530</a>         
+<a name="531" href="#531">531</a>         <strong>void</strong> debug(String str) {
+<a name="532" href="#532">532</a>             System.out.println(str);
+<a name="533" href="#533">533</a>         }
+<a name="534" href="#534">534</a>         
+<a name="535" href="#535">535</a>         
+<a name="536" href="#536">536</a>         <strong>public</strong> <strong>static</strong> <strong>void</strong> main(String param[]) {
+<a name="537" href="#537">537</a>             <a href="../../zeus/concepts/Performative.html">Performative</a> perf = <strong>new</strong> <a href="../../zeus/concepts/Performative.html">Performative</a>(<span class="string">"request"</span>);
+<a name="538" href="#538">538</a>             perf.setContent( <span class="string">"((action      (agent-identifier        :name df@foo.com        :addresses (sequence iiop://foo.com/acc))      (search        (df-agent-description          :ontology (set meeting-scheduler)          :language (set FIPA-SL0 KIF)          :services (set  (service-description   :name profiling     :type meeting-scheduler-service)))        (search-constraints          :min-depth 2))))"</span>);
+<a name="539" href="#539">539</a>             perf.setSender(<span class="string">"Ion"</span>);
+<a name="540" href="#540">540</a>             perf.setReceiver(<span class="string">"me"</span>);
+<a name="541" href="#541">541</a>             FIPA_DF_Services df = <strong>new</strong> FIPA_DF_Services();
+<a name="542" href="#542">542</a>             df.handleSearch(perf);
+<a name="543" href="#543">543</a>             
+<a name="544" href="#544">544</a>         }
+<a name="545" href="#545">545</a>     }
+</pre>
+<hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
+</html>
+

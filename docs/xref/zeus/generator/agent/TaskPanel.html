@@ -1,0 +1,361 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1" /><title>TaskPanel xref</title>
+<link type="text/css" rel="stylesheet" href="../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../apidocs/zeus/generator/agent/TaskPanel.html">View Javadoc</a></div><pre>
+
+<a name="1" href="#1">1</a>   <em class="comment">/*</em>
+<a name="2" href="#2">2</a>   <em class="comment">* The contents of this file are subject to the BT "ZEUS" Open Source </em>
+<a name="3" href="#3">3</a>   <em class="comment">* Licence (L77741), Version 1.0 (the "Licence"); you may not use this file </em>
+<a name="4" href="#4">4</a>   <em class="comment">* except in compliance with the Licence. You may obtain a copy of the Licence</em>
+<a name="5" href="#5">5</a>   <em class="comment">* from $ZEUS_INSTALL/licence.html or alternatively from</em>
+<a name="6" href="#6">6</a>   <em class="comment">* <a href="http://www.labs.bt.com/projects/agents/zeus/licence.htm" target="alexandria_uri">http://www.labs.bt.com/projects/agents/zeus/licence.htm</a></em>
+<a name="7" href="#7">7</a>   <em class="comment">* </em>
+<a name="8" href="#8">8</a>   <em class="comment">* Except as stated in Clause 7 of the Licence, software distributed under the</em>
+<a name="9" href="#9">9</a>   <em class="comment">* Licence is distributed WITHOUT WARRANTY OF ANY KIND, either express or </em>
+<a name="10" href="#10">10</a>  <em class="comment">* implied. See the Licence for the specific language governing rights and </em>
+<a name="11" href="#11">11</a>  <em class="comment">* limitations under the Licence.</em>
+<a name="12" href="#12">12</a>  <em class="comment">* </em>
+<a name="13" href="#13">13</a>  <em class="comment">* The Original Code is within the package zeus.*.</em>
+<a name="14" href="#14">14</a>  <em class="comment">* The Initial Developer of the Original Code is British Telecommunications</em>
+<a name="15" href="#15">15</a>  <em class="comment">* public limited company, whose registered office is at 81 Newgate Street, </em>
+<a name="16" href="#16">16</a>  <em class="comment">* London, EC1A 7AJ, England. Portions created by British Telecommunications </em>
+<a name="17" href="#17">17</a>  <em class="comment">* public limited company are Copyright 1996-9. All Rights Reserved.</em>
+<a name="18" href="#18">18</a>  <em class="comment">* </em>
+<a name="19" href="#19">19</a>  <em class="comment">* THIS NOTICE MUST BE INCLUDED ON ANY COPY OF THIS FILE</em>
+<a name="20" href="#20">20</a>  <em class="comment">*/</em>
+<a name="21" href="#21">21</a>  
+<a name="22" href="#22">22</a>  
+<a name="23" href="#23">23</a>  
+<a name="24" href="#24">24</a>  <em>/**<em>****************************************************************************</em></em>
+<a name="25" href="#25">25</a>  <em>* TaskTablePanel.java</em>
+<a name="26" href="#26">26</a>  <em>*</em>
+<a name="27" href="#27">27</a>  <em>* The Container panel for the Task Table</em>
+<a name="28" href="#28">28</a>  <em>*****************************************************************************/</em>
+<a name="29" href="#29">29</a>  
+<a name="30" href="#30">30</a>  <strong>package</strong> <a href="../../../zeus/generator/agent/package-summary.html">zeus.generator.agent</a>;
+<a name="31" href="#31">31</a>  
+<a name="32" href="#32">32</a>  <strong>import</strong> java.util.*;
+<a name="33" href="#33">33</a>  <strong>import</strong> java.awt.*;
+<a name="34" href="#34">34</a>  <strong>import</strong> javax.swing.*;
+<a name="35" href="#35">35</a>  <strong>import</strong> javax.swing.event.*;
+<a name="36" href="#36">36</a>  <strong>import</strong> javax.swing.border.*;
+<a name="37" href="#37">37</a>  <strong>import</strong> javax.swing.table.*;
+<a name="38" href="#38">38</a>  <strong>import</strong> java.awt.event.*;
+<a name="39" href="#39">39</a>  
+<a name="40" href="#40">40</a>  <strong>import</strong> <a href="../../../zeus/util/package-summary.html">zeus.util</a>.*;
+<a name="41" href="#41">41</a>  <strong>import</strong> <a href="../../../zeus/concepts/package-summary.html">zeus.concepts</a>.*;
+<a name="42" href="#42">42</a>  <strong>import</strong> <a href="../../../zeus/gui/help/package-summary.html">zeus.gui.help</a>.*;
+<a name="43" href="#43">43</a>  <strong>import</strong> <a href="../../../zeus/gui/fields/package-summary.html">zeus.gui.fields</a>.*;
+<a name="44" href="#44">44</a>  <strong>import</strong> <a href="../../../zeus/generator/package-summary.html">zeus.generator</a>.*;
+<a name="45" href="#45">45</a>  
+<a name="46" href="#46">46</a>  <strong>public</strong> <strong>class</strong> <a href="../../../zeus/generator/agent/TaskPanel.html">TaskPanel</a> <strong>extends</strong> JPanel {
+<a name="47" href="#47">47</a>  
+<a name="48" href="#48">48</a>    <strong>static</strong> <strong>final</strong> String[] ERROR_MESSAGE = {
+<a name="49" href="#49">49</a>       <em class="comment">/*<em class="comment"> 0 */</em> <span class="string">"Please select a row before\ncalling this operation"</span></em>
+<a name="50" href="#50">50</a>    };
+<a name="51" href="#51">51</a>  
+<a name="52" href="#52">52</a>    <strong>protected</strong> JTable            table;
+<a name="53" href="#53">53</a>    <strong>protected</strong> <a href="../../../zeus/generator/agent/TaskModel.html">TaskModel</a>         model;
+<a name="54" href="#54">54</a>    <strong>protected</strong> <a href="../../../zeus/gui/help/HelpWindow.html">HelpWindow</a>        helpWin;
+<a name="55" href="#55">55</a>    <strong>protected</strong> <a href="../../../zeus/generator/agent/AgentEditor.html">AgentEditor</a>       editor;
+<a name="56" href="#56">56</a>    <strong>protected</strong> TaskToolBar       toolbar;
+<a name="57" href="#57">57</a>    <strong>protected</strong> <a href="../../../zeus/generator/GeneratorModel.html">GeneratorModel</a>    genmodel;
+<a name="58" href="#58">58</a>    <strong>protected</strong> <a href="../../../zeus/generator/AgentGenerator.html">AgentGenerator</a>    generator;
+<a name="59" href="#59">59</a>  
+<a name="60" href="#60">60</a>    <strong>public</strong> <a href="../../../zeus/generator/agent/TaskPanel.html">TaskPanel</a>(<a href="../../../zeus/generator/AgentGenerator.html">AgentGenerator</a> generator,
+<a name="61" href="#61">61</a>                     <a href="../../../zeus/generator/GeneratorModel.html">GeneratorModel</a> genmodel,
+<a name="62" href="#62">62</a>                     <a href="../../../zeus/generator/agent/AgentEditor.html">AgentEditor</a> editor,
+<a name="63" href="#63">63</a>                     String[] tasks,
+<a name="64" href="#64">64</a>                     String label) {
+<a name="65" href="#65">65</a>  
+<a name="66" href="#66">66</a>      <strong>this</strong>.editor = editor;
+<a name="67" href="#67">67</a>      <strong>this</strong>.genmodel = genmodel;
+<a name="68" href="#68">68</a>      <strong>this</strong>.generator = generator;
+<a name="69" href="#69">69</a>  
+<a name="70" href="#70">70</a>      model = <strong>new</strong> <a href="../../../zeus/generator/agent/TaskModel.html">TaskModel</a>(tasks,genmodel);
+<a name="71" href="#71">71</a>      model.addChangeListener(editor);
+<a name="72" href="#72">72</a>  
+<a name="73" href="#73">73</a>      TableColumnModel tm = <strong>new</strong> DefaultTableColumnModel();
+<a name="74" href="#74">74</a>      TableColumn column;
+<a name="75" href="#75">75</a>      column = <strong>new</strong> TableColumn(TaskModel.TASK,12,
+<a name="76" href="#76">76</a>         <strong>new</strong> DefaultTableCellRenderer(),
+<a name="77" href="#77">77</a>         <strong>new</strong> DefaultCellEditor(<strong>new</strong> <a href="../../../zeus/gui/fields/NameField.html">NameField</a>()));
+<a name="78" href="#78">78</a>      column.setHeaderValue(model.getColumnName(TaskModel.TASK));
+<a name="79" href="#79">79</a>      tm.addColumn(column);
+<a name="80" href="#80">80</a>      column = <strong>new</strong> TableColumn(TaskModel.TYPE,24);
+<a name="81" href="#81">81</a>      column.setHeaderValue(model.getColumnName(TaskModel.TYPE));
+<a name="82" href="#82">82</a>      tm.addColumn(column);
+<a name="83" href="#83">83</a>  
+<a name="84" href="#84">84</a>      table = <strong>new</strong> JTable(model,tm);
+<a name="85" href="#85">85</a>      table.getTableHeader().setReorderingAllowed(false);
+<a name="86" href="#86">86</a>      table.setColumnSelectionAllowed(false);
+<a name="87" href="#87">87</a>  
+<a name="88" href="#88">88</a>      toolbar = <strong>new</strong> TaskToolBar();
+<a name="89" href="#89">89</a>  
+<a name="90" href="#90">90</a>      GridBagLayout gridBagLayout = <strong>new</strong> GridBagLayout();
+<a name="91" href="#91">91</a>      setLayout(gridBagLayout);
+<a name="92" href="#92">92</a>      setBackground(java.awt.Color.lightGray);
+<a name="93" href="#93">93</a>  
+<a name="94" href="#94">94</a>      TitledBorder border = (BorderFactory.createTitledBorder(label));
+<a name="95" href="#95">95</a>      border.setTitlePosition(TitledBorder.TOP);
+<a name="96" href="#96">96</a>      border.setTitleJustification(TitledBorder.RIGHT);
+<a name="97" href="#97">97</a>      border.setTitleFont(<strong>new</strong> Font(<span class="string">"Helvetica"</span>, Font.BOLD, 14));
+<a name="98" href="#98">98</a>      border.setTitleColor(java.awt.Color.blue);
+<a name="99" href="#99">99</a>      setBorder(border);
+<a name="100" href="#100">100</a> 
+<a name="101" href="#101">101</a>     JScrollPane scrollPane = <strong>new</strong> JScrollPane(table);
+<a name="102" href="#102">102</a>     scrollPane.setBorder(<strong>new</strong> BevelBorder(BevelBorder.LOWERED));
+<a name="103" href="#103">103</a>     scrollPane.setMinimumSize(<strong>new</strong> Dimension(160, 80));
+<a name="104" href="#104">104</a>     scrollPane.setPreferredSize(<strong>new</strong> Dimension(200, 80));
+<a name="105" href="#105">105</a>     table.setBackground(Color.white);
+<a name="106" href="#106">106</a>     
+<a name="107" href="#107">107</a>     GridBagConstraints gbc = <strong>new</strong> GridBagConstraints();
+<a name="108" href="#108">108</a>     gbc.gridwidth = GridBagConstraints.REMAINDER;
+<a name="109" href="#109">109</a>     gbc.anchor = GridBagConstraints.WEST;
+<a name="110" href="#110">110</a>     gbc.fill = GridBagConstraints.NONE;
+<a name="111" href="#111">111</a>     gbc.insets = <strong>new</strong> Insets(0,8,0,0);
+<a name="112" href="#112">112</a>     gridBagLayout.setConstraints(toolbar, gbc);
+<a name="113" href="#113">113</a>     add(toolbar);
+<a name="114" href="#114">114</a> 
+<a name="115" href="#115">115</a>     gbc.gridwidth = GridBagConstraints.REMAINDER;
+<a name="116" href="#116">116</a>     gbc.fill = GridBagConstraints.BOTH;
+<a name="117" href="#117">117</a>     gbc.weightx = gbc.weighty = 1;
+<a name="118" href="#118">118</a>     gbc.insets = <strong>new</strong> Insets(8,8,8,8);
+<a name="119" href="#119">119</a>     gridBagLayout.setConstraints(scrollPane, gbc);
+<a name="120" href="#120">120</a>     add(scrollPane);
+<a name="121" href="#121">121</a>   }
+<a name="122" href="#122">122</a> 
+<a name="123" href="#123">123</a>   <strong>protected</strong> <strong>void</strong> errorMsg(<strong>int</strong> tag) {
+<a name="124" href="#124">124</a>      JOptionPane.showMessageDialog(<strong>this</strong>,ERROR_MESSAGE[tag],
+<a name="125" href="#125">125</a>                                    <span class="string">"Error"</span>, JOptionPane.ERROR_MESSAGE);
+<a name="126" href="#126">126</a>   }
+<a name="127" href="#127">127</a> 
+<a name="128" href="#128">128</a>   <strong>public</strong> String[] getData() {
+<a name="129" href="#129">129</a>      <strong>return</strong> model.getData();
+<a name="130" href="#130">130</a>   }
+<a name="131" href="#131">131</a> 
+<a name="132" href="#132">132</a>   <strong>protected</strong> String getSelectedTaskId() {
+<a name="133" href="#133">133</a>     <strong>int</strong> row = table.getSelectedRow();
+<a name="134" href="#134">134</a>     <strong>if</strong> ( row == -1 ) {
+<a name="135" href="#135">135</a>        errorMsg(0);
+<a name="136" href="#136">136</a>        <strong>return</strong> <strong>null</strong>;
+<a name="137" href="#137">137</a>     }
+<a name="138" href="#138">138</a>     <strong>return</strong> (String)model.getValueAt(row,TaskModel.ID);
+<a name="139" href="#139">139</a>   }
+<a name="140" href="#140">140</a> 
+<a name="141" href="#141">141</a>   <strong>class</strong> TaskToolBar <strong>extends</strong> JToolBar implements ActionListener {
+<a name="142" href="#142">142</a>      <strong>protected</strong> JButton        newBtn;
+<a name="143" href="#143">143</a>      <strong>protected</strong> JButton        editBtn;
+<a name="144" href="#144">144</a>      <strong>protected</strong> JButton        deleteBtn;
+<a name="145" href="#145">145</a>      <strong>protected</strong> JToggleButton  helpBtn;
+<a name="146" href="#146">146</a>      <strong>protected</strong> <a href="../../../zeus/gui/help/HelpWindow.html">HelpWindow</a>     helpWin;
+<a name="147" href="#147">147</a>      <strong>protected</strong> JPopupMenu     popup;
+<a name="148" href="#148">148</a>      <strong>protected</strong> JMenu          primitiveMenu;
+<a name="149" href="#149">149</a>      <strong>protected</strong> JMenu          summaryMenu;
+<a name="150" href="#150">150</a>      <strong>protected</strong> JMenu          behaviourMenu;
+<a name="151" href="#151">151</a>      <strong>protected</strong> JMenu          scriptMenu;
+<a name="152" href="#152">152</a>      <strong>protected</strong> JMenuItem      primitiveMenuItem;
+<a name="153" href="#153">153</a>      <strong>protected</strong> JMenuItem      summaryMenuItem;
+<a name="154" href="#154">154</a>      <strong>protected</strong> JMenuItem      behaviourMenuItem;
+<a name="155" href="#155">155</a>      <strong>protected</strong> JMenuItem      scriptMenuItem;
+<a name="156" href="#156">156</a> 
+<a name="157" href="#157">157</a>      <strong>public</strong> TaskToolBar() {
+<a name="158" href="#158">158</a>        setBackground(java.awt.Color.lightGray);
+<a name="159" href="#159">159</a>        setBorder( <strong>new</strong> BevelBorder(BevelBorder.LOWERED ) );
+<a name="160" href="#160">160</a>        setFloatable(false);
+<a name="161" href="#161">161</a> 
+<a name="162" href="#162">162</a>        String sep = System.getProperty(<span class="string">"file.separator"</span>);
+<a name="163" href="#163">163</a>        String path = SystemProps.getProperty(<span class="string">"gif.dir"</span>) + <span class="string">"generator"</span> + sep;
+<a name="164" href="#164">164</a> 
+<a name="165" href="#165">165</a>        <strong>new</strong>Btn = <strong>new</strong> JButton(<strong>new</strong> ImageIcon(path + <span class="string">"new1.gif"</span>));
+<a name="166" href="#166">166</a>        <strong>new</strong>Btn.setMargin(<strong>new</strong> Insets(0,0,0,0));
+<a name="167" href="#167">167</a>        add(newBtn);
+<a name="168" href="#168">168</a>        newBtn.setToolTipText(<span class="string">"Create New Task"</span>);
+<a name="169" href="#169">169</a>        newBtn.addActionListener(<strong>this</strong>);
+<a name="170" href="#170">170</a> 
+<a name="171" href="#171">171</a>        editBtn = <strong>new</strong> JButton(<strong>new</strong> ImageIcon(path + <span class="string">"edit1.gif"</span>));
+<a name="172" href="#172">172</a>        editBtn.setMargin(<strong>new</strong> Insets(0,0,0,0));
+<a name="173" href="#173">173</a>        add(editBtn);
+<a name="174" href="#174">174</a>        editBtn.setToolTipText(<span class="string">"Edit this Task"</span>);
+<a name="175" href="#175">175</a>        editBtn.addActionListener(<strong>this</strong>);
+<a name="176" href="#176">176</a> 
+<a name="177" href="#177">177</a>        deleteBtn = <strong>new</strong> JButton(<strong>new</strong> ImageIcon(path + <span class="string">"delete1.gif"</span>));
+<a name="178" href="#178">178</a>        deleteBtn.setMargin(<strong>new</strong> Insets(0,0,0,0));
+<a name="179" href="#179">179</a>        add(deleteBtn);
+<a name="180" href="#180">180</a>        deleteBtn.setToolTipText(<span class="string">"Delete this Task"</span>);
+<a name="181" href="#181">181</a>        deleteBtn.addActionListener(<strong>this</strong>);
+<a name="182" href="#182">182</a> 
+<a name="183" href="#183">183</a>        addSeparator();
+<a name="184" href="#184">184</a> 
+<a name="185" href="#185">185</a>        helpBtn = <strong>new</strong> JToggleButton(<strong>new</strong> ImageIcon(path + <span class="string">"help.gif"</span>));
+<a name="186" href="#186">186</a>        helpBtn.setMargin(<strong>new</strong> Insets(0,0,0,0));
+<a name="187" href="#187">187</a>        add(helpBtn);
+<a name="188" href="#188">188</a>        helpBtn.setToolTipText(<span class="string">"Help"</span>);
+<a name="189" href="#189">189</a>        helpBtn.addActionListener(<strong>this</strong>);
+<a name="190" href="#190">190</a> 
+<a name="191" href="#191">191</a>        <em class="comment">// ---- Popup Menu for Task Types ----</em>
+<a name="192" href="#192">192</a>        popup = <strong>new</strong> JPopupMenu();
+<a name="193" href="#193">193</a>        popup.add(<strong>new</strong> JLabel (<span class="string">"Tasks"</span>));
+<a name="194" href="#194">194</a>        popup.addSeparator();
+<a name="195" href="#195">195</a> 
+<a name="196" href="#196">196</a>        String name = AbstractTask.getTypeName(AbstractTask.PRIMITIVE);
+<a name="197" href="#197">197</a>        primitiveMenu = <strong>new</strong> JMenu(name,false);
+<a name="198" href="#198">198</a>        primitiveMenuItem = <strong>new</strong> JMenuItem(<span class="string">"New "</span> + name + <span class="string">" task"</span>);
+<a name="199" href="#199">199</a>        primitiveMenuItem.addActionListener(<strong>this</strong>);
+<a name="200" href="#200">200</a> 
+<a name="201" href="#201">201</a>        name = AbstractTask.getTypeName(AbstractTask.SUMMARY);
+<a name="202" href="#202">202</a>        summaryMenu = <strong>new</strong> JMenu(name,false);
+<a name="203" href="#203">203</a>        summaryMenuItem = <strong>new</strong> JMenuItem(<span class="string">"New "</span> + name + <span class="string">" task"</span>);
+<a name="204" href="#204">204</a>        summaryMenuItem.addActionListener(<strong>this</strong>);
+<a name="205" href="#205">205</a> 
+<a name="206" href="#206">206</a>        name = AbstractTask.getTypeName(AbstractTask.BEHAVIOUR);
+<a name="207" href="#207">207</a>        behaviourMenu = <strong>new</strong> JMenu(name,false);
+<a name="208" href="#208">208</a>        behaviourMenuItem = <strong>new</strong> JMenuItem(<span class="string">"New "</span> + name);
+<a name="209" href="#209">209</a>        behaviourMenuItem.addActionListener(<strong>this</strong>);
+<a name="210" href="#210">210</a> 
+<a name="211" href="#211">211</a>        name = AbstractTask.getTypeName(AbstractTask.SCRIPT);
+<a name="212" href="#212">212</a>        scriptMenu = <strong>new</strong> JMenu(name,false);
+<a name="213" href="#213">213</a>        scriptMenuItem = <strong>new</strong> JMenuItem(<span class="string">"New "</span> + name);
+<a name="214" href="#214">214</a>        scriptMenuItem.addActionListener(<strong>this</strong>);
+<a name="215" href="#215">215</a> 
+<a name="216" href="#216">216</a>        popup.add(primitiveMenu);
+<a name="217" href="#217">217</a>        popup.add(summaryMenu);
+<a name="218" href="#218">218</a>        popup.add(behaviourMenu);
+<a name="219" href="#219">219</a>        popup.add(scriptMenu);
+<a name="220" href="#220">220</a> 
+<a name="221" href="#221">221</a>        CompoundBorder cbr = <strong>new</strong> CompoundBorder(<strong>new</strong> EtchedBorder(),
+<a name="222" href="#222">222</a>                                                <strong>new</strong> EmptyBorder(5,5,5,5));
+<a name="223" href="#223">223</a>        popup.setBorder(cbr);
+<a name="224" href="#224">224</a>      }
+<a name="225" href="#225">225</a> 
+<a name="226" href="#226">226</a>      <strong>public</strong> <strong>void</strong> actionPerformed(ActionEvent e) {
+<a name="227" href="#227">227</a>        Object src = e.getSource();
+<a name="228" href="#228">228</a>        String primitive = AbstractTask.getTypeName(AbstractTask.PRIMITIVE);
+<a name="229" href="#229">229</a>        String summary   = AbstractTask.getTypeName(AbstractTask.SUMMARY);
+<a name="230" href="#230">230</a>        String behaviour = AbstractTask.getTypeName(AbstractTask.BEHAVIOUR);
+<a name="231" href="#231">231</a>        String script    = AbstractTask.getTypeName(AbstractTask.SCRIPT);
+<a name="232" href="#232">232</a> 
+<a name="233" href="#233">233</a> 
+<a name="234" href="#234">234</a>        <strong>if</strong> ( src == newBtn ) {
+<a name="235" href="#235">235</a>           String[] taskId = model.getData();
+<a name="236" href="#236">236</a>           Vector names = <strong>new</strong> Vector();
+<a name="237" href="#237">237</a>           <strong>for</strong>(<strong>int</strong> i = 0; i &lt; taskId.length; i++ )
+<a name="238" href="#238">238</a>              names.addElement(genmodel.getTaskName(taskId[i]));
+<a name="239" href="#239">239</a> 
+<a name="240" href="#240">240</a>           primitiveMenu.removeAll();
+<a name="241" href="#241">241</a>           primitiveMenu.add(primitiveMenuItem);
+<a name="242" href="#242">242</a>           primitiveMenu.addSeparator();
+<a name="243" href="#243">243</a> 
+<a name="244" href="#244">244</a>           String[] items = genmodel.getTaskNames(AbstractTask.PRIMITIVE);
+<a name="245" href="#245">245</a>           Vector allNames = Misc.stringVector(items);
+<a name="246" href="#246">246</a>           Vector validNames = Misc.difference(allNames,names);
+<a name="247" href="#247">247</a> 
+<a name="248" href="#248">248</a>           JMenuItem mi;
+<a name="249" href="#249">249</a>           <strong>for</strong>(<strong>int</strong> i = 0; i &lt; validNames.size(); i++ ) {
+<a name="250" href="#250">250</a>              mi = <strong>new</strong> JMenuItem((String)validNames.elementAt(i));
+<a name="251" href="#251">251</a>              mi.addActionListener(<strong>this</strong>);
+<a name="252" href="#252">252</a>              mi.setActionCommand(primitive);
+<a name="253" href="#253">253</a>              primitiveMenu.add(mi);
+<a name="254" href="#254">254</a>           }
+<a name="255" href="#255">255</a> 
+<a name="256" href="#256">256</a>           summaryMenu.removeAll();
+<a name="257" href="#257">257</a>           summaryMenu.add(summaryMenuItem);
+<a name="258" href="#258">258</a>           summaryMenu.addSeparator();
+<a name="259" href="#259">259</a> 
+<a name="260" href="#260">260</a>           items = genmodel.getTaskNames(AbstractTask.SUMMARY);
+<a name="261" href="#261">261</a>           allNames = Misc.stringVector(items);
+<a name="262" href="#262">262</a>           validNames = Misc.difference(allNames,names);
+<a name="263" href="#263">263</a> 
+<a name="264" href="#264">264</a>           <strong>for</strong>(<strong>int</strong> i = 0; i &lt; validNames.size(); i++ ) {
+<a name="265" href="#265">265</a>              mi = <strong>new</strong> JMenuItem((String)validNames.elementAt(i));
+<a name="266" href="#266">266</a>              mi.addActionListener(<strong>this</strong>);
+<a name="267" href="#267">267</a>              mi.setActionCommand(summary);
+<a name="268" href="#268">268</a>              summaryMenu.add(mi);
+<a name="269" href="#269">269</a>           }
+<a name="270" href="#270">270</a> 
+<a name="271" href="#271">271</a>           behaviourMenu.removeAll();
+<a name="272" href="#272">272</a>           behaviourMenu.add(behaviourMenuItem);
+<a name="273" href="#273">273</a>           behaviourMenu.addSeparator();
+<a name="274" href="#274">274</a> 
+<a name="275" href="#275">275</a>           items = genmodel.getTaskNames(AbstractTask.BEHAVIOUR);
+<a name="276" href="#276">276</a>           allNames = Misc.stringVector(items);
+<a name="277" href="#277">277</a>           validNames = Misc.difference(allNames,names);
+<a name="278" href="#278">278</a> 
+<a name="279" href="#279">279</a>           <strong>for</strong>(<strong>int</strong> i = 0; i &lt; validNames.size(); i++ ) {
+<a name="280" href="#280">280</a>              mi = <strong>new</strong> JMenuItem((String)validNames.elementAt(i));
+<a name="281" href="#281">281</a>              mi.addActionListener(<strong>this</strong>);
+<a name="282" href="#282">282</a>              mi.setActionCommand(behaviour);
+<a name="283" href="#283">283</a>              behaviourMenu.add(mi);
+<a name="284" href="#284">284</a>           }
+<a name="285" href="#285">285</a> 
+<a name="286" href="#286">286</a>           scriptMenu.removeAll();
+<a name="287" href="#287">287</a>           scriptMenu.add(scriptMenuItem);
+<a name="288" href="#288">288</a>           scriptMenu.addSeparator();
+<a name="289" href="#289">289</a> 
+<a name="290" href="#290">290</a>           items = genmodel.getTaskNames(AbstractTask.SCRIPT);
+<a name="291" href="#291">291</a>           allNames = Misc.stringVector(items);
+<a name="292" href="#292">292</a>           validNames = Misc.difference(allNames,names);
+<a name="293" href="#293">293</a> 
+<a name="294" href="#294">294</a>           <strong>for</strong>(<strong>int</strong> i = 0; i &lt; validNames.size(); i++ ) {
+<a name="295" href="#295">295</a>              mi = <strong>new</strong> JMenuItem((String)validNames.elementAt(i));
+<a name="296" href="#296">296</a>              mi.addActionListener(<strong>this</strong>);
+<a name="297" href="#297">297</a>              mi.setActionCommand(script);
+<a name="298" href="#298">298</a>              scriptMenu.add(mi);
+<a name="299" href="#299">299</a>           }
+<a name="300" href="#300">300</a> 
+<a name="301" href="#301">301</a>           popup.pack();
+<a name="302" href="#302">302</a>           popup.show(newBtn,0,0);
+<a name="303" href="#303">303</a>        }
+<a name="304" href="#304">304</a>        <strong>else</strong> <strong>if</strong> ( src == primitiveMenuItem )
+<a name="305" href="#305">305</a>           model.addNewRow(primitive);
+<a name="306" href="#306">306</a>        <strong>else</strong> <strong>if</strong> ( src == summaryMenuItem )
+<a name="307" href="#307">307</a>           model.addNewRow(summary);
+<a name="308" href="#308">308</a>        <strong>else</strong> <strong>if</strong> ( src == behaviourMenuItem )
+<a name="309" href="#309">309</a>           model.addNewRow(behaviour);
+<a name="310" href="#310">310</a>        <strong>else</strong> <strong>if</strong> ( src == scriptMenuItem )
+<a name="311" href="#311">311</a>           model.addNewRow(script);
+<a name="312" href="#312">312</a> 
+<a name="313" href="#313">313</a>        <strong>else</strong> <strong>if</strong> ( e.getActionCommand().equals(primitive) )
+<a name="314" href="#314">314</a>           model.addNewRow(primitive,((JMenuItem)src).getText());
+<a name="315" href="#315">315</a>        <strong>else</strong> <strong>if</strong> ( e.getActionCommand().equals(summary) )
+<a name="316" href="#316">316</a>           model.addNewRow(summary,((JMenuItem)src).getText());
+<a name="317" href="#317">317</a>        <strong>else</strong> <strong>if</strong> ( e.getActionCommand().equals(behaviour) )
+<a name="318" href="#318">318</a>           model.addNewRow(behaviour,((JMenuItem)src).getText());
+<a name="319" href="#319">319</a>        <strong>else</strong> <strong>if</strong> ( e.getActionCommand().equals(script) )
+<a name="320" href="#320">320</a>           model.addNewRow(script,((JMenuItem)src).getText());
+<a name="321" href="#321">321</a> 
+<a name="322" href="#322">322</a>        <strong>else</strong> <strong>if</strong> ( src == editBtn ) {
+<a name="323" href="#323">323</a>           String id = getSelectedTaskId();
+<a name="324" href="#324">324</a>           <strong>if</strong> ( id == <strong>null</strong> ) <strong>return</strong>;
+<a name="325" href="#325">325</a>              generator.editTask(id);
+<a name="326" href="#326">326</a>        }
+<a name="327" href="#327">327</a>        <strong>else</strong> <strong>if</strong> ( src == deleteBtn ) {
+<a name="328" href="#328">328</a>           <strong>int</strong> row = table.getSelectedRow();
+<a name="329" href="#329">329</a>           <strong>if</strong> ( row == -1 ) {
+<a name="330" href="#330">330</a>              errorMsg(0);
+<a name="331" href="#331">331</a>              <strong>return</strong>;
+<a name="332" href="#332">332</a>           }
+<a name="333" href="#333">333</a>           model.removeRow(row);
+<a name="334" href="#334">334</a>        }
+<a name="335" href="#335">335</a>        
+<a name="336" href="#336">336</a>        <strong>else</strong> <strong>if</strong> ( src == helpBtn ) {
+<a name="337" href="#337">337</a>          <strong>if</strong> ( helpBtn.isSelected() ) {
+<a name="338" href="#338">338</a>             Point dispos = getLocation();
+<a name="339" href="#339">339</a>             helpWin = <strong>new</strong> <a href="../../../zeus/gui/help/HelpWindow.html">HelpWindow</a>(SwingUtilities.getRoot(<strong>this</strong>),dispos,
+<a name="340" href="#340">340</a>                                      <span class="string">"generator"</span>, <span class="string">"Task Declaration"</span>);
+<a name="341" href="#341">341</a>             helpWin.setSource(helpBtn);
+<a name="342" href="#342">342</a>          }
+<a name="343" href="#343">343</a>          <strong>else</strong>
+<a name="344" href="#344">344</a>             helpWin.dispose();
+<a name="345" href="#345">345</a>        }
+<a name="346" href="#346">346</a>      }
+<a name="347" href="#347">347</a>    }
+<a name="348" href="#348">348</a> }
+</pre>
+<hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
+</html>
+

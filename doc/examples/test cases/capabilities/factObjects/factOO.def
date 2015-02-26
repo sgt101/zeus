@@ -1,0 +1,137 @@
+BEGIN_GENERATOR
+  BEGIN_PREAMBLE
+    :system "ZEUS-Agent-Generator"
+    :version "1.2.2"
+    :ontology ".:test.ont"
+  END_PREAMBLE
+
+  BEGIN_AGENT_NAME_INDEX
+    AgentId1 Agent1
+    AgentId0 Agent0
+  END_AGENT_NAME_INDEX
+
+  BEGIN_AGENT_ICON_INDEX
+    AgentId1 "..:..:..:..:..zeusTest:1.2:gifs:agent.gif"
+    AgentId0 "..:..:..:..:..zeusTest:1.2:gifs:agent.gif"
+  END_AGENT_ICON_INDEX
+
+  BEGIN_TASK_NAME_INDEX
+    AbstractTaskId2 Responder
+    AbstractTaskId1 Supplier
+    AbstractTaskId0 CollectorNotifier
+  END_TASK_NAME_INDEX
+
+  BEGIN_AGENT_LIST
+    (:name AgentId1
+     :class ZeusAgent
+     :planner_width 1
+     :planner_length 20
+     :doublebook_fraction 0
+     :tasks (AbstractTaskId2
+            )
+    )
+    (:name AgentId0
+     :class ZeusAgent
+     :planner_width 1
+     :planner_length 20
+     :doublebook_fraction 0
+     :tasks (AbstractTaskId1
+             AbstractTaskId0
+            )
+     :initial_facts ((:type Entity
+                      :id fact38
+                      :modifiers 0
+                      :attributes ((unit_cost 0)
+                                   (number 1)
+                                  )
+                     )
+                    )
+    )
+  END_AGENT_LIST
+
+  BEGIN_TASK_LIST
+    (:Rulebase AbstractTaskId2
+       (Rule0
+          ?var20 <- (Super (superAtt ?var21))
+          =>
+          (send_message (type inform) (content ?var4) (receiver Agent0))
+       )
+    )
+    (:Rulebase AbstractTaskId1
+       (Rule2
+          ?var32 <- (Entity (unit_cost ?var33) (number ?var34))
+          =>
+          (assert (Sub (superAtt ?var36) (subAtt ?var37)))
+          (retract ?var32)
+       )
+    )
+    (:Rulebase AbstractTaskId0
+       (Rule1
+          ?matched <- (Super (superAtt ?var31))
+          =>
+          (retract ?matched)
+          (assert (Entity (unit_cost ?var5) (number ?var6)))
+          (send_message (type inform) (content ?matched) (receiver Agent1))
+       )
+    )
+  END_TASK_LIST
+
+  BEGIN_GENERATION_PLAN
+    BEGIN_PREAMBLE
+      :platform "Windows"
+      :directory "."
+    END_PREAMBLE
+    BEGIN_AGENT_LIST
+      (:id AgentId1
+       :generate false
+       :status Saved
+       :has_gui true
+       :dns_file "dns.db"
+      )
+      (:id AgentId0
+       :generate false
+       :status Saved
+       :has_gui true
+       :dns_file "dns.db"
+      )
+    END_AGENT_LIST
+    BEGIN_TASK_LIST
+      (:id AbstractTaskId2
+       :generate false
+       :status Saved
+       :external null
+      )
+      (:id AbstractTaskId1
+       :generate false
+       :status Saved
+       :external null
+      )
+      (:id AbstractTaskId0
+       :generate false
+       :status Saved
+       :external null
+      )
+    END_TASK_LIST
+    BEGIN_NAMESERVER_LIST
+      (:name Nameserver0
+       :is_root true
+       :has_gui false
+       :address_output_file "dns.db"
+       :time_grain 0.5
+      )
+    END_NAMESERVER_LIST
+    BEGIN_FACILITATOR_LIST
+      (:name Facilitator0
+       :period 5.00
+       :has_gui false
+       :dns_file "dns.db"
+      )
+    END_FACILITATOR_LIST
+    BEGIN_VISUALISER_LIST
+      (:name Visualiser0
+       :has_gui false
+       :dns_file "dns.db"
+      )
+    END_VISUALISER_LIST
+  END_GENERATION_PLAN
+END_GENERATOR

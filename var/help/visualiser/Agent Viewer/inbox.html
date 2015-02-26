@@ -1,0 +1,43 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+
+<html>
+
+<head>
+<title>Incoming Mail Box Help</title>
+</head>
+
+
+<!-- DOCUMENT MAIN BODY -->
+<body>
+
+<img src="../../../gifs/agentviewer/mailin.gif" hspace=16 align=center>
+<b>The Incoming Mail Box</b> <p>
+
+<b>Role</b> <p>
+
+The Incoming Mail Box (aka InBox) provides Zeus agents with their primary
+means of communication with the outside world. By default Zeus agents communicate
+by exchanging ACSII formated messages through TCP/IP sockets, this lightweight
+mechanism has been deliberately chosen in preference to more complex RMI or
+CORBA mechanisms, which may have required additional software to be installed.
+(Although as the InBox and <a href="outbox.html">OutBox</a> encapsulate the
+communication mechanism it would be possible to replace it with an alternative,
+although this could restrict compatibility with other agents). <p>
+
+<b>Display</b> <p>
+
+The Inbox window consists of a table whose rows represent the last 10 incoming
+messages to be received. The following information is shown:
+
+<ul>
+<li><i>Sender</i> - the name of the agent that dispatched the message
+<li><i>Subject</i> - a summary of the content of the message
+<li><i>Type</i> - the <a href="../../glossary/performative.html">performative</a>
+type of the message
+</ul>
+
+<P>
+
+</body>
+
+</html>

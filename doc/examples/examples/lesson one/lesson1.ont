@@ -1,0 +1,32 @@
+BEGIN_ONTOLOGY
+  BEGIN_PREAMBLE
+    :system ZEUS-Ontology-Editor
+    :version "1.04"
+  END_PREAMBLE
+  BEGIN_FACTS
+    BEGIN_FACT_ITEM
+      :name output
+      :parent Abstract
+      BEGIN_ATTRIBUTE_LIST
+        BEGIN_ATTRIBUTE_ITEM
+          :name info
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+      END_ATTRIBUTE_LIST
+    END_FACT_ITEM
+    BEGIN_FACT_ITEM
+      :name displayed
+      :parent Abstract
+      BEGIN_ATTRIBUTE_LIST
+        BEGIN_ATTRIBUTE_ITEM
+          :name flag
+          :type Boolean
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+      END_ATTRIBUTE_LIST
+    END_FACT_ITEM
+  END_FACTS
+END_ONTOLOGY

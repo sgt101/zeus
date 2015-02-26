@@ -1,0 +1,3 @@
+#!/usr/bin/csh
+#This script runs the root servers and should be run first
+java zeus.agents.ANServer Nameserver0 -t 1.0 -f dns.db & 

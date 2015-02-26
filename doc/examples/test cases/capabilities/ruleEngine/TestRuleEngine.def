@@ -1,0 +1,84 @@
+BEGIN_GENERATOR
+  BEGIN_PREAMBLE
+    :system "ZEUS-Agent-Generator"
+    :version "1.1"
+    :ontology ".:test.ont"
+  END_PREAMBLE
+
+  BEGIN_AGENT_NAME_INDEX
+    AgentId0 RuleTestAgent
+  END_AGENT_NAME_INDEX
+
+  BEGIN_AGENT_ICON_INDEX
+    AgentId0 "..:..:..:..:..zeusTest:1.05:gifs:agent.gif"
+  END_AGENT_ICON_INDEX
+
+  BEGIN_TASK_NAME_INDEX
+    AbstractTaskId0 TestRulesOne
+  END_TASK_NAME_INDEX
+
+  BEGIN_AGENT_LIST
+    (:name AgentId0
+     :class ZeusAgent
+     :planner_width 1
+     :planner_length 20
+     :doublebook_fraction 0
+     :tasks (AbstractTaskId0
+            )
+    )
+  END_AGENT_LIST
+
+  BEGIN_TASK_LIST
+    (:Rulebase AbstractTaskId0
+       (SimpleRule
+          ?var1 <- (Entity (unit_cost ?var2) (number ?var3))
+          =>
+          (retract ?var1)
+       )
+    )
+  END_TASK_LIST
+
+  BEGIN_GENERATION_PLAN
+    BEGIN_PREAMBLE
+      :platform "Windows"
+      :directory "."
+    END_PREAMBLE
+    BEGIN_AGENT_LIST
+      (:id AgentId0
+       :generate false
+       :status Saved
+       :has_gui true
+       :zeus_external "RuleEngineTestExternal"
+       :dns_file "dns.db"
+      )
+    END_AGENT_LIST
+    BEGIN_TASK_LIST
+      (:id AbstractTaskId0
+       :generate false
+       :status Saved
+       :external null
+      )
+    END_TASK_LIST
+    BEGIN_NAMESERVER_LIST
+      (:name Nameserver0
+       :is_root true
+       :has_gui false
+       :address_output_file "dns.db"
+       :time_grain 0.5
+      )
+    END_NAMESERVER_LIST
+    BEGIN_FACILITATOR_LIST
+      (:name Facilitator0
+       :period 5.00
+       :has_gui false
+       :dns_file "dns.db"
+      )
+    END_FACILITATOR_LIST
+    BEGIN_VISUALISER_LIST
+      (:name Visualiser0
+       :has_gui false
+       :dns_file "dns.db"
+      )
+    END_VISUALISER_LIST
+  END_GENERATION_PLAN
+END_GENERATOR

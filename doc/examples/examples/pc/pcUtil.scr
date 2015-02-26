@@ -1,0 +1,3 @@
+yp -o pc.ont -s dns.db
+vis -o pc.ont -s dns.db
+

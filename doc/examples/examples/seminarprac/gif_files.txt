@@ -1,0 +1,2 @@
+Agent1 = f::source_code:gifs:agent.gif
+Agent0 = f::source_code:gifs:agent.gif

@@ -1,0 +1,2 @@
+REM This script runs the non-root servers and other utility agents
+start /min java zeus.visualiser.Visualiser Visualiser -s dns.db -o .\mazedemo.ont -quick

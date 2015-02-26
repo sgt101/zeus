@@ -1,0 +1,152 @@
+BEGIN_ONTOLOGY
+  BEGIN_PREAMBLE
+    :system ZEUS-Ontology-Editor
+    :version "1.0_b1"
+  END_PREAMBLE
+  BEGIN_FACTS
+    BEGIN_FACT_ITEM
+      :name MonitorRequest
+      :parent Abstract
+      BEGIN_ATTRIBUTE_LIST
+        BEGIN_ATTRIBUTE_ITEM
+          :name id
+          :type Integer
+          :restriction "> 0"
+          :default ""
+        END_ATTRIBUTE_ITEM
+      END_ATTRIBUTE_LIST
+    END_FACT_ITEM
+    BEGIN_FACT_ITEM
+      :name VCPath
+      :parent Abstract
+      BEGIN_ATTRIBUTE_LIST
+        BEGIN_ATTRIBUTE_ITEM
+          :name id
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name element_1
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name element_2
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name element_3
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name element_4
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+      END_ATTRIBUTE_LIST
+    END_FACT_ITEM
+    BEGIN_FACT_ITEM
+      :name NodeStatus
+      :parent Abstract
+      BEGIN_ATTRIBUTE_LIST
+        BEGIN_ATTRIBUTE_ITEM
+          :name id
+          :type Integer
+          :restriction "> 0"
+          :default ""
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name status_1
+          :type String
+          :restriction "ok|failed"
+          :default "ok"
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name status_2
+          :type String
+          :restriction "ok|failed"
+          :default "ok"
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name status_3
+          :type String
+          :restriction "ok|failed"
+          :default "ok"
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name status_4
+          :type String
+          :restriction "ok|failed"
+          :default "ok"
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name element_1
+          :type String
+          :restriction ""
+          :default "nil"
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name element_3
+          :type String
+          :restriction ""
+          :default "nil"
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name element_4
+          :type String
+          :restriction ""
+          :default "nil"
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name element_2
+          :type String
+          :restriction ""
+          :default "nil"
+        END_ATTRIBUTE_ITEM
+      END_ATTRIBUTE_LIST
+    END_FACT_ITEM
+    BEGIN_FACT_ITEM
+      :name NetworkElementStatus
+      :parent Abstract
+      BEGIN_ATTRIBUTE_LIST
+        BEGIN_ATTRIBUTE_ITEM
+          :name node
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name nni_port
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name vcid
+          :type Integer
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name problem_status
+          :type String
+          :restriction "yellow|red"
+          :default "yellow"
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name trunk_utilisation
+          :type Real
+          :restriction ">= 0 & <= 100"
+          :default ""
+        END_ATTRIBUTE_ITEM
+      END_ATTRIBUTE_LIST
+    END_FACT_ITEM
+  END_FACTS
+END_ONTOLOGY

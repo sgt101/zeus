@@ -1,0 +1,140 @@
+BEGIN_ONTOLOGY
+  BEGIN_PREAMBLE
+    :system ZEUS-Ontology-Editor
+    :version "1.04"
+  END_PREAMBLE
+  BEGIN_FACTS
+    BEGIN_FACT_ITEM
+      :name obstacle
+      :parent ZeusFact
+      BEGIN_ATTRIBUTE_LIST
+        BEGIN_ATTRIBUTE_ITEM
+          :name north
+          :type Boolean
+          :restriction ""
+          :default "false"
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name south
+          :type Boolean
+          :restriction ""
+          :default "false"
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name east
+          :type Boolean
+          :restriction ""
+          :default "false"
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name west
+          :type Boolean
+          :restriction ""
+          :default "false"
+        END_ATTRIBUTE_ITEM
+      END_ATTRIBUTE_LIST
+    END_FACT_ITEM
+    BEGIN_FACT_ITEM
+      :name mazeExited
+      :parent ZeusFact
+      BEGIN_ATTRIBUTE_LIST
+        BEGIN_ATTRIBUTE_ITEM
+          :name id
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+      END_ATTRIBUTE_LIST
+    END_FACT_ITEM
+    BEGIN_FACT_ITEM
+      :name thisMove
+      :parent ZeusFact
+      BEGIN_ATTRIBUTE_LIST
+        BEGIN_ATTRIBUTE_ITEM
+          :name south
+          :type Boolean
+          :restriction ""
+          :default "false"
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name north
+          :type Boolean
+          :restriction ""
+          :default "false"
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name west
+          :type Boolean
+          :restriction ""
+          :default "false"
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name east
+          :type Boolean
+          :restriction ""
+          :default "false"
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name id
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+      END_ATTRIBUTE_LIST
+    END_FACT_ITEM
+    BEGIN_FACT_ITEM
+      :name moveMade
+      :parent ZeusFact
+      BEGIN_ATTRIBUTE_LIST
+        BEGIN_ATTRIBUTE_ITEM
+          :name moved
+          :type Boolean
+          :restriction ""
+          :default "false"
+        END_ATTRIBUTE_ITEM
+      END_ATTRIBUTE_LIST
+    END_FACT_ITEM
+    BEGIN_FACT_ITEM
+      :name agentsName
+      :parent ZeusFact
+      BEGIN_ATTRIBUTE_LIST
+        BEGIN_ATTRIBUTE_ITEM
+          :name name
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+      END_ATTRIBUTE_LIST
+    END_FACT_ITEM
+    BEGIN_FACT_ITEM
+      :name agentRegistered
+      :parent ZeusFact
+      BEGIN_ATTRIBUTE_LIST
+        BEGIN_ATTRIBUTE_ITEM
+          :name name
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+      END_ATTRIBUTE_LIST
+    END_FACT_ITEM
+    BEGIN_FACT_ITEM
+      :name inMaze
+      :parent ZeusFact
+      BEGIN_ATTRIBUTE_LIST
+        BEGIN_ATTRIBUTE_ITEM
+          :name isInMaze
+          :type Boolean
+          :restriction ""
+          :default "false"
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name name
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+      END_ATTRIBUTE_LIST
+    END_FACT_ITEM
+  END_FACTS
+END_ONTOLOGY

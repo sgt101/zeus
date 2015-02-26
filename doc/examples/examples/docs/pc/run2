@@ -1,0 +1,6 @@
+#!/usr/bin/csh
+#This script runs the task agents
+java PCMaker -o ./pc.ont -s dns.db -gui zeus.agentviewer.AgentViewer -e DellPump & 
+java MonitorMaker -o ./pc.ont -s dns.db & 
+java MotherBoardMaker -o ./pc.ont -s dns.db & 
+java PrinterMaker -o ./pc.ont -s dns.db & 

@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+
+<html>
+
+<head>
+<title>Report Tool Help Pages</title>
+</head>
+
+
+<!-- DOCUMENT MAIN BODY -->
+<body>
+
+<h1>Report Tool On-Line Help</h1>
+
+<b>What is it?</b> <br>
+
+The Report Tool enables users to follow the progress of on-going agent tasks.
+This is achieved by listening for messages sent by the agents whenever one of
+their tasks changes state. <p>
+
+<B>When should I use it?</B> <br>
+
+The Report tool provides the most informative description of any multi-agent
+activity. Activities are depicted as a time-ordered graph of sub-tasks that
+shows the resource dependencies between them. Each sub-task is also colour-coded
+to reflect its state, making it much easier for the user to follow and understand
+the progress of an activity. <p>
+
+<B>How do I use it?</B>
+
+<ul>
+<li> If you haven't connected to an Agent Name Server, no agents will be listed
+in the <b>Agents</b> list at the top left-hand corner of the window.  In which
+case, follow <a href="../common/ans.html">these instructions</a>, which will
+retrieve the list of known agents. <br>
+<li> To make the Visualiser aware of on-going agent tasks it must contact each
+known agent to request progress updates.  To do this, select the <b>Request
+Reports</b> option from the <b>Online</b> menu. This will bring up a dialog
+enabling you to choose which agents' tasks will be followed. <br>
+<li> Nothing will be shown in the Report Tool until an agent begins a task,
+at which point its name will appear in the <b>Current Tasks</b> list, and its 
+constituent sub-tasks will appear in the main panel. <br>
+<li> Additional information about each sub-task can be obtained by double-clicking
+on the appropriate node in the main panel. <br>
+</ul>
+<p>
+
+<B>The Task States</B> <br>
+
+Each sub-task is colour-coded according to what the Visualiser believes is its 
+current state; this will be one of the following:
+<ul>
+<li><FONT COLOR="#33FFFF">FIRM</FONT> - the agent concerned has commited itself to
+performing this task at some point in the future. <br>
+<li><FONT COLOR="#00FF00">RUNNING</FONT> - the agent is currently performing this
+task; this may mean an external process has been started. <br>
+<li><FONT COLOR="#FF0000">FAILED</FONT> - this task has not been performed, this
+may be because of insufficient resources or a program error. The exact reason
+may become apparent by examining the <a href="../Agent Viewer/what.html">Agent
+Viewer</A>. <br>
+<li><FONT COLOR="#DDDDDD">COMPLETED</FONT> [White] - the task has successfully run
+to completion and terminated. <br>
+<li><FONT COLOR="#FF00EE">JEOPARDY</FONT> - the agent has detected the existence of
+a problem that will prevent the task from being completed, and is attempting
+to replan.<br>
+<li><FONT COLOR="#0000FF">SERVICE AGREEMENT</FONT> - the agent has undertaken to
+provide this task a predetermined number of times from now. <br>
+</ul>
+<P>
+
+<B>The Toolbar Options</B> <br>
+
+<img src="../../../gifs/generator/collapse.gif" hspace=16> <b>Collapse</b>
+- collapses the nodes dependent on the currently selected node. <br>
+<img src="../../../gifs/generator/expand.gif" hspace=16> <b>Expand</b>
+- expands any previously collapsed nodes. <br>
+<img src="../../../gifs/generator/recompute.gif" hspace=16> <b>Recompute</b>
+- moves the nodes back to their default positions.<br>
+<img src="../../../gifs/generator/redraw.gif" hspace=16> <b>Redraw</b>
+- refreshes the screen, useful if display is corrupted. <br>
+<img src="../../../gifs/generator/select.gif" hspace=16> <b>Select/Deselect</b>
+- changes the state of those nodes within a selected area. <br>
+<img src="../../../gifs/generator/selectall.gif" hspace=16> <b>Select All Icons</b>
+- marks all nodes as selected.<br>
+<img src="../../../gifs/generator/hide.gif" hspace=16> <b>Hide Selected Icons</b>
+- removes the currently selected nodes from the display. <br>
+<img src="../../../gifs/generator/show.gif" hspace=16> <b>Show Hidden Icons</b>
+- shows all previously hidden nodes. <p>
+
+These options also have corresponding entries in the <b>View</b> menu.<p>
+
+
+<b>Other Menu Options</b>
+
+<ul>
+<li> Even after a task has run to conclusion it will remain in the
+<b>Current Tasks</b> list unless the <b>Auto-Delete Reports</b> option has been
+chosen from the <b>Reports</b> menu. <br>
+<li> Reports can be selectively deleted by choosing either the <b>Delete
+Current Report</b> or <b>Delete Reports...</b> options from the <b>Reports
+</b> menu.<br>
+<li> If the <b>Show Connected Reports</b> option from the <b>Reports</b> menu
+has been selected, then all goals currently being attempted that use the
+results of this task will be shown.<br>
+<li> The activities displayed live by the Report Tool can be saved to a file to
+be replayed later; this process is described <a href="../common/savetodb.html">
+here</a>. Instructions for loading a previously saved session are listed
+<a href="../common/loadfromdb.html">here</a>. <br>
+<li> To stop receiving report updates from any or all agents, select the
+<b>Unrequest Reports</b> option from the <b>Online</b> menu. <br>
+</ul>
+
+
+
+</body>
+
+</html>

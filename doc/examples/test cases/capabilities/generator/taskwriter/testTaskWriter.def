@@ -1,0 +1,173 @@
+BEGIN_GENERATOR
+  BEGIN_PREAMBLE
+    :system "ZEUS-Agent-Generator"
+    :version "1.1"
+    :ontology ".:test.ont"
+  END_PREAMBLE
+
+  BEGIN_AGENT_NAME_INDEX
+    AgentId0 Agent0
+  END_AGENT_NAME_INDEX
+
+  BEGIN_AGENT_ICON_INDEX
+    AgentId0 "..:..:..:..:..:..zeusTest:1.05:gifs:agent.gif"
+  END_AGENT_ICON_INDEX
+
+  BEGIN_TASK_NAME_INDEX
+    AbstractTaskId4 PrimativeExternalTester
+    AbstractTaskId3 PlanScriptTester
+    AbstractTaskId2 RuleBaseTester
+    AbstractTaskId1 SummaryTaskTester
+    AbstractTaskId0 PrimativeTester
+  END_TASK_NAME_INDEX
+
+  BEGIN_AGENT_LIST
+    (:name AgentId0
+     :class ZeusAgent
+     :planner_width 1
+     :planner_length 20
+     :doublebook_fraction 0
+     :tasks (AbstractTaskId3
+             AbstractTaskId2
+             AbstractTaskId1
+             AbstractTaskId0
+            )
+    )
+  END_AGENT_LIST
+
+  BEGIN_TASK_LIST
+    (:Primitive AbstractTaskId4
+     :time (1)
+     :cost (0)
+     :consumed_facts ((:type Entity
+                       :id var1
+                       :modifiers 1
+                       :attributes ((unit_cost ?var2)
+                                    (number ?var3)
+                                   )
+                      )
+                     )
+     :produced_facts ((:type Entity
+                       :id var4
+                       :modifiers 1
+                       :attributes ((unit_cost 1)
+                                    (number ?var6)
+                                   )
+                      )
+                      (:type Entity
+                       :id var8
+                       :modifiers 1
+                       :attributes ((unit_cost ?var9)
+                                    (number ?var10)
+                                   )
+                      )
+                     )
+    )
+    (:PlanScript PlanScriptTester
+     :is_autorun true
+     :time (1)
+     :cost (0)
+     :nodes ((:name begin
+              :is_conditional false
+              :consumed_facts ((:group default (
+                              ))
+                              )
+              :produced_facts ((:group default (
+                              ))
+                              )
+             )
+             (:name end
+              :is_conditional false
+              :consumed_facts ((:group default (
+                              ))
+                              )
+              :produced_facts ((:group default (
+                              ))
+                              )
+             )
+            )
+    )
+    (:Rulebase AbstractTaskId2
+    )
+    (:Summary AbstractTaskId1
+     :is_autorun false
+     :time (1)
+     :cost (0)
+     :nodes ((:name begin
+              :is_conditional false
+              :consumed_facts ((:group default (
+                              ))
+                              )
+              :produced_facts ((:group default (
+                              ))
+                              )
+             )
+             (:name end
+              :is_conditional false
+              :consumed_facts ((:group default (
+                              ))
+                              )
+              :produced_facts ((:group default (
+                              ))
+                              )
+             )
+            )
+    )
+    (:Primitive AbstractTaskId0
+     :time (1)
+     :cost (0)
+    )
+  END_TASK_LIST
+
+  BEGIN_GENERATION_PLAN
+    BEGIN_PREAMBLE
+      :platform "Windows"
+      :directory "."
+    END_PREAMBLE
+    BEGIN_AGENT_LIST
+      (:id AgentId0
+       :generate false
+       :status Saved
+       :has_gui false
+       :dns_file "dns.db"
+      )
+    END_AGENT_LIST
+    BEGIN_TASK_LIST
+      (:id AbstractTaskId4
+       :generate false
+       :status Saved
+       :external externalTest
+      )
+      (:id AbstractTaskId2
+       :generate false
+       :status Saved
+       :external null
+      )
+      (:id AbstractTaskId0
+       :generate false
+       :status Saved
+       :external null
+      )
+    END_TASK_LIST
+    BEGIN_NAMESERVER_LIST
+      (:name Nameserver2
+       :is_root false
+       :has_gui false
+       :dns_file "dns.db"
+      )
+    END_NAMESERVER_LIST
+    BEGIN_FACILITATOR_LIST
+      (:name Facilitator2
+       :period 5.00
+       :has_gui false
+       :dns_file "dns.db"
+      )
+    END_FACILITATOR_LIST
+    BEGIN_VISUALISER_LIST
+      (:name Visualiser2
+       :has_gui false
+       :dns_file "dns.db"
+      )
+    END_VISUALISER_LIST
+  END_GENERATION_PLAN
+END_GENERATOR

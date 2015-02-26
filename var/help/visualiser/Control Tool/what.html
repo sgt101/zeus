@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+
+<html>
+
+<head>
+<title>Control Tool Help Pages</title>
+</head>
+
+
+<!-- DOCUMENT MAIN BODY -->
+<body>
+
+<h1>Control Tool On-Line Help</h1>
+
+<b>What is it?</b> <br>
+
+As the Control Tool is effectively an online version of the <I><FONT COLOR="#FF0000">
+Agent Generator</FONT></I>, it enables users to modify the internal states of
+agents at run-time. <p>
+
+<B>When should I use it?</B> <br>
+
+Whilst modifying an agent whilst it is still running may seem dangerous, the
+declarative nature of ZEUS agents means changes can be incorporated whilst 
+still preserving the integrity of the agents concerned. There are several 
+scenarios when making such changes might be desirable :
+
+<ul>
+<li> <i>Giving Orders</i> - if the agent does not have its own user interface
+this tool can be used to issue instructions. <P>
+<li> <i>What Ifs</i> - when you want to experiment and modify an aspect of an
+agent, but you don't want to recompile it. <P>
+<li> <i>Administrative Management</i> - the tool can be used for administrative
+tasks, like killing or suspending agents. <P>
+</ul>
+
+<B>How do I use it?</B>
+
+<ul>
+<li>Before using the Control Tool ensure that the list of all known active agents
+has been obtained from the Agent Name Server. The instructions for this process
+can be found <a href="../common/ans.html">here</a>. <br>
+<li>If the Visualiser was not supplied with an ontology when it was started choose
+the <b>Load Ontology...</b> option from the <b>File</b> menu. This will summon a
+file browser, locate the appropriate ontology file and then click on the
+<b>Open</b> button. <br>
+<li>The Control Tool is now ready for use, its options can be selected from the
+menu or toolbar. <br>
+</ul>
+<p>
+
+<b>Using the Menu Options</b> <br>
+
+All the operations of the Control Tool can be selected by choosing the appropriate
+menu entry. The menu options list the five aspects of an agent society that
+can be modified, namely:
+
+<ul>
+<li> <a href="goals.html">Goals</a>
+<li> <a href="definition.html">Definition</a>
+<li> <a href="organisation.html">Organisation</a>
+<li> <a href="coordination.html">Co-ordination</a>
+<li> <a href="society.html">Society</a>
+</ul>
+<p>
+
+<b>Sending Commands</b> <br>
+
+There are several ad hoc commands (i.e. non-standard Agent Communication Language
+commands) that can be sent to agents using the <b>Send Commands...</b> menu option.
+This dialog window allows a choice of which agents will receive the command, and
+a textfield for entering the command itself, this can one of the following:
+
+<ul>
+<li> <pre>kill_yourself</pre> - instructs the recipient to cease running gracefully
+<li> <pre>db_del</pre> - instructs the recipient to clear its resources database
+<li> <pre>db_reset</pre> - makes the recipient re-initialise itself
+<li> <pre>optimise</pre> - causes the recipient to optimise its schedule
+</ul>
+<p>
+
+<b>Using the Toolbar Buttons</b> <br>
+
+Alternatively, the toolbar icons provide shortcuts for the more frequently
+used operations, namely: <P>
+
+<img src="../../../gifs/control/kill.gif" hspace=16> <b>Kill Agents</b> -
+selecting this option will send messages to every known agent instructing it
+to cease running. This is a useful option for elegantly ending an application
+regardless of where its processes are located. <P>
+
+<p>The other icons will be documented when they become functional.</p>
+
+</body>
+
+</html>
+

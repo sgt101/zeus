@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='ISO-8859-1'?> 
+ <!DOCTYPE uridef[ 
+  <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+ <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY daml "http://www.daml.org/2001/03/daml+oil">
+  <!ENTITY process "http://www.daml.org/services/daml-s/2001/10/Process">
+  <!ENTITY service "http://www.daml.org/services/daml-s/2001/10/Service">
+  <!ENTITY profile "http://www.daml.org/services/daml-s/2001/10/Profile"> 
+  <!ENTITY country "http://www.daml.ri.cmu.edu/ont/Country.daml">
+  <!ENTITY concepts "http://www.daml.ri.cmu.edu/ont/DAML-S/concepts.daml">
+  <!ENTITY profile "http://www.daml.org/services/daml-s/2001/10/Profile"> 
+  <!ENTITY time "http://www.ai.sri.com/daml/ontologies/sri-basic/1-0/Time.daml">
+  <!ENTITY xsd "http://www.w3.org/2000/10/XMLSchema.xsd">
+  <!ENTITY DEFAULT "http:132.146.209.68\services\MakeComputer.daml">]>
+<rdf:RDF 
+ xmlns:rdf ="&rdf;#" 
+ xmlns:profile="&profile;#"
+ xmlns:rdfs =    "&rdfs;#" 
+ xmlns:xsd =    "&xsd;#"
+  xmlns:daml =    "&daml;#"
+  xmlns:service = "&service;#"
+  xmlns:process = "&process;#">
+<profile:Cusine rdf:ID="cusine"> 
+	<process:condition>
+ <expression><xsd:string rdf:value="(and (and (= ?rest_quality :cusine.quality) ((%gte ?rest_quality 0) (:type vegetarian)))"/> </expression>
+	</process:condition> 
+</profile:Cusine> 
+
+
+<profile:Cusine rdf:ID="cusine"> 
+	<profile:quality> <xsd:string rdf:value="5"/></profile:quality>
+	<profile:type><xsd:string rdf:value="vegan"/></profile:type> 
+</profile:Cusine>  
+
+</rdf:RDF>
+
+
+

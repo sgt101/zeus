@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<contacts>
+   <contact ZEUS-name="sf" FIPA-address="(agent-identifier :name df@sf.us.agentcities.net :addresses (sequence http://sf.us.agentcities.net:8080/acc))" />
+
+   <contact ZEUS-name="betalausanne" FIPA-address="(agent-identifier :name df@beta.lausanne.agentcities.net :addresses (sequence http://srv02.lausanne.agentcities.net:8080/acc))" />
+
+   <contact ZEUS-name="budapest" FIPA-address="(agent-identifier :name df@budapest.agentcities.net :addresses (sequence http://sas.ilab.sztaki.hu:7778/acc))" />
+
+   <contact ZEUS-name="queenmarys" FIPA-address="(agent-identifier :name df@agents.elec.qmul.ac.uk :addresses (sequence http://agents.elec.qmul.ac.uk:4896/acc))" />
+
+   <contact ZEUS-name="saarbrucken" FIPA-address="(agent-identifier :name df@test.saarbruecken.agentcities.net :addresses (sequence http://134.96.184.133:8080/acc))" />
+
+   <contact ZEUS-name="parma" FIPA-address="(agent-identifier :name df@parma.agentcities.net :addresses (sequence http://aot.ce.unipr.it:1055/agentcities))" />
+
+   <contact ZEUS-name="icstm" FIPA-address="(agent-identifier :name df@blackbird.doc.ic.ac.uk :addresses (sequence http://146.169.1.33:3080/acc))" />
+
+   <contact ZEUS-name="paris" FIPA-address="(agent-identifier :name df@paris.agentcities.net :addresses (sequence http://leap.crm-paris.com:5194/leap))" />
+
+   <contact ZEUS-name="lisboa" FIPA-address="(agent-identifier :name df@lisboa.agentcities.net :addresses (sequence http://otelo.adetti-linha4.org:8181/acc))" />
+
+   <contact ZEUS-name="amsterdam" FIPA-address="(agent-identifier :name df@gaper.swi.psy.uva.nl:1099/JADE :addresses (sequence http://gaper.swi.psy.uva.nl:7778))" />
+
+   <contact ZEUS-name="bath" FIPA-address="(agent-identifier :name df@agentcities.cs.bath.ac.uk:1099/JADE :addresses (sequence http://agentcities.cs.bath.ac.uk:7778/acc))" />
+
+   <contact ZEUS-name="barcelona" FIPA-address="(agent-identifier :name df@agntcity.barcelona.agentcities.net:2010/JADE :addresses (sequence http://agntcity.barcelona.agentcities.net:2011/acc))"/>
+
+   <contact ZEUS-name="sydney" FIPA-address="(agent-identifier :name df@sydney.agentcities.org :addresses (sequence http://motarc.pointclark.net:8000/acc))" />
+
+   <contact ZEUS-name="montpellier" FIPA-address="(agent-identifier :name df@montpellier.agentcities.net :addresses (sequence http://www.agentworks.fr:8103/acc))" />
+
+   <contact ZEUS-name="aberdeen" FIPA-address="(agent-identifier :name df@cardoon.csd.abdn.ac.uk:1099/JADE :addresses (sequence http://cardoon.csd.abdn.ac.uk:7778/acc))" />
+
+   <contact ZEUS-name="manchester" FIPA-address="(agent-identifier :name df@Manchester.agentcities.net :addresses (sequence http://Manchester.co.umist.ac.uk:7777/acc))" />
+
+   <contact ZEUS-name="lisboa_tests" FIPA-address="(agent-identifier :name df@lisboa_tests.agentcities.net :addresses (sequence http://proxy.adetti-linha4.org/FIPApp/))" />
+
+   <contact ZEUS-name="honolulu" FIPA-address="(agent-identifier :name df@ewasx.hpl.external.hp.com:1099/JADE :addresses (sequence http://ewasx.hpl.external.hp.com:7788/acc))" />
+
+   <contact ZEUS-name="miami" FIPA-address="(agent-identifier :name df@huphu.hpl.external.hp.com:1099/JADE :addresses (sequence http://huphu.hpl.external.hp.com:7788/acc))" />
+
+   <contact ZEUS-name="zurich" FIPA-address="(agent-identifier :name df@zurich.agentcities.net :addresses (sequence http://zurich.agentcities.whitestein.ch:9999))" />
+
+   <contact ZEUS-name="slc" FIPA-address="(agent-identifier :name df@agentcities:1099/JADE :addresses (sequence http://agentcities.cs.utah.edu:7788/acc))" />
+
+   <contact ZEUS-name="paloalto" FIPA-address="(agent-identifier :name df@uriel.hpl.external.hp.com:1099/JADE :addresses (sequence http://uriel.hpl.external.hp.com:7788/acc))" />
+
+   <contact ZEUS-name="dunedin" FIPA-address="(agent-identifier :name df@OtagoAgentCities :addresses (sequence http://waitaki.otago.ac.nz:2020/agent_9))" />
+
+   <contact ZEUS-name="umbc" FIPA-address="(agent-identifier :name df@umbc.agentcities.net :addresses (sequence http://blackbox.cs.umbc.edu:9890/acc))" />
+
+   <contact ZEUS-name="turin" FIPA-address="(agent-identifier :name df@turin.agentcities.net :addresses (sequence http://sharon.cselt.it:9999/acc))" />
+
+   <contact ZEUS-name="melbourne" FIPA-address="(agent-identifier :name df@lurcher5.cs.rmit.edu.au:9999/JACK :addresses (sequence http://lurcher5.cs.rmit.edu.au:9999/acc))" />
+
+   <contact ZEUS-name="genie" FIPA-address="(agent-identifier :name df@genie.agentcities.net :addresses (sequence http://pbol.ratol.fi/acc/servlet/geniehttpconnection.GenieHTTPConnectionServlet))" />
+
+   <contact ZEUS-name="tarragona" FIPA-address="(agent-identifier :name df@tarragona.agentcities.net :addresses (sequence http://grusma.etse.urv.es:4455/acc))" />
+
+   <contact ZEUS-name="girona" FIPA-address="(agent-identifier :name df@arlab.udg.es:1099/JADE :addresses (sequence http://arlab.udg.es:7778/acc))" />
+
+   <contact ZEUS-name="prague" FIPA-address="(agent-identifier :name df@prague.agentcities.net :addresses (sequence http://agents.felk.cvut.cz:8888/agentcities))" />
+
+   <contact ZEUS-name="aachen" FIPA-address="(agent-identifier :name df@intensivstation.informatik.rwth-aachen.de:7778/JADE :addresses (sequence http://intensivstation.informatik.rwth-aachen.de:7779/acc))" />
+
+   <contact ZEUS-name="upm" FIPA-address="(agent-identifier :name df@tornado.dia.fi.upm.es:1099/JADE :addresses (sequence http://tornado.dia.fi.upm.es:7778/acc))" />
+
+   <contact ZEUS-name="agentscape" FIPA-address="(agent-identifier :name df@212.202.142.100:9100/acc :addresses (sequence http://212.202.142.100:8080/acc))" />
+
+   <contact ZEUS-name="urjc" FIPA-address="(agent-identifier :name df@platon.escet.urjc.es:1099/JADE :addresses (sequence http://platon.escet.urjc.es:7778/acc))" />
+
+</contacts>

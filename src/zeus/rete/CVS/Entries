@@ -1,0 +1,22 @@
+/Action.java/1.1.1.1/Thu Oct  9 10:55:46 2003//
+/ActionNode.java/1.1.1.1/Thu Oct  9 10:55:46 2003//
+/AttributeNode.java/1.1.1.1/Thu Oct  9 10:55:46 2003//
+/DataReader.java/1.1.1.1/Thu Oct  9 10:55:46 2003//
+/FactAction.java/1.1.1.1/Thu Oct  9 10:55:46 2003//
+/IdNode.java/1.1.1.1/Thu Oct  9 10:55:46 2003//
+/Info.java/1.1.1.1/Thu Oct  9 10:55:46 2003//
+/JoinEntry.java/1.1.1.1/Thu Oct  9 10:55:46 2003//
+/JoinNode.java/1.1.1.1/Thu Oct  9 10:55:46 2003//
+/LocalFactMonitor.java/1.1.1.1/Thu Oct  9 10:55:46 2003//
+/Node.java/1.1.1.1/Thu Oct  9 10:55:46 2003//
+/NotNode.java/1.1.1.1/Thu Oct  9 10:55:46 2003//
+/Pattern.java/1.1.1.1/Thu Oct  9 10:55:46 2003//
+/PatternNode.java/1.1.1.1/Thu Oct  9 10:55:46 2003//
+/ReteEngine.java/1.1.1.1/Thu Oct  9 10:55:46 2003//
+/ReteFact.java/1.1.1.1/Thu Oct  9 10:55:46 2003//
+/Rule.java/1.1.1.1/Thu Oct  9 10:55:46 2003//
+/Successor.java/1.1.1.1/Thu Oct  9 10:55:46 2003//
+/TestNode.java/1.1.1.1/Thu Oct  9 10:55:46 2003//
+/TypeNode.java/1.1.1.1/Thu Oct  9 10:55:46 2003//
+D/action////
+/ConflictSet.java/1.1.1.1/Thu Oct  7 14:05:58 2004//

@@ -1,0 +1,298 @@
+BEGIN_GENERATOR
+  BEGIN_PREAMBLE
+    :system "ZEUS-Agent-Generator"
+    :version "1.02"
+    :ontology ".:fruit.ont"
+  END_PREAMBLE
+
+  BEGIN_AGENT_NAME_INDEX
+    AgentId2 ShopBot
+    AgentId1 SupplyBot
+    AgentId0 OrchardBot
+  END_AGENT_NAME_INDEX
+
+  BEGIN_AGENT_ICON_INDEX
+    AgentId2 ".:gifs:cart.gif"
+    AgentId1 ".:gifs:van.gif"
+    AgentId0 ".:gifs:tree.gif"
+  END_AGENT_ICON_INDEX
+
+  BEGIN_TASK_NAME_INDEX
+  END_TASK_NAME_INDEX
+
+  BEGIN_AGENT_LIST
+    (:name AgentId2
+     :class ZeusAgent
+     :planner_width 1
+     :planner_length 20
+     :doublebook_fraction 0
+     :initial_facts ((:type apple
+                      :id appleStock
+                      :modifiers 0
+                      :attributes ((unit_cost 5)
+                                   (number 0)
+                                  )
+                     )
+                     (:type orange
+                      :id orangeStock
+                      :modifiers 0
+                      :attributes ((unit_cost 5)
+                                   (number 0)
+                                  )
+                     )
+                     (:type pear
+                      :id pearStock
+                      :modifiers 0
+                      :attributes ((unit_cost 5)
+                                   (number 5)
+                                  )
+                     )
+                     (:type Money
+                      :id cash
+                      :modifiers 0
+                      :attributes ((amount 500)
+                                  )
+                     )
+                     (:type melon
+                      :id melonStock
+                      :modifiers 0
+                      :attributes ((unit_cost 10)
+                                   (number 10)
+                                  )
+                     )
+                     (:type banana
+                      :id bananaStock
+                      :modifiers 0
+                      :attributes ((unit_cost 8)
+                                   (number 10)
+                                  )
+                     )
+                    )
+     :protocols ((:name "zeus.actors.graphs.ContractNetRespondent"
+                  :type Respondent
+                  :constraints ((:fact (:type ZeusFact
+                                        :id var182
+                                        :modifiers 1
+                                       )
+                                 :type 0
+                                 :strategy "zeus.actors.graphs.LinearRespondentEvaluator"
+                                 :parameters ("noquibble.range" "0.3" "max.percent" "125" "min.percent" "110")
+                                )
+                               )
+                 )
+                 (:name "zeus.actors.graphs.ContractNetInitiator"
+                  :type Initiator
+                  :constraints ((:fact (:type ZeusFact
+                                        :id var180
+                                        :modifiers 1
+                                       )
+                                 :type 0
+                                 :strategy "zeus.actors.graphs.LinearInitiatorEvaluator"
+                                 :parameters ("noquibble.factor" "0.2" "max.percent" "120" "min.percent" "70")
+                                )
+                               )
+                 )
+                )
+    )
+    (:name AgentId1
+     :class ZeusAgent
+     :planner_width 1
+     :planner_length 20
+     :doublebook_fraction 0
+     :initial_facts ((:type apple
+                      :id appleStock
+                      :modifiers 0
+                      :attributes ((unit_cost 5)
+                                   (number 30)
+                                  )
+                     )
+                     (:type orange
+                      :id orangeStock
+                      :modifiers 0
+                      :attributes ((unit_cost 5)
+                                   (number 30)
+                                  )
+                     )
+                     (:type pear
+                      :id pearStock
+                      :modifiers 0
+                      :attributes ((unit_cost 5)
+                                   (number 10)
+                                  )
+                     )
+                     (:type Money
+                      :id cash
+                      :modifiers 0
+                      :attributes ((amount 500)
+                                  )
+                     )
+                     (:type melon
+                      :id melonStock
+                      :modifiers 0
+                      :attributes ((unit_cost 10)
+                                   (number 20)
+                                  )
+                     )
+                     (:type banana
+                      :id bananaStock
+                      :modifiers 0
+                      :attributes ((unit_cost 8)
+                                   (number 20)
+                                  )
+                     )
+                    )
+     :protocols ((:name "zeus.actors.graphs.ContractNetRespondent"
+                  :type Respondent
+                  :constraints ((:fact (:type ZeusFact
+                                        :id var178
+                                        :modifiers 1
+                                       )
+                                 :type 0
+                                 :strategy "zeus.actors.graphs.LinearRespondentEvaluator"
+                                 :parameters ("noquibble.factor" "0.3" "max.percent" "125" "min.percent" "105")
+                                )
+                               )
+                 )
+                 (:name "zeus.actors.graphs.ContractNetInitiator"
+                  :type Initiator
+                  :constraints ((:fact (:type ZeusFact
+                                        :id var176
+                                        :modifiers 1
+                                       )
+                                 :type 0
+                                 :strategy "zeus.actors.graphs.LinearInitiatorEvaluator"
+                                 :parameters ("noquibble.factor" "0.2" "max.percent" "120" "min.percent" "70")
+                                )
+                               )
+                 )
+                )
+    )
+    (:name AgentId0
+     :class ZeusAgent
+     :planner_width 1
+     :planner_length 20
+     :doublebook_fraction 0
+     :initial_facts ((:type apple
+                      :id appleStock
+                      :modifiers 0
+                      :attributes ((unit_cost 5)
+                                   (number 100)
+                                  )
+                     )
+                     (:type orange
+                      :id orangeStock
+                      :modifiers 0
+                      :attributes ((unit_cost 5)
+                                   (number 80)
+                                  )
+                     )
+                     (:type pear
+                      :id pearStock
+                      :modifiers 0
+                      :attributes ((unit_cost 5)
+                                   (number 60)
+                                  )
+                     )
+                     (:type Money
+                      :id cash
+                      :modifiers 0
+                      :attributes ((amount 0)
+                                  )
+                     )
+                     (:type banana
+                      :id bananaStock
+                      :modifiers 0
+                      :attributes ((unit_cost 8)
+                                   (number 0)
+                                  )
+                     )
+                     (:type melon
+                      :id melonStock
+                      :modifiers 0
+                      :attributes ((unit_cost 10)
+                                   (number 0)
+                                  )
+                     )
+                    )
+     :protocols ((:name "zeus.actors.graphs.ContractNetRespondent"
+                  :type Respondent
+                  :constraints ((:fact (:type ZeusFact
+                                        :id var174
+                                        :modifiers 1
+                                       )
+                                 :type 0
+                                 :strategy "zeus.actors.graphs.LinearRespondentEvaluator"
+                                 :parameters ("noquibble.range" "0.3" "max.percent" "125" "min.percent" "105")
+                                )
+                               )
+                 )
+                 (:name "zeus.actors.graphs.ContractNetInitiator"
+                  :type Initiator
+                  :constraints ((:fact (:type ZeusFact
+                                        :id var172
+                                        :modifiers 1
+                                       )
+                                 :type 0
+                                 :strategy "zeus.actors.graphs.LinearInitiatorEvaluator"
+                                 :parameters ("noquibble.range" "0.2" "max.percent" "120" "min.percent" "70")
+                                )
+                               )
+                 )
+                )
+    )
+  END_AGENT_LIST
+
+  BEGIN_TASK_LIST
+  END_TASK_LIST
+
+  BEGIN_GENERATION_PLAN
+    BEGIN_PREAMBLE
+      :platform "Windows"
+      :directory "."
+    END_PREAMBLE
+    BEGIN_AGENT_LIST
+      (:id AgentId2
+       :generate false
+       :status Saved
+       :has_gui true
+       :zeus_external "shopUI"
+       :dns_file "dns.db"
+      )
+      (:id AgentId1
+       :generate false
+       :status Saved
+       :has_gui true
+       :zeus_external "supplyUI"
+       :dns_file "dns.db"
+      )
+      (:id AgentId0
+       :generate false
+       :status Saved
+       :has_gui true
+       :zeus_external "orchardUI"
+       :dns_file "dns.db"
+      )
+    END_AGENT_LIST
+    BEGIN_NAMESERVER_LIST
+      (:name ANS
+       :is_root true
+       :has_gui false
+       :address_output_file "dns.db"
+       :time_grain 0.5
+      )
+    END_NAMESERVER_LIST
+    BEGIN_FACILITATOR_LIST
+      (:name Broker
+       :period 0.00
+       :has_gui false
+       :dns_file "dns.db"
+      )
+    END_FACILITATOR_LIST
+    BEGIN_VISUALISER_LIST
+      (:name Visual
+       :has_gui false
+       :dns_file "dns.db"
+      )
+    END_VISUALISER_LIST
+  END_GENERATION_PLAN
+END_GENERATOR

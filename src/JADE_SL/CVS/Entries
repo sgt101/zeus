@@ -1,0 +1,25 @@
+/ACLMessage.java/1.1.1.1/Thu Oct  9 10:55:36 2003//
+/AID.java/1.1.1.1/Thu Oct  9 10:55:36 2003//
+/AgentAction.java/1.1.1.1/Thu Oct  9 10:55:36 2003//
+/Base64.java/1.1.1.1/Thu Oct  9 10:55:36 2003//
+/CaseInsensitiveString.java/1.1.1.1/Thu Oct  9 10:55:36 2003//
+/Concept.java/1.1.1.1/Thu Oct  9 10:55:36 2003//
+/ContentElement.java/1.1.1.1/Thu Oct  9 10:55:36 2003//
+/ContentElementList.java/1.1.1.1/Thu Oct  9 10:55:36 2003//
+/ContentManager.jade/1.1.1.1/Thu Oct  9 10:55:36 2003//
+/FIPANames.java/1.1.1.1/Thu Oct  9 10:55:36 2003//
+/ISO8601.java/1.1.1.1/Thu Oct  9 10:55:36 2003//
+/OntoACLMessage.jade/1.1.1.1/Thu Oct  9 10:55:36 2003//
+/OntoACLMessage.java/1.1.1.1/Thu Oct  9 10:55:36 2003//
+/OntoAID.jade/1.1.1.1/Thu Oct  9 10:55:36 2003//
+/OntoAID.java/1.1.1.1/Thu Oct  9 10:55:36 2003//
+/Predicate.java/1.1.1.1/Thu Oct  9 10:55:36 2003//
+/StringACLCodec.java/1.1.1.1/Thu Oct  9 10:55:36 2003//
+/Term.java/1.1.1.1/Thu Oct  9 10:55:36 2003//
+/UnreadableException.java/1.1.1.1/Thu Oct  9 10:55:36 2003//
+/WrapperException.java/1.1.1.1/Thu Oct  9 10:55:36 2003//
+D/abs////
+D/acl////
+D/lang////
+D/onto////
+D/schema////

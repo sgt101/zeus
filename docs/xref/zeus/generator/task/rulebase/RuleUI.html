@@ -1,0 +1,600 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1" /><title>RuleUI xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../apidocs/zeus/generator/task/rulebase/RuleUI.html">View Javadoc</a></div><pre>
+
+<a name="1" href="#1">1</a>   <em class="comment">/*</em>
+<a name="2" href="#2">2</a>   <em class="comment">* The contents of this file are subject to the BT "ZEUS" Open Source </em>
+<a name="3" href="#3">3</a>   <em class="comment">* Licence (L77741), Version 1.0 (the "Licence"); you may not use this file </em>
+<a name="4" href="#4">4</a>   <em class="comment">* except in compliance with the Licence. You may obtain a copy of the Licence</em>
+<a name="5" href="#5">5</a>   <em class="comment">* from $ZEUS_INSTALL/licence.html or alternatively from</em>
+<a name="6" href="#6">6</a>   <em class="comment">* <a href="http://www.labs.bt.com/projects/agents/zeus/licence.htm" target="alexandria_uri">http://www.labs.bt.com/projects/agents/zeus/licence.htm</a></em>
+<a name="7" href="#7">7</a>   <em class="comment">* </em>
+<a name="8" href="#8">8</a>   <em class="comment">* Except as stated in Clause 7 of the Licence, software distributed under the</em>
+<a name="9" href="#9">9</a>   <em class="comment">* Licence is distributed WITHOUT WARRANTY OF ANY KIND, either express or </em>
+<a name="10" href="#10">10</a>  <em class="comment">* implied. See the Licence for the specific language governing rights and </em>
+<a name="11" href="#11">11</a>  <em class="comment">* limitations under the Licence.</em>
+<a name="12" href="#12">12</a>  <em class="comment">* </em>
+<a name="13" href="#13">13</a>  <em class="comment">* The Original Code is within the package zeus.*.</em>
+<a name="14" href="#14">14</a>  <em class="comment">* The Initial Developer of the Original Code is British Telecommunications</em>
+<a name="15" href="#15">15</a>  <em class="comment">* public limited company, whose registered office is at 81 Newgate Street, </em>
+<a name="16" href="#16">16</a>  <em class="comment">* London, EC1A 7AJ, England. Portions created by British Telecommunications </em>
+<a name="17" href="#17">17</a>  <em class="comment">* public limited company are Copyright 1996-9. All Rights Reserved.</em>
+<a name="18" href="#18">18</a>  <em class="comment">* </em>
+<a name="19" href="#19">19</a>  <em class="comment">* THIS NOTICE MUST BE INCLUDED ON ANY COPY OF THIS FILE</em>
+<a name="20" href="#20">20</a>  <em class="comment">*/</em>
+<a name="21" href="#21">21</a>  
+<a name="22" href="#22">22</a>  
+<a name="23" href="#23">23</a>  
+<a name="24" href="#24">24</a>  <strong>package</strong> <a href="../../../../zeus/generator/task/rulebase/package-summary.html">zeus.generator.task.rulebase</a>;
+<a name="25" href="#25">25</a>  
+<a name="26" href="#26">26</a>  <strong>import</strong> javax.swing.*;
+<a name="27" href="#27">27</a>  <strong>import</strong> javax.swing.table.*;
+<a name="28" href="#28">28</a>  <strong>import</strong> javax.swing.event.*;
+<a name="29" href="#29">29</a>  <strong>import</strong> javax.swing.border.* ;
+<a name="30" href="#30">30</a>  <strong>import</strong> javax.swing.text.*;
+<a name="31" href="#31">31</a>  <strong>import</strong> java.awt.*;
+<a name="32" href="#32">32</a>  <strong>import</strong> java.awt.event.*;
+<a name="33" href="#33">33</a>  <strong>import</strong> java.util.*;
+<a name="34" href="#34">34</a>  <strong>import</strong> java.io.*;
+<a name="35" href="#35">35</a>  
+<a name="36" href="#36">36</a>  <strong>import</strong> <a href="../../../../zeus/util/package-summary.html">zeus.util</a>.*;
+<a name="37" href="#37">37</a>  <strong>import</strong> <a href="../../../../zeus/concepts/package-summary.html">zeus.concepts</a>.*;
+<a name="38" href="#38">38</a>  <strong>import</strong> <a href="../../../../zeus/generator/util/package-summary.html">zeus.generator.util</a>.*;
+<a name="39" href="#39">39</a>  <strong>import</strong> zeus.rete.Action;
+<a name="40" href="#40">40</a>  <strong>import</strong> <a href="../../../../zeus/gui/fields/package-summary.html">zeus.gui.fields</a>.*;
+<a name="41" href="#41">41</a>  
+<a name="42" href="#42">42</a>  
+<a name="43" href="#43">43</a>  <strong>public</strong> <strong>class</strong> <a href="../../../../zeus/generator/task/rulebase/RuleUI.html">RuleUI</a>  <strong>extends</strong> JPanel
+<a name="44" href="#44">44</a>                       implements  ListSelectionListener,
+<a name="45" href="#45">45</a>                                   FocusListener,
+<a name="46" href="#46">46</a>                                   ActionListener  {
+<a name="47" href="#47">47</a>  
+<a name="48" href="#48">48</a>     <strong>private</strong> JPanel  contentPane;
+<a name="49" href="#49">49</a>     <strong>private</strong> JTable  ruleTable;
+<a name="50" href="#50">50</a>     <strong>private</strong> JScrollPane ruleSP,lhsSP,rhsSP;
+<a name="51" href="#51">51</a>     <strong>private</strong> JTextArea lhsArea,rhsArea;
+<a name="52" href="#52">52</a>     <strong>private</strong> <a href="../../../../zeus/generator/task/rulebase/RuleModel.html">RuleModel</a> ruleBuffer;
+<a name="53" href="#53">53</a>     <strong>private</strong> JComboBox predicateList, actionList, functionList;
+<a name="54" href="#54">54</a>     <strong>private</strong> JButton predicateBtn, actionBtn, functionBtn;
+<a name="55" href="#55">55</a>     <strong>protected</strong> <a href="../../../../zeus/generator/util/FactPanel.html">FactPanel</a> factPanel;
+<a name="56" href="#56">56</a>     <strong>protected</strong> <strong>boolean</strong> lhsFocus, rhsFocus;
+<a name="57" href="#57">57</a>     <strong>protected</strong> JMenuItem fsave, fexit;
+<a name="58" href="#58">58</a>     <strong>protected</strong> <a href="../../../../zeus/concepts/OntologyDb.html">OntologyDb</a> db = <strong>null</strong>;
+<a name="59" href="#59">59</a>     <strong>protected</strong> <a href="../../../../zeus/concepts/ReteKB.html">ReteKB</a> kb = <strong>null</strong>;
+<a name="60" href="#60">60</a>  
+<a name="61" href="#61">61</a>     <strong>private</strong> <strong>final</strong> <strong>int</strong> WIDTH = 640;
+<a name="62" href="#62">62</a>     <strong>private</strong> <strong>final</strong> <strong>int</strong> HEIGHT = 480;
+<a name="63" href="#63">63</a>     <strong>private</strong> <strong>final</strong> <strong>int</strong> LWIDTH = 300;
+<a name="64" href="#64">64</a>     <strong>private</strong> <strong>final</strong> <strong>int</strong> LHEIGHT = 250;
+<a name="65" href="#65">65</a>     <strong>private</strong>  JFrame frame;
+<a name="66" href="#66">66</a>  
+<a name="67" href="#67">67</a>     <strong>protected</strong> String[] precedenceWds = zeus.rete.Action.types;
+<a name="68" href="#68">68</a>     <strong>protected</strong> String[] booleanWds = {<span class="string">"not"</span>,<span class="string">"test"</span>};
+<a name="69" href="#69">69</a>     <strong>protected</strong> Vector   methodValues;
+<a name="70" href="#70">70</a>  
+<a name="71" href="#71">71</a>     <strong>protected</strong> SimpleAttributeSet boolFmt, preFmt, methFmt, plainFmt;
+<a name="72" href="#72">72</a>  
+<a name="73" href="#73">73</a>  <em class="comment">//---------------------------------------------------------------------------</em>
+<a name="74" href="#74">74</a>        <strong>public</strong> <a href="../../../../zeus/generator/task/rulebase/RuleUI.html">RuleUI</a>(<a href="../../../../zeus/concepts/OntologyDb.html">OntologyDb</a> db, <a href="../../../../zeus/generator/util/Editor.html">Editor</a> editor,
+<a name="75" href="#75">75</a>                      <a href="../../../../zeus/concepts/ReteKB.html">ReteKB</a> kb, Vector methodValues) {
+<a name="76" href="#76">76</a>  
+<a name="77" href="#77">77</a>           <strong>this</strong>.methodValues = methodValues;
+<a name="78" href="#78">78</a>           <strong>this</strong>.db = db;
+<a name="79" href="#79">79</a>           <strong>this</strong>.kb = kb;
+<a name="80" href="#80">80</a>  
+<a name="81" href="#81">81</a>           ruleBuffer = <strong>new</strong> <a href="../../../../zeus/generator/task/rulebase/RuleModel.html">RuleModel</a>(kb,db);
+<a name="82" href="#82">82</a>           ruleBuffer.addChangeListener(editor);
+<a name="83" href="#83">83</a>  
+<a name="84" href="#84">84</a>           GridBagLayout gridBagLayout = <strong>new</strong> GridBagLayout();
+<a name="85" href="#85">85</a>           GridBagConstraints gbc = <strong>new</strong> GridBagConstraints();
+<a name="86" href="#86">86</a>           setLayout(gridBagLayout);
+<a name="87" href="#87">87</a>           setBackground(Color.lightGray);
+<a name="88" href="#88">88</a>           setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
+<a name="89" href="#89">89</a>  
+<a name="90" href="#90">90</a>  	 <em class="comment">// Add the control panel</em>
+<a name="91" href="#91">91</a>           <a href="../../../../zeus/generator/util/ControlPanel.html">ControlPanel</a> controlPane =
+<a name="92" href="#92">92</a>              <strong>new</strong> <a href="../../../../zeus/generator/util/ControlPanel.html">ControlPanel</a>(editor,<span class="string">"Rulebase Editor"</span>,<strong>true</strong>,<strong>true</strong>);
+<a name="93" href="#93">93</a>           gbc.gridwidth = GridBagConstraints.REMAINDER;
+<a name="94" href="#94">94</a>           gbc.anchor = GridBagConstraints.NORTHWEST;
+<a name="95" href="#95">95</a>           gbc.fill = GridBagConstraints.HORIZONTAL;
+<a name="96" href="#96">96</a>           gbc.insets = <strong>new</strong> Insets(8,8,8,8);
+<a name="97" href="#97">97</a>           gbc.weightx = gbc.weighty = 0;
+<a name="98" href="#98">98</a>           gridBagLayout.setConstraints(controlPane,gbc);
+<a name="99" href="#99">99</a>           add(controlPane);
+<a name="100" href="#100">100</a> 
+<a name="101" href="#101">101</a>          <em class="comment">// Add the panel that will contain the task's nodes</em>
+<a name="102" href="#102">102</a>          JPanel dataPanel = <strong>new</strong> JPanel();
+<a name="103" href="#103">103</a>          gbc.gridwidth = GridBagConstraints.REMAINDER;
+<a name="104" href="#104">104</a>          gbc.anchor = GridBagConstraints.NORTHWEST;
+<a name="105" href="#105">105</a>          gbc.fill = GridBagConstraints.BOTH;
+<a name="106" href="#106">106</a>          gbc.weightx = gbc.weighty = 1;
+<a name="107" href="#107">107</a>          gbc.insets = <strong>new</strong> Insets(8,8,8,8);
+<a name="108" href="#108">108</a>          gridBagLayout.setConstraints(dataPanel,gbc);
+<a name="109" href="#109">109</a>          add(dataPanel);
+<a name="110" href="#110">110</a> 
+<a name="111" href="#111">111</a>          gridBagLayout = <strong>new</strong> GridBagLayout();
+<a name="112" href="#112">112</a>          gbc = <strong>new</strong> GridBagConstraints();
+<a name="113" href="#113">113</a>          dataPanel.setLayout(gridBagLayout);
+<a name="114" href="#114">114</a>          dataPanel.setBackground(Color.lightGray);
+<a name="115" href="#115">115</a> <em class="comment">//         dataPanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));</em>
+<a name="116" href="#116">116</a> 
+<a name="117" href="#117">117</a>          JToolBar toolbar = <strong>new</strong> RuleToolBar();
+<a name="118" href="#118">118</a> 	 gbc.gridwidth = GridBagConstraints.REMAINDER;
+<a name="119" href="#119">119</a>          gbc.anchor = GridBagConstraints.NORTHWEST;
+<a name="120" href="#120">120</a>          gbc.fill = GridBagConstraints.NONE;
+<a name="121" href="#121">121</a>          gbc.insets = <strong>new</strong> Insets(0,8,0,0);
+<a name="122" href="#122">122</a>          gbc.weightx = gbc.weighty = 0;
+<a name="123" href="#123">123</a>          gridBagLayout.setConstraints(toolbar,gbc);
+<a name="124" href="#124">124</a>          dataPanel.add(toolbar);
+<a name="125" href="#125">125</a> 
+<a name="126" href="#126">126</a>      <em class="comment">// Create data info area     </em>
+<a name="127" href="#127">127</a>          TableColumnModel tm = <strong>new</strong> DefaultTableColumnModel();     
+<a name="128" href="#128">128</a>          TableColumn column = <strong>new</strong> TableColumn(RuleModel.RULE,12);
+<a name="129" href="#129">129</a>          column.setHeaderValue(ruleBuffer.getColumnName(RuleModel.RULE));
+<a name="130" href="#130">130</a>          tm.addColumn(column);
+<a name="131" href="#131">131</a>          column = <strong>new</strong> TableColumn(RuleModel.PRIORITY,12,     
+<a name="132" href="#132">132</a>             <strong>new</strong> DefaultTableCellRenderer(),
+<a name="133" href="#133">133</a>             <strong>new</strong> DefaultCellEditor(<strong>new</strong> <a href="../../../../zeus/gui/fields/WholeNumberField.html">WholeNumberField</a>(zeus.rete.Rule.MIN_SALIENCE,
+<a name="134" href="#134">134</a>                zeus.rete.Rule.MAX_SALIENCE)));
+<a name="135" href="#135">135</a>          column.setHeaderValue(ruleBuffer.getColumnName(RuleModel.PRIORITY));
+<a name="136" href="#136">136</a>          tm.addColumn(column);
+<a name="137" href="#137">137</a>     
+<a name="138" href="#138">138</a>          ruleTable = <strong>new</strong> JTable(ruleBuffer,tm);
+<a name="139" href="#139">139</a>          ruleTable.getTableHeader().setReorderingAllowed(false);
+<a name="140" href="#140">140</a>          ruleTable.setColumnSelectionAllowed(false);
+<a name="141" href="#141">141</a> 
+<a name="142" href="#142">142</a>          ruleSP = <strong>new</strong> JScrollPane(ruleTable);
+<a name="143" href="#143">143</a>          ruleSP.setPreferredSize(<strong>new</strong> Dimension(400,150));
+<a name="144" href="#144">144</a>          ruleTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+<a name="145" href="#145">145</a>          ruleTable.getSelectionModel().addListSelectionListener(<strong>this</strong>);
+<a name="146" href="#146">146</a> 
+<a name="147" href="#147">147</a>          gbc.gridwidth = GridBagConstraints.REMAINDER;
+<a name="148" href="#148">148</a>          gbc.anchor = GridBagConstraints.NORTHWEST;
+<a name="149" href="#149">149</a>          gbc.fill = GridBagConstraints.HORIZONTAL;
+<a name="150" href="#150">150</a>          gbc.weightx = gbc.weighty = 0;
+<a name="151" href="#151">151</a>          gbc.insets = <strong>new</strong> Insets(8,8,0,8);
+<a name="152" href="#152">152</a>          gridBagLayout.setConstraints(ruleSP,gbc);
+<a name="153" href="#153">153</a>          dataPanel.add(ruleSP);
+<a name="154" href="#154">154</a> 
+<a name="155" href="#155">155</a>          JPanel panel = getIfThenPanel();
+<a name="156" href="#156">156</a> 	 gbc.gridwidth = 1;
+<a name="157" href="#157">157</a>          gbc.anchor = GridBagConstraints.NORTHWEST;
+<a name="158" href="#158">158</a>          gbc.fill = GridBagConstraints.BOTH;
+<a name="159" href="#159">159</a>          gbc.weightx = gbc.weighty = 1;
+<a name="160" href="#160">160</a>          gbc.insets = <strong>new</strong> Insets(8,8,8,0);
+<a name="161" href="#161">161</a>          gridBagLayout.setConstraints(panel,gbc);
+<a name="162" href="#162">162</a>          dataPanel.add(panel);
+<a name="163" href="#163">163</a> 
+<a name="164" href="#164">164</a>          panel = getUtilitiesPanel();
+<a name="165" href="#165">165</a> 	 gbc.gridwidth = GridBagConstraints.REMAINDER;
+<a name="166" href="#166">166</a>          gbc.anchor = GridBagConstraints.NORTHWEST;
+<a name="167" href="#167">167</a>          gbc.fill = GridBagConstraints.VERTICAL;
+<a name="168" href="#168">168</a>          gbc.weightx = gbc.weighty = 0;
+<a name="169" href="#169">169</a>          gbc.insets = <strong>new</strong> Insets(8,8,8,8);
+<a name="170" href="#170">170</a>          gridBagLayout.setConstraints(panel,gbc);
+<a name="171" href="#171">171</a>          dataPanel.add(panel);
+<a name="172" href="#172">172</a> 
+<a name="173" href="#173">173</a> 	 lhsFocus = false;
+<a name="174" href="#174">174</a>          rhsFocus  = false;
+<a name="175" href="#175">175</a> <em class="comment">//         setTextFormats();</em>
+<a name="176" href="#176">176</a> <em class="comment">//         setPreferredSize(new Dimension(WIDTH,HEIGHT));</em>
+<a name="177" href="#177">177</a>       }
+<a name="178" href="#178">178</a> 
+<a name="179" href="#179">179</a> <em class="comment">//---------------------------------------------------------------------------</em>
+<a name="180" href="#180">180</a>       <strong>public</strong> <strong>void</strong> save() {
+<a name="181" href="#181">181</a> 	 kb.setRules(ruleBuffer.getData());
+<a name="182" href="#182">182</a>       }
+<a name="183" href="#183">183</a> <em class="comment">//---------------------------------------------------------------------------</em>
+<a name="184" href="#184">184</a>       <strong>void</strong> setTextFormats(){
+<a name="185" href="#185">185</a>           boolFmt = <strong>new</strong> SimpleAttributeSet();
+<a name="186" href="#186">186</a>           StyleConstants.setForeground(boolFmt,Color.red);
+<a name="187" href="#187">187</a>           preFmt = <strong>new</strong> SimpleAttributeSet();
+<a name="188" href="#188">188</a>           StyleConstants.setForeground(preFmt,Color.blue);
+<a name="189" href="#189">189</a>           methFmt = <strong>new</strong> SimpleAttributeSet();
+<a name="190" href="#190">190</a>           StyleConstants.setForeground(methFmt,Color.green);
+<a name="191" href="#191">191</a>           plainFmt = <strong>new</strong> SimpleAttributeSet();
+<a name="192" href="#192">192</a>           StyleConstants.setForeground(plainFmt,Color.black);
+<a name="193" href="#193">193</a> 
+<a name="194" href="#194">194</a>       }
+<a name="195" href="#195">195</a> <em class="comment">//---------------------------------------------------------------------------</em>
+<a name="196" href="#196">196</a>       <strong>void</strong> createFrame(){
+<a name="197" href="#197">197</a>         frame = <strong>new</strong> JFrame(<span class="string">"Rule Editor"</span>);
+<a name="198" href="#198">198</a>         frame.getContentPane().add(<strong>this</strong>);
+<a name="199" href="#199">199</a>         frame.addWindowListener(
+<a name="200" href="#200">200</a>            <strong>new</strong> WindowAdapter() {
+<a name="201" href="#201">201</a>               <strong>public</strong> <strong>void</strong> windowClosing(WindowEvent evt) { System.exit(0); }
+<a name="202" href="#202">202</a>            }
+<a name="203" href="#203">203</a>         );
+<a name="204" href="#204">204</a>         JMenuBar menuBar = <strong>new</strong> JMenuBar();
+<a name="205" href="#205">205</a>         JMenu fMenu = <strong>new</strong> JMenu(<span class="string">"File"</span>);
+<a name="206" href="#206">206</a>         menuBar.add(fMenu);
+<a name="207" href="#207">207</a>         fsave = <strong>new</strong> JMenuItem(<span class="string">"Save"</span>);
+<a name="208" href="#208">208</a>         fsave.addActionListener(<strong>this</strong>);
+<a name="209" href="#209">209</a>         fMenu.add(fsave);
+<a name="210" href="#210">210</a>         fexit = <strong>new</strong> JMenuItem(<span class="string">"Exit"</span>);
+<a name="211" href="#211">211</a>         fexit.addActionListener(<strong>this</strong>);
+<a name="212" href="#212">212</a>         fMenu.add(fexit);
+<a name="213" href="#213">213</a>         frame.setJMenuBar(menuBar);
+<a name="214" href="#214">214</a>         frame.pack();
+<a name="215" href="#215">215</a>         frame.show();
+<a name="216" href="#216">216</a>      }
+<a name="217" href="#217">217</a> 
+<a name="218" href="#218">218</a> <em class="comment">//---------------------------------------------------------------------------</em>
+<a name="219" href="#219">219</a>       <strong>class</strong> RuleToolBar <strong>extends</strong> JToolBar implements ActionListener{
+<a name="220" href="#220">220</a>         <strong>protected</strong> JButton       newBtn;
+<a name="221" href="#221">221</a>         <strong>protected</strong> JButton       deleteBtn;
+<a name="222" href="#222">222</a> 
+<a name="223" href="#223">223</a>         <strong>public</strong> RuleToolBar() {
+<a name="224" href="#224">224</a>           setBackground(java.awt.Color.lightGray);
+<a name="225" href="#225">225</a>           setBorder( <strong>new</strong> BevelBorder(BevelBorder.LOWERED ) );
+<a name="226" href="#226">226</a>           setFloatable(false);
+<a name="227" href="#227">227</a> 
+<a name="228" href="#228">228</a>           String sep = System.getProperty(<span class="string">"file.separator"</span>);
+<a name="229" href="#229">229</a>           String path = SystemProps.getProperty(<span class="string">"gif.dir"</span>) + <span class="string">"generator"</span> + sep;
+<a name="230" href="#230">230</a> 
+<a name="231" href="#231">231</a>           <em class="comment">// New Button</em>
+<a name="232" href="#232">232</a>           <strong>new</strong>Btn = <strong>new</strong> JButton(<strong>new</strong> ImageIcon(path + <span class="string">"new1.gif"</span>));
+<a name="233" href="#233">233</a>       	  <strong>new</strong>Btn.setMargin(<strong>new</strong> Insets(0,0,0,0));
+<a name="234" href="#234">234</a>           add(newBtn);
+<a name="235" href="#235">235</a>           newBtn.setToolTipText(<span class="string">"New rule"</span>);
+<a name="236" href="#236">236</a>           newBtn.addActionListener(<strong>this</strong>);
+<a name="237" href="#237">237</a> 
+<a name="238" href="#238">238</a>           <em class="comment">// Delete Button</em>
+<a name="239" href="#239">239</a>           deleteBtn = <strong>new</strong> JButton(<strong>new</strong> ImageIcon(path + <span class="string">"delete1.gif"</span>));
+<a name="240" href="#240">240</a> 	  deleteBtn.setMargin(<strong>new</strong> Insets(0,0,0,0));
+<a name="241" href="#241">241</a>           add(deleteBtn);
+<a name="242" href="#242">242</a>           deleteBtn.setToolTipText(<span class="string">"Delete"</span>);
+<a name="243" href="#243">243</a>           deleteBtn.addActionListener(<strong>this</strong>);
+<a name="244" href="#244">244</a> 
+<a name="245" href="#245">245</a>          }
+<a name="246" href="#246">246</a>           <strong>public</strong> <strong>void</strong> actionPerformed(ActionEvent e)  {
+<a name="247" href="#247">247</a>             Object src = e.getSource();
+<a name="248" href="#248">248</a>             <strong>if</strong> ( src == newBtn ) {
+<a name="249" href="#249">249</a>                ruleBuffer.addRule();
+<a name="250" href="#250">250</a>             }
+<a name="251" href="#251">251</a>             <strong>else</strong> <strong>if</strong> ( src == deleteBtn ) {
+<a name="252" href="#252">252</a>               <strong>int</strong> row = ruleTable.getSelectedRow();
+<a name="253" href="#253">253</a>               <strong>if</strong> (row != -1 &amp;&amp; row &lt;= ruleBuffer.getRowCount())
+<a name="254" href="#254">254</a>                  ruleBuffer.deleteRule(row);
+<a name="255" href="#255">255</a>               ruleTable.clearSelection();
+<a name="256" href="#256">256</a>               lhsArea.setText(<span class="string">""</span>);
+<a name="257" href="#257">257</a>               rhsArea.setText(<span class="string">""</span>);
+<a name="258" href="#258">258</a>             }
+<a name="259" href="#259">259</a>           }
+<a name="260" href="#260">260</a> 
+<a name="261" href="#261">261</a>       }
+<a name="262" href="#262">262</a> <em class="comment">//---------------------------------------------------------------------------</em>
+<a name="263" href="#263">263</a>       JPanel getUtilitiesPanel() {
+<a name="264" href="#264">264</a>          JPanel panel = <strong>new</strong> JPanel();
+<a name="265" href="#265">265</a>          GridBagLayout gridBagLayout = <strong>new</strong> GridBagLayout();
+<a name="266" href="#266">266</a>          GridBagConstraints gbc = <strong>new</strong> GridBagConstraints();
+<a name="267" href="#267">267</a>          panel.setLayout(gridBagLayout);
+<a name="268" href="#268">268</a>          panel.setBackground(Color.lightGray);
+<a name="269" href="#269">269</a> <em class="comment">//         panel.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));</em>
+<a name="270" href="#270">270</a> 
+<a name="271" href="#271">271</a>          functionBtn = <strong>new</strong> JButton(<span class="string">"Insert Function"</span>);
+<a name="272" href="#272">272</a>          functionBtn.addActionListener(<strong>this</strong>);
+<a name="273" href="#273">273</a>          functionBtn.setToolTipText(<span class="string">"Click to insert selected function"</span>);
+<a name="274" href="#274">274</a> 	 gbc.gridwidth = 1;
+<a name="275" href="#275">275</a>          gbc.anchor = GridBagConstraints.WEST;
+<a name="276" href="#276">276</a>          gbc.fill = GridBagConstraints.HORIZONTAL;
+<a name="277" href="#277">277</a>          gbc.insets = <strong>new</strong> Insets(8,8,0,0);
+<a name="278" href="#278">278</a>          gridBagLayout.setConstraints(functionBtn,gbc);
+<a name="279" href="#279">279</a>          panel.add(functionBtn);
+<a name="280" href="#280">280</a> 
+<a name="281" href="#281">281</a>          functionList = <strong>new</strong> JComboBox(methodValues) {
+<a name="282" href="#282">282</a>             <strong>public</strong> <strong>void</strong> contentsChanged(ListDataEvent e) {
+<a name="283" href="#283">283</a>                selectedItemReminder = <strong>null</strong>;
+<a name="284" href="#284">284</a>                <strong>super</strong>.contentsChanged(e);
+<a name="285" href="#285">285</a>             }
+<a name="286" href="#286">286</a>          };
+<a name="287" href="#287">287</a>          functionList.addActionListener(<strong>this</strong>);
+<a name="288" href="#288">288</a>          functionList.setForeground(Color.green);
+<a name="289" href="#289">289</a> 	 gbc.gridwidth = GridBagConstraints.REMAINDER;
+<a name="290" href="#290">290</a>          gbc.anchor = GridBagConstraints.WEST;
+<a name="291" href="#291">291</a>          gbc.fill = GridBagConstraints.HORIZONTAL;
+<a name="292" href="#292">292</a>          gbc.insets = <strong>new</strong> Insets(8,8,0,0);
+<a name="293" href="#293">293</a>          gridBagLayout.setConstraints(functionList,gbc);
+<a name="294" href="#294">294</a>          panel.add(functionList);
+<a name="295" href="#295">295</a> 
+<a name="296" href="#296">296</a>          predicateBtn = <strong>new</strong> JButton(<span class="string">"Insert Predicate"</span>);
+<a name="297" href="#297">297</a>          predicateBtn.addActionListener(<strong>this</strong>);
+<a name="298" href="#298">298</a>          predicateBtn.setToolTipText(<span class="string">"Click to insert selected predicate"</span>);
+<a name="299" href="#299">299</a> 	 gbc.gridwidth = 1;
+<a name="300" href="#300">300</a>          gbc.anchor = GridBagConstraints.WEST;
+<a name="301" href="#301">301</a>          gbc.fill = GridBagConstraints.HORIZONTAL;
+<a name="302" href="#302">302</a>          gbc.insets = <strong>new</strong> Insets(8,8,0,0);
+<a name="303" href="#303">303</a>          gridBagLayout.setConstraints(predicateBtn,gbc);
+<a name="304" href="#304">304</a>          panel.add(predicateBtn);
+<a name="305" href="#305">305</a> 
+<a name="306" href="#306">306</a>          predicateList = <strong>new</strong> JComboBox(booleanWds) {
+<a name="307" href="#307">307</a>             <strong>public</strong> <strong>void</strong> contentsChanged(ListDataEvent e) {
+<a name="308" href="#308">308</a>                selectedItemReminder = <strong>null</strong>;
+<a name="309" href="#309">309</a>                <strong>super</strong>.contentsChanged(e);
+<a name="310" href="#310">310</a>             }
+<a name="311" href="#311">311</a>          };
+<a name="312" href="#312">312</a>          predicateList.addActionListener(<strong>this</strong>);
+<a name="313" href="#313">313</a>          functionList.setForeground(Color.red);
+<a name="314" href="#314">314</a> 	 gbc.gridwidth = GridBagConstraints.REMAINDER;
+<a name="315" href="#315">315</a>          gbc.anchor = GridBagConstraints.WEST;
+<a name="316" href="#316">316</a>          gbc.fill = GridBagConstraints.HORIZONTAL;
+<a name="317" href="#317">317</a>          gbc.insets = <strong>new</strong> Insets(8,8,0,0);
+<a name="318" href="#318">318</a>          gridBagLayout.setConstraints(predicateList,gbc);
+<a name="319" href="#319">319</a>          panel.add(predicateList);
+<a name="320" href="#320">320</a> 
+<a name="321" href="#321">321</a>          actionBtn = <strong>new</strong> JButton(<span class="string">"Insert Action"</span>);
+<a name="322" href="#322">322</a>          actionBtn.addActionListener(<strong>this</strong>);
+<a name="323" href="#323">323</a>          actionBtn.setToolTipText(<span class="string">"Click to insert selected action"</span>);
+<a name="324" href="#324">324</a> 	 gbc.gridwidth = 1;
+<a name="325" href="#325">325</a>          gbc.anchor = GridBagConstraints.WEST;
+<a name="326" href="#326">326</a>          gbc.fill = GridBagConstraints.HORIZONTAL;
+<a name="327" href="#327">327</a>          gbc.insets = <strong>new</strong> Insets(8,8,0,0);
+<a name="328" href="#328">328</a>          gridBagLayout.setConstraints(actionBtn,gbc);
+<a name="329" href="#329">329</a>          panel.add(actionBtn);
+<a name="330" href="#330">330</a> 
+<a name="331" href="#331">331</a>          actionList = <strong>new</strong> JComboBox(precedenceWds) {
+<a name="332" href="#332">332</a>             <strong>public</strong> <strong>void</strong> contentsChanged(ListDataEvent e) {
+<a name="333" href="#333">333</a>                selectedItemReminder = <strong>null</strong>;
+<a name="334" href="#334">334</a>                <strong>super</strong>.contentsChanged(e);
+<a name="335" href="#335">335</a>             }
+<a name="336" href="#336">336</a>          };
+<a name="337" href="#337">337</a>          actionList.addActionListener(<strong>this</strong>);
+<a name="338" href="#338">338</a>          functionList.setForeground(Color.blue);
+<a name="339" href="#339">339</a> 	 gbc.gridwidth = GridBagConstraints.REMAINDER;
+<a name="340" href="#340">340</a>          gbc.anchor = GridBagConstraints.WEST;
+<a name="341" href="#341">341</a>          gbc.fill = GridBagConstraints.HORIZONTAL;
+<a name="342" href="#342">342</a>          gbc.insets = <strong>new</strong> Insets(8,8,0,0);
+<a name="343" href="#343">343</a>          gridBagLayout.setConstraints(actionList,gbc);
+<a name="344" href="#344">344</a>          panel.add(actionList);
+<a name="345" href="#345">345</a> 
+<a name="346" href="#346">346</a> 	 factPanel= <strong>new</strong> <a href="../../../../zeus/generator/util/FactPanel.html">FactPanel</a>(<strong>this</strong>,db);
+<a name="347" href="#347">347</a> <em class="comment">//         factPanel.setPreferredSize(new Dimension(LWIDTH,LHEIGHT+300));</em>
+<a name="348" href="#348">348</a>          factPanel.setBorder(makeBorder(<span class="string">"Ontology"</span>));
+<a name="349" href="#349">349</a> 
+<a name="350" href="#350">350</a> 	 gbc.gridwidth = GridBagConstraints.REMAINDER;
+<a name="351" href="#351">351</a>          gbc.anchor = GridBagConstraints.NORTHWEST;
+<a name="352" href="#352">352</a>          gbc.fill = GridBagConstraints.BOTH;
+<a name="353" href="#353">353</a>          gbc.weightx = gbc.weighty = 1;
+<a name="354" href="#354">354</a>          gbc.insets = <strong>new</strong> Insets(8,0,0,0);
+<a name="355" href="#355">355</a>          gridBagLayout.setConstraints(factPanel,gbc);
+<a name="356" href="#356">356</a>          panel.add(factPanel);
+<a name="357" href="#357">357</a> 
+<a name="358" href="#358">358</a>          <strong>return</strong> panel;
+<a name="359" href="#359">359</a>       }
+<a name="360" href="#360">360</a> <em class="comment">//---------------------------------------------------------------------------</em>
+<a name="361" href="#361">361</a>       JTextArea getLastTextAreaWithFocus() {
+<a name="362" href="#362">362</a>           <strong>if</strong> (lhsFocus)
+<a name="363" href="#363">363</a>             <strong>return</strong> lhsArea;
+<a name="364" href="#364">364</a>           <strong>else</strong> <strong>if</strong> (rhsFocus)
+<a name="365" href="#365">365</a>             <strong>return</strong> rhsArea;
+<a name="366" href="#366">366</a>           <strong>else</strong>
+<a name="367" href="#367">367</a>             <strong>return</strong> <strong>null</strong>;
+<a name="368" href="#368">368</a>       }
+<a name="369" href="#369">369</a> <em class="comment">//---------------------------------------------------------------------------</em>
+<a name="370" href="#370">370</a>       <strong>void</strong> setFocus(JTextArea textarea){
+<a name="371" href="#371">371</a> 
+<a name="372" href="#372">372</a>            <strong>if</strong> (textarea == lhsArea) {
+<a name="373" href="#373">373</a>              lhsFocus = <strong>true</strong>;
+<a name="374" href="#374">374</a>              rhsFocus = false;
+<a name="375" href="#375">375</a>            }
+<a name="376" href="#376">376</a>            <strong>else</strong> <strong>if</strong> (textarea == rhsArea) {
+<a name="377" href="#377">377</a>              rhsFocus = <strong>true</strong>;
+<a name="378" href="#378">378</a>              lhsFocus = false;
+<a name="379" href="#379">379</a>            }
+<a name="380" href="#380">380</a>       }
+<a name="381" href="#381">381</a> <em class="comment">//---------------------------------------------------------------------------</em>
+<a name="382" href="#382">382</a>       <strong>void</strong> appendTextTo(JTextArea textarea, String text, <strong>boolean</strong> keyword){
+<a name="383" href="#383">383</a>            <strong>int</strong> pos = textarea.getCaretPosition();
+<a name="384" href="#384">384</a>            Document doc = <strong>null</strong>;
+<a name="385" href="#385">385</a> 
+<a name="386" href="#386">386</a>            <strong>if</strong> (textarea == lhsArea) {
+<a name="387" href="#387">387</a>               doc = lhsArea.getDocument();
+<a name="388" href="#388">388</a>               insert(doc,text,pos);
+<a name="389" href="#389">389</a>            }
+<a name="390" href="#390">390</a>            <strong>else</strong> <strong>if</strong> (textarea == rhsArea) {
+<a name="391" href="#391">391</a>              doc = rhsArea.getDocument();
+<a name="392" href="#392">392</a>              insert(doc,text,pos);
+<a name="393" href="#393">393</a>            }
+<a name="394" href="#394">394</a> 
+<a name="395" href="#395">395</a>            <strong>if</strong>(keyword &amp;&amp; !methodValues.contains(text))
+<a name="396" href="#396">396</a>              textarea.setCaretPosition(textarea.getCaretPosition()-1);
+<a name="397" href="#397">397</a>            <strong>else</strong> {
+<a name="398" href="#398">398</a>              textarea.setCaretPosition(textarea.getDocument().getLength());
+<a name="399" href="#399">399</a>              <strong>try</strong> {
+<a name="400" href="#400">400</a>                doc.insertString(textarea.getCaretPosition(),<span class="string">"\n"</span>,<strong>null</strong>);
+<a name="401" href="#401">401</a>              }
+<a name="402" href="#402">402</a>              <strong>catch</strong> (BadLocationException e) {
+<a name="403" href="#403">403</a> <em class="comment">//               e.printStackTrace();</em>
+<a name="404" href="#404">404</a>              }
+<a name="405" href="#405">405</a>            }
+<a name="406" href="#406">406</a>       }
+<a name="407" href="#407">407</a> <em class="comment">//---------------------------------------------------------------------------</em>
+<a name="408" href="#408">408</a>       <strong>void</strong> insert(Document doc, String text, <strong>int</strong> pos) {
+<a name="409" href="#409">409</a> 
+<a name="410" href="#410">410</a>           <strong>try</strong> {
+<a name="411" href="#411">411</a>            <strong>if</strong> (Misc.member(text,booleanWds)) {
+<a name="412" href="#412">412</a>               doc.insertString(pos,<span class="string">"("</span> + text + <span class="string">" )"</span>,<strong>null</strong>);
+<a name="413" href="#413">413</a>            }
+<a name="414" href="#414">414</a>            <strong>else</strong> <strong>if</strong> (Misc.member(text,precedenceWds)) {
+<a name="415" href="#415">415</a>               <strong>if</strong> ( text.equals(Action.types[Action.MESSAGE]) ) {
+<a name="416" href="#416">416</a>                  text += <span class="string">" "</span>;
+<a name="417" href="#417">417</a>                  <strong>for</strong>(<strong>int</strong> i = 0; i &lt; Per<strong>for</strong>mative.ATTRIBUTE_TYPES.length; i++ )
+<a name="418" href="#418">418</a>                     text += <span class="string">"("</span> + Performative.ATTRIBUTE_TYPES[i] + <span class="string">" "</span> +
+<a name="419" href="#419">419</a> 		             Fact.V_STR + db.GenSym().plainId(<span class="string">"var"</span>) + <span class="string">")"</span>;
+<a name="420" href="#420">420</a>                  doc.insertString(pos,<span class="string">"("</span> + text + <span class="string">")"</span>,<strong>null</strong>);
+<a name="421" href="#421">421</a>               }
+<a name="422" href="#422">422</a>               <strong>else</strong> <strong>if</strong> ( text.equals(Action.types[Action.ACHIEVE]) ||
+<a name="423" href="#423">423</a>                         text.equals(Action.types[Action.BUY]) ||
+<a name="424" href="#424">424</a>                         text.equals(Action.types[Action.SELL]) ) {
+<a name="425" href="#425">425</a>                  text += <span class="string">" "</span>;
+<a name="426" href="#426">426</a>                  <strong>for</strong>(<strong>int</strong> i = 0; i &lt; OntologyDb.GOAL_ATTRIBUTES.length; i++ )
+<a name="427" href="#427">427</a>                     text += <span class="string">"("</span> + OntologyDb.GOAL_ATTRIBUTES[i] + <span class="string">" "</span> +
+<a name="428" href="#428">428</a> 		             Fact.V_STR + db.GenSym().plainId(<span class="string">"var"</span>) + <span class="string">")"</span>;
+<a name="429" href="#429">429</a>                  doc.insertString(pos,<span class="string">"("</span> + text + <span class="string">")"</span>,<strong>null</strong>);
+<a name="430" href="#430">430</a>               }
+<a name="431" href="#431">431</a>               <strong>else</strong> <strong>if</strong> ( text.equals(Action.types[Action.IF]) )
+<a name="432" href="#432">432</a>                   doc.insertString(pos,<span class="string">"("</span> + text + <span class="string">"  \n then\n\n else\n\n)"</span>,<strong>null</strong>);
+<a name="433" href="#433">433</a>               <strong>else</strong> <strong>if</strong> ( text.equals(Action.types[Action.WHILE]) )
+<a name="434" href="#434">434</a>                   doc.insertString(pos,<span class="string">"("</span> + text + <span class="string">"  \n do\n\n)"</span>,<strong>null</strong>);
+<a name="435" href="#435">435</a>               <strong>else</strong>
+<a name="436" href="#436">436</a>                  doc.insertString(pos,<span class="string">"("</span> + text + <span class="string">" )"</span>,<strong>null</strong>);
+<a name="437" href="#437">437</a>            }
+<a name="438" href="#438">438</a>            <strong>else</strong> <strong>if</strong> (methodValues.contains(text))
+<a name="439" href="#439">439</a>               doc.insertString(pos,text,<strong>null</strong>);
+<a name="440" href="#440">440</a>            <strong>else</strong> {
+<a name="441" href="#441">441</a>               doc.insertString(pos,text,<strong>null</strong>);
+<a name="442" href="#442">442</a>            }
+<a name="443" href="#443">443</a>           }
+<a name="444" href="#444">444</a>           <strong>catch</strong> (BadLocationException e) {
+<a name="445" href="#445">445</a>           }
+<a name="446" href="#446">446</a>       }
+<a name="447" href="#447">447</a> 
+<a name="448" href="#448">448</a> <em class="comment">//---------------------------------------------------------------------------</em>
+<a name="449" href="#449">449</a>       <strong>void</strong> appendTextTo(String text){
+<a name="450" href="#450">450</a>          JTextArea textarea = getLastTextAreaWithFocus();
+<a name="451" href="#451">451</a>          <strong>if</strong> (textarea != <strong>null</strong>) {
+<a name="452" href="#452">452</a>              appendTextTo(textarea,text,false);
+<a name="453" href="#453">453</a>          }
+<a name="454" href="#454">454</a>       }
+<a name="455" href="#455">455</a>       <strong>public</strong> <strong>void</strong> actionPerformed(ActionEvent e){
+<a name="456" href="#456">456</a>          Object source = e.getSource();
+<a name="457" href="#457">457</a>          String value = <strong>null</strong>;
+<a name="458" href="#458">458</a>          JTextArea textarea;
+<a name="459" href="#459">459</a> 
+<a name="460" href="#460">460</a>          <strong>if</strong> (source == fsave) {
+<a name="461" href="#461">461</a>             writeRulesToFile();
+<a name="462" href="#462">462</a>          }
+<a name="463" href="#463">463</a>          <strong>else</strong> <strong>if</strong> (source == fexit) {
+<a name="464" href="#464">464</a>             System.exit(0);
+<a name="465" href="#465">465</a>          }
+<a name="466" href="#466">466</a>          <strong>else</strong> <strong>if</strong> ( source == predicateList || source == predicateBtn ||
+<a name="467" href="#467">467</a> 	           source == functionList  || source == functionBtn  ||
+<a name="468" href="#468">468</a> 		   source == actionList    || source == actionBtn ) {
+<a name="469" href="#469">469</a>             textarea = getLastTextAreaWithFocus();
+<a name="470" href="#470">470</a>             <strong>if</strong> (textarea != <strong>null</strong>) {
+<a name="471" href="#471">471</a>                <strong>if</strong> (source == predicateList || source == predicateBtn )
+<a name="472" href="#472">472</a>                   value = (String)predicateList.getSelectedItem();
+<a name="473" href="#473">473</a>                <strong>else</strong> <strong>if</strong> (source == actionList || source == actionBtn )
+<a name="474" href="#474">474</a>                   value = (String)actionList.getSelectedItem();
+<a name="475" href="#475">475</a>                <strong>else</strong> <strong>if</strong> (source == functionList || source == functionBtn )
+<a name="476" href="#476">476</a>                   value = (String)functionList.getSelectedItem();
+<a name="477" href="#477">477</a>                <strong>if</strong> ( value != <strong>null</strong>) {
+<a name="478" href="#478">478</a>                  <strong>if</strong> (Misc.member(value,precedenceWds) &amp;&amp; textarea != rhsArea)
+<a name="479" href="#479">479</a>                     <strong>return</strong>;
+<a name="480" href="#480">480</a>                  appendTextTo(textarea,value,<strong>true</strong>);
+<a name="481" href="#481">481</a>               }
+<a name="482" href="#482">482</a>             }
+<a name="483" href="#483">483</a>          }
+<a name="484" href="#484">484</a>       }
+<a name="485" href="#485">485</a> <em class="comment">//---------------------------------------------------------------------------</em>
+<a name="486" href="#486">486</a>       <strong>public</strong> <strong>void</strong> focusGained(FocusEvent e) {
+<a name="487" href="#487">487</a>            JTextArea textarea = (JTextArea) e.getSource();
+<a name="488" href="#488">488</a>            setFocus(textarea);
+<a name="489" href="#489">489</a>       }
+<a name="490" href="#490">490</a> <em class="comment">//---------------------------------------------------------------------------</em>
+<a name="491" href="#491">491</a>       <strong>public</strong> <strong>void</strong> focusLost(FocusEvent e) {
+<a name="492" href="#492">492</a>       }
+<a name="493" href="#493">493</a> <em class="comment">//---------------------------------------------------------------------------</em>
+<a name="494" href="#494">494</a>       JPanel getIfThenPanel(){
+<a name="495" href="#495">495</a>          JPanel panel = <strong>new</strong> JPanel(<strong>new</strong> GridLayout(2,1,5,5));
+<a name="496" href="#496">496</a>          panel.setBackground(Color.lightGray);
+<a name="497" href="#497">497</a> 
+<a name="498" href="#498">498</a>          lhsArea = <strong>new</strong> JTextArea(<strong>new</strong> PlainDocument(),<span class="string">""</span>,6,80);
+<a name="499" href="#499">499</a>          lhsSP = <strong>new</strong> JScrollPane(lhsArea);
+<a name="500" href="#500">500</a>          lhsSP.setBorder(makeBorder(<span class="string">"Conditions"</span>));
+<a name="501" href="#501">501</a>          lhsArea.addFocusListener(<strong>this</strong>);
+<a name="502" href="#502">502</a>          lhsSP.setPreferredSize(<strong>new</strong> Dimension(500,100));
+<a name="503" href="#503">503</a>          panel.add(lhsSP);
+<a name="504" href="#504">504</a> 
+<a name="505" href="#505">505</a>          rhsArea = <strong>new</strong> JTextArea(<strong>new</strong> PlainDocument(),<span class="string">""</span>,6,80);
+<a name="506" href="#506">506</a>          rhsSP = <strong>new</strong> JScrollPane(rhsArea);
+<a name="507" href="#507">507</a>          rhsSP.setBorder(makeBorder(<span class="string">"Actions"</span>));
+<a name="508" href="#508">508</a>          rhsSP.setPreferredSize(<strong>new</strong> Dimension(500,100));
+<a name="509" href="#509">509</a>          rhsArea.addFocusListener(<strong>this</strong>);
+<a name="510" href="#510">510</a>          panel.add(rhsSP);
+<a name="511" href="#511">511</a> 
+<a name="512" href="#512">512</a>          lhsArea.setLineWrap(<strong>true</strong>);
+<a name="513" href="#513">513</a>          lhsArea.setWrapStyleWord(<strong>true</strong>);
+<a name="514" href="#514">514</a>          rhsArea.setLineWrap(<strong>true</strong>);
+<a name="515" href="#515">515</a>          rhsArea.setWrapStyleWord(<strong>true</strong>);
+<a name="516" href="#516">516</a> 
+<a name="517" href="#517">517</a> 	 <strong>return</strong> panel;
+<a name="518" href="#518">518</a>       }
+<a name="519" href="#519">519</a> 
+<a name="520" href="#520">520</a> <em class="comment">//---------------------------------------------------------------------------</em>
+<a name="521" href="#521">521</a>       <strong>private</strong> TitledBorder makeBorder(String title){
+<a name="522" href="#522">522</a>           TitledBorder border = (BorderFactory.createTitledBorder(title));
+<a name="523" href="#523">523</a>           border.setTitlePosition(TitledBorder.TOP);
+<a name="524" href="#524">524</a> 	  border.setTitleJustification(TitledBorder.RIGHT);
+<a name="525" href="#525">525</a> 	  border.setTitleFont(<strong>new</strong> Font(<span class="string">"Helvetica"</span>, Font.BOLD, 12));
+<a name="526" href="#526">526</a> 	  border.setTitleColor(Color.black);
+<a name="527" href="#527">527</a>           <strong>return</strong> border;
+<a name="528" href="#528">528</a>      }
+<a name="529" href="#529">529</a> 
+<a name="530" href="#530">530</a> <em class="comment">//---------------------------------------------------------------------------</em>
+<a name="531" href="#531">531</a>      <strong>void</strong> writeRulesToFile(){
+<a name="532" href="#532">532</a>          <a href="../../../../zeus/rete/Rule.html">Rule</a> rule;
+<a name="533" href="#533">533</a>          String fname;
+<a name="534" href="#534">534</a>          File f1 = <strong>null</strong>;
+<a name="535" href="#535">535</a>          String fsep = System.getProperty(<span class="string">"file.separator"</span>);
+<a name="536" href="#536">536</a>          String fdir = SystemProps.getProperty(<span class="string">"zeus.dir"</span>) + <span class="string">"rete"</span> + fsep + <span class="string">"clp"</span> + fsep;
+<a name="537" href="#537">537</a>          String image = SystemProps.getProperty(<span class="string">"gir.dir"</span>) + <span class="string">"generator"</span> + <span class="string">"kb.gif"</span>;
+<a name="538" href="#538">538</a> 
+<a name="539" href="#539">539</a>          JFileChooser chooser = <strong>new</strong> JFileChooser(<strong>new</strong> File(fdir));
+<a name="540" href="#540">540</a>          <em class="comment">//chooser.addChoosableFileType("Rule bases (*.kb)", "kb", new ImageIcon(image));</em>
+<a name="541" href="#541">541</a>          <strong>int</strong> val = chooser.showSaveDialog(frame);
+<a name="542" href="#542">542</a>          <strong>if</strong> (val == JFileChooser.APPROVE_OPTION )
+<a name="543" href="#543">543</a>           f1 = chooser.getSelectedFile();
+<a name="544" href="#544">544</a> 
+<a name="545" href="#545">545</a>          <strong>if</strong> (f1 == <strong>null</strong>) {
+<a name="546" href="#546">546</a>             JOptionPane.showMessageDialog(<strong>null</strong>,<span class="string">"File hasn't been specified"</span>,<span class="string">"Error"</span>,JOptionPane.ERROR_MESSAGE);
+<a name="547" href="#547">547</a>             <strong>return</strong>;
+<a name="548" href="#548">548</a>          }
+<a name="549" href="#549">549</a>          <strong>try</strong> {
+<a name="550" href="#550">550</a> 
+<a name="551" href="#551">551</a> 	   PrintWriter out = <strong>new</strong> PrintWriter(<strong>new</strong> FileWriter(f1));
+<a name="552" href="#552">552</a>            Vector rules = ruleBuffer.getRules();
+<a name="553" href="#553">553</a>            <strong>for</strong>(<strong>int</strong> i=0;i &lt; rules.size(); i++) {
+<a name="554" href="#554">554</a>               rule = (Rule) rules.elementAt(i);
+<a name="555" href="#555">555</a>               printRule(rule,out);
+<a name="556" href="#556">556</a>            }
+<a name="557" href="#557">557</a>            out.flush();
+<a name="558" href="#558">558</a> 	   out.close();
+<a name="559" href="#559">559</a>          }
+<a name="560" href="#560">560</a>          <strong>catch</strong>(IOException e) {
+<a name="561" href="#561">561</a> 	   e.printStackTrace();
+<a name="562" href="#562">562</a>          }
+<a name="563" href="#563">563</a>      }
+<a name="564" href="#564">564</a> <em class="comment">//---------------------------------------------------------------------------</em>
+<a name="565" href="#565">565</a>      <strong>void</strong> printRule(<a href="../../../../zeus/rete/Rule.html">Rule</a> rule, PrintWriter out) {
+<a name="566" href="#566">566</a>          out.println(<span class="string">"   ("</span> + rule.name );
+<a name="567" href="#567">567</a>          out.println();
+<a name="568" href="#568">568</a>          out.println(rule.getCondition().trim());
+<a name="569" href="#569">569</a>          out.println(<span class="string">"=>"</span>);
+<a name="570" href="#570">570</a>          out.println(rule.getConclusion().trim());
+<a name="571" href="#571">571</a>          out.println();
+<a name="572" href="#572">572</a>          out.println(<span class="string">"   )"</span>);
+<a name="573" href="#573">573</a>          out.println(); out.println();
+<a name="574" href="#574">574</a>      }
+<a name="575" href="#575">575</a> <em class="comment">//---------------------------------------------------------------------------</em>
+<a name="576" href="#576">576</a>       <strong>public</strong> <strong>void</strong> valueChanged(ListSelectionEvent e) {
+<a name="577" href="#577">577</a>           <strong>int</strong> row;
+<a name="578" href="#578">578</a>           <strong>if</strong> (e.getSource() == ruleTable.getSelectionModel() ) {
+<a name="579" href="#579">579</a>              row = ruleTable.getSelectedRow();
+<a name="580" href="#580">580</a>              <strong>if</strong> (row >= 0  &amp;&amp; row &lt; ruleBuffer.getRowCount()) {
+<a name="581" href="#581">581</a>               lhsArea.setDocument(ruleBuffer.getRule(row).getLHS());
+<a name="582" href="#582">582</a>               rhsArea.setDocument(ruleBuffer.getRule(row).getRHS());
+<a name="583" href="#583">583</a>              }
+<a name="584" href="#584">584</a>           }
+<a name="585" href="#585">585</a>       }
+<a name="586" href="#586">586</a> <em class="comment">//---------------------------------------------------------------------------</em>
+<a name="587" href="#587">587</a> }
+</pre>
+<hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
+</html>
+

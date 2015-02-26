@@ -1,0 +1,3 @@
+MonitorMaker -o pc.ont -s dns.db -range 30
+MotherBoardMaker -o pc.ont -s dns.db -range 30
+PrinterMaker -o pc.ont -s dns.db -range 30

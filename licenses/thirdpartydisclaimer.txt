@@ -1,0 +1,20 @@
+Attention.
+
+Please note that some of the files in this directory are provided for your use by third parties. We gratefully acknowledge that this code is not covered by the Zeus license, but is covered and avaliable as described below. 
+
+ant.jar is available from http://ant.apache.org/ it is provided under the terms of the license that can be found at http://ant.apache.org/license.html
+
+icu4j.jar is available from http://oss.software.ibm.com/icu4j/ it is provided under the license that can be found at http://oss.software.ibm.com/cvs/icu/~checkout~/icu/license.html
+
+gnu-regexp.jar is available from http://freshmeat.net/projects/gnu.regexp/?topic_id=809%2C849%2C857%2C852 and http://www.cacas.org/java/gnu/regexp/ it is provided under the terms of the license at http://www.gnu.org/copyleft/lesser.html
+
+jena.jar is available from the Jena project http://jena.sourceforge.com it is provided under a free BSD license. 
+
+jaxb-rt and jaxb-xjc are from the Sun JAXB framework and can be obtained as part of the Java Web Services Developer Pack.  http://java.sun.com/webservices/downloads/webservicespack.html. They are provided under the redistribution element of the license which can be viewed at the noted site.
+
+xerces.jar is part of the apache project and can be obtained from http://www.apache.org. 
+
+Other code provided as source files are compiled and packaged into the zeus.jar in order to simplify installation.
+
+
+

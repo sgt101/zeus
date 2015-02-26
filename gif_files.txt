@@ -1,0 +1,4 @@
+Agent3 = ..:agentcities_zeus:gifs:agent.gif
+Agent2 = ..:agentcities_zeus:gifs:agent.gif
+Agent1 = ..:agentcities_zeus:gifs:agent.gif
+Agent0 = ..:agentcities_zeus:gifs:agent.gif

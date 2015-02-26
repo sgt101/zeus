@@ -1,0 +1,281 @@
+options {
+  STATIC = false;
+  OPTIMIZE_TOKEN_MANAGER=false;
+  ERROR_REPORTING=false;
+  SANITY_CHECK=false;
+  FORCE_LA_CHECK=true;
+  CACHE_TOKENS=true;
+}
+
+PARSER_BEGIN(PerformativeParser)
+
+package zeus.concepts;
+
+import java.util.*;
+import java.io.*;
+import zeus.util.*;
+
+public class PerformativeParser {
+}
+
+PARSER_END(PerformativeParser)
+
+/* WHITE SPACE */
+
+SKIP :
+{
+  " "
+| "\t"
+| "\n"
+| "\r"
+| "\f"
+}
+
+/* Tokens */
+
+TOKEN: {
+
+  <LBRACKET:         "(" >
+| <RBRACKET:         ")" >
+| <ACCEPT:           "accept-proposal" >
+| <AGREE:            "agree" >
+| <CANCEL:           "cancel" >
+| <CFP:              "cfp" >
+| <CONFIRM:          "confirm" >
+| <DISCONFRIM:       "disconfirm"  >
+| <FAILURE:          "failure"  >
+| <INFORM:           "inform" >
+| <INFORM_IF:        "inform-if">
+| <INFORM_REF:       "inform-ref" >
+| <NOT_UNDERSTOOD:   "not-understood" >
+| <PROPOSE:          "propose" >
+| <QUERY_IF:         "query-if">
+| <QUERY_REF:        "query-ref">
+| <REFUSE:           "refuse">
+| <REJECT:           "reject-proposal" >
+| <REQUEST:          "request"  >
+| <REQUEST_WHEN:     "request-when" >
+| <REQUEST_WHENEVER: "request-whenever"  >
+| <REQUEST_FORWARD: "request-forward" > 
+| <SUBSCRIBE:        "subscribe" >
+
+| <SENDER:          ":sender" >
+| <RECEIVER:        ":receiver" >
+| <CONTENT:         ":content" >
+| <REPLY_WITH:      ":reply-with" >
+| <REPLY_BY:        ":reply-by"  >
+| <IN_REPLY_TO:     ":in-reply-to">
+| <REPLY_TO:        ":reply-to" >
+| <ENVELOPE:        ":envelope" >
+| <LANGUAGE:        ":language"  >
+| <ONTOLOGY:        ":ontology"  >
+| <PROTOCOL:        ":protocol"  >
+| <CONVERSATION_ID: ":conversation-id"  >
+| <NAME:            ":name"> 
+| <ADDRESSES:       ":addresses"  > 
+}
+
+/* LITERALS */
+
+TOKEN: {
+  < WORD:    (~[ "(", ")", "#", "0" - "9", "-", "@", "\"",
+                 " ", "\t", "\n", "\r", "\f"])
+             (~[ "(", ")", "\"", " ", "\t", "\n", "\r", "\f"])*
+  >
+| < INTEGER: <DECIMAL> (["l","L"])? >
+| < REAL:
+        (["0"-"9"])+ "." (["0"-"9"])* (<EXPONENT>)? (["f","F","d","D"])?
+      | "." (["0"-"9"])+ (<EXPONENT>)? (["f","F","d","D"])?
+      | (["0"-"9"])+ <EXPONENT> (["f","F","d","D"])?
+      | (["0"-"9"])+ (<EXPONENT>)? ["f","F","d","D"]
+  >
+| < DATE_TIME: ("+")? <DIGIT> <DIGIT> <DIGIT> <DIGIT>
+                 <DIGIT> <DIGIT> <DIGIT> <DIGIT> "T"
+		 <DIGIT> <DIGIT>
+		 <DIGIT> <DIGIT>
+		 <DIGIT> <DIGIT>
+		 <DIGIT> <DIGIT> <DIGIT>
+          (["a"-"z","A"-"Z"]) ?
+  >
+| < LITERAL:
+      "\""
+      (   (~["\"","\\","\n","\r"])
+        | ("\\"
+            ( ["n","t","b","r","f","\\","'","\""]
+            | ["0"-"7"] ( ["0"-"7"] )?
+            | ["0"-"3"] ["0"-"7"] ["0"-"7"]
+            )
+          )
+      )*
+      "\""
+  >
+
+| < #EXPONENT: ["e","E"] (["+","-"])? (["0"-"9"])+ >
+| < #LETTER: ["a"-"z", "_", "A"-"Z"] >
+| < #DIGIT: ["0"-"9"] >
+| < #DECIMAL: "0" | ["1"-"9"] (["0"-"9"])* >
+}
+
+Performative Message():
+{
+  String type;
+  Performative msg;
+}
+{
+  <LBRACKET>
+    type = MessageType()
+    { msg = new Performative(type); }
+    (
+      MessageParameter(msg)
+    )+
+  <RBRACKET>
+  { return msg; }
+}
+
+String MessageType() :
+{
+  Token t = null;
+}
+{
+(
+     t = <ACCEPT>
+   | t = <AGREE>
+   | t = <CANCEL>
+   | t = <CFP>
+   | t = <CONFIRM>
+   | t = <DISCONFRIM>
+   | t = <FAILURE>
+   | t = <INFORM>
+   | t = <INFORM_IF>
+   | t = <INFORM_REF>
+   | t = <NOT_UNDERSTOOD>
+   | t = <PROPOSE>
+   | t = <QUERY_IF>
+   | t = <QUERY_REF>
+   | t = <REFUSE>
+   | t = <REJECT>
+   | t = <REQUEST>
+   | t = <REQUEST_WHEN>
+   | t = <REQUEST_WHENEVER>
+   | t = <REQUEST_FORWARD>
+   | t = <SUBSCRIBE>
+)
+{  return t.image; }
+}
+
+void MessageParameter(Performative msg) :
+{
+   String s = null;
+   Token t = null;
+   Hashtable table = null;
+   Vector receivers = null;
+}
+{
+(
+   <SENDER> s = AgentName()
+   { msg.setSender(s); }
+|  <RECEIVER> receivers = RecipientExpr()
+   { msg.setReceivers(receivers); }
+|  <CONTENT> s = Expression()
+   { msg.setContent(s); }
+|  <REPLY_TO> s = Expression() 
+    {// added by simon for 2.0/1.1? 
+        msg.setReplyTo (s); }
+|  <REPLY_WITH> s = Expression()
+   { msg.setReplyWith(s); }
+|  <REPLY_BY> t = <DATE_TIME>
+   { msg.setReplyBy(t.image); }
+|  <IN_REPLY_TO> s = Expression()
+   { msg.setInReplyTo(s); }
+|  <ENVELOPE> table = KeyValuePairList()
+   { msg.setEnvelope(table); }
+|  <LANGUAGE> s = Expression()
+   { msg.setLanguage(s); }
+|  <ONTOLOGY> s = Expression()
+   { msg.setOntology(s); }
+|  <PROTOCOL> t = <WORD>
+   { msg.setProtocol(t.image); }
+|  <CONVERSATION_ID> s = Expression()
+   { msg.setConversationId(s); }
+
+)
+}
+
+String Expression() :
+{
+   String s = "";
+   Token t = null;
+   String s1;
+}
+{
+(
+   t = <WORD>
+   {  s = t.image; }
+|  t = <LITERAL>
+   { s = Misc.literalToString(t.image); }
+|  t = <INTEGER>
+   {  s = t.image; }
+|  t = <REAL>
+   {  s = t.image; }
+|  <LBRACKET>
+   (
+      s1 = Expression()
+      { s += " " + s1; }
+   )+
+   <RBRACKET>
+   { s = "(" + s + ")"; }
+)
+   { return s.trim(); }
+}
+
+Hashtable KeyValuePairList() :
+{
+   Hashtable table = new Hashtable();
+   String value = null;
+   Token t;
+}
+{
+   <LBRACKET>
+   (
+      <LBRACKET> t = <WORD> value = Expression() <RBRACKET>
+      {  table.put(t.image,value);  }
+   )*
+   <RBRACKET>
+   {  return table; }
+}
+
+Vector RecipientExpr() :
+{
+   Vector result = new Vector();
+   String name = null;
+}
+{
+(
+   name = AgentName()
+   {  result.addElement(name); }
+|  <LBRACKET>
+   (
+      name = AgentName()
+      {  result.addElement(name);  }
+   )+
+   <RBRACKET>
+)
+   {  return result; }
+}
+
+String AgentName() :
+{
+   String s = null;
+   Token t = null;
+}
+{/**** good 'ol fashioned zeus */
+   t = <WORD>
+   {  s = t.image; }
+   [
+      "@" t = <WORD>
+      {  s += "@" + t.image; }
+   ]
+   {return s;}
+}
+
+

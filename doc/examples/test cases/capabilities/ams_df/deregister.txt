@@ -1,0 +1,12 @@
+  (action 
+    (agent-identifier
+    :name df@foo.com
+    :addresses (sequence iiop://foo.com/acc))
+    (deregister
+    (df-agent-description
+        :name
+        (agent-identifier
+            :name dummy@foo.com
+            :addresses (sequence iiop://foo.com/acc))))))
+
+ 

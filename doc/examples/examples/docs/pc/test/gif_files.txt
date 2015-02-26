@@ -1,0 +1,5 @@
+NewPrinterMaker = ..:..:..:..:Zeus archive:1.2.1:gifs:agent.gif
+PCMaker = ..:gifs:computer.gif
+MonitorMaker = ..:gifs:monitor.gif
+MotherBoardMaker = ..:gifs:cpu.gif
+PrinterMaker = ..:gifs:printer.gif

@@ -1,0 +1,286 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>The Zeus Realisation Guide</title>
+<LINK REL="STYLESHEET" TYPE="text/css" HREF="zeusdoc.css">
+</head>
+
+<body>
+
+<table width=100% border=0>
+<tr>
+<td><h4>The Zeus Agent Building Toolkit </h4></td>
+<td align=right class="text">The Application Realisation Guide</td>
+</tr>
+</table>
+<br>
+<table border=1 cellspacing=0 width=100% class="smalltext">
+<tr>
+<td width=10%><a class="smalltextlink" href="TOC.html">Contents</a></td>
+<td width=15%><a class="smalltextlink" href="part1.html">Introduction</a></td>
+<td width=15%><b>Ontologies</b></td>
+<td width=15%><a class="smalltextlink" href="part3.html">Building<br> Task Agents</a></td>
+<td width=15%><a class="smalltextlink" href="part4.html">Utility Agents</a></td>
+<td width=15%><a class="smalltextlink" href="part5.html">Task Agent<br> Configuration</a></td>
+<td width=15%><a class="smalltextlink" href="part6.html">Agent Implementation</a></td>
+</tr>
+</table>
+<br>
+<br>
+
+<a name="1"></a><h3>2     The Ontology Creation Stage</h3>
+
+<p class="text">An ontology is a set of declarative knowledge representing
+  every significant concept within a particular application domain.  The significance
+  of a concept is easily assessed, if meaningful interaction can not occur between
+  agents without both parties being aware of it, then the concept <i>is</i> significant
+  and must be modelled.  Note that for convenience we use the term 'fact' throughout
+  ZEUS to describe an individual domain concept.</p>
+<p class="text">Prior to attempting this stage you should have already identified
+  the following:</p>
+<li><p class="text"> the key concepts within the problem domain</p>
+<li><p class="text"> the significant attributes of each concept</p>
+<li><p class="text"> the types of each attribute </p>
+<li><p class="text"> any constraints on the attributes </p>
+<br>
+
+<p class="text">
+The remainder of this section describes how to enter this information into the
+ZEUS Ontology Editor. This can be launched from the ZEUS Agent Generator tool,
+which displays the following panel: </p>
+
+<table cellpadding=0 cellspacing=0 border=0>
+  <tr>
+    <td><img width=519 height=149 src="./gfx/image007.gif"></td>
+  </tr>
+  <tr><td align=center class='smalltext'><b>Figure 2.1</b>:
+  A screenshot of the Ontology Options panel of the Generator tool</td>
+  </tr>
+</table>
+
+<br>
+<hr width="50%">
+<br> <br>
+
+<a name="ONT1"></a><h3>ONT-1: How to Create a New Ontology</h3>
+<p class="text"> <img width=32 height=32
+src="./gfx/image009.gif"> &nbsp; If the
+  Ontology Editor is not running, click on the &quot;Edit&quot; button in the
+  Generator tools' Ontology Options toolbar, or select the &quot;New Ontology&quot;
+  menu option from the Ontology Menu.  This will create a new (empty) ontology
+  and launch the Ontology Editor.  From now onward all facts entered through this
+  editor will become part of this ontology.</p>
+<p class="text"> <img width=32 height=32
+src="./gfx/image010.gif"> &nbsp; If the
+  Ontology Editor is already running, select the &quot;New&quot; menu option;
+  if there is currently an ontology in memory you will be asked whether you want
+  to save it.  Clicking on the &quot;New&quot; button in the Generator tools'
+  Ontology Options toolbar will clear the current ontology without opening the
+  Editor.</p>
+<br>
+<br>
+
+<a name="ONT2"></a><h3>ONT-2: How to Load an Ontology</h3>
+<p class="text"> <img width=32 height=32
+src="./gfx/image011.gif"> &nbsp; If the
+  Ontology Editor is not running, click on the &quot;Load&quot; button in the
+  Generator tools' Ontology Options toolbar, or select the &quot;Load Ontology&quot;
+  menu option from the Ontology Menu.  </p>
+<li> <p class="text"> If the Ontology Editor is already open, a new ontology can be loaded by choosing the
+  &quot;Load…&quot; menu option.  </p>
+<li> <p class="text"> This will
+  summon a file requester, locate the file containing the Ontology and click &quot;OK&quot;. 
+  If there is already an ontology in memory, you will be asked if you want to
+  save it before it is removed.</p>
+<li><p class="text">When the ontology has been loaded and parsed, its contents
+  will appear in the Ontology Editor's windows.  A screenshot of the Ontology
+  Editor is shown in Figure 2.1.</p>
+<p class="text">Note that the fact pane of the Ontology Editor is divided
+  into two, an upper panel that displays the Fact Hierarchy, and a lower panel
+  that displays the attributes of the currently selected fact.  The panels are
+  separated by a split-pane that can be moved up or down to enlarge one panel
+  at the expense of the other. </p>
+<p class="smalltext"><img src="./gfx/figure2-2.gif"><br clear=ALL>
+  <b>Figure 2.2</b>: A Screenshot of one of the panels of the Ontology Editor. 
+  Notice how the one of the nodes in the fact hierarchy (Monitor) has been selected,
+  and its attributes are being shown in the table below. </p>
+<br>
+<br>
+
+<a name="ONT3"></a><h3>ONT-3: How to Create a New Fact</h3>
+<p class="text">The first stage in creating a new fact is to determine its
+  position within the existing fact hierarchy:</p>
+<p class="text"> <img width=32 height=16 src="./gfx/image014.gif"> &nbsp; If the
+  new fact has no parents in the existing hierarchy you will typically choose
+  the <b>Entity </b>node and click on the &quot;Add New Child Fact&quot; button.
+</p>
+<p class="text">The <b>Entity</b> fact is used to represent concepts that
+  have physical realisations, like objects and commodities.  Where this is not
+  appropriate the ZEUS fact hierarchy also has a fact called <b>Abstract</b> that
+  does not possess cardinality and value attributes.</p>
+<p class="text"> <img width=32 height=16
+src="./gfx/image014.gif"> &nbsp; If the
+  new fact inherits from an existing fact, select the parent node and click on
+  the &quot;Add New Child Fact&quot; button.</p>
+<p class="text"> <img width=32 height=16 src="./gfx/image015.gif"> &nbsp; To make
+  the new fact share the same parent as another, (a useful short cut), select
+  the existing fact and click the &quot;Add New Peer Fact&quot; button.</p>
+<p class="text"> A new entry will now appear in the fact tree, double click on it and rename to whatever is appropriate.</p>
+<br>
+<br>
+
+<a name="ONT4"></a><h3>ONT-4: How to Create a New Attribute</a></h3>
+<p class="text">Ensure that the fact to which the attribute will be added is the selected node of the
+  fact hierarchy,  if not, clicking on the fact selects it.  The existing attributes
+  for the selected fact will then appear in the Attribute Table beneath the Fact
+  Hierarchy window.</p>
+<p class="text"> <img width=32 height=16 src="./gfx/image016.gif"> &nbsp;
+  Click on the &quot;New&quot; button in the toolbar above the Attribute Table.  This
+  will create a new entry in the table, double-click on it to rename it as appropriate.</p>
+<p class="text"> 
+<img width=32 height=16 src="./gfx/image017.gif">
+<img width=32 height=16 src="./gfx/image018.gif"> &nbsp;
+  Clicking on the 'Toggle Shown Attributes' will hide or show the attributes inherited
+  from the fact's parents.  This can be useful for determining whether an attribute
+  has already been declared higher in the fact hierarchy.</p>
+<br>
+<br>
+
+
+<a name="ONT5"></a><h3>ONT-5: How to Set the Type of an Attribute</h3>
+<p class="text">Types serve to restrict the set of valid values the attribute
+  can take, and will be one of the basic types, a restriction or another fact.</p>
+<table cellpadding=0 cellspacing=0>
+  <tr>
+    <td><img width=403 height=390 src="./gfx/image020.gif"></td>
+  </tr>
+  <tr>
+  <td align=center class="smalltext"><b>Figure 2.3</b>: A screenshot of the Type Selection window</td>
+  </tr>
+</table>
+<br clear=ALL>
+<p class="text">
+Double-click on an entry in the Attribute Table, this will summon a window showing
+all a hierarchy of currently known types, as shown in Figure 2.3.
+<p
+<p class="text">The basic types have been predefined, they are:</p>
+<ul>
+<li><p class="text"> <b>String</b>: any combination
+  of alpha-numeric characters, plus the _ and $ characters <i>only</i></p>
+<li><p class="text"> <b>Integer</b>: whole numbers
+  in the range -2147483648 to +2147483647, (these are the minimum and maximum
+  integer values in Java).</p>
+<li><p class="text"> <b>Real</b>: all numbers in the range 4.94e<sup>-324</sup>
+  to 1.798e<sup>308</sup>, (these are the minimum and maximum double values in Java).</p>
+<li><p class="text"> <b>Boolean</b>: the words <i>true</i> or <i>false</i></p>
+<li><p class="text"> <b>Date</b>: numerically expressed in the European format: dd/mm/yyyy, (i.e. 2 digits for day/ 1 or 2
+  for month/4 for year). Terms can also be separated by dashes, i.e. dd-mm-yyyy. 
+  ZEUS is millennium compliant.</p>
+<li><p class="text"> <b>Time</b>: numerically expressed using the 24-hour clock
+  format, as either hh:mm:ss, (i.e. 1 or 2 digits for each of hours:minutes:seconds). 
+  For convenience, seconds can be omitted, and hh:mm used instead.</p>
+<li><p class="text"> <b>JavaObject</b>: an opaque reference to a runtime Java object</p>
+</ul>
+<br>
+<p class="text">Restrictions are custom types used to further restrict the
+  values possible for basic types.  These are entered separately, see 'How to
+  Create a Restriction'.  All previously entered restrictions are listed under
+  the &quot;Restrictions&quot; node of the type selection window.</p>
+<p class="text">Where attributes need to assume more complex values, their
+  type can be specified as a particular fact.  All previously entered facts are
+  listed under the &quot;Facts&quot; node of the type selection window.</p>
+<br>
+<br>
+
+<a name="ONT6"></a><h3>ONT-6: How to Restrict an Attribute</h3>
+<p class="text">
+  An alternative to creating a restriction rule is to restrict each attribute individually, this
+  is achieved by double clicking on the &quot;Restriction&quot; cell of the attribute
+  entry, which opens a small green-coloured panel through which the restriction
+  can be typed.</p>
+<p class="text"> The syntax of restrictions is that of a simplified expression,
+full details will be included in a later release. </p>
+<br>
+<br>
+
+<a name="ONT7"></a><h3>ONT-7: How to Set Attribute Defaults</h3>
+<p class="text">
+  To give an attribute a default value, double click on the &quot;Default&quot; cell of
+  the attribute entry, this opens a small green-coloured panel through which the
+  default value can be typed.  </p>
+<p class="text"> The syntax of the value is
+  dependent on the attribute type.  Defaults can not be set for attributes whose
+  type is a restriction or another fact.</p>
+
+<br>
+<br>
+
+<a name="ONT8"></a><h3>ONT-8: How to Create a Restriction</h3>
+<p class="text">Restrictions are types that have been constrained to a particular
+  set or range of values.  Although it is possible to restrict attributes without
+  creating a restriction (see 'How to Restrict an Attribute'), restrictions allow
+  for reuse, and provide meaningful names.  Restrictions are entered through the
+  'Restriction Definitions' pane of the Ontology Editor.</p>
+<ul>
+<li><p class="text"> To create
+  a restriction click on 'Restriction Definitions' tab at the bottom of the Ontology
+  Editor.  This shows the list of known restrictions (initially empty). </p>
+<li><p class="text"> Add a new
+  restriction by clicking on the &quot;New&quot; button on the toolbar, this will
+  create a new entry in the Restriction Table, double click on it to edit its
+  name to something more appropriate. </p>
+<li><p class="text"> Now set
+  the type of the restriction by double clicking on its &quot;Type&quot; cell,
+  this brings up a window with a hierarchy of basic types (see 'How to Set the
+  Type of an Attribute' for details) and current restrictions.  Facts can not
+  be chosen as a type.</p>
+<li><p class="text"> Now double
+  click on the &quot;Restriction&quot; cell, this opens a small green-coloured
+  panel through which the default value can be typed.  The syntax will be dependent
+  on the type chosen previously. </p>
+<li><p class="text"> The restriction will be syntactically checked upon entry, 
+  invalid entries being displayed in red.</p>
+</ul>
+<br>
+<br>
+
+<a name="ONT9"></a><h3>ONT-9: How to Save an Ontology</h3>
+<p class="text">Ontologies are currently saved in an ASCII file using our
+  own format; saving ontology in a more standardised format, like XML is under
+  consideration.</p>
+<p class="text"> <img width=32 height=32 src="./gfx/image021.gif"> &nbsp; If the
+  Ontology Editor is not open, click on the &quot;Save&quot; button in the Generator's
+  Ontology Options toolbar, or select the &quot;Save Ontology&quot; menu option
+  from the Ontology Menu.</p>
+<ul>
+<li><p class="text"> If the Ontology Editor is still open, choosing the &quot;Save&quot; menu option will
+  save its contents.</p>
+<li><p class="text"> If the ontology is unnamed a file requester will appear, and you will be prompted for
+  a filename to save it under.</p>
+<li><p class="text"> If the ontology has already been named it will be saved under that name.  To save it
+  under a different name, choose the &quot;Save Ontology As…&quot; menu option.</p>
+</ul>
+  <br>
+  <br>
+<h4>Merging Ontologies</h4>
+<p class="text"> This function is not yet supported in the current Ontology Editor.  </p>
+<br>
+
+<br>
+<br>
+<table border=1 cellspacing=0 width=100% class="smalltext">
+<tr>
+<td width=10%><a class="smalltextlink" href="TOC.html">Contents</a></td>
+<td width=15%><a class="smalltextlink" href="part1.html">Introduction</a></td>
+<td width=15%><b>Ontologies</b></td>
+<td width=15%><a class="smalltextlink" href="part3.html">Building<br> Task Agents</a></td>
+<td width=15%><a class="smalltextlink" href="part4.html">Utility Agents</a></td>
+<td width=15%><a class="smalltextlink" href="part5.html">Task Agent<br> Configuration</a></td>
+<td width=15%><a class="smalltextlink" href="part6.html">Agent Implementation</a></td>
+</tr>
+</table>
+
+
+</body>
+</html>
+

@@ -1,0 +1,12 @@
+<project
+  default="update-jar"
+  xmlns:j="jelly:core"
+  xmlns:u="jelly:util">
+
+  <goal name="update-jar">
+    <attainGoal name="jar:jar" />
+    <copy file="${maven.build.dir}\${maven.final.name}.jar"
+    todir="lib" />
+  </goal>
+
+</project>

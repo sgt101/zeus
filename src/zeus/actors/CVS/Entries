@@ -1,0 +1,42 @@
+/AbilityDb.java/1.1.1.1/Thu Oct  9 10:55:38 2003//
+/ActionNode.java/1.1.1.1/Thu Oct  9 10:55:38 2003//
+/AgentContext.java/1.1.1.1/Thu Oct  9 10:55:38 2003//
+/AttributeNode.java/1.1.1.1/Thu Oct  9 10:55:38 2003//
+/Connection.java/1.1.1.1/Thu Oct  9 10:55:38 2003//
+/ConnectionPool.java/1.1.1.1/Thu Oct  9 10:55:38 2003//
+/ConsumedDb.java/1.1.1.1/Thu Oct  9 10:55:38 2003//
+/DataRec.java/1.1.1.1/Thu Oct  9 10:55:38 2003//
+/Decomposition.java/1.1.1.1/Thu Oct  9 10:55:38 2003//
+/EffectChain.java/1.1.1.1/Thu Oct  9 10:55:38 2003//
+/ExecutionMonitor.java/1.1.1.1/Thu Oct  9 10:55:38 2003//
+/ExternalDb.java/1.1.1.1/Thu Oct  9 10:55:38 2003//
+/Handler.java/1.1.1.1/Thu Oct  9 10:55:38 2003//
+/InTray.java/1.1.1.1/Thu Oct  9 10:55:38 2003//
+/MailBox.java/1.1.1.1/Thu Oct  9 10:55:38 2003//
+/MsgHandler.java/1.1.1.1/Thu Oct  9 10:55:38 2003//
+/MsgNode.java/1.1.1.1/Thu Oct  9 10:55:38 2003//
+/OrganisationDb.java/1.1.1.1/Thu Oct  9 10:55:38 2003//
+/OutTray.java/1.1.1.1/Thu Oct  9 10:55:38 2003//
+/PlanDb.java/1.1.1.1/Thu Oct  9 10:55:38 2003//
+/PlanRecord.java/1.1.1.1/Thu Oct  9 10:55:38 2003//
+/Planner.java/1.1.1.1/Thu Oct  9 10:55:38 2003//
+/PostMan.java/1.1.1.1/Thu Oct  9 10:55:38 2003//
+/PostManConnectionPool.java/1.1.1.1/Thu Oct  9 10:55:38 2003//
+/PreconditionChain.java/1.1.1.1/Thu Oct  9 10:55:38 2003//
+/ProducedDb.java/1.1.1.1/Thu Oct  9 10:55:38 2003//
+/ProtocolDb.java/1.1.1.1/Thu Oct  9 10:55:38 2003//
+/ProtocolDbResult.java/1.1.1.1/Thu Oct  9 10:55:38 2003//
+/ResourceDb.java/1.1.1.1/Thu Oct  9 10:55:38 2003//
+/RootNode.java/1.1.1.1/Thu Oct  9 10:55:38 2003//
+/Server.java/1.1.1.1/Thu Oct  9 10:55:38 2003//
+/TaskContext.java/1.1.1.1/Thu Oct  9 10:55:38 2003//
+/TaskDb.java/1.1.1.1/Thu Oct  9 10:55:38 2003//
+/TaskExternal.java/1.1.1.1/Thu Oct  9 10:55:38 2003//
+/ZeusAgentContext.java/1.1.1.1/Thu Oct  9 10:55:38 2003//
+/ZeusTask.java/1.1.1.1/Thu Oct  9 10:55:38 2003//
+D/event////
+D/factories////
+D/graphs////
+D/intrays////
+D/outtrays////
+D/rtn////

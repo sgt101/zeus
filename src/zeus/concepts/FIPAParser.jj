@@ -1,0 +1,1077 @@
+
+/*
+* The contents of this file are subject to the BT "ZEUS" Open Source
+* Licence (L77741), Version 1.0 (the "Licence"); you may not use this file
+* except in compliance with the Licence. You may obtain a copy of the Licence
+* from $ZEUS_INSTALL/licence.html or alternatively from
+* http://www.labs.bt.com/projects/agents/zeus/licence.htm
+*
+* Except as stated in Clause 7 of the Licence, software distributed under the
+* Licence is distributed WITHOUT WARRANTY OF ANY KIND, either express or
+* implied. See the Licence for the specific language governing rights and
+* limitations under the Licence.
+*
+* The Original Code is within the package zeus.*.
+* The Initial Developer of the Original Code is British Telecommunications
+* public limited company, whose registered office is at 81 Newgate Street,
+* London, EC1A 7AJ, England. Portions created by British Telecommunications
+* public limited company are Copyright 1996-2001. All Rights Reserved.
+*
+* THIS NOTICE MUST BE INCLUDED ON ANY COPY OF THIS FILE
+*/
+
+options {
+  STATIC = false;
+  LOOKAHEAD = 10; /* worked for 4  */
+  FORCE_LA_CHECK = true;
+}
+
+PARSER_BEGIN(FIPAParser)
+
+package zeus.concepts;
+
+import java.util.*;
+import java.io.*;
+import zeus.util.*;
+
+public class FIPAParser {
+}
+
+PARSER_END(FIPAParser)
+
+/* WHITE SPACE */
+
+SKIP :
+{
+  " "
+| "\t"
+| "\n"
+| "\r"
+| "\f"
+}
+
+/* Tokens */
+/* tried to be exhaustive ...*/
+TOKEN: {
+
+  <LBRACKET:         "(" >
+| <RBRACKET:         ")" >
+| <ACCEPT:           "accept-proposal" >
+| <AGREE:            "agree">
+| <CANCEL:           "cancel" >
+| <CFP:              "cfp" >
+| <CONFIRM:          "confirm">
+| <DISCONFRIM:       "disconfirm" >
+| <FAILURE:          "failure">
+| <INFORM:           "inform"  >
+| <INFORM_IF:        "inform-if">
+| <INFORM_REF:       "inform-ref">
+| <NOT_UNDERSTOOD:   "not-understood" >
+| <PROPOSE:          "propose">
+| <QUERY_IF:         "query-if" >
+| <QUERY_REF:        "query-ref">
+| <REFUSE:           "refuse" >
+| <REJECT:           "reject-proposal" >
+| <REQUEST:          "request" >
+| <REQUEST_WHEN:     "request-when" >
+| <REQUEST_WHENEVER: "request-whenever" >
+| <REQUEST_FORWARD: "request-forward" >
+| <SUBSCRIBE:        "subscribe" >
+
+| <SENDER:          ":sender"  >
+| <RECEIVER:        ":receiver">
+| <CONTENT:         ":content"  >
+| <REPLY_WITH:      ":reply-with"  >
+| <REPLY_BY:        ":reply-by" >
+| <IN_REPLY_TO:     ":in-reply-to" >
+| <REPLY_TO:        ":reply-to"  >
+| <ENVELOPE:        ":envelope" >
+| <LANGUAGE:        ":language"  >
+| <ONTOLOGY:        ":ontology"  >
+| <PROTOCOL:        ":protocol" >
+| <ENCODING:        ":encoding">
+| <CONVERSATION_ID: ":conversation-id"  >
+| <NAME:            ":name">
+| <ADDRESSES:       ":addresses"  >
+| <SET:             "set"  >
+| <AGENT_IDENTIFIER: "agent-identifier" >
+| <SEQUENCE:        "sequence" >
+| <AMS_AGENT_DESC : "ams-agent-description">
+| <DF_AGENT_DESC:   "df-agent-description">
+| <AP_Description : "ap-description">
+| <SEARCH_CONSTRAINTS:  "search-constraints">
+| <OWNERSHIP : ":ownership">
+| <STATE: ":state">
+| <SERVICE_DESCRIPTION:     "service-description">
+| <SERVICES:    ":services">
+| <PROPERTIES:   ":properties">
+| <PROPERTY :   "property">
+| <DYNAMIC:     ":dynamic">
+| <MOBILITY:    ":mobility">
+| <TRANSPORT_PROFILE:   ":transport-profile">
+| <MAX_DEPTH: ":max-depth">
+| <MAX_RESULTS: ":max-results">
+| <TYPE: ":type"> /** note not Zeus performative type!*/
+| <VALUE: ":value">
+| <AP_TRANSPORT_DESCRIPTION : "ap-transport-description">
+| <AVAILABLE_MTS : ":available-mtps">
+| <MTP_DESCRIPTION : "mtp-description">
+| <PROFILE : ":profile">
+| <MTP_NAME : ":mtp-name">
+| <ALIAS_ADDRESS_OPEN:  "<alias_address>"  >
+| <ZEUS_NAME_OPEN:      "<zeus_name>">
+| <AID_OPEN:            "<aid>">
+| <AID_CLOSE:           "</aid>">
+| <ZEUS_NAME_CLOSE:     "</zeus_name>">
+| <ALIAS_ADDRESS_CLOSE: "</alias_address>">
+| <TRANSPORT_CONFIGURATION: "<transport_configuration>">
+| <TRANSPORT_NAME : "<name>" |"<NAME>">
+| <TRANSPORT_PORT : "<port>" | "<PORT>">
+| <TRANSPORT_CONFIGURATION_CLOSE: "</transport_configuration>">
+| <TRANSPORT_NAME_CLOSE : "</name>" |"</NAME>">
+| <RESOLVERS : ":resolvers" | ":RESOLVERS">
+| <TRANSPORT_PORT_CLOSE : "</port>" | "</PORT>">
+| <GET_DESCRIPTION : "get-description">
+| <REGISTER : "register">
+| <SEARCH : "search">
+| <DEREGISTER : "deregister" >
+| <ONTOLOGIES : ":ontologies">
+| <LANGUAGES: ":languages">
+| <PROTOCOLS: ":protocols">
+}
+
+/* LITERALS */
+
+TOKEN: {
+
+  < WORD:    (~[ "(", ")", "#", "0" - "9", "@", "\"",
+                 " ", "\t", "\n", "\r", "\f"])
+             (~[ "(", ")", "\"", " ", "\t", "\n", "\r", "\f"])*
+  >
+| < INTEGER: <DECIMAL> (["l","L"])? >
+| <ADDR : (["0"-"9"])+ "." (["0"-"9"])+ "." (["0"-"9"])+ "." (["0"-"9"])+
+        |
+           (["a"-"z","A"-"Z"])+ "." (["a"-"z","A"-"Z"])+ "." (["a"-"z","A"-"Z"])+ "." (["a"-"z","A"-"Z"])+
+        |
+         (["a"-"z","A"-"Z"])+ "." (["a"-"z","A"-"Z"])+ "." (["a"-"z","A"-"Z"])+
+        |
+         (["a"-"z","A"-"Z"])+ "." (["a"-"z","A"-"Z"])+
+         >
+| < REAL:
+        (["0"-"9"])+ "." (["0"-"9"])* (<EXPONENT>)? (["f","F","d","D"])?
+      | "." (["0"-"9"])+ (<EXPONENT>)? (["f","F","d","D"])?
+      | (["0"-"9"])+ <EXPONENT> (["f","F","d","D"])?
+      | (["0"-"9"])+ (<EXPONENT>)? ["f","F","d","D"]
+  >
+| < DATE_TIME: ("+")? <DIGIT> <DIGIT> <DIGIT> <DIGIT>
+                 <DIGIT> <DIGIT> <DIGIT> <DIGIT> "T"
+		 <DIGIT> <DIGIT>
+		 <DIGIT> <DIGIT>
+		 <DIGIT> <DIGIT>
+		 <DIGIT> <DIGIT> <DIGIT>
+          (["a"-"z","A"-"Z"]) ?
+  >
+| < LITERAL:
+      "\""
+      (   (~["\"","\\","\n","\r"])
+        | ("\\"
+            ( ["n","t","b","r","f","\\","'","\""]
+            | ["0"-"7"] ( ["0"-"7"] )?
+            | ["0"-"3"] ["0"-"7"] ["0"-"7"]
+            )
+          )
+      )*
+      "\""
+  >
+
+| < #EXPONENT: ["e","E"] (["+","-"])? (["0"-"9"])+ >
+| < #LETTER: ["a"-"z", "_","-", "A"-"Z"] > // added "-" on 27/5/03
+| < #DIGIT: ["0"-"9"] >
+| < #DECIMAL: "0" | ["1"-"9"] (["0"-"9"])* >
+/*| < ACTION_STRING :
+    <LBRACKET>"action"
+    ( (~["\"","\\","\n","\r"])
+        | ("\\"
+            ( ["n","t","b","r","f","\\","'","\""]
+            | ["0"-"7"] ( ["0"-"7"] )?
+            | ["0"-"3"] ["0"-"7"] ["0"-"7"]
+            )
+          )
+      )+
+      <RBRACKET>
+      >
+  |< RESULT_STRING :
+    <LBRACKET>"action"
+    ( (~["\"","\\","\n","\r"])
+        | ("\\"
+            ( ["n","t","b","r","f","\\","'","\""]
+            | ["0"-"7"] ( ["0"-"7"] )?
+            | ["0"-"3"] ["0"-"7"] ["0"-"7"]
+            )
+          )
+      )+
+      <RBRACKET>
+      >*/
+}
+
+ /**
+    Parse a string of format "<alias_address> <zeus_name> <i> name_to_be_used</i>
+    </zeus_name> <aid> <i> actual_fipa_aid </i> </aid> </alias_address> ".
+    Return a Hashtable full of the alias/address pairs.
+    @author Simon Thompson
+    @since 1.1
+    */
+Hashtable Addresses () :
+{
+    Token t = null;
+    String alias = null;
+    FIPA_AID_Address address = null;
+    Hashtable addresses = new Hashtable();
+
+}
+{ {System.out.println("parsing addresses"); }
+   ( <ALIAS_ADDRESS_OPEN>
+        <ZEUS_NAME_OPEN> t= <WORD> { alias = t.image; }
+        <ZEUS_NAME_CLOSE>
+        <AID_OPEN> address = SenderName()
+        <AID_CLOSE>
+        <ALIAS_ADDRESS_CLOSE>
+        {   System.out.println("alias = " + alias + " address = " + address);
+            addresses.put (alias, address);}
+   )*
+
+    {
+        return addresses; }
+
+}
+
+
+StringHashtable Transports () :
+{
+    Token t;
+    TransportConfig conf = new TransportConfig();
+    StringHashtable retVal = new StringHashtable();
+}
+{
+    {System.out.println("parsing transports"); }
+    ( { System.out.println("initialising");
+        conf = new TransportConfig(); }
+
+        <TRANSPORT_CONFIGURATION> <TRANSPORT_NAME> t=<WORD> {conf.setName(t.image);}
+            <TRANSPORT_NAME_CLOSE>
+            <TRANSPORT_PORT> t = <INTEGER> {conf.setPort (t.image); }
+            <TRANSPORT_PORT_CLOSE>
+            <TRANSPORT_CONFIGURATION_CLOSE>
+            {
+                System.out.println("name ="+conf.getName());
+                retVal.put(conf.getName(), conf); }
+            )+
+            {return retVal; }
+
+}
+
+
+
+
+
+FIPAPerformative Message():
+{
+  String type;
+  FIPAPerformative msg;
+}
+{
+  <LBRACKET>
+    type = MessageType()
+    { msg = new FIPAPerformative(type); }
+    (
+      MessageParameter(msg)
+    )+
+  <RBRACKET>
+  { return msg; }
+}
+
+String MessageType() :
+{
+  Token t = null;
+}
+{
+(
+     t = <ACCEPT>
+   | t = <AGREE>
+   | t = <CANCEL>
+   | t = <CFP>
+   | t = <CONFIRM>
+   | t = <DISCONFRIM>
+   | t = <FAILURE>
+   | t = <INFORM>
+   | t = <INFORM_IF>
+   | t = <INFORM_REF>
+   | t = <NOT_UNDERSTOOD>
+   | t = <PROPOSE>
+   | t = <QUERY_IF>
+   | t = <QUERY_REF>
+   | t = <REFUSE>
+   | t = <REJECT>
+   | t = <REQUEST>
+   | t = <REQUEST_WHEN>
+   | t = <REQUEST_WHENEVER>
+   | t = <REQUEST_FORWARD>
+   | t = <SUBSCRIBE>
+)
+{  return t.image; }
+}
+
+void MessageParameter(FIPAPerformative msg) :
+{
+   String s = null;
+   Token t = null;
+   Hashtable table = null;
+   Vector receivers = null;
+   FIPA_AID_Address addr = null;
+}
+{
+(
+   <SENDER> addr = SenderName()
+    { msg.setSender (addr); }
+|  <RECEIVER> receivers = RecipientExpr()
+   { msg.setReceivers(receivers); }
+|  <CONTENT> (s = Expression(){msg.appendContent(s);})*
+   {System.out.println("msg.content = " + msg.getContent());  
+     }
+|  <REPLY_TO> s = Expression()
+    { msg.setReplyTo(s); }
+|  <REPLY_WITH> s = Expression()
+   { msg.setReplyWith(s); }
+|  <REPLY_BY> t = <DATE_TIME>
+   { msg.setReplyBy(t.image); }
+|  <IN_REPLY_TO> s = Expression()
+   { msg.setInReplyTo(s); }
+|  <ENVELOPE> table = KeyValuePairList()
+   { msg.setEnvelope(table); }
+|  <LANGUAGE> s = Expression()
+   { msg.setLanguage(s); }
+|  <ONTOLOGY> s = Expression()
+   { msg.setOntology(s); }
+|  <PROTOCOL> t = <WORD>
+   { msg.setProtocol(t.image); }
+|  <CONVERSATION_ID> s = Expression()
+   { msg.setConversationId(s); }
+| <ENCODING> s = Expression ()
+
+)
+}
+
+String Expression() :
+{
+   String s = "";
+   Token t = null;
+   String s1;
+   FIPA_AID_Address addr;
+   AMS_Description ams;
+   DF_Description df;
+   FIPA_Search_Constraints search;
+   Vector set;
+   FIPA_AP_Description ap;
+}
+{
+ (
+    ap = AP_Description()
+     {
+        s = ap.toString(); 
+    }
+ |
+    set = StringSet()
+    {
+        String temp;
+        Enumeration allMembers = set.elements();
+        while (allMembers.hasMoreElements()) {
+            String obj = (String) allMembers.nextElement();
+            temp = obj.toString() +" ";
+            s+= temp;
+        }
+    }
+ |
+    search = SearchConstraints ()
+    {
+        s = search.toString();
+    }
+|
+    df = DFDescription()
+    {
+        s= df.toString();
+    }
+|
+    ams = AMSDescription()
+    {
+        s = ams.toString();
+  
+    }
+|
+    addr=SenderName()
+    {
+        s = addr.toFIPAString();
+}
+
+|
+   t = <WORD>
+   {  s += t.image + " ";
+       }
+|  t = <LITERAL>
+   { 
+    System.out.println("before literal s = " + s); 
+    s += Misc.literalToString(t.image) + " "; 
+    System.out.println("literal s = " + s); 
+    }
+|  t = <INTEGER>
+   {  s += t.image +" "; 
+      }
+|  t = <REAL>
+   {  s += t.image+" "; 
+    }
+|  <LBRACKET>
+   (
+      s1 = Expression()
+      { s += " " + s1; 
+           }
+   )+
+   <RBRACKET>
+   { s = "(" + s + ")"; 
+        }
+)
+   {System.out.println("return s= " + s);  
+    return s; } // was trimmed Simon - 25/7 
+}
+
+Hashtable KeyValuePairList() :
+{
+   Hashtable table = new Hashtable();
+   String value = null;
+   Token t;
+}
+{
+   <LBRACKET>
+   (
+      <LBRACKET> t = <WORD> value = Expression() <RBRACKET>
+      {  table.put(t.image,value);  }
+   )*
+   <RBRACKET>
+   {  return table; }
+}
+
+
+
+FIPA_AID_Address SenderName() : {
+     String name = null;
+    String host = null;
+    FIPA_AID_Address addr = null;
+    Token t = null;
+    Token u = null;
+    String temp = null;
+    Vector rec = new Vector();
+
+}
+{
+
+ (
+     <LBRACKET> <AGENT_IDENTIFIER>
+    <NAME> t = <WORD>
+    {
+    // can't make it work so
+    name = t.image;
+    StringTokenizer tokens = new StringTokenizer(name,"@");
+    name = tokens.nextToken();
+    host = tokens.nextToken();
+    addr =  new FIPA_AID_Address (name,host); }
+
+            <ADDRESSES> <LBRACKET> <SEQUENCE>
+            (t=<WORD>
+                    {temp = t.image;
+                     addr.addAddress(temp);
+                    }
+                    )* <RBRACKET> <RBRACKET>
+|
+ <AGENT_IDENTIFIER>
+    <NAME> t = <WORD>
+    {
+    // can't make it work so
+    name = t.image;
+    StringTokenizer tokens = new StringTokenizer(name,"@");
+    name = tokens.nextToken();
+    host = tokens.nextToken();
+    addr =  new FIPA_AID_Address (name,host); }
+
+            <ADDRESSES> <LBRACKET> <SEQUENCE>
+            (t=<WORD>
+                    {temp = t.image;
+                     addr.addAddress(temp);
+                    }
+                    )* <RBRACKET>
+| <LBRACKET> <AGENT_IDENTIFIER>
+    <NAME> t = <WORD>
+    {
+    // can't make it work so
+    name = t.image;
+    StringTokenizer tokens = new StringTokenizer(name,"@");
+    name = tokens.nextToken();
+    host = tokens.nextToken();
+    addr =  new FIPA_AID_Address (name,host); }
+
+            <ADDRESSES> <LBRACKET> <SEQUENCE>
+            (t=<WORD>
+                    {temp = t.image;
+                     addr.addAddress(temp);
+                    }
+                    )* <RBRACKET>
+
+	    <RESOLVERS> <LBRACKET> <SEQUENCE>
+	(t = <WORD>
+		{
+			System.err.println("resolvers detected, not processed yet");
+			/** handle resolvers here : now ignore them */}
+		)* <RBRACKET>
+ <RBRACKET>
+|
+<LBRACKET>
+ <AGENT_IDENTIFIER>
+    <NAME> t = <WORD>
+    {
+    // can't make it work so
+    name = t.image;
+    StringTokenizer tokens = new StringTokenizer(name,"@");
+    name = tokens.nextToken();
+    host = tokens.nextToken();
+    addr =  new FIPA_AID_Address (name,host); }
+
+            <ADDRESSES> <LBRACKET> <SEQUENCE>
+            (t=<WORD>
+                    {temp = t.image;
+                     addr.addAddress(temp);
+                    }
+                    )* <RBRACKET>
+	    <RESOLVERS> <LBRACKET> <SEQUENCE>
+	(t = <WORD>
+		{
+			System.err.println("resolvers detected, not processed yet");
+			/** handle resolvers here : now ignore them */}
+		)* <RBRACKET> <RBRACKET>
+|
+ <AGENT_IDENTIFIER>
+    <NAME> t = <WORD>
+    {
+    // can't make it work so
+    name = t.image;
+    StringTokenizer tokens = new StringTokenizer(name,"@");
+    name = tokens.nextToken();
+    host = tokens.nextToken();
+    addr =  new FIPA_AID_Address (name,host); }
+
+            <ADDRESSES> <LBRACKET> <SEQUENCE>
+            (t=<WORD>
+                    {temp = t.image;
+                     addr.addAddress(temp);
+                    }
+                    )* <RBRACKET>
+	    <RESOLVERS> <LBRACKET> <SEQUENCE>
+	(t = <WORD>
+		{ /** handle resolvers here : now ignore them */}
+		)* <RBRACKET>
+|
+<LBRACKET> <AGENT_IDENTIFIER>
+    <NAME> t = <WORD>
+    {
+    // can't make it work so
+    name = t.image;
+    StringTokenizer tokens = new StringTokenizer(name,"@");
+    name = tokens.nextToken();
+    host = tokens.nextToken();
+    addr =  new FIPA_AID_Address (name,host); }
+	<RBRACKET>
+|
+ <AGENT_IDENTIFIER>
+    <NAME> t = <WORD>
+    {
+    // can't make it work so
+    name = t.image;
+    StringTokenizer tokens = new StringTokenizer(name,"@");
+    name = tokens.nextToken();
+    host = tokens.nextToken();
+    addr =  new FIPA_AID_Address (name,host); }
+
+)
+   {return (addr); }
+
+
+}
+
+
+Vector RecipientExpr () : {
+
+    String name = null;
+    String host = null;
+    FIPA_AID_Address addr = null;
+    Token t = null;
+    Token u = null;
+    String temp = null;
+    Vector rec = new Vector();
+
+}
+{
+    /***** bloody FIPA bloody receivers */
+    <LBRACKET> <SET>(
+    <LBRACKET> <AGENT_IDENTIFIER>
+    <NAME> t = <WORD>
+    {
+    // can't make it work so
+    name = t.image;
+    StringTokenizer tokens = new StringTokenizer(name,"@");
+    name = tokens.nextToken();
+
+    addr =  new FIPA_AID_Address (name,host); }
+
+            <ADDRESSES> <LBRACKET> <SEQUENCE>
+            (t=<WORD>
+                    {temp = t.image;
+                     addr.addAddress(temp);
+                    }
+                    )* <RBRACKET> <RBRACKET> <RBRACKET>
+   {  rec.addElement (addr); })*
+   {return (rec); }
+
+}
+
+AMS_Description AMSDescription () : {
+    FIPA_AID_Address aid;
+    AMS_Description dec = new AMS_Description();
+    String s;
+}
+{
+ <LBRACKET> <AMS_AGENT_DESC>
+  (
+     <NAME> aid = SenderName()
+  	{ dec.setName(aid);
+    	}
+    |
+     <OWNERSHIP> s=Expression()
+        {dec.setOwnership(s);
+    }
+    |
+     <STATE> s=Expression()
+        {dec.setState(s);
+    }
+    )*
+
+    <RBRACKET>
+    {return (dec); }
+}
+
+
+DF_Description DFDescription () : {
+    FIPA_AID_Address aid;
+    DF_Description dec = new DF_Description();
+    Vector serv = null;
+    Vector prot = new Vector ();
+    Vector ont = new Vector ();
+    Vector lang = new Vector ();
+    String s;
+}
+{
+        <LBRACKET> <DF_AGENT_DESC>
+        (
+        <NAME> aid = SenderName() {
+            dec.setName (aid);
+            }
+        |
+        <SERVICES> serv = ServiceDescriptions() {
+ //           dec.setServices(serv);
+            }
+        |
+        <PROTOCOLS> prot = StringSet ()  {
+            dec.setProtocol(prot);
+            }
+        |
+        <ONTOLOGY> ont = StringSet () {
+            dec.setOntology (ont);
+            }
+        |
+        <LANGUAGES> lang = StringSet () {
+            dec.setLanguage(lang);
+            }
+            )*<RBRACKET>
+
+            {return (dec); }
+
+}
+
+
+
+Vector StringSet () : {
+    Vector retVal = new Vector();
+    String s;
+}
+
+{
+    <LBRACKET> <SET> (s=Expression() {retVal.addElement(s); } )+ <RBRACKET>
+    {return (retVal); }
+
+}
+
+
+Vector ServiceDescriptions() : {
+    Vector retVal = new Vector();
+    FIPA_Service_Description s ;
+}
+{
+
+    <LBRACKET> <SET>
+        (s = ServiceDescription() { retVal.addElement(s);})+
+    <RBRACKET>
+    {return (retVal);}
+}
+
+
+FIPA_Service_Description ServiceDescription (): {
+ String s;
+ Vector vect;
+ FIPA_Service_Description retVal = new FIPA_Service_Description();
+ Vector prop;
+}
+{
+    <LBRACKET > <SERVICE_DESCRIPTION>
+    (
+    <NAME> s=Expression() {retVal.setName(s); }
+    |
+    <TYPE> s=Expression() {retVal.setType(s); }
+    |
+    <PROTOCOLS> vect = StringSet() {retVal.setProtocol (vect); }
+    |
+    <ONTOLOGIES> vect = StringSet() { retVal.setOntology (vect); }
+    |
+    <LANGUAGES> vect = StringSet() {retVal.setLanguage (vect); }
+    |
+    <OWNERSHIP> s = Expression () {retVal.setOwnership(s); }
+    |
+    <PROPERTIES> prop=Properties () {retVal.setProperties (prop); }
+    )* <RBRACKET> /** added */
+    {return (retVal);}
+}
+
+
+Vector Properties () : {
+ Vector retVal = new Vector();
+ FIPA_Property p;
+}
+{
+    <LBRACKET> <SET> ( p=Property() {retVal.addElement(p); })* <RBRACKET>
+    {return (retVal);}
+}
+
+
+FIPA_Property Property() : {
+        FIPA_Property retVal = new FIPA_Property();
+        String s;
+
+}
+{
+    <LBRACKET> <PROPERTY>
+    (
+        <NAME> s=Expression () { retVal.setName(s); }
+     |
+        <VALUE> s = Expression () { retVal.setValue(s); }
+        )+
+    <RBRACKET>
+    {return (retVal); }
+}
+
+
+FIPA_Search_Constraints SearchConstraints() : {
+    FIPA_Search_Constraints fsc = new FIPA_Search_Constraints();
+    String s;
+ }
+{ <LBRACKET> <SEARCH_CONSTRAINTS>
+  ( <MAX_DEPTH> s=Expression() {
+        fsc.setMaxDepth(Integer.parseInt(s));
+    }
+    |
+    <MAX_RESULTS> s=Expression() {
+        fsc.setMaxResults (Integer.parseInt(s));
+    }
+    )+ <RBRACKET>
+    {return fsc; }
+
+}
+
+
+Vector descriptions () : {
+}
+{
+	<LBRACKET> <WORD> <LBRACKET>
+         SenderName()
+	<RBRACKET> <WORD> <RBRACKET> <WORD> <LBRACKET>
+	<RBRACKET> <WORD> <LBRACKET><LBRACKET><LBRACKET>
+	<LBRACKET> <WORD> (AMSDescription () )*
+	(<RBRACKET>)*
+	{return new Vector (); }
+
+}
+
+
+FIPA_AMS_Management_Content FIPA_AMS_Management_Content () : {
+  String action;
+  FIPA_AID_Address implementor;
+  AMS_Description subject;
+  boolean doneorDo;
+  Token t;
+  Token b;
+  FIPA_AMS_Management_Content cont = new FIPA_AMS_Management_Content();
+  String context;
+  FIPA_Search_Constraints constraints;
+}
+{
+    ({System.err.println("in one"); }
+    <LBRACKET> <WORD>
+            implementor = SenderName()
+            <LBRACKET> t=<WORD> { action = t.image; }
+            subject = AMSDescription () <RBRACKET> <RBRACKET>
+            {
+                cont.setImplementor (implementor);
+                cont.setSubject (subject);
+                cont.setAction (action);
+                cont.setType (false);
+            }
+
+    |
+	{System.err.println("in two"); }
+     <LBRACKET> b =<WORD>
+        <LBRACKET> t=<WORD> {
+               context = b.image;
+               action = t.image; }
+               subject = AMSDescription () <RBRACKET> <RBRACKET>
+            {
+                cont.setContext(context);
+                cont.setSubject (subject);
+                cont.setAction (action);
+                cont.setType (false);
+
+            }
+    |
+	{System.err.println("in THREE New"); }
+        <LBRACKET><LBRACKET><WORD> implementor = SenderName()
+            <LBRACKET>
+		(t = <WORD> {
+               	 action = t.image; }
+               	 subject = AMSDescription() <RBRACKET><RBRACKET>
+                 {
+                	cont.setImplementor (implementor);
+                	cont.setSubject (subject);
+                	cont.setAction (action);
+                	cont.setType (false);
+            	}
+			(
+			t = <WORD>
+            		{cont.setResult (t.image); }
+			)?
+        	    	<RBRACKET>
+		|
+
+		 t =<GET_DESCRIPTION> {
+                	action = t.image;
+                                        }
+
+        	|
+         	t = <REGISTER> {
+               		 action = t.image;}
+                         subject = AMSDescription()   <RBRACKET><RBRACKET>
+                         {   cont.setImplementor (implementor);
+                             cont.setSubject (subject);
+                             cont.setAction (action);
+                             cont.setType (false);
+                             }
+        	|
+         	t = <DEREGISTER> {
+              	  action = t.image; }
+                        subject = AMSDescription()   <RBRACKET><RBRACKET>
+                         {   cont.setImplementor (implementor);
+                             cont.setSubject (subject);
+                             cont.setAction (action);
+                             cont.setType (false);
+                             }
+                |
+                t = <SEARCH> {
+                 action = t.image;}
+                 subject = AMSDescription()
+                         {   cont.setImplementor (implementor);
+                             cont.setSubject (subject);
+                             cont.setAction (action);
+                             cont.setType (false);
+                             }
+                 constraints = SearchConstraints()
+
+				   <RBRACKET><RBRACKET>
+
+			<RBRACKET> <RBRACKET> <RBRACKET>
+       		)
+)
+{ return (cont); }
+}
+
+
+FIPA_DF_Management_Content FIPA_DF_Management_Content () : {
+  String action;
+  FIPA_AID_Address implementor;
+  DF_Description subject;
+  boolean doneorDo;
+  Token t;
+  Token b;
+  FIPA_DF_Management_Content cont = new FIPA_DF_Management_Content();
+  String context;
+    FIPA_Search_Constraints constraints;
+  String s;
+}
+{
+    (   {System.out.println("df one");  }
+    <LBRACKET> <SEARCH>
+            implementor = SenderName()
+            <LBRACKET> t=<WORD> { action = t.image; }
+            subject = DFDescription () <RBRACKET>  <RBRACKET>
+            {
+                cont.setImplementor (implementor);
+                cont.setSubject (subject);
+                cont.setAction (action);
+                cont.setType (false);
+            }
+
+    |                {System.out.println("df two");  }
+     <LBRACKET> b =<WORD>
+        <LBRACKET> t=<WORD> {
+               context = b.image;
+               action = t.image;
+	        }
+               subject = DFDescription () <RBRACKET>  <RBRACKET>
+            {
+                cont.setContext(context);
+                cont.setSubject (subject);
+                cont.setAction (action);
+                cont.setType (false);
+
+            }
+    |
+    {System.out.println("df thee");  }
+        <LBRACKET><LBRACKET><WORD> implementor = SenderName()
+            <LBRACKET> t = <SEARCH> {
+                   cont.setAction ("(action (agent-identifier  :name df@adastralcity.agentcities.net )   (search (df-agent-description )    (search-constraints    :max-depth 100     :max-results 100))");
+
+		  }
+                subject = DFDescription()
+
+                constraints = SearchConstraints()
+
+                (t = <WORD>
+           	 {cont.setResult (t.image); }
+            	<RBRACKET>
+		|
+		<RBRACKET>)
+     |   {System.out.println("df four");  }
+        <LBRACKET> b =<WORD>
+        <LBRACKET> t=<WORD> {
+               context = b.image;
+               action = t.image; }
+               subject = DFDescription ()<RBRACKET> <RBRACKET>
+            {
+                cont.setContext(context);
+                cont.setSubject (subject);
+                cont.setAction ("(action (agent-identifier  :name df@adastralcity.agentcities.net )   (search (df-agent-description )    (search-constraints    :max-depth 100     :max-results 100))");
+                cont.setType (false);
+
+            } <LBRACKET> <SET> s=Expression ()
+            { cont.setResult (s);
+            }
+            <RBRACKET>
+
+
+)
+{ return (cont); }
+}
+
+
+FIPA_AP_Description AP_Description () : {
+    String s;
+    Token t;
+    FIPA_Transport_Profile ap_trans;
+    FIPA_AP_Description ap = new FIPA_AP_Description();
+}
+{
+ <LBRACKET> <AP_Description>
+ (
+ <NAME> t=<ADDR>
+    {
+        ap.setName (t.image);
+    }
+  |
+  <DYNAMIC> s=Expression ()
+    {
+        ap.setDynamic (s);
+    }
+  |
+  <MOBILITY> s=Expression ()
+    {
+        ap.setMobility (s);
+    }
+    |
+    <TRANSPORT_PROFILE>
+        ap_trans = Transport_Profile ()
+        {
+            ap.setTransportProfile(ap_trans);
+        }
+        )* <RBRACKET>
+        {
+            return (ap);
+        }
+}
+
+
+FIPA_Transport_Profile Transport_Profile() :  {
+
+    FIPA_MTP_Description mtp;
+    FIPA_Transport_Profile profile = new FIPA_Transport_Profile();
+}
+{
+    <LBRACKET> <AP_TRANSPORT_DESCRIPTION>
+           <AVAILABLE_MTS>
+            <LBRACKET> <SET>
+            (mtp = Mtp_Description () { profile.addMTPDescription (mtp); })+
+            <RBRACKET> <RBRACKET>
+{return (profile);}
+
+}
+
+
+FIPA_MTP_Description Mtp_Description () : {
+    FIPA_MTP_Description mtp = new FIPA_MTP_Description();
+    String s;
+}
+{
+    <LBRACKET> <MTP_DESCRIPTION>
+    (
+        <PROFILE> s = Expression() { mtp.setProfile (s); }
+       |
+        <MTP_NAME> s = Expression () {mtp.setMTPName (s); }
+        |
+        <ADDRESSES> <LBRACKET> <SEQUENCE> (s = Expression() {mtp.addAddress(s); } )+
+        <RBRACKET>
+
+        )*
+        <RBRACKET>
+        {
+            return (mtp); }
+}
+
+
+
+
+
+
+
+
+
+
+

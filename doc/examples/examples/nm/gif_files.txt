@@ -1,0 +1,5 @@
+UIA = .:gifs:gui.gif
+FSM = .:gifs:object.gif
+FTM = .:gifs:object.gif
+FAA = .:gifs:object.gif
+VCW = .:gifs:object.gif

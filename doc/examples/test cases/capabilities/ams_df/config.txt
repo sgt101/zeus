@@ -1,0 +1,12 @@
+<transport_configuration> 
+    <name> FIPA_IIOP_2000 </name> 
+    <port> 2000 </port> 
+</transport_configuration> 
+<transport_configuration> 
+    <name> FIPA_IIOP_1997 </name> 
+    <port> 1997 </port> 
+</transport_configuration> 
+<transport_configuration> 
+    <name> FIPA_HTTP_2000 </name> 
+    <port> 16100 </port> 
+</transport_configuration> 

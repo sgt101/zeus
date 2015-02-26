@@ -1,0 +1,115 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>The Zeus Technical Manual</title>
+<LINK REL="STYLESHEET" TYPE="text/css" HREF="zeusdoc.css">
+</head>
+
+<body>
+
+<table width=100% border=0>
+<tr>
+<td><h4>The Zeus Agent Building Toolkit </h4></td>
+<td align=right class="text">Technical Manual</td>
+</tr>
+</table>
+<br>
+<br>
+
+<table border=1 cellspacing=0 width=100% class="smalltext">
+<tr>
+<td width=10%><a class="smalltextlink" href="TOC.html">Contents</a></td>
+<td width=12%><a class="smalltextlink" href="part1.html">Introduction</a></td>
+<td width=12%><a class="smalltextlink" href="part2.html">Zeus Philosophy</a></td>
+<td width=12%><a class="smalltextlink" href="part3.html">Zeus Architecture</a></td>
+<td width=12%><a class="smalltextlink" href="part4.html">Communication</a></td>
+<td width=12%><a class="smalltextlink" href="part5.html">Coordination</a></td>
+<td width=12%><a class="smalltextlink" href="part6.html">Planning and<br>Task Execution</a></td>
+<td width=13%><b>External<br>Applications</b></td>
+</tr>
+</table>
+<br>
+<br>
+
+
+<h3><a name="1"></a>7 Integrating ZEUS Agents with External Programs</h3>
+<p class="text">The preceding sections have mentioned the primary interfaces
+  between ZEUS agents and external programs. These include the domain functions
+  in primitive plan operator specifications, and user-defined Co-ordination Engine
+  graphs whose nodes make direct calls to external programs.  Also mentioned was
+  the fact that the Resource Database implements an interface that could be used,
+  for example, with the database connectivity API of Java to link to proprietary
+  databases – thus extending its potential size and functionality.  For routine
+  problem solving within the declared scope of the ZEUS toolkit, it is expected
+  that for the most part, these primary mechanisms will suffice.  However, the
+  Agent Component Library also provides a secondary, more sophisticated interface,
+  although employing it requires significant user programming. This done via a
+  ZeusExternal interface class and an agent internal event model.</p>
+<p class="text">The ZeusExternal interface class allows users to link an
+  external Java class (that implements the interface) to an executing ZEUS agent
+  program.  Once linked to the agent program, the external code can utilise the
+  agent’s public methods to query or modify the agent’s internal state.  Thus,
+  for example, the resource and/or plan databases can be queried or modified.
+</p>
+<p class="text">The TaskExternal interface class performs a similar function, 
+  to allows users to link an external Java class that implements the 
+  activity of a Zeus task. This interface also contains references to its
+  owner agent, enabling the task to query or change its internal state.
+</p>
+<p class="text">The internal event model provides a mechanism whereby all
+  significant events occurring in the agent can be monitored, e.g. planning events,
+  resource, acquaintance and plan database events, message events, execution monitor
+  events, and co-ordination engine events.  The internal event model is similar
+  to the Java event model, whereby objects register an interest in receiving events
+  of a particular type, and all subsequent events of that type are forwarded to
+  the object.  So, using the event model, an external program that is linked to
+  a ZEUS agent can monitor particular events in the agent and react to them, even
+  by going so far as to use the agent’s public methods to make changes to its
+  internal state.  Although the reader is forewarned that ZEUS currently does
+  not even attempt to manage any internal inconsistencies that might result from
+  such actions.</p>
+<p class="text">The <b>ZEUS Application Realisation</b> guide provides several
+  examples of how to use the event model. </p>
+
+<br>
+<br>
+<hr width=50%>
+<br>
+
+<h4>Concluding Remarks</h4>
+<p class="text">
+  The purpose of this document has been to explain the philosophy and
+  functionality that underly the ZEUS toolkit. In particular, the way in which 
+  the agent-level issues are encapsulated inside agent components, separate
+  from application-level issues. This is deliberate, to enable developers to
+  create working multi-agent systems more easily and efficiently. If others
+  can use Zeus to build their own applications, our decision to employ a
+  declarative specification of behaviour that is interpreted by the generic 
+  ZEUS agent will have been vindicated.
+</p>
+<p class="text">Although this document provides an insight into how agent
+  applications can be built from the toolkit components, it has deliberately avoided 
+  discussing how agent applications should be designed.  There is also no description 
+  of how tools such as the ZEUS Agent Generator tool can be used to create executable
+  applications.  Instead, these are subjects dealt with in the ZEUS Methodology
+  documents.</p>
+
+<br>
+<br>
+
+<table border=1 cellspacing=0 width=100% class="smalltext">
+<tr>
+<td width=10%><a class="smalltextlink" href="TOC.html">Contents</a></td>
+<td width=12%><a class="smalltextlink" href="part1.html">Introduction</a></td>
+<td width=12%><a class="smalltextlink" href="part2.html">Zeus Philosophy</a></td>
+<td width=12%><a class="smalltextlink" href="part3.html">Zeus Architecture</a></td>
+<td width=12%><a class="smalltextlink" href="part4.html">Communication</a></td>
+<td width=12%><a class="smalltextlink" href="part5.html">Coordination</a></td>
+<td width=12%><a class="smalltextlink" href="part6.html">Planning and<br>Task Execution</a></td>
+<td width=13%><b>External<br>Applications</b></td>
+</tr>
+</table>
+
+
+</body>
+</html>

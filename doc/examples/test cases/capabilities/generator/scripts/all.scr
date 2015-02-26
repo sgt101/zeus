@@ -1,0 +1,30 @@
+ns
+Agent19 -o .\test.ont -s dns.db
+Agent18 -o .\test.ont -s dns.db
+Agent17 -o .\test.ont -s dns.db
+Agent16 -o .\test.ont -s dns.db
+Agent15 -o .\test.ont -s dns.db
+Agent14 -o .\test.ont -s dns.db
+Agent13 -o .\test.ont -s dns.db
+Agent12 -o .\test.ont -s dns.db
+Agent9 -o .\test.ont -s dns.db
+Agent11 -o .\test.ont -s dns.db
+Agent8 -o .\test.ont -s dns.db
+Agent10 -o .\test.ont -s dns.db
+Agent7 -o .\test.ont -s dns.db
+Agent6 -o .\test.ont -s dns.db
+Agent5 -o .\test.ont -s dns.db
+Agent4 -o .\test.ont -s dns.db
+Agent3 -o .\test.ont -s dns.db
+Agent2 -o .\test.ont -s dns.db
+Agent1 -o .\test.ont -s dns.db
+Agent0 -o .\test.ont -s dns.db
+Agent26 -o .\test.ont -s dns.db
+Agent25 -o .\test.ont -s dns.db
+Agent24 -o .\test.ont -s dns.db
+Agent23 -o .\test.ont -s dns.db
+Agent22 -o .\test.ont -s dns.db
+Agent21 -o .\test.ont -s dns.db
+Agent20 -o .\test.ont -s dns.db
+yp
+vis

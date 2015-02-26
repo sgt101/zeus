@@ -1,0 +1,43 @@
+<alias_address>
+<zeus_name>
+    ping_agent
+</zeus_name>
+<aid>
+ (agent-identifier 
+     :name PingAgent@132.146.209.235
+     :addresses (sequence iiop://132.146.209.235:1097/acc))
+</aid>
+</alias_address> 
+
+<alias_address>
+<zeus_name>
+    remote_df
+</zeus_name>
+<aid> 
+    (agent-identifier 
+       :name df@132.146.209.235
+       :addresses (sequence iiop://132.146.209.235:1097/acc))
+</aid> 
+</alias_address> 
+<alias_address>
+<zeus_name>
+    remote_ams
+</zeus_name>
+<aid> 
+    (agent-identifier 
+       :name ams@132.146.209.235
+       :addresses (sequence iiop://132.146.209.235:1097/acc))
+</aid> 
+</alias_address>
+<transport_configuration> 
+    <name> FIPA_IIOP_2000 </name> 
+    <port> 2000 </port> 
+</transport_configuration> 
+<transport_configuration> 
+    <name> FIPA_IIOP_1997 </name> 
+    <port> 1997 </port> 
+</transport_configuration> 
+<transport_configuration> 
+    <name>FIPA_HTTP_2000 </name> 
+    <port>16100 </port> 
+</transport_configuration> 

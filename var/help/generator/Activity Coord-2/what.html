@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+
+<html>
+
+<head>
+<title>Agent Co-ordination Help</title>
+</head>
+
+
+<!-- DOCUMENT MAIN BODY -->
+<body>
+
+<h3> COORD-2: How to Equip an Agent with an Interaction Strategy </h3>
+
+Whilst interaction protocols describe how agents interact, they do not explain
+why.  This arises from each agent's intentions and motivations, which need to
+be encoded into interaction strategies.  At this stage of the realisation
+process agent developers can choose an appropriate strategy for their agents.
+These strategies are entered through the 'Co-ordination Strategies' panel, and
+refer to the protocol currently selected in the upper Co-ordination Protocols
+table. <p>
+
+In associating a strategy with an agent what we are specifying the parameters
+the agent will use to obtain particular facts from other agents. This involves
+the following steps: <p>
+
+<ul>
+<li> Ensure the relevant protocol is the currently selected entry in the
+upper 'Co-ordination Protocols' table
+<li> A default strategy will appear in the table - this can be configured as
+appropriate by entering information into its Fact Type, Agents, Relations,
+Strategy and Parameter fields - the options applicable are described in more
+detail in the ZEUS Realisation guide.
+<li> A protocol can be associated with more than one strategy, to add a new
+strategy click on the toolbar's New button, this will create a new entry
+<li> When the Mode field is checked, the strategy will be used when negotiating
+for the fact type in question.  If the opposite is true, deselect it.
+</ul>
+
+The strategy itself is a body of procedural knowledge that will have been
+implemented as a Java file and incorporated into one of the ZEUS packages,
+(see activity COORD-3). <p>
+
+</body>
+
+</html>

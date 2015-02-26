@@ -1,0 +1,686 @@
+DEBUG 1 Compiling msg processing rule ...
+	(:message_rule Agent1_Rule1 :pattern ((type (?:request)) (content (?:^register$))) :action zeus.actors.MsgHandler$register)
+DEBUG 1 Compiling msg processing rule ...
+	(:message_rule Agent1_Rule2 :pattern ((type (?:request)) (content (?:^deregister$))) :action zeus.actors.MsgHandler$deregister)
+DEBUG 1 Compiling msg processing rule ...
+	(:message_rule Agent1_Rule3 :pattern ((type (?:subscribe)) (content (?:^log_message$))) :action zeus.actors.MsgHandler$log_message)
+DEBUG 1 Compiling msg processing rule ...
+	(:message_rule Agent1_Rule4 :pattern ((type (?:subscribe)) (content (?:^log_report$))) :action zeus.actors.MsgHandler$log_report)
+DEBUG 1 Compiling msg processing rule ...
+	(:message_rule Agent1_Rule5 :pattern ((type (?:subscribe)) (content (?:^log_address$))) :action zeus.actors.MsgHandler$log_address)
+DEBUG 1 Compiling msg processing rule ...
+	(:message_rule Agent1_Rule6 :pattern ((type (?:cancel)) (content (?:^log_message$))) :action zeus.actors.MsgHandler$cancel_message)
+DEBUG 1 Compiling msg processing rule ...
+	(:message_rule Agent1_Rule7 :pattern ((type (?:cancel)) (content (?:^log_report$))) :action zeus.actors.MsgHandler$cancel_report)
+DEBUG 1 Compiling msg processing rule ...
+	(:message_rule Agent1_Rule8 :pattern ((type (?:cancel)) (content (?:^log_address$))) :action zeus.actors.MsgHandler$cancel_address)
+DEBUG 1 Compiling msg processing rule ...
+	(:message_rule Agent1_Rule9 :pattern ((type (?:query-ref)) (content (?:^your_abilities$))) :action zeus.actors.MsgHandler$your_abilities)
+DEBUG 1 Compiling msg processing rule ...
+	(:message_rule Agent1_Rule10 :pattern ((type (?:query-ref)) (content (?:^address_of(([:space:])+)([:alnum:])((.)*)$))) :action zeus.actors.MsgHandler$address_of)
+DEBUG 1 Compiling msg processing rule ...
+	(:message_rule Agent1_Rule11 :pattern ((type (?:query-ref)) (content (?:^your_relations$))) :action zeus.actors.MsgHandler$your_relations)
+DEBUG 1 Compiling msg processing rule ...
+	(:message_rule Agent1_Rule12 :pattern ((type (?:query-ref)) (content (?:^has_ability(([:space:])+)((.)*)$))) :action zeus.actors.MsgHandler$has_ability)
+DEBUG 1 Compiling msg processing rule ...
+	(:message_rule Agent1_Rule13 :pattern ((type (?:inform)) (content (?:^isa_facilitator(([:space:])+)([:alnum:])((.)*)$))) :action zeus.actors.MsgHandler$isa_facilitator)
+DEBUG 1 Compiling msg processing rule ...
+	(:message_rule Agent1_Rule14 :pattern ((type (?:request)) (content (?:^kill_yourself$))) :action zeus.actors.MsgHandler$kill_yourself)
+DEBUG 1 Compiling msg processing rule ...
+	(:message_rule Agent1_Rule15 :pattern ((type (?:subscribe)) (content (?:^has_ability(([:space:])+)((.)*)$))) :action zeus.actors.MsgHandler$log_specified_ability)
+DEBUG 1 Compiling msg processing rule ...
+	(:message_rule Agent1_Rule16 :pattern ((type (?:cancel)) (content (?:^has_ability(([:space:])+)((.)*)$))) :action zeus.actors.MsgHandler$cancel_specified_ability)
+DEBUG 1 Compiling msg processing rule ...
+	(:message_rule Agent1_Rule17 :pattern ((type (?:inform)) (content (?:^my_abilities(([:space:])+)((.)*)$))) :action zeus.actors.MsgHandler$add_agents_abilities)
+DEBUG 1 Compiling msg processing rule ...
+	(:message_rule Agent1_Rule18 :pattern ((type (?:inform)) (content (?:^data(([:space:])+)((.)*)$))) :action zeus.actors.MsgHandler$add_information)
+DEBUG 1 Compiling msg processing rule ...
+	(:message_rule Agent1_Rule20 :pattern ((type (?:inform)) (in-reply-to (?:Agent119))) :action zeus.actors.MailBox$register)
+DEBUG 1 MsgHandler processing msg ...
+(inform
+ :sender Nameserver5
+ :receiver Agent1
+ :in-reply-to Agent119
+ :content "984756803375 18000 984756809171"
+ :envelope ((address "(:name Nameserver5 :host \"132.146.209.68\" :port 6700 :type Nameserver)")(sendTime "0.322")))
+
+DEBUG 2 Invoking method register of class zeus.actors.MailBox with parameter (inform
+ :sender Nameserver5
+ :receiver Agent1
+ :in-reply-to Agent119
+ :content "984756803375 18000 984756809171"
+ :envelope ((address "(:name Nameserver5 :host \"132.146.209.68\" :port 6700 :type Nameserver)")(sendTime "0.322")))
+
+DEBUG 1 MsgHandler processing msg ...
+(inform
+ :sender Facilitator5
+ :receiver Agent1
+ :content "isa_facilitator Facilitator5"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "0.3447777777777778")(receiveTime "0.3482777777777778")))
+
+DEBUG 2 Invoking method isa_facilitator of class zeus.actors.MsgHandler with parameter (inform
+ :sender Facilitator5
+ :receiver Agent1
+ :content "isa_facilitator Facilitator5"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "0.3447777777777778")(receiveTime "0.3482777777777778")))
+
+DEBUG 1 MsgHandler processing msg ...
+(query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "0.3456666666666667")(receiveTime "0.3491111111111111")))
+
+DEBUG 2 Invoking method your_abilities of class zeus.actors.MsgHandler with parameter (query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "0.3456666666666667")(receiveTime "0.3491111111111111")))
+
+DEBUG 1 Compiling msg processing rule ...
+	(:message_rule Agent1_Rule21 :pattern ((type (?:cfp)) (in-reply-to (?:)) (reply-with (?:^([:alnum:])((.)*)$))) :action zeus.actors.rtn.Engine$new_dialogue)
+DEBUG 1 MsgHandler processing msg ...
+(query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "1.3413333333333333")(receiveTime "1.3430555555555554")))
+
+DEBUG 2 Invoking method your_abilities of class zeus.actors.MsgHandler with parameter (query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "1.3413333333333333")(receiveTime "1.3430555555555554")))
+
+DEBUG 1 MsgHandler processing msg ...
+(cfp
+ :sender Agent0
+ :receiver Agent1
+ :reply-with Agent0_local_dstruct65
+ :content "(:id Agent0_subgoal42 :desired_by Agent0 :type true :fact (:type FactForTesting :id var_38 :modifiers 1 :attributes ((att2 ?var_39)(att1 9))) :end_time 9 :cost 0.0 :priority 1 :root_id Agent0_goal34 :reply_time 4.437138888888889 :confirm_time 7.0)"
+ :envelope ((address "(:name Agent0 :host \"132.146.209.68\" :port 6701 :type Agent)")(sendTime "1.8604444444444443")(receiveTime "1.8665")))
+
+DEBUG 2 Invoking method new_dialogue of class zeus.actors.rtn.Engine with parameter (cfp
+ :sender Agent0
+ :receiver Agent1
+ :reply-with Agent0_local_dstruct65
+ :content "(:id Agent0_subgoal42 :desired_by Agent0 :type true :fact (:type FactForTesting :id var_38 :modifiers 1 :attributes ((att2 ?var_39)(att1 9))) :end_time 9 :cost 0.0 :priority 1 :root_id Agent0_goal34 :reply_time 4.437138888888889 :confirm_time 7.0)"
+ :envelope ((address "(:name Agent0 :host \"132.146.209.68\" :port 6701 :type Agent)")(sendTime "1.8604444444444443")(receiveTime "1.8665")))
+
+DEBUG 1 EngineTableModel addNode(): s0-0
+DEBUG 1 	Node has no parents
+DEBUG 2 Getting datarec for Agent1_PlanRecord54/FactForTesting/?var_46/Agent0_local_dstruct65 at position 0
+DEBUG 2 Required to find Fact:
+(:type FactForTesting :id var_48 :modifiers 1 :attributes ((att2 9)(att1 11)))
+DEBUG 2 Fact:
+(:type FactForTesting :id fact43 :modifiers 0 :attributes ((att2 9)(att1 11)))
+assigned to datarec ?var_48
+DEBUG 0 canAchieve = 
+ (goals [(:id Agent0_subgoal42 :desired_by Agent0 :type true :fact (:type FactForTesting :id var_46 :modifiers 1 :attributes ((att2 ?var_47)(att1 9))) :end_time 9 :cost 0.0 :priority 1 :root_id Agent0_goal34 :reply_time 4.437138888888889 :confirm_time 7.0)]
+  internal [Agent1_PlanRecord54/FactForTesting/?var_46/Agent0_local_dstruct65]
+  external []
+  timeout 1.5
+  bindings ()
+  decompositions {}
+ )
+DEBUG 1 EngineTableModel addNode(): s1-1
+DEBUG 1 	Node has parents: s0-0
+DEBUG 1 EngineTableModel addNode(): s6-2
+DEBUG 1 	Node has parents: s1-1
+DEBUG 1 Compiling msg processing rule ...
+	(:message_rule Agent0_local_dstruct65 :pattern ((in-reply-to (?:Agent0_local_dstruct65))) :action zeus.actors.rtn.Engine$continue_dialogue)
+DEBUG 1 EngineTableModel addNode(): d3R-3
+DEBUG 1 	Node has parents: s6-2
+DEBUG 1 continue_dialogue:
+	Agent: Agent0
+	CommsKey: Agent0_local_dstruct65
+	MsgType: propose
+	Content: (:id Agent0_subgoal42 :desired_by Agent0 :type true :fact (:type FactForTesting :id var_46 :modifiers 1 :attributes ((att2 ?var_47)(att1 9))) :end_time 9 :cost 4.9E-324 :priority 1 :root_id Agent0_goal34 :reply_time 4.437138888888889 :confirm_time 7.0)
+DEBUG 1 MsgHandler processing msg ...
+(accept-proposal
+ :sender Agent0
+ :receiver Agent1
+ :in-reply-to Agent0_local_dstruct65
+ :content "(:id Agent0_subgoal42 :desired_by Agent0 :type true :fact (:type FactForTesting :id var_72 :modifiers 1 :attributes ((att2 ?var_73)(att1 9))) :end_time 9 :cost 4.9E-324 :priority 1 :root_id Agent0_goal34 :reply_time 4.437138888888889 :confirm_time 7.0 :consumer_records ((:producer Agent1 :producer_id Agent0_subgoal42 :consumer Agent0 :consumer_id Agent0_goal34 :use_ref Agent0_used74 :comms_key Agent0_local_dstruct65 :start 9 :amount 1 :consumed true)))"
+ :envelope ((address "(:name Agent0 :host \"132.146.209.68\" :port 6701 :type Agent)")(sendTime "1.8856111111111111")(receiveTime "1.8925")))
+
+DEBUG 2 Invoking method continue_dialogue of class zeus.actors.rtn.Engine with parameter (accept-proposal
+ :sender Agent0
+ :receiver Agent1
+ :in-reply-to Agent0_local_dstruct65
+ :content "(:id Agent0_subgoal42 :desired_by Agent0 :type true :fact (:type FactForTesting :id var_72 :modifiers 1 :attributes ((att2 ?var_73)(att1 9))) :end_time 9 :cost 4.9E-324 :priority 1 :root_id Agent0_goal34 :reply_time 4.437138888888889 :confirm_time 7.0 :consumer_records ((:producer Agent1 :producer_id Agent0_subgoal42 :consumer Agent0 :consumer_id Agent0_goal34 :use_ref Agent0_used74 :comms_key Agent0_local_dstruct65 :start 9 :amount 1 :consumed true)))"
+ :envelope ((address "(:name Agent0 :host \"132.146.209.68\" :port 6701 :type Agent)")(sendTime "1.8856111111111111")(receiveTime "1.8925")))
+
+DEBUG 2 Engine: new msg received
+(agent Agent0
+ msg_type accept-proposal
+ key Agent0_local_dstruct65
+ goals [(:id Agent0_subgoal42 :desired_by Agent0 :type true :fact (:type FactForTesting :id var_61 :modifiers 1 :attributes ((att2 ?var_62)(att1 9))) :end_time 9 :cost 4.9E-324 :priority 1 :root_id Agent0_goal34 :reply_time 4.437138888888889 :confirm_time 7.0 :consumer_records ((:producer Agent1 :producer_id Agent0_subgoal42 :consumer Agent0 :consumer_id Agent0_goal34 :use_ref Agent0_used74 :comms_key Agent0_local_dstruct65 :start 9 :amount 1 :consumed true)))]
+)
+DEBUG 2 d3R continue_exec
+DEBUG 2 d3R replyReceived: (agent Agent0
+ msg_type accept-proposal
+ key Agent0_local_dstruct65
+ goals [(:id Agent0_subgoal42 :desired_by Agent0 :type true :fact (:type FactForTesting :id var_61 :modifiers 1 :attributes ((att2 ?var_62)(att1 9))) :end_time 9 :cost 4.9E-324 :priority 1 :root_id Agent0_goal34 :reply_time 4.437138888888889 :confirm_time 7.0 :consumer_records ((:producer Agent1 :producer_id Agent0_subgoal42 :consumer Agent0 :consumer_id Agent0_goal34 :use_ref Agent0_used74 :comms_key Agent0_local_dstruct65 :start 9 :amount 1 :consumed true)))]
+)
+DEBUG 2 s6-2 continue_exec
+DEBUG 2 EffectChain(Agent0_subgoal42,1,9,true)
+DEBUG 2 s6-2 continue_exec OK
+DEBUG 1 EngineTableModel addNode(): s2-4
+DEBUG 1 	Node has parents: d3R-3
+DEBUG 2 AddProducerRecords null
+DEBUG 2 AddConsumerRecords [(:producer Agent1 :producer_id Agent0_subgoal42 :consumer Agent0 :consumer_id Agent0_goal34 :use_ref Agent0_used74 :comms_key Agent0_local_dstruct65 :start 9 :amount 1 :consumed true)]
+DEBUG 2 AddContract (goal Agent0_subgoal42
+ key Agent0_local_dstruct65
+ cost 0.0
+ delivered false
+ paid false
+ agent Agent1
+ owner Agent0
+ timeout 9.0)
+DEBUG 2 *** S2 AuditTable State ***
+DEBUG 2 Audit Table Entries
+...Contracts...
+Table-key = Agent0_subgoal42
+(goal Agent0_subgoal42
+ key Agent0_local_dstruct65
+ cost 0.0
+ delivered false
+ paid false
+ agent Agent1
+ owner Agent0
+ timeout 9.0)
+...Routing...
+Table-key = Agent0_goal34/Agent0_used74
+(:producer Agent1 :producer_id Agent0_subgoal42 :consumer Agent0 :consumer_id Agent0_goal34 :use_ref Agent0_used74 :comms_key Agent0_local_dstruct65 :start 9 :amount 1 :consumed true)
+
+**************
+
+DEBUG 2 Running started ... 
+DEBUG 2 Engine: new msg received
+(agent Agent1
+ msg_type result
+ key Agent0_goal34/Agent0_used74
+ goals [(:type FactForTesting :id var_51 :modifiers 0 :attributes ((att2 ?var_47)(att1 9)))]
+)
+DEBUG 2 GoodsReceived
+(agent Agent1
+ msg_type result
+ key Agent0_goal34/Agent0_used74
+ goals [(:type FactForTesting :id var_51 :modifiers 0 :attributes ((att2 ?var_47)(att1 9)))]
+)
+DEBUG 2 Audit Table Entries
+...Contracts...
+Table-key = Agent0_subgoal42
+(goal Agent0_subgoal42
+ key Agent0_local_dstruct65
+ cost 0.0
+ delivered false
+ paid false
+ agent Agent1
+ owner Agent0
+ timeout 9.0)
+...Routing...
+Table-key = Agent0_goal34/Agent0_used74
+(:producer Agent1 :producer_id Agent0_subgoal42 :consumer Agent0 :consumer_id Agent0_goal34 :use_ref Agent0_used74 :comms_key Agent0_local_dstruct65 :start 9 :amount 1 :consumed true)
+
+**************
+
+DEBUG 1 continue_dialogue:
+	Agent: Agent0
+	CommsKey: Agent0_local_dstruct65
+	MsgType: inform
+	DataType: result
+	DataKey: Agent0_goal34/Agent0_used74
+	Content: (:type FactForTesting :id var_51 :modifiers 0 :attributes ((att2 ?var_47)(att1 9)))
+DEBUG 1 continue_dialogue:
+	Agent: Agent0
+	CommsKey: Agent0_local_dstruct65
+	MsgType: inform
+	DataType: invoice
+	DataKey: Agent0_subgoal42
+	Content: (:type Money :id var_63 :modifiers 1 :attributes ((amount 0.0)))
+DEBUG 2 GoodsReceived - post
+Audit Table Entries
+...Contracts...
+Table-key = Agent0_subgoal42
+(goal Agent0_subgoal42
+ key Agent0_local_dstruct65
+ cost 0.0
+ delivered true
+ paid false
+ agent Agent1
+ owner Agent0
+ timeout 9.0)
+...Routing...
+
+**************
+
+DEBUG 1 MsgHandler processing msg ...
+(inform
+ :sender Agent0
+ :receiver Agent1
+ :in-reply-to Agent0_local_dstruct65
+ :content "payment Agent0_subgoal42 (:type Money :id fact_86 :modifiers 0 :attributes ((amount 4.9E-324)))"
+ :envelope ((address "(:name Agent0 :host \"132.146.209.68\" :port 6701 :type Agent)")(sendTime "2.271")(receiveTime "2.2770555555555556")))
+
+DEBUG 2 Invoking method continue_dialogue of class zeus.actors.rtn.Engine with parameter (inform
+ :sender Agent0
+ :receiver Agent1
+ :in-reply-to Agent0_local_dstruct65
+ :content "payment Agent0_subgoal42 (:type Money :id fact_86 :modifiers 0 :attributes ((amount 4.9E-324)))"
+ :envelope ((address "(:name Agent0 :host \"132.146.209.68\" :port 6701 :type Agent)")(sendTime "2.271")(receiveTime "2.2770555555555556")))
+
+DEBUG 2 Engine: new msg received
+(agent Agent0
+ msg_type payment
+ key Agent0_subgoal42
+ goals [(:type Money :id var_68 :modifiers 0 :attributes ((amount 4.9E-324)))]
+)
+DEBUG 2 AuditTable paymentReceived:
+(agent Agent0
+ msg_type payment
+ key Agent0_subgoal42
+ goals [(:type Money :id var_68 :modifiers 0 :attributes ((amount 4.9E-324)))]
+)
+DEBUG 2 Audit Table Entries
+...Contracts...
+Table-key = Agent0_subgoal42
+(goal Agent0_subgoal42
+ key Agent0_local_dstruct65
+ cost 0.0
+ delivered true
+ paid false
+ agent Agent1
+ owner Agent0
+ timeout 9.0)
+...Routing...
+
+**************
+
+DEBUG 2 AuditTable paymentReceived - post
+Audit Table Entries
+...Contracts...
+...Routing...
+
+**************
+
+DEBUG 1 MsgHandler processing msg ...
+(query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "2.3421666666666665")(receiveTime "2.343888888888889")))
+
+DEBUG 2 Invoking method your_abilities of class zeus.actors.MsgHandler with parameter (query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "2.3421666666666665")(receiveTime "2.343888888888889")))
+
+DEBUG 1 MsgHandler processing msg ...
+(query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "3.3430555555555554")(receiveTime "3.344777777777778")))
+
+DEBUG 2 Invoking method your_abilities of class zeus.actors.MsgHandler with parameter (query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "3.3430555555555554")(receiveTime "3.344777777777778")))
+
+DEBUG 1 MsgHandler processing msg ...
+(query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "4.343944444444444")(receiveTime "4.345666666666666")))
+
+DEBUG 2 Invoking method your_abilities of class zeus.actors.MsgHandler with parameter (query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "4.343944444444444")(receiveTime "4.345666666666666")))
+
+DEBUG 1 MsgHandler processing msg ...
+(query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "5.344777777777778")(receiveTime "5.3465")))
+
+DEBUG 2 Invoking method your_abilities of class zeus.actors.MsgHandler with parameter (query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "5.344777777777778")(receiveTime "5.3465")))
+
+DEBUG 1 MsgHandler processing msg ...
+(query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "6.345666666666666")(receiveTime "6.347388888888889")))
+
+DEBUG 2 Invoking method your_abilities of class zeus.actors.MsgHandler with parameter (query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "6.345666666666666")(receiveTime "6.347388888888889")))
+
+DEBUG 1 MsgHandler processing msg ...
+(query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "7.346555555555556")(receiveTime "7.348277777777778")))
+
+DEBUG 2 Invoking method your_abilities of class zeus.actors.MsgHandler with parameter (query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "7.346555555555556")(receiveTime "7.348277777777778")))
+
+DEBUG 1 MsgHandler processing msg ...
+(query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "8.346555555555556")(receiveTime "8.348277777777778")))
+
+DEBUG 2 Invoking method your_abilities of class zeus.actors.MsgHandler with parameter (query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "8.346555555555556")(receiveTime "8.348277777777778")))
+
+DEBUG 1 MsgHandler processing msg ...
+(query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "9.347388888888888")(receiveTime "9.34911111111111")))
+
+DEBUG 2 Invoking method your_abilities of class zeus.actors.MsgHandler with parameter (query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "9.347388888888888")(receiveTime "9.34911111111111")))
+
+DEBUG 1 MsgHandler processing msg ...
+(query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "10.348277777777778")(receiveTime "10.35")))
+
+DEBUG 2 Invoking method your_abilities of class zeus.actors.MsgHandler with parameter (query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "10.348277777777778")(receiveTime "10.35")))
+
+DEBUG 1 MsgHandler processing msg ...
+(query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "11.34911111111111")(receiveTime "11.350833333333334")))
+
+DEBUG 2 Invoking method your_abilities of class zeus.actors.MsgHandler with parameter (query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "11.34911111111111")(receiveTime "11.350833333333334")))
+
+DEBUG 1 MsgHandler processing msg ...
+(query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "12.35")(receiveTime "12.351722222222222")))
+
+DEBUG 2 Invoking method your_abilities of class zeus.actors.MsgHandler with parameter (query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "12.35")(receiveTime "12.351722222222222")))
+
+DEBUG 1 MsgHandler processing msg ...
+(query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "13.350888888888889")(receiveTime "13.352611111111111")))
+
+DEBUG 2 Invoking method your_abilities of class zeus.actors.MsgHandler with parameter (query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "13.350888888888889")(receiveTime "13.352611111111111")))
+
+DEBUG 1 MsgHandler processing msg ...
+(query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "14.350888888888889")(receiveTime "14.352611111111111")))
+
+DEBUG 2 Invoking method your_abilities of class zeus.actors.MsgHandler with parameter (query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "14.350888888888889")(receiveTime "14.352611111111111")))
+
+DEBUG 1 MsgHandler processing msg ...
+(query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "15.351722222222222")(receiveTime "15.353444444444444")))
+
+DEBUG 2 Invoking method your_abilities of class zeus.actors.MsgHandler with parameter (query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "15.351722222222222")(receiveTime "15.353444444444444")))
+
+DEBUG 1 MsgHandler processing msg ...
+(query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "16.35172222222222")(receiveTime "16.353444444444445")))
+
+DEBUG 2 Invoking method your_abilities of class zeus.actors.MsgHandler with parameter (query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "16.35172222222222")(receiveTime "16.353444444444445")))
+
+DEBUG 1 MsgHandler processing msg ...
+(query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "17.352611111111113")(receiveTime "17.354333333333333")))
+
+DEBUG 2 Invoking method your_abilities of class zeus.actors.MsgHandler with parameter (query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "17.352611111111113")(receiveTime "17.354333333333333")))
+
+DEBUG 1 MsgHandler processing msg ...
+(query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "18.3535")(receiveTime "18.35522222222222")))
+
+DEBUG 2 Invoking method your_abilities of class zeus.actors.MsgHandler with parameter (query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "18.3535")(receiveTime "18.35522222222222")))
+
+DEBUG 1 MsgHandler processing msg ...
+(query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "19.354333333333333")(receiveTime "19.356055555555557")))
+
+DEBUG 2 Invoking method your_abilities of class zeus.actors.MsgHandler with parameter (query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "19.354333333333333")(receiveTime "19.356055555555557")))
+
+DEBUG 1 MsgHandler processing msg ...
+(query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "20.35522222222222")(receiveTime "20.356944444444444")))
+
+DEBUG 2 Invoking method your_abilities of class zeus.actors.MsgHandler with parameter (query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "20.35522222222222")(receiveTime "20.356944444444444")))
+
+DEBUG 1 MsgHandler processing msg ...
+(query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "21.35522222222222")(receiveTime "21.356944444444444")))
+
+DEBUG 2 Invoking method your_abilities of class zeus.actors.MsgHandler with parameter (query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "21.35522222222222")(receiveTime "21.356944444444444")))
+
+DEBUG 1 MsgHandler processing msg ...
+(query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "22.356055555555557")(receiveTime "22.357777777777777")))
+
+DEBUG 2 Invoking method your_abilities of class zeus.actors.MsgHandler with parameter (query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "22.356055555555557")(receiveTime "22.357777777777777")))
+
+DEBUG 1 MsgHandler processing msg ...
+(query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "23.356944444444444")(receiveTime "23.358666666666668")))
+
+DEBUG 2 Invoking method your_abilities of class zeus.actors.MsgHandler with parameter (query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "23.356944444444444")(receiveTime "23.358666666666668")))
+
+DEBUG 1 MsgHandler processing msg ...
+(query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "24.357833333333332")(receiveTime "24.359555555555556")))
+
+DEBUG 2 Invoking method your_abilities of class zeus.actors.MsgHandler with parameter (query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "24.357833333333332")(receiveTime "24.359555555555556")))
+
+DEBUG 1 MsgHandler processing msg ...
+(query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "25.358666666666668")(receiveTime "25.360388888888888")))
+
+DEBUG 2 Invoking method your_abilities of class zeus.actors.MsgHandler with parameter (query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "25.358666666666668")(receiveTime "25.360388888888888")))
+
+DEBUG 1 MsgHandler processing msg ...
+(query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "26.359555555555556")(receiveTime "26.36127777777778")))
+
+DEBUG 2 Invoking method your_abilities of class zeus.actors.MsgHandler with parameter (query-ref
+ :sender Facilitator5
+ :receiver Agent1
+ :reply-with Facilitator521
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator5 :host \"132.146.209.68\" :port 6704 :type Facilitator)")(sendTime "26.359555555555556")(receiveTime "26.36127777777778")))
+

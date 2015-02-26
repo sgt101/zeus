@@ -1,0 +1,7 @@
+<contacts>
+   <contact ZEUS-name="SaarbruckenPing" FIPA-address="(agent-identifier :name ping@africa.agentcities.net :addresses (sequence http://192.168.0.2:3000/acc))"/>
+   <contact ZEUS-name="SanfranciscoPing" FIPA-address="(agent-identifier :name ping@africa.agentcities.net :addresses (sequence http://192.168.0.2:3000/acc))"/>
+   <contact ZEUS-name="ICSTMPing" FIPA-address="(agent-identifier :name ACLPing@blackbird.doc.ic.ac.uk :addresses (sequence http://146.169.1.33:3080/acc))"/>
+   <contact ZEUS-name="LausannePing" FIPA-address="(agent-identifier :name acl_ping@beta.lausanne.agentcities.net :addresses (sequence http://srv02.lausanne.agentcities.net:8080/acc IOR:000000000000001149444c3a464950412f4d54533a312e3000000000000000010000000000000054000101000000000d3139322e33332e3231302e320000cdbf00000018afabcaff0000000262da9e390000000800000000000000000000000100000001000000140000000000010020000000000001010000000000 corbaname://srv02.lausanne.agentcities.net:8081/acities/lausanne/acc iioploc:http://srv02.lausanne.agentcities.net:80/~acities/Lausanne/acc_iiop_ior))"/>
+   <contact ZEUS-name="AuctionHouseRegistration" FIPA-address="(agent-identifier :name arega@saarbruecken.agentcities.net :addresses (sequence http://134.96.184.100:8080/acc))"/>
+</contacts>

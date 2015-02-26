@@ -1,0 +1,28 @@
+BEGIN_ONTOLOGY
+  BEGIN_PREAMBLE
+    :system ZEUS-Ontology-Editor
+    :version "1.02"
+  END_PREAMBLE
+  BEGIN_FACTS
+    BEGIN_FACT_ITEM
+      :name apple
+      :parent Entity
+    END_FACT_ITEM
+    BEGIN_FACT_ITEM
+      :name orange
+      :parent Entity
+    END_FACT_ITEM
+    BEGIN_FACT_ITEM
+      :name pear
+      :parent Entity
+    END_FACT_ITEM
+    BEGIN_FACT_ITEM
+      :name banana
+      :parent Entity
+    END_FACT_ITEM
+    BEGIN_FACT_ITEM
+      :name melon
+      :parent Entity
+    END_FACT_ITEM
+  END_FACTS
+END_ONTOLOGY

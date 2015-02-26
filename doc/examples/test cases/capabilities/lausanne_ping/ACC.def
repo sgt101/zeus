@@ -1,0 +1,50 @@
+BEGIN_GENERATOR
+  BEGIN_PREAMBLE
+    :system "ZEUS-Agent-Generator"
+    :version "1.2.2"
+    :ontology ".:ACC.ont"
+  END_PREAMBLE
+
+  BEGIN_AGENT_NAME_INDEX
+  END_AGENT_NAME_INDEX
+
+  BEGIN_AGENT_ICON_INDEX
+  END_AGENT_ICON_INDEX
+
+  BEGIN_TASK_NAME_INDEX
+  END_TASK_NAME_INDEX
+
+  BEGIN_AGENT_LIST
+  END_AGENT_LIST
+
+  BEGIN_TASK_LIST
+  END_TASK_LIST
+
+  BEGIN_GENERATION_PLAN
+    BEGIN_PREAMBLE
+      :platform "Unix"
+      :directory "..:..:..:source_code:zeus:agents"
+    END_PREAMBLE
+    BEGIN_NAMESERVER_LIST
+      (:name Nameserver0
+       :is_root true
+       :has_gui false
+       :address_output_file "dns.db"
+       :time_grain 0.5
+      )
+    END_NAMESERVER_LIST
+    BEGIN_FACILITATOR_LIST
+      (:name Facilitator0
+       :period 5.00
+       :has_gui false
+       :dns_file "dns.db"
+      )
+    END_FACILITATOR_LIST
+    BEGIN_VISUALISER_LIST
+      (:name Visualiser0
+       :has_gui false
+       :dns_file "dns.db"
+      )
+    END_VISUALISER_LIST
+  END_GENERATION_PLAN
+END_GENERATOR

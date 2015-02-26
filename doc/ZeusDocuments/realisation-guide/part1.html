@@ -1,0 +1,251 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>The Zeus Realisation Guide</title>
+<LINK REL="STYLESHEET" TYPE="text/css" HREF="zeusdoc.css">
+</head>
+
+<body>
+
+<table width=100% border=0>
+<tr>
+<td><h4>The Zeus Agent Building Toolkit </h4></td>
+<td align=right class="text">The Application Realisation Guide</td>
+</tr>
+</table>
+<br>
+
+<table border=1 cellspacing=0 width=100% class="smalltext">
+<tr>
+<td width=10%><a class="smalltextlink" href="TOC.html">Contents</a></td>
+<td width=15%><b>Introduction</b></td>
+<td width=15%><a class="smalltextlink" href="part2.html">Ontologies</a></td>
+<td width=15%><a class="smalltextlink" href="part3.html">Building<br> Task Agents</a></td>
+<td width=15%><a class="smalltextlink" href="part4.html">Utility Agents</a></td>
+<td width=15%><a class="smalltextlink" href="part5.html">Task Agent<br> Configuration</a></td>
+<td width=15%><a class="smalltextlink" href="part6.html">Agent Implementation</a></td>
+</tr>
+</table>
+<br>
+<br>
+
+
+<h3><a name="1"></a>1        Introduction</a></h3>
+
+<p class="text">The agent realisation process follows the design stage of
+  the ZEUS agent development methodology.  During the course of this guide
+  the realisation process will be methodically described as a series of 
+  development stages, each of which consists of individual activities that
+  implement particular aspects of an agent.</p>
+<p class="text">A prerequisite for using this document is a design for the
+  application being realised.  In addition the developer should know when and
+  how to perform the necessary activities.  We have tried to capture this expertise
+  in the Case Studies document, which provides worked examples that we feel best
+  illustrate how to implement working agent applications.</p>
+<p class="text">But before we consider how to implement an agent, we need
+  to consider the conceptual basis of agents created with the ZEUS toolkit.</p>
+
+<br>
+<hr width="50%">
+<br> <br>
+
+<a name="11"></a><h4>1.1     The Conceptual Zeus Agent</h4>
+
+<p class="text">At the highest level of abstraction, the ZEUS agent design approach requires developers
+to view an agent as a five-layered entity, as illustrated in Figure 1.1 below. </p>
+
+
+<table cellpadding=0 cellspacing=0>
+  <tr>
+    <td width=72 height=0></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td><img width=423 height=357
+   src="./gfx/figure1-1.gif"></td>
+  </tr>
+</table>
+<br clear=ALL>
+<p class="smalltext" align="center">
+<b>Figure 1.1</b>: The Conceptual Structure of a ZEUS Agent</p> 
+<br>
+<br>
+<p class="text">From the bottom up, these layers are: </p>
+<ul>
+<li><p class="text">an interface layer, which enables the agent to be linked to the external programs
+  that provide it with resources and/or implement its competencies</p>
+<li><p class="text">a <i>definition layer</i>, where the agent is viewed as an autonomous reasoning entity</p>
+<li><p class="text">an <i>organisation layer</i>, where the agent is viewed in terms of its relationships
+  with other agents</p>
+<li><p class="text">a <i>co-ordination</i> layer, where the agent is viewed as a social entity that
+  interacts according to its known protocols and strategies</p>
+<li><p class="text">a <i>communication layer</i>, which implements the protocols and mechanisms that support
+  inter-agent communication</p>
+</ul>
+<br>
+<p class="text">The <i>Interface</i> layer receives input via its sensors
+  and is able to change the outside world through its effectors.  For instance,
+  a sensor could receive instructions from a GUI or act by modifying a database,
+  thus providing physical realisations of the agents' resources and skills.  As
+  the sensors and effectors are external to the agent, configuration of the Interface
+  layer consists of specifying interfaces between them and the agent. </p>
+<p class="text">At the <i>Definition</i> layer the agent is viewed as an
+  autonomous rational entity, in terms of its reasoning abilities, goals, resources, 
+  skills, beliefs and preferences.  As this layer is physically realised by classes 
+  from the ZEUS Agent Component library, (described in the Technical Manual), 
+  this stage of the methodology involves the configuration of these components.  
+</p>
+<p class="text">At the <i>Organisation</i> layer the agent is viewed in terms
+  of its relationships with other agents.  This introduces the concept of an agency 
+  - a group of related agents.  Agencies may be real, in that they are related 
+  by virtue of common attribute, such as being part of the same company.  Or agencies 
+  may be virtual, in that their constituents share a co-operation agreement.  
+  Thus this stage of the methodology involves configuring the agent in terms of 
+  the agency it belongs to, what roles it plays with the agency, what other agents 
+  it is aware of, and what abilities it knows others possess.</p>
+<p class="text">At the <i>Co-ordination</i> layer the agent is considered
+  to be a social entity, hence this stage involves configuring it for the desired 
+  forms of social behaviour.  This is achieved by equipping it with the appropriate 
+  negotiation protocols and strategies.  </p>
+<p class="text">The <i>Communication</i> layer provides a transport protocol
+  and language enabling agents to send messages to each other.  For compatibility 
+  this layer should be the same in each agent, and so there no need for developers 
+  to configure this layer.</p>
+<p class="text">This document will explain the process by which this conceptual
+  agent is configured into functional member of a multi-agent society.  This configuration 
+  process will be accomplished using the ZEUS Agent Generator tool, which will 
+  ultimately generate the agent source code.  The developer need only implement 
+  the agents' application-specific functionality, and link it to the agents using 
+  the interfaces provided. </p>
+
+<br>
+<hr width="50%">
+<br> <br>
+
+<a name="12"></a>
+<h4>1.2     An Overview of the Agent Realisation Process</h4>
+
+<p class="text">The objective of this process is to realise working agent
+  implementations from conceptual designs created during the previous stage. 
+  The agent realisation process consists of several stages, (some of which have
+  been derived from the levels of abstraction that exist within a ZEUS agent as
+  shown in Figure 1.1).  The stages and the order in which they should be attempted 
+  are: </p>
+<p class="text"><b>Stage 1: Ontology Creation</b></p>
+<p class="text">Before implementing any agents the developer must define
+  the application ontology: the declarative knowledge that represents the significant 
+  concepts within the application domain.  The tool used to enter this information 
+  is the ZEUS Ontology Editor.  Or alternatively, an existing ontology can be
+  imported.</p>
+<p style='
+text-align:justify'><b>Stage 2: Agent Creation</b></p>
+<p style='text-align:justify'>During this stage the generic ZEUS agent is configured 
+  to fulfil its application-specific responsibilities, returning in a task agent.  
+  This process involves the ZEUS Agent Editor to complete up to four sub-stages
+  (depending on the nature of the agent); these are:</p>
+<ul>
+<li><p class="text">Agent Definition
+  - where its tasks, initial resources and planning abilities are specified </p>
+<li><p class="text">Task Description
+  - where the applicability and attributes of agent activities are specified </p>
+<li><p class="text">Agent Organisation
+  - where the social context of each agent is specified</p>
+<li><p class="text">Agent Co-ordination
+  - where each agent is equipped with the social abilities for interaction</p>
+</ul>
+<p style='text-align:justify'><b>Stage 3: Utility Agent Configuration</b></p>
+<p style='text-align:justify'>Whereas the previous section concerned the agents
+  who performed the application-specific activities this stage defines the attributes 
+  of the utility agents who provide the support infrastructure for the agent society.  
+  This information is entered through the Code Generation Editor in readiness 
+  for the creation of the utility agents. </p>
+<p style='
+text-align:justify'><b>Stage 4: Task Agent Configuration</b></p>
+<p style='text-align:justify'>This stage enables the runtime parameters of the 
+  task agents to be specified.  This involves supplying information such as the 
+  host machines the agents will run on, and the external resources and programs 
+  to which the agents will be linked. </p>
+<p style='
+text-align:justify'><b>Stage 5: Agent Implementation</b></p>
+<p style='text-align:justify'>At this stage the Code Generator can be invoked 
+  and agent source code automatically generated.  This leaves the developer with 
+  the job of providing the application-specific implementations of the tasks, 
+  external resources, programs (such as agent user interfaces) and interaction 
+  strategies.  When this stage has been completed the application is ready to 
+  be run.</p>
+<p class="text">Each of these stages is the subject of the remaining sections
+  of this document.  Each section contains various activities that describe how 
+  to configure aspects of the generic ZEUS agent.  For instance, the Co-ordination 
+  section describes how to solve the problem of engaging in a dialogue with another 
+  agent (the solution being to equip agent with an appropriate co-ordination protocol).  
+</p>
+<p class="text">These problem/solution entries are referred to in the Case
+  Studies that accompany the Role Modelling Guide.  If you are reading this document 
+  for the first time it is recommended that you read this guide and one of the 
+  associated case studies before proceeding further.</p>
+
+<br>
+<hr width="50%">
+<br> <br>
+
+<a name="13"></a><h4>1.3     Getting Started</a></h4>
+
+<p class="text">All the stages of the realisation process are achieved through
+  the ZEUS Agent Generator tool.  The Generator is run through the Java runtime
+  environment, which should be version 1.2 or later (due to the class libraries
+  required).  The presence of a JRE can be easily tested by typing 'java -version'
+  into your machine's command line, if it is installed correctly you will see
+  a message reporting the version of the JRE installed on that machine.  Otherwise
+  you will need to install the JRE (or make it accessible) before proceeding.  
+</p>
+<p class="text">You should also ensure that the JRE's CLASSPATH environment
+  variable contains a reference to the directory that contains the zeus class
+  package.  The state of this variable can be seen by typing SETENV on UNIX machines,
+  or SET on PCs.  There should also be a ZEUS properties file in the appropriate
+  location, (for more detailed instructions, see the Installation guide). </p>
+
+<p class="text"> Now start the Generator by entering the following command:</p>
+<p><tt>java zeus.generator.AgentGenerator</tt></p>
+<p style='text-align:justify'>If ZEUS has been installed properly a window should
+  appear entitled 'ZEUS Agent Generator'.  If not, consult the trouble-shooting
+  section of the installation guide. </p>
+<p class="text">The Generator window serves as the launching point
+  for the various agent building windows, it consists of four panels that enable
+  access to its functions, namely:</p>
+<ul>
+<li><p class="text"> <b>Project Options</b> -
+  this panel contains a toolbar of management options, enabling whole projects
+  to be loaded, saved and cleared.  The other buttons launch the Society Viewer
+  and Code Generator tools.  Beneath is the filename of the project currently
+  in memory. </p>
+<li><p class="text"> <b>Ontology Options - </b>this
+  panel provides access to the Ontology Editor tool, enabling ontologies to be
+  loaded, saved, cleared and edited.  The name of the ontology currently in memory
+  is shown beneath the toolbar.</p>
+<li><p class="text"> <b>Agent Options</b> - this
+  panel consists of a toolbar and a table that lists all the agents in the currently
+  loaded project.  The options available from here are described in <a class="textlink" href="part3.html">Section 3</a>. </p>
+<li><p class="text"> <b>Task Options</b> - this
+  panel consists of a toolbar and a table that lists all the tasks in the currently
+  loaded project.  The options available from here are also described in <a class="textlink" href="part3.html">Section 3</a>.   </p>
+</ul>
+<p class="text">The subsequent sections describe how the facilities
+  of the Generator tool support the stages of the ZEUS agent creation methodology.</p>
+<br>
+
+<br>
+<br>
+<table border=1 cellspacing=0 width=100% class="smalltext">
+<tr>
+<td width=10%><a class="smalltextlink" href="TOC.html">Contents</a></td>
+<td width=15%><b>Introduction</b></td>
+<td width=15%><a class="smalltextlink" href="part2.html">Ontologies</a></td>
+<td width=15%><a class="smalltextlink" href="part3.html">Building<br> Task Agents</a></td>
+<td width=15%><a class="smalltextlink" href="part4.html">Utility Agents</a></td>
+<td width=15%><a class="smalltextlink" href="part5.html">Task Agent<br> Configuration</a></td>
+<td width=15%><a class="smalltextlink" href="part6.html">Agent Implementation</a></td>
+</tr>
+</table>
+
+</body>
+</html>

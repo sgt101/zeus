@@ -1,0 +1,216 @@
+BEGIN_GENERATOR
+  BEGIN_PREAMBLE
+    :system "ZEUS-Agent-Generator"
+    :version "1.04"
+    :ontology ".:mazedemo.ont"
+  END_PREAMBLE
+
+  BEGIN_AGENT_NAME_INDEX
+    AgentId1 Environment
+    AgentId0 Navigator
+  END_AGENT_NAME_INDEX
+
+  BEGIN_AGENT_ICON_INDEX
+    AgentId1 ".:gifs:maze.gif"
+    AgentId0 ".:gifs:navigator.gif"
+  END_AGENT_ICON_INDEX
+
+  BEGIN_TASK_NAME_INDEX
+    AbstractTaskId14 Navigate
+    AbstractTaskId1 Register
+    AbstractTaskId0 respondMove
+  END_TASK_NAME_INDEX
+
+  BEGIN_AGENT_LIST
+    (:name AgentId1
+     :class ZeusAgent
+     :planner_width 2
+     :planner_length 20
+     :doublebook_fraction 0
+     :tasks (AbstractTaskId0
+            )
+     :initial_facts ((:type agentRegistered
+                      :id fact195
+                      :modifiers 0
+                      :attributes ((name Environment)
+                                  )
+                     )
+                    )
+    )
+    (:name AgentId0
+     :class ZeusAgent
+     :planner_width 2
+     :planner_length 20
+     :doublebook_fraction 0
+     :tasks (AbstractTaskId1
+             AbstractTaskId14
+            )
+     :initial_facts ((:type thisMove
+                      :id fact39
+                      :modifiers 0
+                      :attributes ((west false)
+                                   (east false)
+                                   (south false)
+                                   (north false)
+                                   (id Navigator)
+                                  )
+                     )
+                    )
+     :acquaintances ((:name AgentId1
+                      :relation peer
+                     )
+                    )
+    )
+  END_AGENT_LIST
+
+  BEGIN_TASK_LIST
+    (:Rulebase AbstractTaskId1
+       (registerWithEnvironment
+          ?aN <- (agentsName (name ?var6))
+          =>
+          (send_message (type inform) (content ?aN) (receiver Environment))
+       )
+       (exitedMaze9
+          ?me <- (mazeExited (id ?var6))
+          ?obst <- (obstacle)
+          ?aR <- (agentRegistered (name ?var19))
+          ?tM <- (thisMove)
+          (agentsName (name ?var33))
+          =>
+          (retract ?me)
+          (retract ?obst)
+          (retract ?aR)
+          (retract ?tM)
+          (assert (thisMove (west false) (east false) (south false) (north false) (id ?var33)))
+       )
+    )
+    (:Rulebase AbstractTaskId14
+       (start
+          ?obs <- (obstacle (west ?var180) (east ?var181) (south ?var182) (north ?var179))
+          ?lastMove <- (thisMove (west false) (east false) (south false) (north false))
+          ?agentReg <- (agentRegistered (name ?var15))
+          ?inMaze <- (inMaze (isInMaze true))
+          =>
+          (modify ?lastMove (west false) (east false) (south false) (north true))
+          (send_message (type inform) (content ?lastMove) (receiver ?var15))
+          (retract ?obs)
+       )
+       (followWall_east9
+          ?obst <- (obstacle (east false) (north true))
+          ?agentReg <- (agentRegistered (name ?var15))
+          ?lastMove <- (thisMove (east true))
+          ?inMaze <- (inMaze (isInMaze true))
+          =>
+          (modify ?lastMove (west false) (east true) (south false) (north false))
+          (send_message (type inform) (content ?lastMove) (receiver ?var15))
+          (retract ?obst)
+       )
+       (followWall_north9
+          ?obst <- (obstacle (west true) (north false))
+          ?agentReg <- (agentRegistered (name ?var15))
+          ?lastMove <- (thisMove (north true))
+          ?inMaze <- (inMaze (isInMaze true))
+          =>
+          (modify ?lastMove (west false) (east false) (south false) (north true))
+          (send_message (type inform) (content ?lastMove) (receiver ?var15))
+          (retract ?obst)
+       )
+       (followWall_west9
+          ?obst <- (obstacle (west false) (south true))
+          ?agentReg <- (agentRegistered (name ?var15))
+          ?lastMove <- (thisMove (west true))
+          ?inMaze <- (inMaze (isInMaze true))
+          =>
+          (modify ?lastMove (west true) (east false) (south false) (north false))
+          (send_message (type inform) (content ?lastMove) (receiver ?var15))
+          (retract ?obst)
+       )
+       (followWall_south9
+          ?obst <- (obstacle (east true) (south false))
+          ?agentReg <- (agentRegistered (name ?var15))
+          ?lastMove <- (thisMove (south true))
+          ?inMaze <- (inMaze (isInMaze true))
+          =>
+          (modify ?lastMove (west false) (east false) (south true) (north false))
+          (send_message (type inform) (content ?lastMove) (receiver ?var15))
+          (retract ?obst)
+       )
+       (going_east_blocked_east
+          ?obst <- (obstacle (east true) (south true))
+          ?agentReg <- (agentRegistered (name ?var15))
+          ?lastMove <- (thisMove (east true))
+          ?inMaze <- (inMaze (isInMaze true))
+          =>
+          (modify ?lastMove (west false) (east false) (south false) (north true))
+          (send_message (type inform) (content ?lastMove) (receiver ?var15))
+          (retract ?obst)
+       )
+       (going_east_blocked_east_openSouth
+          ?obst <- (obstacle (east true) (south false))
+          ?agentReg <- (agentRegistered (name ?var15))
+          ?lastMove <- (thisMove (east true))
+          ?inMaze <- (inMaze (isInMaze true))
+          =>
+          (modify ?lastMove (west false) (east false) (south true) (north false))
+          (send_message (type inform) (content ?lastMove) (receiver ?var15))
+          (retract ?obst)
+       )
+       (going_south_blocked_south
+          ?obst <- (obstacle (west true) (south true))
+          ?agentReg <- (agentRegistered (name ?var15))
+          ?lastMove <- (thisMove (south true))
+          ?inMaze <- (inMaze (isInMaze true))
+          =>
+          (modify ?lastMove (west false) (east true) (south false) (north false))
+          (send_message (type inform) (content ?lastMove) (receiver ?var15))
+          (retract ?obst)
+       )
+       (going_south_blocked_south_openWest
+          ?obst <- (obstacle (west false) (south true))
+          ?agentReg <- (agentRegistered (name ?var15))
+          ?lastMove <- (thisMove (south true))
+          ?inMaze <- (inMaze (isInMaze true))
+          =>
+          (modify ?lastMove (west true) (east false) (south false) (north false))
+          (send_message (type inform) (content ?lastMove) (receiver ?var15))
+          (retract ?obst)
+       )
+       (going_north_blocked_north
+          ?obst <- (obstacle (east true) (north true))
+          ?agentReg <- (agentRegistered (name ?var15))
+          ?lastMove <- (thisMove (north true))
+          ?inMaze <- (inMaze (isInMaze true))
+          =>
+          (modify ?lastMove (west true) (east false) (south false) (north false))
+          (send_message (type inform) (content ?lastMove) (receiver ?var15))
+          (retract ?obst)
+       )
+       (going_north_blocked_north_openEast
+          ?obst <- (obstacle (east false) (north true))
+          ?agentReg <- (agentRegistered (name ?var15))
+          ?lastMove <- (thisMove (north true))
+          ?inMaze <- (inMaze (isInMaze true))
+          =>
+          (modify ?lastMove (west false) (east true) (south false) (north false))
+          (send_message (type inform) (content ?lastMove) (receiver ?var15))
+          (retract ?obst)
+       )
+       (going_west_blocked_west
+          ?obst <- (obstacle (west true) (north true))
+          ?agentReg <- (agentRegistered (name ?var15))
+          ?lastMove <- (thisMove (west true))
+          ?inMaze <- (inMaze (isInMaze true))
+          =>
+          (modify ?lastMove (west false) (east false) (south true) (north false))
+          (send_message (type inform) (content ?lastMove) (receiver ?var15))
+          (retract ?obst)
+       )
+       (going_west_blocked_west_openNorth
+          ?obst <- (obstacle (west true) (north false))
+          ?agentReg <- (agentRegistered (name ?var15))
+          ?lastMove <- (thisMove (west true))
+          ?inMaze <- (inMaze (isInMaze true))
+          =>
+          (modify ?lastMove (west false) (east false) (south false) (north true))
+          (send_message (type inform) (content ?lastMove) (receiver ?var15))
+          

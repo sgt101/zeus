@@ -1,0 +1,350 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>The Zeus Realisation Guide</title>
+<LINK REL="STYLESHEET" TYPE="text/css" HREF="zeusdoc.css">
+</head>
+
+<body>
+
+<table width=100% border=0>
+<tr>
+<td><h4>The Zeus Agent Building Toolkit </h4></td>
+<td align=right class="text">The Application Realisation Guide</td>
+</tr>
+</table>
+<br>
+<table border=1 cellspacing=0 width=100% class="smalltext">
+<tr>
+<td width=10%><a class="smalltextlink" href="TOC.html">Contents</a></td>
+<td width=15%><a class="smalltextlink" href="part1.html">Introduction</a></td>
+<td width=15%><a class="smalltextlink" href="part2.html">Ontologies</a></td>
+<td width=15%><a class="smalltextlink" href="part3.html">Building<br> Task Agents</a></td>
+<td width=15%><b>Utility Agents</b></td>
+<td width=15%><a class="smalltextlink" href="part5.html">Task Agent<br> Configuration</a></td>
+<td width=15%><a class="smalltextlink" href="part6.html">Agent Implementation</a></td>
+</tr>
+</table>
+
+<br>
+<br>
+
+<a name="1"></a><h3>4     The Utility Agent Configuration Stage</h3>
+
+<p class="text">By now the task-specific agents will have been defined, leaving
+  us to consider the agents that will provide the support infrastructure: these
+  are known as the utility agents.  This stage requires that the following design
+  decisions should have already been taken: </p>
+<ul>
+<li> <p class="text"> how the name resolution service will be realised</p>
+<li> <p class="text"> whether there will be a Facilitator, and if so, what are its attributes</p>
+<li> <p class="text"> whether there will be a Visualiser</p>
+<li> <p class="text"> whether agent activity will be stored persistently</p>
+</ul>
+<p class="text"> The number and nature of the utility agents needed is dependent on the application. 
+  The Role Modelling guide and its case studies provide examples of how to configure
+  utility agents appropriately. Each type of utility agent can be configured through
+  the 'Utility Agent' pane of the Code Generator window.  
+</p>
+<p class="text"><img width=32 height=32 src="./gfx/image067.gif"> &nbsp;
+  To open the Code Generator tool select the &quot;Generate Code&quot; menu option or the equivalent button
+  from the Project Options toolbar.  You will now be able to perform the main
+  activities of this stage, namely:</p>
+<ul>
+<li> <p class="text"> <a class="textlink" href="#UTIL1">Configuring the Name Servers</a>, <b>(UTIL-1)</b></p>
+<li> <p class="text"> <a class="textlink" href="#UTIL2">Configuring the Facilitators</a>, <b>(UTIL-2)</b></p>
+<li> <p class="text"> <a class="textlink" href="#UTIL3">Configuring the Visualisers</a>, <b>(UTIL-3)</b></p>
+<li> <p class="text"> <a class="textlink" href="#UTIL4">Configuring the Database Proxies</a>, <b>(UTIL-4)</b></p>
+</ul>
+
+<br> <br>
+<a name="UTIL1"></a>
+<table cellpadding=0 cellspacing=0 border=0 width=100%>
+  <tr>
+    <td align=left valign=top><img src="./gfx/image069.gif"></td>
+    <td><h3>UTIL-1: Configuring the Name Servers</h3></td>
+  </tr>
+</table>
+
+<p class="text">
+  An agent society must possess at least one Agent Name Server (ANS).  The ANSs
+  maintain a registry of known agents, enabling them to map agent identities to
+  a logical network location.  This is necessary because agents only know the
+  names of their acquaintances and not their locations.  Name Server agents are
+  created and configured using the 'Name Servers' panel, as shown in Figure 4.1.
+</p>
+
+<table cellpadding=0 cellspacing=0 border=0>
+  <tr>
+    <td><img src="./gfx/image071.gif"></td>
+  </tr>
+  <tr><td align=center class='smalltext'><b>Figure 4.1:</b> The Name Servers Entry Panel</td>
+  </tr>
+</table>
+<br>
+<p class="text">By default the Name Servers table has one entry, referring
+  to a single ANS agent, this should suffice for small agent societies.  However
+  as the ANS is vital to all agent communication it is a potential bottleneck,
+  and so it may be desirable to have multiple ANSs to support larger societies,
+  or to provide a degree of redundancy in case one fails.</p>
+<li> <p class="text"> <img width=32 height=16 src="./gfx/image016.gif"> &nbsp; To add
+  another ANS, click the New button, this will create another entry in the table
+  that can be edited as required.</p>
+<p class="text"> The Host field shows the I.P address (i.e. network location)
+  of the machine that the ANS will run on, this defaults to the I.P address of
+  the machine that is currently running the Generator tool.  More than one ANS
+  can reside on a single host. </p>
+<p class="text"> To change the location of
+  the ANS double click on the Host field and enter the new value. If you don't
+  know the I.P address of machine, use the ping command to discover it.</p>
+<p class="text">If there is more than one ANS the developer can choose which
+  is the root server, the only operational difference of changing this is the
+  root server will provide the time-grain value (see below) and be responsible
+  for maintaining the society-wide clock. </p>
+<li> <p class="text"> To select or deselect an agent as the root, click on the 
+ 'Is Root?' field. Note: one ANS must be selected as the root.</p>
+<p class="text">The agent selected as the root will provide the time-grain
+  value for the entire society, (for a discussion of the time-grain and its implications
+  see section 3 of this document).    </p>
+<li> <p class="text"> Change
+  the time-grain by double clicking the Time Grain field, the new value should
+  be expressed in minutes and be a non-negative real number. For instance to set
+  the time-grain to 20 seconds 0.33 should be entered.  Note: only the time grain
+  field of the root ANS can be edited.  </p>
+<p class="text">As the root ANS serves as a reference point for all other
+  agents in the society, there must be a means to inform other agents where the
+  root ANS is located.  Hence when the root ANS starts, it will write its network
+  location into a file called the Default Name Server (DNS) file.  If agents share
+  a network file system it is recommended that the DNS file be expressed in terms
+  of a network pathname.    </p>
+<li> <p class="text"> To edit
+  the pathname to which the root ANS will write the DNS, double click on the Address
+  File field of the root agent. </p>
+<p class="text">To make non-root name servers aware of the root ANS, they
+  must be told where to find the root's DNS file.  This pathname is entered into
+  the DNS File field.  If this is not a network accessible file, it will need
+  to be copied to the local file system of the agent concerned, and hence this
+  field will contain its local pathname and filename. </p>
+<li> <p class="text"> To edit
+  the pathname from which the DNS file will be read, double click on the DNS File
+  field of the root agent. </p>
+<p class="text">The developer can choose whether Agent Name Servers will
+  be created with a graphical user interface, (GUI).  The GUI will display information
+  on the server's activity, and provide some control functions.  This may be useful
+  for debugging and monitoring, but unnecessary if the ANS is to run in the background.</p>
+<li> <p class="text"> To create
+  an ANS with a GUI click the 'Create GUI?' checkbox field, click again to 
+  deselect.</p>
+
+<br> <br>
+<a name="UTIL2"></a>
+<table cellpadding=0 cellspacing=0 border=0 width=100%>
+  <tr>
+    <td align=left valign=top><img src="./gfx/image072.gif"></td>
+    <td><h3>UTIL-2: Configuring the Facilitators</h3></td>
+  </tr>
+</table>
+
+<p class="text">
+ Whereas every agent society must have an ANS, there is no such obligation for
+ Facilitators.  Whether Facilitators are included depends on the nature of the
+ application; if all agent acquaintances and abilities have been determined at
+ design-time and will not change, then a Facilitator may not be necessary.  However,
+ this situation is unlikely, and so most applications will possess at least one
+ Facilitator, which can be created and configured using the 'Facilitators' panel,
+ as shown in Figure 4.2. </p>
+
+<table cellpadding=0 cellspacing=0 border=0>
+  <tr>
+    <td><img src="./gfx/image074.gif"></td>
+  </tr>
+  <tr><td align=center class='smalltext'><b>Figure 4.2:</b> The Facilitator Entry Panel</td>
+  </tr>
+</table>
+<br>
+<p class="text">By default the Facilitators table has one entry, one should
+  suffice for small-scale applications, but as it could be a potential bottleneck
+  it may be desirable to have multiple Facilitators for larger applications, or
+  where some redundancy is wanted in case of failure.</p>
+<li> <p class="text"> <img width=32 height=16 src="./gfx/image016.gif"> &nbsp; To add
+  another Facilitator, click the New button, this will create another entry in
+  the table that can be edited as required.</p>
+<p class="text">The Host field shows the I.P address (i.e. network location)
+  of the machine that the Facilitator will run on, this defaults to the I.P address
+  of the machine that is currently running the Generator tool.  More than one
+  Facilitator can reside on a single host. </p>
+<li> <p class="text"> To change the location of
+  a Facilitator double click on the Host field and enter the new value. If you
+  don't know the I.P address of machine, use the ping command to discover it.</p>
+<p class="text">To make Facilitators aware of the root ANS, they must be
+  told where to find its DNS file.  This pathname is entered into the DNS File
+  field.  If this is not a network accessible file, it will need to be copied
+  to the Facilitator's local file system, and its local pathname and filename
+  entered in this field. </p>
+<li> <p class="text"> To edit
+  the pathname from which the DNS file will be read, double click on the DNS File
+  field. </p>
+<p class="text">The developer can choose whether Facilitators will be created
+  with a graphical user interface, (GUI).  The GUI will display information on
+  the agent's activity, and provide some control functions.  This may be useful
+  for debugging and monitoring, but unnecessary if the agent is to run in the
+  background.</p>
+<li> <p class="text"> To create
+  a Facilitator GUI click the 'Create GUI?' checkbox field, click again to deselect.</p>
+<br>
+<p class="text"><b>How to Make the Facilitator Reactive</b></p>
+<p class="text">The normal behaviour of a Facilitator is to retrieve the
+  list of known agents from an ANS, and then send a message to each of the agents
+  asking them to reply with details of the abilities they are currently able to
+  perform.  The interval between these queries is set through the Recycle Period
+  field.</p>
+<li> <p class="text"> Change
+  the cycle interval by double clicking the Recycle Period field, the new value
+  should be expressed in minutes and be a non-negative real number.  </p>
+<p class="text">If the cycle period is set to 0 the Facilitator will cease
+  its proactive querying of agents and become totally reactive.  In this case
+  the normal roles are reversed and the agents must behave proactively, periodically
+  advertising their abilities to the Facilitator.  This will require altering
+  the agent's normal behaviour, (see <a href="part6.html#imp4a" class="textlink">
+  How to Instruct an Agent to Do Something</a>).</p>
+
+<br> <br>
+<a name="UTIL3"></a>
+<table cellpadding=0 cellspacing=0 border=0 width=100%>
+  <tr>
+    <td align=left valign=top><img src="./gfx/image075.gif"></td>
+    <td><h3>UTIL-3: Configuring the Visualisers</h3></td>
+  </tr>
+</table>
+<p class="text">
+ Like Facilitators, there is no requirement for an application to contain a Visualiser.
+ Whether one is included depends on whether the application is to be debugged,
+ monitored or analysed.  Given the Visualiser offers some very useful functionality
+ for free it will usually be included in the list of agents to be created.  Visualisers
+ are created and configured using the 'Visualisers' panel, shown in Figure 4.3.</p>
+
+<table cellpadding=0 cellspacing=0 border=0>
+  <tr>
+    <td><img src="./gfx/image077.gif"></td>
+  </tr>
+  <tr><td align=center class='smalltext'><b>Figure 4.3</b>: The Visualiser Entry Panel</td>
+  </tr>
+</table>
+<br>
+
+<p class="text">By default the Visualisers table has one entry, whether more
+  than one is necessary will probably depend on the number of locations where
+  users will want to visualise some aspect of the society. Another influencing
+  factor is that Visualisers are not essential to the operation of an agent society,
+  and so as the implications of failure are less serious there is less need for
+  redundancy.</p>
+<li> <p class="text"> <img width=32 height=16 src="./gfx/image016.gif"> &nbsp; 
+  To add another Visualiser, click the New button, this will create another entry in
+  the table that can be edited as required.</p>
+<p class="text">The Host field shows the I.P address (i.e. network location)
+  of the machine that the Visualiser will run on, this defaults to the I.P address
+  of the machine that is currently running the Generator tool.  As the Visualiser
+  windows will occupy most of a host's screen space, there is likely to be only
+  one Visualiser per host (although this is not enforced). </p>
+<li> <p class="text"> To change the location of
+  a Visualiser double click on the Host field and enter the new value. If you
+  don't know the I.P address of machine, use the ping command to discover it.</p>
+<p class="text">To make Visualisers aware of the root ANS, they must be told
+  where to find its DNS file.  This pathname is entered into the DNS File field. 
+  If this is not a network accessible file, it will need to be copied to the Visualiser's
+  local file system, and its local pathname and filename entered in this field.
+</p>
+<li> <p class="text"> To edit the pathname from which the DNS file will be read, 
+ double click on the DNS File field. </p>
+<p class="text">The developer can choose whether Visualisers will be created
+  with a GUI that will display information on the Visualiser agent's activity;
+  (this will be created separately from the windows of the Visualiser tools).
+  This GUI may be useful for debugging and understanding how the agent works,
+  but otherwise this option should be ignored.</p>
+<li> <p class="text"> To create
+  a Visualiser with an activity GUI click the 'Create GUI?' checkbox field; click
+  again to deselect.</p>
+
+<br> <br>
+<a name="UTIL4"></a>
+<table cellpadding=0 cellspacing=0 border=0 width=100%>
+  <tr>
+    <td align=left valign=top><img src="./gfx/image078.gif"></td>
+    <td><h3>UTIL-4: Configuring the Database Proxies</h3></td>
+  </tr>
+</table>
+<p class="text">
+  A Database Proxy (DP) agent provides Visualiser agents with a means of persistent
+  storing agent session information.  A DP can serve as an interface to a 3<sup>rd</sup>
+  party database, or translate the information to be stored into its own ASCII
+  file format.  Database Proxies are created and configured through the panel
+  of the same name, shown in Figure 4.4, although there is no entry there by default.
+</p>
+
+<table cellpadding=0 cellspacing=0 border=0>
+  <tr>
+    <td><img src="./gfx/image080.gif"></td>
+  </tr>
+  <tr><td align=center class='smalltext'><b>Figure 4.4</b>: The Database Proxy Entry Panel</td>
+  </tr>
+</table>
+<br>
+<p class="text">Whether a DP is included in an application depends on whether
+  the activities of the agents need to be logged.  Hence a DP will typically only
+  be created if the society is being debugged or audited, and a DP will not be
+  created by default.</p>
+<li> <p class="text"> <img width=32 height=16 src="./gfx/image016.gif"> &nbsp; 
+ To add a Database Proxy, click the New button, this will create an entry in the table
+  that can be edited as required.</p>
+<p class="text">The Host field shows the I.P address (i.e. network location)
+  of the machine that the Database Proxy will run on, this defaults to the I.P
+  address of the machine that is currently running the Generator tool.  If the
+  DP is to be connected to a proprietary database the address entered will probably
+  need to be the address of the machine that hosts the database. </p>
+<li> <p class="text"> To change the location of
+  the DP double click on the Host field and enter the new value. If you don't
+  know the I.P address of machine, use the ping command to discover it.</p>
+<p class="text">Like the other utility agents the DPs must be aware of the
+  root ANS.  Thus the location of the DNS file should be entered into the DNS
+  File field.  If this is not a network accessible file, it will need to be copied
+  to the DP's local file system. </p>
+<li> <p class="text"> To edit
+  the pathname from which the DNS file will be read, double click on the DNS File
+  field. </p>
+<p class="text">The developer can choose whether the DP will be created with
+  a GUI that will display information on its activities. This GUI may be useful
+  for debugging and understanding how the agent works, but otherwise this option
+  should be ignored.</p>
+<li> <p class="text"> To create
+  an activity GUI click the 'Create GUI?' checkbox field; click again to deselect.</p>
+<br>
+
+<p class="text"><b>How to Connect a Database Proxy to a Storage Medium</b></p>
+<p class="text">The Database Proxy is connected to its storage media through
+  a Java class that implements the methods of the storage interface.  The ZEUS
+  toolkit provides two predefined storage interfaces:</p>
+<ol>
+<li><p class="text"> zeus.ext.FlatFile : this writes saved information into a conventional ASCII file </p>
+<li><p class="text"> zeus.ext.Oracle : this writes information into an Oracle Database using a ODBC connection</p>
+</ol>
+<p class="text"> To choose the storage mechanism to be used, double click on the Proxy Classpath field
+  and enter the full pathname of the appropriate class.  If this is not entered
+  the DP will not be able to save information.</p>
+
+
+<br>
+<br>
+<table border=1 cellspacing=0 width=100% class="smalltext">
+<tr>
+<td width=10%><a class="smalltextlink" href="TOC.html">Contents</a></td>
+<td width=15%><a class="smalltextlink" href="part1.html">Introduction</a></td>
+<td width=15%><a class="smalltextlink" href="part2.html">Ontologies</a></td>
+<td width=15%><a class="smalltextlink" href="part3.html">Building<br> Task Agents</a></td>
+<td width=15%><b>Utility Agents</b></td>
+<td width=15%><a class="smalltextlink" href="part5.html">Task Agent<br> Configuration</a></td>
+<td width=15%><a class="smalltextlink" href="part6.html">Agent Implementation</a></td>
+</tr>
+</table>
+
+</body>
+</html>

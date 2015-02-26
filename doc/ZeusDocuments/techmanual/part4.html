@@ -1,0 +1,457 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>The Zeus Technical Manual</title>
+<LINK REL="STYLESHEET" TYPE="text/css" HREF="zeusdoc.css">
+</head>
+
+<body>
+
+<table width=100% border=0>
+<tr>
+<td><h4>The Zeus Agent Building Toolkit </h4></td>
+<td align=right class="text">Technical Manual</td>
+</tr>
+</table>
+<br>
+<br>
+
+<table border=1 cellspacing=0 width=100% class="smalltext">
+<tr>
+<td width=10%><a class="smalltextlink" href="TOC.html">Contents</a></td>
+<td width=12%><a class="smalltextlink" href="part1.html">Introduction</a></td>
+<td width=12%><a class="smalltextlink" href="part2.html">Zeus Philosophy</a></td>
+<td width=12%><a class="smalltextlink" href="part3.html">Zeus Architecture</a></td>
+<td width=12%><b>Communication</b></td>
+<td width=12%><a class="smalltextlink" href="part5.html">Coordination</a></td>
+<td width=12%><a class="smalltextlink" href="part6.html">Planning and<br>Task Execution</a></td>
+<td width=13%><a class="smalltextlink" href="part7.html">External<br>Applications</a></td>
+</tr>
+</table>
+<br>
+<br>
+
+<h3><a name="1"></a>4 Agent Communication</h3>
+<p class="text">The focus of this section is on the components that implement 
+ inter-agent communication. Communication between ZEUS agents is implemented 
+ via point-to-point TCP/IP sockets, with each message communicated as a sequence 
+ of ASCII characters. <br>
+ <br>
+ This is realised through the combined actions of an agent's Mailbox and Message
+ Handler components, permanent threads that run concurrently for as long as the
+ agent is alive.  The creation order and interactions between the threads of
+ the communication mechanism are shown in Figure 4.1, (where permanent threads
+ are dashed lines and transient threads are shown as dotted lines).</p>
+
+<p class="text" align=center>
+<img width=480 height=311 src="./gfx/image022.gif"><br><br>
+<b>Figure 4.1</b>: A timeline of the active threads of the Zeus Communication Mechanism</p>
+
+<br>
+
+<a name="41"></a><h4>4.1 The Mailbox</h4>
+<p class="text">The Mailbox is responsible for creating and reading TCP/IP
+  sockets to send and receive messages. It maintains two independent threads of
+  activity: one, a reader thread, continually listens for incoming socket connections. 
+  When one is detected it will create a new transient thread to read the message
+  and deliver it to the Message Handler, which will process it.  This approach
+  delegates responsibility for reading messages to the new connection thread,
+  leaving the main 'InBox' thread free to continue listening for incoming messages,
+  (thus enabling several messages to be received simultaneously).  When the incoming
+  message is read, the connection thread terminates. </p>
+<p class="text">The other Mailbox thread is the 'OutBox'.  When this is given
+  a message to dispatch it creates a transient thread to open a socket to the
+  recipient.  If the connection is made the message is then streamed down the
+  socket, and when finished the writer thread terminates.  Again this approach
+  means an agent can dispatch more than one message at a time. </p>
+<p class="text">The writer thread of the Mailbox continually checks a priority
+  FIFO outgoing-message-queue for messages to dispatch. For each message awaiting
+  dispatch, it queries the message object for the intended recipient, and looks
+  up a local address book for the recipient’s address. If the address is found,
+  the writer opens a network socket connection to the agent at the specified address.
+  Next, it serialises the message object as an ASCII sequence onto the network
+  connection. If the recipient’s address is not found, the writer stores the message
+  object onto a holding buffer, and queries known NameServer agents for the required
+  address. This embedded query utilises recursively the same Mailbox and Message
+  Handler functionality.  Once the message recipient’s address is received, the
+  writer removes the relevant message from the holding buffer and proceeds to
+  dispatch the message.  In the event that no address is found or network communications
+  fails, a suitable error message is generated, which the writer adds to the reader’s
+  incoming-message-queue to be processed as a normal incoming message.</p>
+<p class="text"><b>Why TCP/IP?</b></p>
+<p class="text">TCP/IP was deliberately chosen as the transport protocol
+  for ZEUS messages, in preference to object-oriented middleware solutions like
+  CORBA.  As the lowest common denominator, the transport protocol used will ultimately
+  dictate the portability of the agents.  Hence our rationale was to choose the
+  most ubiquitous standardised protocol, and for the foreseeable future that is
+  likely to be TCP/IP.  It also has the additional advantage of being lightweight,
+  meaning we could implement functionality in the agent layer rather than having
+  to rely on services in the transport layer: the facilitator agent provides a
+  good example.  </p>
+<p class="text">As all aspects of ZEUS agent communication are encapsulated
+  inside the Mailbox, it would be perfectly possible to replace the TCP/IP mechanism
+  with a middleware alternative, should that be felt necessary.</p>
+<p class="text">Messages sent through sockets are received message as a stream
+  of ASCII characters, which are then parsed into a <i>Performative</i> object
+  and queued onto a priority FIFO incoming-message-queue<a href="#_ftn1" name="_ftnref1" title=""><sup>[1]</sup></a>. 
+  Performatives form the basis of the most inter-agent communication languages,
+  and those used in ZEUS are explained next.  </p>
+
+<br>
+<br>
+
+<h3><a name="42"></a>4.2 The Language of Communication</h3>
+<p class="text">Most agent communication languages (ACLs) are based on speech
+  act theory [6], wherein human utterances are viewed as actions in the sense
+  of actions performed in the everyday physical world (e.g. picking up a block).
+  Hence, ACLs specify message types called <b>performatives</b>, such as <i>ask</i>,
+  <i>tell</i>, or <i>achieve,</i> which by virtue of being sent from one agent
+  to another, are assumed to effect some illocutionary actions in the receiving
+  agent.</p>
+<p class="text">Obviously, inter-agent compatibility will be impossible until
+  all parties adopt the same agent communication language, and fortunately ACL
+  standards do exist.  All ZEUS agents communicate using messages that obey the
+  FIPA 1997 ACL specification, which is described 
+  <a class="textlink" href="http://www.fipa.org/spec/f8a22.zip">here</a>. 
+</p>
+<p class="text">The syntax of this language is included in the ZEUS toolkit
+  in the file <b>zeus/concepts/Performative.jj, </b>which is used by the agent's
+  internal parser to formulate and decode messages.  This syntax is used to construct
+  instances of the Performative class, which have the following attributes:</p>
+
+<center>
+<table width="70%" border=1 cellspacing=0 cellpadding=0>
+  <tr>
+    <td valign=top class="Normal">
+      <p class=MsoPlainText>Performative(&nbsp;</p>
+      <p class=MsoPlainText>                type:                /* performative type, e.g. inform, cancel etc. */</p>
+      <p class=MsoPlainText>                sender:              /* name of agent sending message */</p>
+      <p class=MsoPlainText>                receiver:            /* name of intended recipient agent */</p>
+      <p class=MsoPlainText>                reply_with:          /* sender’s conversation identification key */</p>
+      <p class=MsoPlainText>                in_reply_to:         /* recipient’s conversation key */</p>
+      <p class=MsoPlainText>                content:             /* message content */</p>
+      <p class=MsoPlainText>                language:            /* name of language in which content is expressed */</p>
+      <p class=MsoPlainText>                address:             /* sender’s address */</p>
+      <p class=MsoPlainText>                send_time:           /* time at which message is sent */</p>
+      <p class=MsoPlainText>                receive_time:        /* time when message is received */</p>
+      <p class=MsoPlainText>)</p>
+    </td>
+  </tr>
+</table>
+<p class="text"><b>Figure 4.2:</b> The attribrites of the performative class</p>
+</center>
+<br>
+
+<p class="text">The first field of a performative message - its type - refers
+  to the action the recipient is being asked to perform; this can be one of the following:</p>
+<br>
+
+<center>
+<table width="70%" border=1 cellspacing=0 cellpadding=0>
+  <tr>
+    <td width=130 valign=top bgcolor="silver" class="Normal">
+      <p class=MsoBodyText align=center style='text-align:center'><b>Message Type</b></p>
+    </td>
+    <td width=425 valign=top bgcolor="silver" class="Normal">
+      <p class=MsoBodyText align=center style='text-align:center'><b>Purpose</b></p>
+    </td>
+  </tr>
+  <tr>
+    <td width=130 valign=top class="Normal">
+      <p class=MsoBodyText align=center style='text-align:center'>Accept-proposal</p>
+    </td>
+    <td width=425 valign=top class="Normal">
+      <p class=MsoBodyText align=center style='text-align:center'>Used in the
+        context of an existing dialogue to inform the recipient that a prior proposal
+        has been accepted</p>
+    </td>
+  </tr>
+  <tr>
+    <td width=130 valign=top class="Normal">
+      <p class=MsoBodyText align=center style='text-align:center'>Agree</p>
+    </td>
+    <td width=425 valign=top class="Normal">
+      <p class=MsoBodyText align=center style='text-align:center'>Signals acceptance
+        of facts asserted within the message</p>
+    </td>
+  </tr>
+  <tr>
+    <td width=130 valign=top class="Normal">
+      <p class=MsoBodyText align=center style='text-align:center'>Cancel</p>
+    </td>
+    <td width=425 valign=top class="Normal">
+      <p class=MsoBodyText align=center style='text-align:center'>Causes the recipient's
+        <i>MailBox </i>and<i> ExecutionMonitor</i> to stop streaming reports to
+        the originator</p>
+    </td>
+  </tr>
+  <tr>
+    <td width=130 valign=top class="Normal">
+      <p class=MsoBodyText align=center style='text-align:center'>Cfp</p>
+    </td>
+    <td width=425 valign=top class="Normal">
+      <p class=MsoBodyText align=center style='text-align:center'>Invites the
+        recipient to make an offer concerning a specified resource </p>
+    </td>
+  </tr>
+  <tr>
+    <td width=130 valign=top class="Normal">
+      <p class=MsoBodyText align=center style='text-align:center'>Confirm</p>
+    </td>
+    <td width=425 valign=top class="Normal">
+      <p class=MsoBodyText align=center style='text-align:center'>Confirms the
+        reservation of a resource</p>
+    </td>
+  </tr>
+  <tr>
+    <td width=130 valign=top class="Normal">
+      <p class=MsoBodyText align=center style='text-align:center'>Disconfirm</p>
+    </td>
+    <td width=425 valign=top class="Normal">
+      <p class=MsoBodyText align=center style='text-align:center'>Retracts a previously
+        made conformation</p>
+    </td>
+  </tr>
+  <tr>
+    <td width=130 valign=top class="Normal">
+      <p class=MsoBodyText align=center style='text-align:center'>Failure</p>
+    </td>
+    <td width=425 valign=top class="Normal">
+      <p class=MsoBodyText align=center style='text-align:center'>Terminates a
+        dialogue when the originator can no longer continue</p>
+    </td>
+  </tr>
+  <tr>
+    <td width=130 valign=top class="Normal">
+      <p class=MsoBodyText align=center style='text-align:center'>Inform</p>
+    </td>
+    <td width=425 valign=top class="Normal">
+      <p class=MsoBodyText align=center style='text-align:center'>Causes the recipient
+        to add the associated content to its <i>Resource Database</i> </p>
+    </td>
+  </tr>
+  <tr>
+    <td width=130 valign=top class="Normal">
+      <p class=MsoBodyText align=center style='text-align:center'>Inform-if</p>
+    </td>
+    <td width=425 valign=top class="Normal">
+      <p class=MsoBodyText align=center style='text-align:center'>A conditional
+        version of <i>Inform</i></p>
+    </td>
+  </tr>
+  <tr>
+    <td width=130 valign=top class="Normal">
+      <p class=MsoBodyText align=center style='text-align:center'>Inform-ref</p>
+    </td>
+    <td width=425 valign=top class="Normal">
+      <p class=MsoBodyText align=center style='text-align:center'>Causes recipient
+        to add some referenced content to its Resource Database </p>
+    </td>
+  </tr>
+  <tr>
+    <td width=130 valign=top class="Normal">
+      <p class=MsoBodyText align=center style='text-align:center'>Not-understood</p>
+    </td>
+    <td width=425 valign=top class="Normal">
+      <p class=MsoBodyText align=center style='text-align:center'>A more specific
+        case of <i>Failure</i></p>
+    </td>
+  </tr>
+  <tr>
+    <td width=130 valign=top class="Normal">
+      <p class=MsoBodyText align=center style='text-align:center'>Propose</p>
+    </td>
+    <td width=425 valign=top class="Normal">
+      <p class=MsoBodyText align=center style='text-align:center'>Encapsulates
+        a proposal for achieving or buying a specified resource</p>
+    </td>
+  </tr>
+  <tr>
+    <td width=130 valign=top class="Normal">
+      <p class=MsoBodyText align=center style='text-align:center'>Query-if</p>
+    </td>
+    <td width=425 valign=top class="Normal">
+      <p class=MsoBodyText align=center style='text-align:center'>A conditional
+        request for information</p>
+    </td>
+  </tr>
+  <tr>
+    <td width=130 valign=top class="Normal">
+      <p class=MsoBodyText align=center style='text-align:center'>Query-ref</p>
+    </td>
+    <td width=425 valign=top class="Normal">
+      <p class=MsoBodyText align=center style='text-align:center'>A request for
+        information referenced by the message contents</p>
+    </td>
+  </tr>
+  <tr>
+    <td width=130 valign=top class="Normal">
+      <p class=MsoBodyText align=center style='text-align:center'>Refuse</p>
+    </td>
+    <td width=425 valign=top class="Normal">
+      <p class=MsoBodyText align=center style='text-align:center'>Terminates a
+        dialogue, usually because the originator considers proposals have been
+        unacceptable rather than unobtainable (cf. Failure)</p>
+    </td>
+  </tr>
+  <tr>
+    <td width=130 valign=top class="Normal">
+      <p class=MsoBodyText align=center style='text-align:center'>Reject-proposal</p>
+    </td>
+    <td width=425 valign=top class="Normal">
+      <p class=MsoBodyText align=center style='text-align:center'>Used in the
+        context of an existing dialogue to inform the recipient that a prior proposal
+        is unacceptable</p>
+    </td>
+  </tr>
+  <tr>
+    <td width=130 valign=top class="Normal">
+      <p class=MsoBodyText align=center style='text-align:center'>Request</p>
+    </td>
+    <td width=425 valign=top class="Normal">
+      <p class=MsoBodyText align=center style='text-align:center'>Asks the recipient
+        to provide some resource or service</p>
+    </td>
+  </tr>
+  <tr>
+    <td width=130 valign=top class="Normal">
+      <p class=MsoBodyText align=center style='text-align:center'>Request-when</p>
+    </td>
+    <td width=425 valign=top class="Normal">
+      <p class=MsoBodyText align=center style='text-align:center'>A conditional
+        version of <i>Request</i></p>
+    </td>
+  </tr>
+  <tr>
+    <td width=130 valign=top class="Normal">
+      <p class=MsoBodyText align=center style='text-align:center'>Request-whenever</p>
+    </td>
+    <td width=425 valign=top class="Normal">
+      <p class=MsoBodyText align=center style='text-align:center'>A time conditional
+        version of <i>Request</i></p>
+    </td>
+  </tr>
+  <tr>
+    <td width=130 valign=top class="Normal">
+      <p class=MsoBodyText align=center style='text-align:center'>Subscribe</p>
+    </td>
+    <td width=425 valign=top class="Normal">
+      <p class=MsoBodyText align=center style='text-align:center'>Registers the
+        originator, typically used to register with utility agents such as the
+        Name-Servers and Visualisers</p>
+    </td>
+  </tr>
+</table>
+</center>
+
+<p class=MsoBodyText align=center style='text-align:center'><b>Table 4.1</b>:
+  The Message Types present within ZEUS Performatives</p>
+<p class="text">Performatives tend to originate from the states of dialogue
+  nodes, (which are described in the next section) or from the firing of rules that
+  have a communication effect.  Incoming performatives are then processed by the
+  other component of the communication mechanism: the Message Handler, this is
+  described next.</p>
+
+<br>
+<br>
+
+<h4><a name="43"></a>4.3 The Message Handler</h4>
+<p class="text">The Message Handler is a ZEUS agent’s internal mail sorting
+  office, continually checking the incoming-message-queue of the Mailbox for new
+  messages, and forwarding them to the relevant components of the agent. Its behaviour
+  is controlled by two factors: first, whether a new message represents the start
+  of a new dialogue or it is part of an existing dialogue; and second, on message
+  processing rules registered in the Handler by other components of the agent.</p>
+<p class="text"><b>New dialogues</b></p>
+<p class="text">For new dialogues, identified by messages with a null in-reply-to
+  field in the message object, processing is governed solely by the rules registered
+  with the Handler.  The rules take two basic forms, object rules and engine rules:</p>
+<table border=1 cellspacing=0 cellpadding=0>
+  <tr>
+    <td width=132 valign=top class="Normal">
+      <p class="text">Object Rules</p>
+    </td>
+    <td width=420 valign=top class="Normal">
+      <p class="text">Message-pattern&nbsp;&nbsp;->&nbsp;&nbsp;action-type&nbsp;&nbsp;object-reference&nbsp;
+        method-name</p>
+    </td>
+  </tr>
+  <tr>
+    <td width=132 valign=top class="Normal">
+      <p class="text">Engine Rules</p>
+    </td>
+    <td width=420 valign=top class="Normal">
+      <p class="text">Message-pattern&nbsp;&nbsp;->&nbsp;&nbsp;action-type&nbsp;&nbsp;fully-qualified-graph-name</p>
+    </td>
+  </tr>
+</table>
+<p class="text">Where message-pattern is a partial description of a message
+  performative that gets matched against the new incoming message object, object-reference
+  is a Java object and method-name is the name of a public method of the object
+  referenced by object-reference. </p>
+<p class="text">The action-type can be set to either EXECUTE_ONCE or EXECUTE_MANY. 
+  Whereas the rule is deleted from the Message Handler after execution in the
+  case of EXECUTE_ONCE, it is retained after execution in the case of EXECUTE_MANY. 
+  The fully-qualified-graph-name is a string reference to the qualified name of
+  one of the Co-ordination Engine graphs (described in the next section).</p>
+<p class="text">For object rules, new messages are matched against the message-pattern,
+  with successful matches resulting in the method method-name of the object referenced
+  by object-reference being invoked with the new message object as its input argument.
+  The invocation mechanism is based on Java reflection.  Object rules are intended
+  to implement short-lived and simple reactive behaviour, for example automatic
+  responses to requests for information.</p>
+<p class="text">For engine rules, a successful match of the incoming message
+  against the message-pattern results in a call to the Co-ordination Engine to
+  launch the graph referenced by the fully-qualified-graph-name with the message
+  object as its input argument.  Engine rules are intended for long-lived and/or
+  complex behaviour such as requests to achieve a particular goal, which might
+  lead to planning, negotiation with other agents and plan execution and monitoring.
+  The generic ZEUS agent has some predefined object and engine rules for dealing
+  with standard messages such as requests for information or requests to achieve
+  goals.</p>
+<p class="text"><b>Continuation dialogues</b></p>
+<p class="text">For continuation dialogues, the default behaviour of the
+  Message Handler is to forward new messages to the Co-ordination Engine (which
+  as described later, provides a mechanism for managing long-lived dialogues).
+  However, this default behaviour can be overridden by object rules of the form</p>
+<p class="text">reply-message-pattern&nbsp;&nbsp;->&nbsp;&nbsp;action-type&nbsp;&nbsp;object-reference&nbsp;&nbsp;method-name</p>
+<p class="text">where reply-message-pattern is a message-pattern with a non-null
+  value of its in-reply-to field. Thus, if a message matches the reply-message-pattern
+  of a rule, then the rule is invoked as described earlier; otherwise, the default
+  behaviour of forwarding the message to the Co-ordination Engine is applied.</p>
+<p class="text">Thus support for the declarative specification of behaviour
+  in the Message Handler is provided through the use of pattern-action rules. 
+  This allows the processing behaviour of the Message Handler to be modified,
+  even at runtime, simply by adding new processing rules or deleting existing
+  ones.</p>
+
+<br>
+<br>
+<hr align=left size=1 width="33%">
+<div id=ftn1>
+  <p class=MsoFootnoteText><a href="#_ftnref1"
+name="_ftn1" title=""><sup>[1]</sup></a> Most of the queues used in the ZEUS implementation
+    were designed as blocking queues. When a blocking queue is empty, any thread
+    trying to remove an element from the queue blocks until another thread adds
+    an element into the queue.</p>
+</div>
+
+<br>
+<br>
+
+
+<table border=1 cellspacing=0 width=100% class="smalltext">
+<tr>
+<td width=10%><a class="smalltextlink" href="TOC.html">Contents</a></td>
+<td width=12%><a class="smalltextlink" href="part1.html">Introduction</a></td>
+<td width=12%><a class="smalltextlink" href="part2.html">Zeus Philosophy</a></td>
+<td width=12%><a class="smalltextlink" href="part3.html">Zeus Architecture</a></td>
+<td width=12%><b>Communication</b></td>
+<td width=12%><a class="smalltextlink" href="part5.html">Coordination</a></td>
+<td width=12%><a class="smalltextlink" href="part6.html">Planning and<br>Task Execution</a></td>
+<td width=13%><a class="smalltextlink" href="part7.html">External<br>Applications</a></td>
+</tr>
+</table>
+
+</body>
+</html>

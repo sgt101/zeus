@@ -1,0 +1,5 @@
+ns
+Agent1 -o .\subsuper.ont -s dns.db
+Agent0 -o .\subsuper.ont -s dns.db
+yp
+vis

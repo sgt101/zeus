@@ -1,0 +1,283 @@
+BEGIN_GENERATOR
+  BEGIN_PREAMBLE
+    :system "ZEUS-Agent-Generator"
+    :version "1.2.2"
+    :ontology ".:show.ont"
+  END_PREAMBLE
+
+  BEGIN_AGENT_NAME_INDEX
+    AgentId6 Agent6
+    AgentId5 Agent5
+    AgentId4 Agent4
+    AgentId3 Agent3
+    AgentId2 Agent2
+    AgentId1 Agent1
+    AgentId0 Agent0
+    AgentId9 Agent9
+    AgentId8 Agent8
+    AgentId7 Agent7
+  END_AGENT_NAME_INDEX
+
+  BEGIN_AGENT_ICON_INDEX
+    AgentId6 "C::local zeus:gifs:agent.gif"
+    AgentId5 "C::local zeus:gifs:agent.gif"
+    AgentId4 "C::local zeus:gifs:agent.gif"
+    AgentId3 "C::local zeus:gifs:agent.gif"
+    AgentId2 "C::local zeus:gifs:agent.gif"
+    AgentId1 "C::local zeus:gifs:agent.gif"
+    AgentId0 "C::local zeus:gifs:agent.gif"
+    AgentId9 "C::local zeus:gifs:agent.gif"
+    AgentId8 "C::local zeus:gifs:agent.gif"
+    AgentId7 "C::local zeus:gifs:agent.gif"
+  END_AGENT_ICON_INDEX
+
+  BEGIN_TASK_NAME_INDEX
+    AbstractTaskId2 Task2
+    AbstractTaskId1 Task1
+    AbstractTaskId0 Task0
+  END_TASK_NAME_INDEX
+
+  BEGIN_AGENT_LIST
+    (:name AgentId6
+     :class ZeusAgent
+     :planner_width 1
+     :planner_length 20
+     :doublebook_fraction 0
+    )
+    (:name AgentId5
+     :class ZeusAgent
+     :planner_width 1
+     :planner_length 20
+     :doublebook_fraction 0
+    )
+    (:name AgentId4
+     :class ZeusAgent
+     :planner_width 1
+     :planner_length 20
+     :doublebook_fraction 0
+     :tasks (AbstractTaskId2
+            )
+    )
+    (:name AgentId3
+     :class ZeusAgent
+     :planner_width 1
+     :planner_length 20
+     :doublebook_fraction 0
+    )
+    (:name AgentId2
+     :class ZeusAgent
+     :planner_width 1
+     :planner_length 20
+     :doublebook_fraction 0
+     :tasks (AbstractTaskId2
+            )
+     :initial_facts ((:type Entity
+                      :id fact1
+                      :modifiers 0
+                      :attributes ((unit_cost 0)
+                                   (number 1)
+                                  )
+                     )
+                    )
+     :protocols ((:name "zeus.actors.graphs.ContractNetInitiator"
+                  :type Initiator
+                  :constraints ((:fact (:type ZeusFact
+                                        :id var5
+                                        :modifiers 1
+                                       )
+                                 :type 0
+                                 :strategy "zeus.actors.graphs.DefaultInitiatorEvaluator"
+                                )
+                               )
+                 )
+                )
+     :acquaintances ((:name AgentId5
+                      :relation superior
+                      :abilities ((:fact (:type Entity
+                                          :id var2
+                                          :modifiers 1
+                                          :attributes ((unit_cost ?var3)
+                                                       (number ?var4)
+                                                      )
+                                         )
+                                   :time 0
+                                   :cost 0.0
+                                  )
+                                 )
+                     )
+                    )
+    )
+    (:name AgentId1
+     :class ZeusAgent
+     :planner_width 1
+     :planner_length 20
+     :doublebook_fraction 0
+    )
+    (:name AgentId0
+     :class ZeusAgent
+     :planner_width 1
+     :planner_length 20
+     :doublebook_fraction 0
+    )
+    (:name AgentId9
+     :class ZeusAgent
+     :planner_width 1
+     :planner_length 20
+     :doublebook_fraction 0
+    )
+    (:name AgentId8
+     :class ZeusAgent
+     :planner_width 1
+     :planner_length 20
+     :doublebook_fraction 0
+    )
+    (:name AgentId7
+     :class ZeusAgent
+     :planner_width 1
+     :planner_length 20
+     :doublebook_fraction 0
+    )
+  END_AGENT_LIST
+
+  BEGIN_TASK_LIST
+    (:Primitive AbstractTaskId2
+     :time (1)
+     :cost (0)
+    )
+    (:Primitive AbstractTaskId1
+     :time (1)
+     :cost (0)
+    )
+    (:Primitive AbstractTaskId0
+     :time (1)
+     :cost (0)
+     :consumed_facts ((:type Fact9
+                       :id var40
+                       :modifiers 9
+                      )
+                      (:type Fact11
+                       :id var41
+                       :modifiers 1
+                      )
+                     )
+     :produced_facts ((:type fortesting
+                       :id var39
+                       :modifiers 1
+                      )
+                     )
+    )
+  END_TASK_LIST
+
+  BEGIN_GENERATION_PLAN
+    BEGIN_PREAMBLE
+      :platform "Windows"
+      :directory "."
+    END_PREAMBLE
+    BEGIN_AGENT_LIST
+      (:id AgentId6
+       :generate false
+       :status Saved
+       :has_gui true
+       :dns_file "dns.db"
+      )
+      (:id AgentId5
+       :generate false
+       :status Saved
+       :has_gui false
+       :dns_file "dns.db"
+      )
+      (:id AgentId4
+       :generate false
+       :status Saved
+       :has_gui true
+       :dns_file "dns.db"
+      )
+      (:id AgentId3
+       :generate false
+       :status Saved
+       :has_gui false
+       :dns_file "dns.db"
+      )
+      (:id AgentId2
+       :generate false
+       :status Saved
+       :has_gui false
+       :dns_file "dns.db"
+      )
+      (:id AgentId1
+       :generate false
+       :status Saved
+       :has_gui false
+       :dns_file "dns.db"
+      )
+      (:id AgentId0
+       :generate false
+       :status Saved
+       :has_gui false
+       :dns_file "dns.db"
+      )
+      (:id AgentId9
+       :generate false
+       :status Saved
+       :has_gui false
+       :dns_file "dns.db"
+      )
+      (:id AgentId8
+       :generate false
+       :status Saved
+       :has_gui false
+       :dns_file "dns.db"
+      )
+      (:id AgentId7
+       :generate false
+       :status Saved
+       :has_gui false
+       :dns_file "dns.db"
+      )
+    END_AGENT_LIST
+    BEGIN_TASK_LIST
+      (:id AbstractTaskId2
+       :generate false
+       :status Saved
+       :external null
+      )
+      (:id AbstractTaskId1
+       :generate false
+       :status Saved
+       :external null
+      )
+      (:id AbstractTaskId0
+       :generate false
+       :status Saved
+       :external null
+      )
+    END_TASK_LIST
+    BEGIN_NAMESERVER_LIST
+      (:name Nameserver0
+       :is_root true
+       :has_gui false
+       :address_output_file "dns.db"
+       :time_grain 0.5
+      )
+    END_NAMESERVER_LIST
+    BEGIN_FACILITATOR_LIST
+      (:name Facilitator0
+       :period 5.00
+       :has_gui false
+       :dns_file "dns.db"
+      )
+    END_FACILITATOR_LIST
+    BEGIN_VISUALISER_LIST
+      (:name Visualiser0
+       :has_gui false
+       :dns_file "dns.db"
+      )
+    END_VISUALISER_LIST
+    BEGIN_DBPROXY_LIST
+      (:name DbProxy0
+       :has_gui false
+       :dns_file "dns.db"
+      )
+    END_DBPROXY_LIST
+  END_GENERATION_PLAN
+END_GENERATOR

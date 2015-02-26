@@ -1,0 +1,216 @@
+BEGIN_ONTOLOGY
+  BEGIN_PREAMBLE
+    :system ZEUS-Ontology-Editor
+    :version "1.2.2"
+  END_PREAMBLE
+  BEGIN_FACTS
+    BEGIN_FACT_ITEM
+      :name leFait
+      :parent Abstract
+    END_FACT_ITEM
+    BEGIN_FACT_ITEM
+      :name consome
+      :parent Abstract
+      BEGIN_ATTRIBUTE_LIST
+        BEGIN_ATTRIBUTE_ITEM
+          :name AttF1
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name AttF2
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name AttF3
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name AttF4
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name AttF5
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name AttF6
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name AttF7
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name AttF8
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name AttF9
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name AttF10
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name AttF11
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name AttF12
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name AttF13
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name AttF14
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name AttF15
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name AttF16
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+      END_ATTRIBUTE_LIST
+    END_FACT_ITEM
+    BEGIN_FACT_ITEM
+      :name produit
+      :parent Abstract
+      BEGIN_ATTRIBUTE_LIST
+        BEGIN_ATTRIBUTE_ITEM
+          :name AttG1
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name AttG2
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name AttG3
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name AttG4
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name AttG5
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name AttG6
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name AttG7
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name AttG8
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name AttG9
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name AttG10
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name AttG11
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name AttG12
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name AttG13
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name AttG14
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name AttG15
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name AttG16
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+      END_ATTRIBUTE_LIST
+    END_FACT_ITEM
+  END_FACTS
+END_ONTOLOGY

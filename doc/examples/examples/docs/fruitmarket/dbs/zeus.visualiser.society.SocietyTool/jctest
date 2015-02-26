@@ -1,0 +1,24 @@
+_:RECORD
+(query-ref :sender Visual :receiver SupplyBot :reply-with Visual_Rule34 :content "your_relations" :envelope ((receiveTime "5.2246")(address "(:name Visual :host \"132.146.209.245\" :port 6701 :type Visualiser)")(sendTime "5.2246")))
+_:RECORD
+(failure :sender SupplyBot :receiver Visual :in-reply-to Visual_Rule34 :content "no relations" :envelope ((receiveTime "5.292333333333334")(address "(:name SupplyBot :host \"132.146.209.245\" :port 6704 :type Agent)")(sendTime "5.292333333333334")))
+_:RECORD
+(query-ref :sender Visual :receiver Broker :reply-with Visual_Rule35 :content "your_relations" :envelope ((receiveTime "5.225133333333333")(address "(:name Visual :host \"132.146.209.245\" :port 6701 :type Visualiser)")(sendTime "5.225133333333333")))
+_:RECORD
+(query-ref :sender Visual :receiver ShopBot :reply-with Visual_Rule37 :content "your_relations" :envelope ((receiveTime "5.233966666666666")(address "(:name Visual :host \"132.146.209.245\" :port 6701 :type Visualiser)")(sendTime "5.233966666666666")))
+_:RECORD
+(query-ref :sender Visual :receiver OrchardBot :reply-with Visual_Rule38 :content "your_relations" :envelope ((receiveTime "5.2345")(address "(:name Visual :host \"132.146.209.245\" :port 6701 :type Visualiser)")(sendTime "5.2345")))
+_:RECORD
+(failure :sender Broker :receiver Visual :in-reply-to Visual_Rule35 :content "no relations" :envelope ((receiveTime "5.218333333333334")(address "(:name Broker :host \"132.146.209.245\" :port 6702 :type Facilitator)")(sendTime "5.218333333333334")))
+_:RECORD
+(query-ref :sender Visual :receiver ANS :reply-with Visual_Rule39 :content "your_relations" :envelope ((receiveTime "5.2345")(address "(:name Visual :host \"132.146.209.245\" :port 6701 :type Visualiser)")(sendTime "5.2345")))
+_:RECORD
+(failure :sender ShopBot :receiver Visual :in-reply-to Visual_Rule37 :content "no relations" :envelope ((receiveTime "5.3767")(address "(:name ShopBot :host \"132.146.209.245\" :port 6705 :type Agent)")(sendTime "5.3767")))
+_:RECORD
+(query-ref :sender Visual :receiver Visual :reply-with Visual_Rule40 :content "your_relations" :envelope ((receiveTime "5.542833333333333")(address "(:name Visual :host \"132.146.209.245\" :port 6701 :type Visualiser)")(sendTime "5.542833333333333")))
+_:RECORD
+(refuse :sender Visual :receiver Visual :in-reply-to Visual_Rule40 :content "no oganisation database" :envelope ((receiveTime "5.6918")(address "(:name Visual :host \"132.146.209.245\" :port 6701 :type Visualiser)")(sendTime "5.6918")))
+_:RECORD
+(refuse :sender ANS :receiver Visual :in-reply-to Visual_Rule39 :content "no oganisation database" :envelope ((receiveTime "6.258333333333334")(address "(:name ANS :host \"132.146.209.245\" :port 6700 :type Nameserver)")(sendTime "6.258333333333334")))
+_:RECORD
+(failure :sender OrchardBot :receiver Visual :in-reply-to Visual_Rule38 :content "no relations" :envelope ((receiveTime "5.670966666666667")(address "(:name OrchardBot :host \"132.146.209.245\" :port 6706 :type Agent)")(sendTime "5.670966666666667")))

@@ -1,0 +1,3 @@
+REM This script runs the task agents
+start /min java dummy -o .\test.ont -s dns.db
+start /min java scheduler_agent -o .\test.ont -s dns.db -name scheduler-agent

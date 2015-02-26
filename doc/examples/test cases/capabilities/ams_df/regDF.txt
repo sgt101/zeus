@@ -1,0 +1,24 @@
+(action
+    (register 
+    (df-agent-description
+        :name
+        (agent-identifier 
+            :name dummy@132.146.209.68
+            :addresses (sequence iiop://132.146.209.68:2000/acc))
+        :protocol (set FIPA-Request Application-Protocol)
+        :ontology (set meeting-scheduler)
+        :language (set FIPA-SL0 KIF)
+        :services (set
+        (service-description
+            :name profiling
+            :type user-profiling
+            :ontology (set meeting-scheduler)
+            :properties (set
+            (property
+                :name learning-algorithm
+                :value BBN)
+            (property 
+                :name max-nodes
+                :value 10000000))))))))))
+
+

@@ -1,0 +1,5 @@
+ns
+PCMaker -o pc.ont -s dns.db -gui zeus.agentviewer.AgentViewer -e DellPump
+MonitorMaker -o pc.ont -s dns.db -range 20 21 -gui zeus.agentviewer.AgentViewer
+MotherBoardMaker -o pc.ont -s dns.db -range 20 21 -gui zeus.agentviewer.AgentViewer
+PrinterMaker -o pc.ont -s dns.db -range 20 21 -gui zeus.agentviewer.AgentViewer

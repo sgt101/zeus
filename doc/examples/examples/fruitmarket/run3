@@ -1,0 +1,5 @@
+#!/usr/bin/csh
+#This script runs the task agents
+java ShopBot -o ./fruit.ont -s dns.db -gui zeus.agentviewer.AgentViewer -e shopUI & 
+java SupplyBot -o ./fruit.ont -s dns.db -gui zeus.agentviewer.AgentViewer -e supplyUI & 
+java OrchardBot -o ./fruit.ont -s dns.db -gui zeus.agentviewer.AgentViewer -e orchardUI & 

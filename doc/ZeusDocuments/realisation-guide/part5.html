@@ -1,0 +1,175 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>The Zeus Realisation Guide</title>
+<LINK REL="STYLESHEET" TYPE="text/css" HREF="zeusdoc.css">
+</head>
+
+<body>
+
+<table width=100% border=0>
+<tr>
+<td><h4>The Zeus Agent Building Toolkit </h4></td>
+<td align=right class="text">The Application Realisation Guide</td>
+</tr>
+</table>
+<br>
+<table border=1 cellspacing=0 width=100% class="smalltext">
+<tr>
+<td width=10%><a class="smalltextlink" href="TOC.html">Contents</a></td>
+<td width=15%><a class="smalltextlink" href="part1.html">Introduction</a></td>
+<td width=15%><a class="smalltextlink" href="part2.html">Ontologies</a></td>
+<td width=15%><a class="smalltextlink" href="part3.html">Building<br> Task Agents</a></td>
+<td width=15%><a class="smalltextlink" href="part4.html">Utility Agents</a></td>
+<td width=15%><b>Task Agent<br> Configuration</b></td>
+<td width=15%><a class="smalltextlink" href="part6.html">Agent Implementation</a></td>
+</tr>
+</table>
+
+<br>
+<br>
+
+<a name="1"></a><h3>5     The Task Agent Configuration Stage</h3>
+<p class="text">During the previous stage, utility agent configuration, the
+  run-time parameters of the utility agents were specified.  During this stage
+  the same process is undertaken for the application's task agents.  In keeping
+  with previous stages, this also assumes certain design decisions have been taken:
+</p>
+<ul>
+<li> <p class="text"> whether each agent will be linked to an external source of data</p>
+<li> <p class="text"> whether each agent will be linked to external programs (like a GUI front-end)</p>
+</ul>
+<p class="text"> For those seeking guidance, the Role Modelling guide and its case studies provide
+  examples of typical task agent configurations.  All task agents are configured
+  through the 'Task Agents' pane of the Code Generator window. </p>
+
+<p class="text"><img width=32 height=32 src="./gfx/image067.gif"> &nbsp; To open the Code
+  Generator tool select the Agent Generator's &quot;Generate Code&quot; menu option
+  or the equivalent button from the Project Options toolbar.  This will enable
+  the developer to perform the sole activity of this stage: Configuring the 
+  Task Agents. </p>
+
+<br> <br>
+<a name="TACF1"></a>
+<table cellpadding=0 cellspacing=0 border=0 width=100%>
+  <tr>
+    <td align=left valign=top><img src="./gfx/image082.gif"></td>
+    <td><h3>TACF-1: Configuring the Task Agents</h3></td>
+  </tr>
+</table>
+
+<p class="text">
+  Each task agents in the current project appears in the Code Generator's agent
+  table (as shown in Figure 5.1).  Shown beside its name is status, this will
+  be either <i>Saved</i> - which indicates the agent has not been altered since
+  the project was last loaded; or <i>Modified</i> - which indicates the agent
+  has been modified recently and so its source code will need to be regenerated
+  to take account of the changes.  </p>
+
+<table cellpadding=0 cellspacing=0 border=0>
+  <tr>
+    <td><img src="./gfx/image084.gif"></td>
+  </tr>
+  <tr><td align=center class='smalltext'><b>Figure 5.1:</b> The Task Agent Configuration Panel, and how to use it</td>
+  </tr>
+</table>
+<br>
+
+<p class="text">The same status information is provided for tasks in the
+  'Tasks' pane, where you can also choose which tasks will be generated when the
+  Code Generator is executed.</p>
+<p class="text">The Host field shows the I.P address (i.e. network location)
+  of the machine that each task agent will run on.  This defaults to the I.P address
+  of the machine that is currently running the Generator tool.  The machine resources
+  consumed by a single agent will depend on the application, although from our
+  experience it is perfectly reasonable to run many agents on the same host. 
+  However, agent load balancing and assessment is somewhat beyond the scope of
+  this document.</p>
+<li><p class="text"> To change the location of
+  a Visualiser double click on the Host field and enter the new value. If you
+  don't know the I.P address of machine, use the ping command to discover it.</p>
+<p class="text"> Like the utility agents, the task agents need to be aware
+  of the root ANS, and must be told where to find its DNS file. Thus the location
+  of the DNS file should be entered into the DNS File field.  If this is not a
+  network accessible file, it will need to be copied to each task agent's local
+  file system. </p>
+<li> <p class="text"> To edit the pathname from which the DNS file will be read,
+ double click on the DNS File field.  </p>
+<p class="text">The icon field is a cosmetic rather than a functional option;
+  it enables the developer to choose what icon will represent the agent when the
+  Visualiser displays it.  As the Visualiser uses the icon it should be accessible
+  from its file system - if not, it should be copied over to it.  (Icons should
+  be 256-colour GIF format images, preferably about 32 to 64 pixels in both width
+  and breadth).   </p>
+<li> <p class="text"> To set
+  a task agent's icon, double click on its Icon field, this will open a file dialog
+  window enabling the icon file to be located and chosen.   </p>
+<p class="text">The icon locations will be placed in a file called <i>default.gifs</i>
+  - this should be located in the same directory as the name server file used
+  by each Visualiser.</p>
+<p class="text"><b>How to Link an Agent to an External Resource </b></p>
+<p class="text">A task agent can obtain the resources it needs to perform
+  its tasks from one of three sources: from its resource database, from other
+  agents, our from an external data source.  The latter can be connected to the
+  task agent through a Java class that implements the <i>zeus.actors.ExternalDb</i>
+  interface.</p>
+<li> <p class="text"> To connect
+  the task agent to an external data source double click on the Database External
+  field and enter the <u>full package name</u> of the appropriate class. </p>
+
+<p class="text"><b>See also…</b></p>
+  <ul>
+  <li><p class="text"><a class="textlink" href="part6.html#IMPL3">How to connect to external resources</a></p>
+  <li><p class="text"><a class="textlink" href="../../api/index.html">The ZEUS agent API</a></p>
+  </ul>
+
+<br>
+<p class="text"><b>How to Link an Agent to an External Program </b></p>
+<p class="text">A task agent can be linked to external programs that enable
+  it to send or receive information from the outside world.  This external program
+  will typically be a user interface from which instructions are received and
+  to which the agent sends results.  External programs are connected to the task
+  agent through a Java class that implements the zeus.agents.ZeusExternal interface.</p>
+<li> <p class="text"> To connect
+  a task agent to an external program double click on the External Program field
+  and enter the <u>full package name</u> of the appropriate class. </p>
+
+<p class="text"><b>See also…</b></p>
+  <ul>
+  <li><p class="text"><a class="textlink" href="part6.html#IMPL4">How to write external programs</a></p>
+  <li><p class="text"><a class="textlink" href="../../api/index.html">The ZEUS agent API</a></p>
+  </ul>
+
+<br>
+<p class="text"><b>How to Create an Agent with an Agent Viewer GUI </b></p>
+<p class="text">The Agent Viewer GUI is a specialised tool that displays
+  detailed information on the internal components of agent.  This is independent
+  of any other application front-end and provides the best means for understanding
+  how the agent works, as well as being an excellent debugging aid.  Whether a
+  task agent is created with this GUI is left to the discretion of the developer.</p>
+<li> <p class="text"> To create
+  a task agent with an Agent Viewer GUI click the 'Create GUI?' checkbox field;
+  or click again to deselect.</p>
+
+<p class="text"><b>See also…</b></p>
+  <ul>
+  <li><p class="text"><a class="textlink" href="../runtime/agentviewer.html">Agent Viewer User Manual</a></p>
+  </ul>
+
+<br>
+<br>
+<table border=1 cellspacing=0 width=100% class="smalltext">
+<tr>
+<td width=10%><a class="smalltextlink" href="TOC.html">Contents</a></td>
+<td width=15%><a class="smalltextlink" href="part1.html">Introduction</a></td>
+<td width=15%><a class="smalltextlink" href="part2.html">Ontologies</a></td>
+<td width=15%><a class="smalltextlink" href="part3.html">Building<br> Task Agents</a></td>
+<td width=15%><a class="smalltextlink" href="part4.html">Utility Agents</a></td>
+<td width=15%><b>Task Agent<br> Configuration</b></td>
+<td width=15%><a class="smalltextlink" href="part6.html">Agent Implementation</a></td>
+</tr>
+</table>
+
+</body>
+</html>
+

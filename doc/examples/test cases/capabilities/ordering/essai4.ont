@@ -1,0 +1,92 @@
+BEGIN_ONTOLOGY
+  BEGIN_PREAMBLE
+    :system ZEUS-Ontology-Editor
+    :version "1.2.2"
+  END_PREAMBLE
+  BEGIN_FACTS
+    BEGIN_FACT_ITEM
+      :name leFait
+      :parent Abstract
+      BEGIN_ATTRIBUTE_LIST
+        BEGIN_ATTRIBUTE_ITEM
+          :name Att1
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+      END_ATTRIBUTE_LIST
+    END_FACT_ITEM
+    BEGIN_FACT_ITEM
+      :name consome
+      :parent leFait
+      BEGIN_ATTRIBUTE_LIST
+        BEGIN_ATTRIBUTE_ITEM
+          :name AttF1
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name AttF2
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name AttF3
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+      END_ATTRIBUTE_LIST
+    END_FACT_ITEM
+    BEGIN_FACT_ITEM
+      :name produit
+      :parent leFait
+      BEGIN_ATTRIBUTE_LIST
+        BEGIN_ATTRIBUTE_ITEM
+          :name AttG1
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name AttG2
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name AttG3
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+      END_ATTRIBUTE_LIST
+    END_FACT_ITEM
+    BEGIN_FACT_ITEM
+      :name consomeTwo
+      :parent leFait
+      BEGIN_ATTRIBUTE_LIST
+        BEGIN_ATTRIBUTE_ITEM
+          :name C2Fone
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name C2Ftwo
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+        BEGIN_ATTRIBUTE_ITEM
+          :name C2Fthree
+          :type String
+          :restriction ""
+          :default ""
+        END_ATTRIBUTE_ITEM
+      END_ATTRIBUTE_LIST
+    END_FACT_ITEM
+  END_FACTS
+END_ONTOLOGY

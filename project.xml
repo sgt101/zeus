@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+<project>
+  <pomVersion>1</pomVersion>
+  <id>zeus</id>
+  <name>Zeus Toolkit</name>
+  <currentVersion>2.0</currentVersion>
+  <organization>
+    <name>BT Exact Technologies</name>
+    <url>http://btexact.com/</url>
+  </organization>
+  <inceptionYear>2000</inceptionYear>
+  <package>zeus</package>
+
+  <description>
+        <![CDATA[
+        Zeus Toolkit (<i>Open Source</i>)<br/>
+        ]]>
+  </description>
+  <shortDescription>
+        <![CDATA[ Zeus Toolkit (<i>Open Source</i>)<br/> ]]>
+  </shortDescription>
+
+  <url>http://more.btexact.com/projects/agents/zeus/</url>
+
+  <repository>
+    <connection>
+      scm|cvs|sspi|csgserver1.info.bt.co.uk|F:\CVSRepository|OpenSourceZeus
+    </connection>
+    <url>http://csgserver1/viewcvs.cgi/OpenSourceZeus/</url>
+  </repository>
+
+  <versions>
+    <version>
+      <id>2.0</id>
+      <name>2.0</name>
+      <tag>release-2003</tag>
+    </version>
+  </versions>
+
+  <developers>
+    <developer>
+      <name>Simon Thompson</name>
+      <id>thompss</id>
+      <email>simon.2.thompson@bt.com</email>
+      <organization>BT Exact, IS Lab</organization>
+      <roles>
+        <role>Developer</role>
+        <role>Project Lead</role>
+      </roles>
+      <timezone>0</timezone>
+    </developer>
+    <developer>
+      <name>Nick Giles</name>
+      <id>gilesn</id>
+      <email>nick.giles@bt.com</email>
+      <organization>BT Exact, IS Lab</organization>
+      <roles>
+        <role>Developer</role>
+        <role>Maven Admin</role>
+      </roles>
+      <timezone>0</timezone>
+    </developer>
+  </developers>
+
+  <licenses>
+    <license>
+      <name>Zeus license</name>
+      <url>http://more.btexact.com/projects/agents/zeus/LICENSE.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <dependencies>
+
+    <dependency>
+      <id>xerces</id>
+      <version>2.4.0</version>
+      <url></url>
+    </dependency>
+    <dependency>
+      <id>gnu-regexp</id>
+      <version>1.1.4</version>
+      <url></url>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+
+    <sourceDirectory>src</sourceDirectory>
+
+  </build>
+
+  <reports>
+    <report>maven-junit-report-plugin</report>
+    <report>maven-javadoc-plugin</report>
+    <report>maven-jxr-plugin</report>
+    <report>maven-changelog-plugin</report>
+    <report>maven-pmd-plugin</report>
+    <report>maven-jdepend-plugin</report>
+    <report>maven-developer-activity-plugin</report>
+    <report>maven-file-activity-plugin</report>
+    <report>maven-statcvs-plugin</report>
+    <report>maven-tasklist-plugin</report>
+
+    <!--
+     May cause OutOfMemoryErrors when run with many reports. Use:
+     set MAVEN_OPTS=-Xmx512m
+    -->
+    <report>maven-checkstyle-plugin</report>
+    <report>maven-linkcheck-plugin</report>
+
+    <!--Too long command line causes jcoverage to crash-->
+    <!--<report>maven-jcoverage-plugin</report>-->
+  </reports>
+
+</project>

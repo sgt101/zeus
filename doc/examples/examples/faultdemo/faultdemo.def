@@ -1,0 +1,525 @@
+BEGIN_GENERATOR
+  BEGIN_PREAMBLE
+    :system "ZEUS-Agent-Generator"
+    :version "1.02"
+    :ontology ".:faultdemo.ont"
+  END_PREAMBLE
+
+  BEGIN_AGENT_NAME_INDEX
+    AgentId8 WorldSimulator
+    AgentId7 East
+    AgentId6 West
+    AgentId5 South
+    AgentId0 North
+  END_AGENT_NAME_INDEX
+
+  BEGIN_AGENT_ICON_INDEX
+    AgentId8 ".:gifs:view.gif"
+    AgentId7 ".:gifs:agent.gif"
+    AgentId6 ".:gifs:agent.gif"
+    AgentId5 ".:gifs:agent.gif"
+    AgentId0 ".:gifs:agent.gif"
+  END_AGENT_ICON_INDEX
+
+  BEGIN_TASK_NAME_INDEX
+    AbstractTaskId5 Reactor
+    AbstractTaskId4 FaultSimulator
+    AbstractTaskId3 Type1Repair
+    AbstractTaskId2 Type2Repair
+    AbstractTaskId1 Type3Repair
+    AbstractTaskId0 Type4Repair
+  END_TASK_NAME_INDEX
+
+  BEGIN_AGENT_LIST
+    (:name AgentId8
+     :class ZeusAgent
+     :planner_width 1
+     :planner_length 20
+     :doublebook_fraction 0
+     :tasks (AbstractTaskId4
+            )
+    )
+    (:name AgentId7
+     :class ZeusAgent
+     :planner_width 2
+     :planner_length 30
+     :doublebook_fraction 0
+     :tasks (AbstractTaskId5
+             AbstractTaskId3
+             AbstractTaskId2
+             AbstractTaskId1
+             AbstractTaskId0
+            )
+     :initial_facts ((:type Engineer
+                      :id engineer1
+                      :modifiers 0
+                      :attributes ((skill 1)
+                                   (unit_cost 10)
+                                   (number 3)
+                                  )
+                     )
+                     (:type Engineer
+                      :id engineer2
+                      :modifiers 0
+                      :attributes ((skill 2)
+                                   (unit_cost 15)
+                                   (number 3)
+                                  )
+                     )
+                     (:type Engineer
+                      :id engineer3
+                      :modifiers 0
+                      :attributes ((skill 3)
+                                   (unit_cost 20)
+                                   (number 3)
+                                  )
+                     )
+                    )
+     :protocols ((:name "zeus.actors.graphs.ContractNetRespondent"
+                  :type Respondent
+                  :constraints ((:fact (:type ZeusFact
+                                        :id var119
+                                        :modifiers 1
+                                       )
+                                 :type 0
+                                 :strategy "zeus.actors.graphs.LinearRespondentEvaluator"
+                                 :parameters ("step.default" "2" "noquibble.range" "2" "max.percent" "120" "min.percent" "105")
+                                )
+                               )
+                 )
+                 (:name "zeus.actors.graphs.ContractNetInitiator"
+                  :type Initiator
+                  :constraints ((:fact (:type ZeusFact
+                                        :id var118
+                                        :modifiers 1
+                                       )
+                                 :type 0
+                                 :strategy "zeus.actors.graphs.LinearInitiatorEvaluator"
+                                 :parameters ("step.default" "2" "noquibble.range" "2" "max.percent" "100" "min.percent" "85")
+                                )
+                               )
+                 )
+                )
+    )
+    (:name AgentId6
+     :class ZeusAgent
+     :planner_width 2
+     :planner_length 30
+     :doublebook_fraction 0
+     :tasks (AbstractTaskId5
+             AbstractTaskId3
+             AbstractTaskId1
+             AbstractTaskId0
+            )
+     :initial_facts ((:type Engineer
+                      :id engineer1
+                      :modifiers 0
+                      :attributes ((skill 1)
+                                   (unit_cost 10)
+                                   (number 2)
+                                  )
+                     )
+                     (:type Engineer
+                      :id engineer2
+                      :modifiers 0
+                      :attributes ((skill 2)
+                                   (unit_cost 15)
+                                   (number 3)
+                                  )
+                     )
+                     (:type Engineer
+                      :id engineer3
+                      :modifiers 0
+                      :attributes ((skill 3)
+                                   (unit_cost 20)
+                                   (number 2)
+                                  )
+                     )
+                     (:type Engineer
+                      :id engineer4
+                      :modifiers 0
+                      :attributes ((skill 4)
+                                   (unit_cost 25)
+                                   (number 2)
+                                  )
+                     )
+                    )
+     :protocols ((:name "zeus.actors.graphs.ContractNetRespondent"
+                  :type Respondent
+                  :constraints ((:fact (:type ZeusFact
+                                        :id var119
+                                        :modifiers 1
+                                       )
+                                 :type 0
+                                 :strategy "zeus.actors.graphs.LinearRespondentEvaluator"
+                                 :parameters ("step.default" "2" "noquibble.range" "2" "max.percent" "120" "min.percent" "105")
+                                )
+                               )
+                 )
+                 (:name "zeus.actors.graphs.ContractNetInitiator"
+                  :type Initiator
+                  :constraints ((:fact (:type ZeusFact
+                                        :id var118
+                                        :modifiers 1
+                                       )
+                                 :type 0
+                                 :strategy "zeus.actors.graphs.LinearInitiatorEvaluator"
+                                 :parameters ("step.default" "2" "noquibble.range" "2" "max.percent" "100" "min.percent" "85")
+                                )
+                               )
+                 )
+                )
+    )
+    (:name AgentId5
+     :class ZeusAgent
+     :planner_width 2
+     :planner_length 30
+     :doublebook_fraction 0
+     :tasks (AbstractTaskId5
+             AbstractTaskId3
+             AbstractTaskId2
+             AbstractTaskId0
+            )
+     :initial_facts ((:type Engineer
+                      :id engineer1
+                      :modifiers 0
+                      :attributes ((skill 1)
+                                   (unit_cost 10)
+                                   (number 2)
+                                  )
+                     )
+                     (:type Engineer
+                      :id engineer2
+                      :modifiers 0
+                      :attributes ((skill 2)
+                                   (unit_cost 15)
+                                   (number 3)
+                                  )
+                     )
+                     (:type Engineer
+                      :id engineer4
+                      :modifiers 0
+                      :attributes ((skill 4)
+                                   (unit_cost 25)
+                                   (number 2)
+                                  )
+                     )
+                    )
+     :protocols ((:name "zeus.actors.graphs.ContractNetRespondent"
+                  :type Respondent
+                  :constraints ((:fact (:type ZeusFact
+                                        :id var119
+                                        :modifiers 1
+                                       )
+                                 :type 0
+                                 :strategy "zeus.actors.graphs.LinearRespondentEvaluator"
+                                 :parameters ("step.default" "2" "noquibble.range" "2" "max.percent" "120" "min.percent" "105")
+                                )
+                               )
+                 )
+                 (:name "zeus.actors.graphs.ContractNetInitiator"
+                  :type Initiator
+                  :constraints ((:fact (:type ZeusFact
+                                        :id var118
+                                        :modifiers 1
+                                       )
+                                 :type 0
+                                 :strategy "zeus.actors.graphs.LinearInitiatorEvaluator"
+                                 :parameters ("step.default" "2" "noquibble.range" "2" "max.percent" "100" "min.percent" "85")
+                                )
+                               )
+                 )
+                )
+    )
+    (:name AgentId0
+     :class ZeusAgent
+     :planner_width 2
+     :planner_length 30
+     :doublebook_fraction 0
+     :tasks (AbstractTaskId5
+             AbstractTaskId3
+             AbstractTaskId2
+             AbstractTaskId1
+            )
+     :initial_facts ((:type Engineer
+                      :id engineer2
+                      :modifiers 0
+                      :attributes ((skill 2)
+                                   (unit_cost 15)
+                                   (number 3)
+                                  )
+                     )
+                     (:type Engineer
+                      :id engineer3
+                      :modifiers 0
+                      :attributes ((skill 3)
+                                   (unit_cost 20)
+                                   (number 2)
+                                  )
+                     )
+                     (:type Engineer
+                      :id engineer4
+                      :modifiers 0
+                      :attributes ((skill 4)
+                                   (unit_cost 25)
+                                   (number 2)
+                                  )
+                     )
+                    )
+     :protocols ((:name "zeus.actors.graphs.ContractNetRespondent"
+                  :type Respondent
+                  :constraints ((:fact (:type ZeusFact
+                                        :id var119
+                                        :modifiers 1
+                                       )
+                                 :type 0
+                                 :strategy "zeus.actors.graphs.LinearRespondentEvaluator"
+                                 :parameters ("step.default" "2" "noquibble.range" "2" "max.percent" "120" "min.percent" "105")
+                                )
+                               )
+                 )
+                 (:name "zeus.actors.graphs.ContractNetInitiator"
+                  :type Initiator
+                  :constraints ((:fact (:type ZeusFact
+                                        :id var118
+                                        :modifiers 1
+                                       )
+                                 :type 0
+                                 :strategy "zeus.actors.graphs.LinearInitiatorEvaluator"
+                                 :parameters ("step.default" "2" "noquibble.range" "2" "max.percent" "100" "min.percent" "85")
+                                )
+                               )
+                 )
+                )
+    )
+  END_AGENT_LIST
+
+  BEGIN_TASK_LIST
+    (:Rulebase AbstractTaskId5
+       (reaction
+          (Fault (type ?t) (id ?id))
+          =>
+          (achieve (fact (Repair (type ?t) (fault ?id))) (end_time 9) (confirm_time 3))
+       )
+       (clear_fault
+          ?fault <- (Fault (type ?type) (id ?id))
+          ?fix <- (Repair (type ?type) (fault ?id))
+          =>
+          (send_message (type inform) (content ?fix) (receiver WorldSimulator))
+          (retract ?fault ?fix)
+       )
+    )
+    (:Rulebase AbstractTaskId4
+       (notify_agent
+          ?fault <- (Fault (owner ?owner))
+          =>
+          (send_message (type inform) (content ?fault) (receiver ?owner))
+       )
+       (clear_fault
+          ?fault <- (Fault (id ?id))
+          ?fix <- (Repair (fault ?id))
+          =>
+          (retract ?fault ?fix)
+       )
+    )
+    (:Primitive AbstractTaskId3
+     :time (1)
+     :cost (17.5)
+     :consumed_facts ((:type Engineer
+                       :id engineer
+                       :modifiers 25
+                       :attributes ((skill >=?repair.type)
+                                    (unit_cost ?var60)
+                                    (number 1)
+                                   )
+                      )
+                     )
+     :produced_facts ((:type Repair
+                       :id repair
+                       :modifiers 1
+                       :attributes ((type 1)
+                                    (fault ?var64)
+                                    (id ?var65)
+                                   )
+                      )
+                     )
+    )
+    (:Primitive AbstractTaskId2
+     :time (1)
+     :cost (25)
+     :consumed_facts ((:type Engineer
+                       :id engineer
+                       :modifiers 25
+                       :attributes ((skill >=?repair.type)
+                                    (unit_cost ?var56)
+                                    (number 1)
+                                   )
+                      )
+                     )
+     :produced_facts ((:type Repair
+                       :id repair
+                       :modifiers 1
+                       :attributes ((type 2)
+                                    (fault ?var52)
+                                    (id ?var53)
+                                   )
+                      )
+                     )
+    )
+    (:Primitive AbstractTaskId1
+     :time (1)
+     :cost (37.5)
+     :consumed_facts ((:type Repair
+                       :id repair1
+                       :modifiers 1
+                       :attributes ((type 1)
+                                    (fault ?repair3.fault)
+                                    (id ?var45)
+                                   )
+                      )
+                      (:type Repair
+                       :id repair2
+                       :modifiers 1
+                       :attributes ((type 2)
+                                    (fault ?repair3.fault)
+                                    (id ?var46)
+                                   )
+                      )
+                      (:type Engineer
+                       :id engineer
+                       :modifiers 25
+                       :attributes ((skill >=?repair3.type)
+                                    (unit_cost ?var48)
+                                    (number 1)
+                                   )
+                      )
+                     )
+     :produced_facts ((:type Repair
+                       :id repair3
+                       :modifiers 1
+                       :attributes ((type 3)
+                                    (fault ?var40)
+                                    (id ?var41)
+                                   )
+                      )
+                     )
+    )
+    (:Primitive AbstractTaskId0
+     :time (1)
+     :cost (50)
+     :consumed_facts ((:type Engineer
+                       :id engineer
+                       :modifiers 25
+                       :attributes ((skill ?repair.type)
+                                    (unit_cost ?var32)
+                                    (number 1)
+                                   )
+                      )
+                      (:type Repair
+                       :id prep
+                       :modifiers 1
+                       :attributes ((type 3)
+                                    (fault ?repair.fault)
+                                    (id ?var37)
+                                   )
+                      )
+                     )
+     :produced_facts ((:type Repair
+                       :id repair
+                       :modifiers 1
+                       :attributes ((type 4)
+                                    (fault ?var28)
+                                    (id ?var29)
+                                   )
+                      )
+                     )
+    )
+  END_TASK_LIST
+
+  BEGIN_GENERATION_PLAN
+    BEGIN_PREAMBLE
+      :platform "Windows"
+      :directory "."
+    END_PREAMBLE
+    BEGIN_AGENT_LIST
+      (:id AgentId8
+       :generate false
+       :status Saved
+       :has_gui false
+       :zeus_external "WorldSim"
+       :dns_file "dns.db"
+      )
+      (:id AgentId7
+       :generate false
+       :status Saved
+       :has_gui false
+       :dns_file "dns.db"
+      )
+      (:id AgentId6
+       :generate false
+       :status Saved
+       :has_gui true
+       :dns_file "dns.db"
+      )
+      (:id AgentId5
+       :generate false
+       :status Saved
+       :has_gui false
+       :dns_file "dns.db"
+      )
+      (:id AgentId0
+       :generate false
+       :status Saved
+       :has_gui true
+       :dns_file "dns.db"
+      )
+    END_AGENT_LIST
+    BEGIN_TASK_LIST
+      (:id AbstractTaskId5
+       :generate false
+       :status Saved
+      )
+      (:id AbstractTaskId4
+       :generate false
+       :status Saved
+      )
+      (:id AbstractTaskId3
+       :generate false
+       :status Saved
+      )
+      (:id AbstractTaskId2
+       :generate false
+       :status Saved
+      )
+      (:id AbstractTaskId1
+       :generate false
+       :status Saved
+      )
+      (:id AbstractTaskId0
+       :generate false
+       :status Saved
+      )
+    END_TASK_LIST
+    BEGIN_NAMESERVER_LIST
+      (:name Nameserver0
+       :is_root true
+       :has_gui false
+       :address_output_file "dns.db"
+       :time_grain 1.0
+      )
+    END_NAMESERVER_LIST
+    BEGIN_FACILITATOR_LIST
+      (:name Facilitator0
+       :period 2.00
+       :has_gui false
+       :dns_file "dns.db"
+      )
+    END_FACILITATOR_LIST
+    BEGIN_VISUALISER_LIST
+      (:name Visualiser0
+       :has_gui false
+       :dns_file "dns.db"
+      )
+    END_VISUALISER_LIST
+  END_GENERATION_PLAN
+END_GENERATOR

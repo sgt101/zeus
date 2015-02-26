@@ -1,0 +1,15 @@
+BrandedPCMakerThree -o .\pc.ont -s dns.db -gui zeus.agentviewer.AgentViewer
+BrandedPCMakerTwo -o .\pc.ont -s dns.db -gui zeus.agentviewer.AgentViewer
+CartridgeMaker -o .\pc.ont -s dns.db -gui zeus.agentviewer.AgentViewer
+BrandedPCMakerOne -o .\pc.ont -s dns.db -gui zeus.agentviewer.AgentViewer
+QualityMonitorMakerOne -o .\pc.ont -s dns.db -gui zeus.agentviewer.AgentViewer
+QuailtyCPUMaker -o .\pc.ont -s dns.db -gui zeus.agentviewer.AgentViewer
+PrinterMaker -o .\pc.ont -s dns.db -gui zeus.agentviewer.AgentViewer
+BoardMaker -o .\pc.ont -s dns.db -gui zeus.agentviewer.AgentViewer
+MemoryChipMaker -o .\pc.ont -s dns.db -gui zeus.agentviewer.AgentViewer
+CPUChipMaker -o .\pc.ont -s dns.db -gui zeus.agentviewer.AgentViewer
+QualityMonitorMakerTwo -o .\pc.ont -s dns.db -gui zeus.agentviewer.AgentViewer
+CheapMonitorMaker -o .\pc.ont -s dns.db -gui zeus.agentviewer.AgentViewer
+ClonePCMakerOne -o .\pc.ont -s dns.db -gui zeus.agentviewer.AgentViewer
+ClonePCMakerTwo -o .\pc.ont -s dns.db -gui zeus.agentviewer.AgentViewer
+ClonePCMakerThree -o .\pc.ont -s dns.db -gui zeus.agentviewer.AgentViewer

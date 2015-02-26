@@ -1,0 +1,579 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>The Zeus Technical Manual</title>
+<LINK REL="STYLESHEET" TYPE="text/css" HREF="zeusdoc.css">
+</head>
+
+<body>
+
+<table width=100% border=0>
+<tr>
+<td><h4>The Zeus Agent Building Toolkit </h4></td>
+<td align=right class="text">Technical Manual</td>
+</tr>
+</table>
+<br>
+<br>
+
+<table border=1 cellspacing=0 width=100% class="smalltext">
+<tr>
+<td width=10%><a class="smalltextlink" href="TOC.html">Contents</a></td>
+<td width=12%><a class="smalltextlink" href="part1.html">Introduction</a></td>
+<td width=12%><a class="smalltextlink" href="part2.html">Zeus Philosophy</a></td>
+<td width=12%><a class="smalltextlink" href="part3.html">Zeus Architecture</a></td>
+<td width=12%><a class="smalltextlink" href="part4.html">Communication</a></td>
+<td width=12%><b>Coordination</b></td>
+<td width=12%><a class="smalltextlink" href="part6.html">Planning and<br>Task Execution</a></td>
+<td width=13%><a class="smalltextlink" href="part7.html">External<br>Applications</a></td>
+</tr>
+</table>
+<br>
+<br>
+
+
+<h3><a name="1"></a>5 Agent Co-ordination</h3>
+
+<p class="text">The component with the role of co-ordinating an agent's 
+  activity with other agent’s is the Co-ordination Engine. It contains facilities 
+  to manage the agent's problem solving behaviours, particularly those involving 
+  multi-agent collaboration. <br>
+  <br>
+  In addition to the general requirement for declarative specification of behaviour,
+  the design of the Co-ordination Engine was governed also by the requirement
+  that an agent should be capable of engaging in many tasks simultaneously.  This
+  meant that the Engine should support some form of multi-tasking.  However, because
+  of the costs involved, simple multi-threading was deemed inappropriate, since
+  the number of independent tasks could potentially run into hundreds.  Thus we
+  choose to represent problem solving behaviours as recursive transition network
+  graphs, which are interpreted by a recursive finite state machine.</p>
+<br>
+<br>
+<h4>Problem solving behaviour representation and processing</h4>
+<p class="text">Figure&nbsp;5.1 depicts a code fragment defining a simple
+  graph and its equivalent pictorial representation.  As the figure shows, behaviour
+  graphs are specified as networks of nodes interconnected by directed arcs. 
+  The ZEUS representation of a graph is as a two-dimensional array of strings,
+  where each string represents the fully qualified class name of the relevant
+  node or arc. </p>
+<p class="text">The processing of a graph involves starting from a designated
+  start node and attempting to traverse the graph until a terminal node is reached. 
+  The processing is controlled by a Graph class, which is the superclass of all
+  behaviour graphs.  The nodes of a graph implement the processing points, while
+  its arcs implement tests to determine whether traversal from one node to another
+  is valid. Each node and arc accept an input argument on which they act to return
+  an output argument. Thus, information follows through a graph from node to arc,
+  in tandem with the traversal path. To allow for recursion, graphs are themselves
+  also arcs; for example, in Figure&nbsp;5.1, the arc from S3 to S4 is a recursive
+  invocation of simple_graph.</p>
+
+<center>
+<table border=1 cellspacing=0 cellpadding=0>
+  <tr>
+    <td width=240 valign=top class="text">
+      <p class=MsoPlainText>public class simple_graph extends<b> Graph </b>{</p>
+      <p class=MsoPlainText>   static String[ ][ ] entry = {</p>
+      <p class=MsoPlainText>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {&quot;S1&quot;,
+      &quot;A1&quot;, &quot;S2&quot;,
+      &quot;A2&quot;, &quot;S3&quot;},</p>
+      <p class=MsoPlainText>        {&quot;S2&quot;,
+      &quot;A3&quot;, &quot;S4&quot;},</p>
+      <p class=MsoPlainText>        {&quot;S3&quot;,
+      &quot;A4&quot;, &quot;S3&quot;,</p>
+      <p class=MsoPlainText>         &quot;simple_graph&quot;, &quot;S4&quot;},</p>
+      <p class=MsoPlainText>        {&quot;S4&quot;}</p>
+      <p class=MsoPlainText>   };</p>
+      <p class=MsoPlainText>   public simple_graph() {<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;    super(entry,&quot;S1&quot;);<br>
+      &nbsp;&nbsp;  }</p>
+    </td>
+    <td width=348 valign=top class="text">
+      <p><img border=0 width=338 height=164 src="./gfx/image024.gif"></p>
+    </td>
+  </tr>
+</table>
+<br>
+<p class="text"><b>Figure 5.1:</b> (left) The Java code for the simple_graph data structure (right) the states of simple_graph.</p>
+</center>
+<p class="text">All nodes of a graph must implement two functions: an exec()
+  and a reset() function.</p>
+<ol class="text">
+<li> The <tt>exec()</tt> function performs the core processing of the node, and returns one of the values
+  OK, FAIL or WAIT. A return value of OK indicates that the processing at that
+  node has succeeded, whereas FAIL indicates failure. A return value of WAIT,
+  which must be associated with a timeout value and/or a message-reply-key, indicates
+  that processing of the node must be suspended until the timeout period expires
+  and/or a message with the specified message-reply-key is received.</p>
+<li> The <tt>reset()</tt>
+  function undoes any changes made on the input data by the exec() function ¾
+  this is in order to support backtracking.</p>
+</ol>
+<p class="text">Arcs, on the other hand, must implement only a test() function
+  that returns a Boolean value that indicates whether or not traversal of the
+  arc is valid.</p>
+<p class="text"><b>Multi-tasking</b></p>
+<p class="text">In order to allow for the parallel processing of multiple
+  graphs, control of processing of graphs is managed by a priority FIFO node-queue. 
+  For example, processing of simple_graph of Figure&nbsp;5.1 proceeds as follows:
+  the graph is launched by creating its designated start node (S1) using Java’s
+  dynamic (runtime) object creation mechanism. Next, the input of the node is
+  set to the argument passed with the launch command.  Now, the node is queued
+  onto the node-queue to await execution.  Once the node is selected for execution,
+  its exec() method is called, and if it returns OK, then the first arc emanating
+  from the node (A1) is dynamically created. The arc is initialised with the output
+  of S1, and its test() method called.  If the test() method succeeds, S2 is dynamically
+  created, initialised with the output of A1, and queued onto the node-queue. 
+  The use of the node-queue therefore allows many graphs to be executed simultaneously
+  by interleaving node processing.</p>
+<p class="text"><b>Parallelism</b></p>
+<p class="text">Further parallelism is supported by a mechanism whereby certain
+  arcs or graphs can be designated as parallel graphs.  For such an arc or graph,
+  whenever its input is an array, then a (non-parallel) copy of the arc/graph
+  is created for each element of the array.  The copies are managed in a <i>k-out-of-n</i>
+  fashion, i.e. the parent arc/graph is traversed if <i>k</i> or more of its child
+  copies succeed.  The value of <i>k</i> is specified in the definition of the
+  parallel graph.  The parallel graph mechanism is particularly useful during
+  delegation or contracting, where many independent jobs may need to be contracted
+  simultaneously. </p>
+<p class="text"><b>Backtracking</b></p>
+<p class="text">To continue with our example, assume that when S2 is processed
+  by calling its exec() method, it returns OK, however, when its first arc (A3)
+  is executed it fails. In such a case, the processor attempts to backtrack by
+  trying the next arc from S2. Since, S2 has no more arcs, its reset() method
+  is called to undo any changes made by its exec() method. Next, its predecessor
+  node (S1) is called to attempt traversing the graph by following its next arc
+  (i.e. A2). Backtracking is also initiated whenever a node’s exec() method fails.</p>
+<p class="text"><b>Communication</b></p>
+<p class="text">In the graph framework, support for inter-agent communicating
+  is achieved through use of the WAIT return value of a node’s exec() method. 
+  For example, a node engaged in communication would send out a message and then
+  ask to be suspended by returning WAIT with an associated timeout value or message-reply-key. 
+  The node will then only be re-queued for processing when the timeout expires
+  and/or a message with the required key is received.</p>
+<p class="text">The recursive transition network approach used to define
+  behaviour satisfied our requirements for declarative specification of behaviour
+  and support for multi-tasking.  An alternative approach considered was rule-based
+  processing; however this was rejected for a number of reasons.  First, while
+  rule-based systems allow declarative specifications and parallel processing,
+  the management of contextual information (i.e. the data on which decisions and
+  actions are based) becomes confusing when multiple independent behaviours act
+  on the same data.  Furthermore, this makes backtracking also difficult.  A final
+  consideration in its favour was that we also believe the transition network
+  representation is more intuitive.</p>
+
+<br>
+<br>
+
+<a name="51"></a><h4>5.1 The Default Problem Solving Behaviour</h4>
+<p class="text">The generic ZEUS agent comes equipped with a predefined goal-processing
+  graph, this is depicted in Figure 5.2 and annotated in Table 5.1. 
+  The graph controls basic problem solving behaviour for achieving goals in response to the 
+  achieve() call made by the Co-ordination Engine component. <br>
+  <br>
+  It can be viewed as being logically composed of three phases: a resource allocation phase, a negotiation phase
+  and a commitment management phase. Later in this section, the behaviour of this graph 
+  will be explained with an example.</p>
+<br>
+<p class="text" align=center style='text-align:center'>
+<img border=0 src="./gfx/achieve-graph.gif"><br><br>
+<b>Figure 5.2</b>: The achieve default goal processing graph </p>
+<br>
+<br>
+
+<center>
+<table width=80% border=1 cellspacing=0 cellpadding=0>
+  <tr>
+    <td width=76 valign=top bgcolor="silver" class="text">
+      <p class="text" align=center style='text-align:center'><b>Node</b></p>
+    </td>
+    <td width=416 valign=top bgcolor="silver" class="text">
+      <p class="text" align=center style='text-align:center'><b>Description/Transition Condition</b></p>
+    </td>
+    <td width=125 valign=top bgcolor="silver" class="text">
+      <p class="text" align=center style='text-align:center'><b>Phase</b></p>
+    </td>
+  </tr>
+  <tr>
+    <td width=76 valign=top class="text">
+      <p class="text" align=center style='text-align:center'>S1</p>
+    </td>
+    <td width=416 valign=top class="text">
+      Create and initialise data structure that holds goal contextual information; Invoke Planner
+    </td>
+    <td width=125 valign=top class="text">Resource allocation
+    </td>
+  </tr>
+  <tr>
+    <td width=76 valign=top class="text">
+      <p class="text" align=center style='text-align:center'>S2</p>
+    </td>
+    <td width=416 valign=top class="text">
+      <p class="text">Prepare to place external contracts</p>
+    </td>
+    <td width=125 valign=top class="text">Negotiation
+    </td>
+  </tr>
+  <tr>
+    <td width=76 valign=top class="text">
+      <p class="text" align=center style='text-align:center'>S3</p>
+    </td>
+    <td width=416 valign=top class="text">
+      Resume planning with results of negotiation
+    </td>
+    <td width=125 valign=top class="text">Resource allocation
+    </td>
+  </tr>
+  <tr>
+    <td width=76 valign=top class="text">
+      <p class="text" align=center style='text-align:center'>S4</p>
+    </td>
+    <td width=416 valign=top class="text">
+      Send confirmation and rejection messages to relevant contractor agents</p>
+    </td>
+    <td width=125 valign=top class="text">Negotiation
+    </td>
+  </tr>
+  <tr>
+    <td width=76 valign=top class="text">
+      <p class="text" align=center style='text-align:center'>S5</p>
+    </td>
+    <td width=416 valign=top class="text">
+    Prepare to negotiate with agent that request goal
+    </td>
+    <td width=125 valign=top class="text">Negotiation
+    </td>
+  </tr>
+  <tr>
+    <td width=76 valign=top class="text">
+      <p class="text" align=center style='text-align:center'>S6</p>
+    </td>
+    <td width=416 valign=top class="text">
+    Check that confirmation message has been received from the agent that requested goal
+    </td>
+    <td width=125 valign=top class="text">Negotiation
+    </td>
+  </tr>
+  <tr>
+    <td width=76 valign=top class="text">
+      <p class="text" align=center style='text-align:center'>S7</p>
+    </td>
+    <td width=416 valign=top class="text">
+      Firmly commit to plan to achieve goal<br>
+      Set up monitors to manage plan execution
+    </td>
+    <td width=125 valign=top class="text">Commitment
+    </td>
+  </tr>
+  <tr>
+    <td width=76 valign=top class="text">
+      <p class="text" align=center style='text-align:center'>S8</p>
+    </td>
+    <td width=416 valign=top class="text">
+      Failure: instruct planner to reject goal
+    </td>
+    <td width=125 valign=top class="text">Commitment
+    </td>
+  </tr>
+  <tr>
+    <td width=76 valign=top class="text">
+      <p class="text" align=center style='text-align:center'>S9</p>
+    </td>
+    <td width=416 valign=top class="text">
+      Rejection: send reject/refuse message
+    </td>
+    <td width=125 valign=top class="text">Commitment
+    </td>
+  </tr>
+</table>
+<br>
+<p class="text"><b>Table 5.1:</b> The nodes of the Achieve() graph</p>
+</center>
+
+<br>
+<br>
+
+<a name="52"></a><h4>A Graph Walkthrough</h4>
+
+<p class="text">
+  The default problem solving behaviour can be consider further by walking
+  through the stages as they occur. <br>
+  <br>
+  Consider that a message is received by an agent to achieve
+  a goal, x. Processing this message involves the agent’s Message Handler sending
+  a request to its Co-ordination Engine to launch the default goal processing
+  graph with the new message as its input argument. Launching the graph involves
+  the creation of an instance of its designated start node (S1 of Figure 5.2),
+  and the node’s input argument set to the new message. </p>
+<p class="text">When executed, S1 first creates a data structure to hold
+  the contextual information that will be generated as a result of processing
+  the goal.  Next, the data structure is initialised with the goal’s parameters
+  (taken from the content of the message passed as input to the node).  Now, the
+  node calls the Planner/Scheduler to plan a sequence of actions to achieve the
+  goal.  If the Planner has no competence whatsoever in dealing with the goal
+  then the node fails, which in turn will cause the graph to fail.  </p>
+<p class="text">Assume, however, that the Planner plans a sequence of actions
+  to achieve the goal, but requires that some subgoals y and z should be achieved
+  externally by other agents – this may be because of lack of time, competence,
+  information or other resources.  Now, A2 is the only viable arc from S1, since
+  its test condition that external collaboration is required (a non-empty list
+  of external subgoals) is satisfied.  Thus we arrive at S2, where the agent prepares
+  to contract out the subgoals y and z; this is achieved by executing A4.</p>
+<p class="text">A4 is in fact defined as a 0<i>-out-of-n</i> parallel graph. 
+  Thus, if its input is an array, then a (non-parallel) child copy of itself is
+  created for each element of the array.  Therefore, with the sub-goals y and
+  z as its inputs, independent child copies of A4 are created to handle each of
+  y and z.  Secondly, by being defined as 0<i>-out-of-n</i>, the parent A4 is
+  traversed if zero or more of its child copies succeed.  Thus, on contracting
+  out y and z, the parent A4 will be traversed if none, one or both goals are
+  contracted out.</p>
+<p class="text" align=center style='text-align:center'><img border=0 width=395 height=77
+src="./gfx/image028.gif" v:shapes="_x0000_i1033"></p>
+<p class="text" align=center style='text-align:center'><b>Figure 5.3: </b>The
+  A4 parallel graph.</p>
+<p class="text">The graph defined by A4 (an example is shown in Figure 5.3)
+  simply serves to provide a placeholder for the potentially many arcs/graphs
+  that define the <i>initiator-side behaviour</i> of various negotiation protocols. 
+  It could include, for example, arcs/graphs defining the contract manager’s behaviour
+  at the request for proposals stage of the contract-net protocol, or the contract
+  manager’s initial delegation behaviour in the master-slave delegation protocol.
+</p>
+<p class="text">As the graph processor attempts to traverse the first viable
+  arc from S2a to S3a, the choice of negotiation protocol depends on two factors. 
+  Firstly, the order in which the arcs from S2a to S3a are listed in the A4 graph
+  specification, and secondly on whether the selected arc is indeed traversable
+  in the given context.  The backtracking capability of the graph processor ensures
+  that if viable arcs exist from S2a to S3a, then at least one will be selected. 
+  In ZEUS, negotiation graphs (e.g. the initiator-side negotiation graphs in Figure&nbsp;5.3)
+  typically comprise two main parts: an <i>applicability assessment</i> section
+  and a<i> negotiation dialogue</i> section. The applicability section simply
+  checks whether the protocol is applicable in the given context, while the dialogue
+  section actually implements the protocol.</p>
+<p class="text">Once A4 is traversed, at S3 the Planner is re-called with
+  the results of the contracting process. Depending on its input, the Planner
+  returns one of three possible results: </p>
+<p class="text">(a)&nbsp;&nbsp;&nbsp;&nbsp; that the planning process failed
+  and no solution could be found for the original problem, </p>
+<p class="text">(b)&nbsp;&nbsp;&nbsp;&nbsp; that the planning process completed
+  successfully and no further contracting is required, or </p>
+<p class="text">(c)&nbsp;&nbsp;&nbsp;&nbsp; it might return a new list of
+  subgoals to be contracted out, as well as a partitioned list of prior sub-contracts,
+  some of which should be rejected and others that should be accepted.</p>
+<p class="text">If further contracting is required, A5 will return the goal
+  processor to S2 to begin a new phase of contracting.  If, alternatively there
+  are no more subgoals to contract out and the planning process completed successfully,
+  then A6 or A7 will be selected.  Which one gets chosen depends on whether or
+  not the agent is trying to achieve the original goal x for itself or on behalf
+  of another agent.  In the latter case, A6 is selected, which leads to S5.  </p>
+<p class="text">At S5, some housekeeping functions are performed, in preparation
+  for negotiation with the agent that requested that goal x be achieved.  The
+  actual respondent-side negotiation<i> </i>is performed when A8 is executed. 
+  A8 is in fact a placeholder for potentially many arcs/graphs that define different
+  <i>respondent-side negotiation</i> behaviour. Again the ordering of the arcs/graphs
+  (that replace A8) and the context determine which negotiation protocol gets
+  selected.</p>
+<p class="text">Following respondent-side negotiation (A8), at S6 checks
+  are performed to determine that the agent has been awarded the contract, i.e.
+  that an award confirmation message is received from the agent that requested
+  goal x.  Next, A9 or A11 is traversed, depending on whether or not the goal
+  x had any external subgoals.  Since in our example sub-goals y and z were contracted
+  out, A9 is selected, leading to S4.  At S4, award confirmation messages are
+  sent out to the agents selected to perform the contracted subgoals, and rejection
+  messages sent out to those agents that did not get selected.  Finally, at S7,
+  the plan constructed to achieve the goal x is scheduled for execution, and monitors
+  are set up to manage the plan execution process.</p>
+<p class="text">From the foregoing description, a couple of points should
+  be clear. First, that the transition network representation makes it relatively
+  easy for one to redefine, if needed, the basic goal processing behaviour outlined
+  above. However, we believe our conceptual decomposition of the goal processing
+  process into resource allocation (planning), negotiation and commitment phases,
+  and our default graph are fairly generic and applicable in a number of domains.
+</p>
+<p class="text">Secondly, the transition network approach makes it easy for
+  negotiation protocols and strategies to be added to a ZEUS agent.  Simply, initiator-
+  and respondent-side negotiation graphs have to be defined for the protocol/strategy,
+  and integrated into the default graph between S2a and S3a of Figure 5.3, and
+  S5 and S6 of Figure&nbsp;5.2, respectively. In fact, the generic ZEUS agent
+  already has some predefined negotiation protocols such as contract-net, master-slave
+  delegation and some auction protocols.  Figure&nbsp;5.4 and Table 5.2 describe
+  our current initiator- and respondent-side implementations of the contract-net
+  protocol. In typical negotiation graphs, the negotiation strategy logic is defined
+  within the exec() methods of the nodes in the graphs.  In some cases, this may
+  even involve a call to external programs. The organisational relationships defined
+  by Agent Component Library are typically used in the applicability test portions
+  of negotiation protocol graph specifications.  For example, the applicability
+  test portion of the initiator-side contract-net graph of Figure 5.4 mandates
+  a preference for co-worker agents before peer agents when contracting out tasks
+  (by the ordering of the arcs A1 and A2, where A1 precedes A2).</p>
+<p align=center style='text-align:center'>
+<img border=0 width=431 height=193 src="./gfx/image030.gif"><br><br>
+<b>Figure 5.4: </b>Sample ZEUS implementation of the contract-net protocol</p>
+<br>
+
+<center>
+<table border=1 cellspacing=0 cellpadding=0>
+  <tr>
+    <td width=558 colspan=2 valign=top class="text"><b>Initiator-side contract-net behaviour</b>
+    </td>
+  </tr>
+  <tr>
+    <td width=96 valign=top class="text" align="center">Node/Arc</p>
+    </td>
+    <td width=462 valign=top class="text">Description/Transition Condition</p>
+    </td>
+  </tr>
+  <tr>
+    <td width=96 valign=top class="text">
+      <p align=center style='text-align:center'>S1</p>
+    </td>
+    <td width=462 valign=top class="text">
+      <p>Identify agents that can perform goal</p>
+    </td>
+  </tr>
+  <tr>
+    <td width=96 valign=top class="text">
+      <p align=center style='text-align:center'>A1</p>
+    </td>
+    <td width=462 valign=top class="text">
+      <p>Select subset of agents that can perform goal and who are co-workers
+        (check not empty)</p>
+    </td>
+  </tr>
+  <tr>
+    <td width=96 valign=top class="text">
+      <p align=center style='text-align:center'>A2</p>
+    </td>
+    <td width=462 valign=top class="text">
+      <p>Select subset of agents that can perform goal and who are peers (check not empty)</p>
+    </td>
+  </tr>
+  <tr>
+    <td width=96 valign=top class="text">
+      <p align=center style='text-align:center'>S2</p>
+    </td>
+    <td width=462 valign=top class="text">
+      <p>Send request for proposals to selected agent and await responses</p>
+    </td>
+  </tr>
+  <tr>
+    <td width=96 valign=top class="text">
+      <p align=center style='text-align:center'>A3</p>
+    </td>
+    <td width=462 valign=top class="text">
+      <p>Check that an <b>accept</b> response has been received</p>
+    </td>
+  </tr>
+  <tr>
+    <td width=96 valign=top class="text">
+      <p align=center style='text-align:center'>S3</p>
+    </td>
+    <td width=462 valign=top class="text"><b>Done</b>
+    </td>
+  </tr>
+</table>
+
+<br>
+<br>
+
+<table border=1 cellspacing=0 cellpadding=0>
+  <tr>
+    <td width=558 colspan=2 valign=top class="text"><b>Respondent-side contract-net behaviour</b>
+    </td>
+  </tr>
+  <tr>
+    <td width=96 valign=top class="text">
+      <p align=center class="text">Node/Arc</p>
+    </td>
+    <td width=462 valign=top class="text">
+      <p class="text">Description/Transition Condition</p>
+    </td>
+  </tr>
+  <tr>
+    <td width=96 valign=top class="text">
+      <p align=center style='text-align:center'>S4</p>
+    </td>
+    <td width=462 valign=top class="text">
+      Evaluate cost<br>
+      Send <b>accept</b> message<br>
+      Await response
+    </td>
+  </tr>
+  <tr>
+    <td width=96 valign=top class="text">
+      <p align=center style='text-align:center'>A4</p>
+    </td>
+    <td width=462 valign=top class="text">
+      <p>Contract award message received</p>
+    </td>
+  </tr>
+  <tr>
+    <td width=96 valign=top class="text">
+      <p align=center style='text-align:center'>S5</p>
+    </td>
+    <td width=462 valign=top class="text"><b>Done</b>
+    </td>
+  </tr>
+</table>
+<p class="text" align=center style='text-align:center'><b>Table 5.2: </b>Descriptions
+  of the nodes and arcs of Figure&nbsp;5.4.</p>
+</center>
+<br>
+<br>
+
+
+<h3><a name="53"></a>The Default Rationality Model</h4>
+<p class="text">It is worth briefly commenting on the rationality model implicit
+  in the Co-ordination Engine and the default goal-processing graph.  Used as
+  is, the default goal processing graph implicitly implements the following: </p>
+<p class="text">(a)&nbsp;&nbsp;&nbsp;&nbsp; an agent would accept any goal
+  for which it has the available resources to pursue, </p>
+<p class="text">(b)&nbsp;&nbsp;&nbsp;&nbsp; the agent will continue accepting
+  goals on a first-come first-served basis until its capacity to do so is exhausted,
+  and </p>
+<p class="text">(c)&nbsp;&nbsp;&nbsp;&nbsp; once an agent has accepted a
+  goal, the agent is fully committed to the goal, and will do all in its power
+  to ensure the goal is achieved. (As we shall see when discussing exception handling,
+  the agent remains committed to an accepted goal even when it might no longer
+  be in its best interest to remain so<a href="#_ftn2" name="_ftnref2" title=""><sup>[2]</sup></a>).</p>
+<p class="text">It is worth noting that the current version of the Co-ordination
+  Engine has no explicit rationality model, i.e. there is no reasoning framework
+  to determine from whom, and when to accept goals, or equivalently, when to abandon
+  goals although they may be technically achievable.  Such a model, if needed,
+  can be implemented by adding an agenda (and associated reasoning rules) to control
+  (i) the conditions under which the goal processing graph is launched for goal
+  selection, and (ii) the node-queue of the Co-ordination Engine for goal scheduling
+  and abandonment control. The reasoning rules of the agenda should be essentially
+  equivalent to the desire filter of the belief-desire-intention agent architecture
+  [7]. Given the application domains envisaged for ZEUS, such an explicit rationality
+  model was not deemed particularly necessary, although one is likely to be included
+  in future versions of the system.</p>
+
+<br>
+<br>
+<hr align=left size=1 width="33%">
+
+<div id=ftn2>
+  <p class=MsoFootnoteText><a href="#_ftnref2"
+name="_ftn2" title=""><sup>[2]</sup></a> This reflects practice in commercial
+    domains, where for legal reasons and also in order to maintain customer confidence,
+    contracts that are later found to be non-profitable are not automatically
+    abandoned.</p>
+</div>
+
+<br>
+<br>
+
+<table border=1 cellspacing=0 width=100% class="smalltext">
+<tr>
+<td width=10%><a class="smalltextlink" href="TOC.html">Contents</a></td>
+<td width=12%><a class="smalltextlink" href="part1.html">Introduction</a></td>
+<td width=12%><a class="smalltextlink" href="part2.html">Zeus Philosophy</a></td>
+<td width=12%><a class="smalltextlink" href="part3.html">Zeus Architecture</a></td>
+<td width=12%><a class="smalltextlink" href="part4.html">Communication</a></td>
+<td width=12%><b>Coordination</b></td>
+<td width=12%><a class="smalltextlink" href="part6.html">Planning and<br>Task Execution</a></td>
+<td width=13%><a class="smalltextlink" href="part7.html">External<br>Applications</a></td>
+</tr>
+</table>
+
+</body>
+</html>

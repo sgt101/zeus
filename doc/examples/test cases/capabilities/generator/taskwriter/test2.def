@@ -1,0 +1,160 @@
+BEGIN_GENERATOR
+  BEGIN_PREAMBLE
+    :system "ZEUS-Agent-Generator"
+    :version "1.1"
+    :ontology ".:test2.ont"
+  END_PREAMBLE
+
+  BEGIN_AGENT_NAME_INDEX
+    AgentId0 Agent0
+  END_AGENT_NAME_INDEX
+
+  BEGIN_AGENT_ICON_INDEX
+    AgentId0 "..:..:..:..:..:..zeusTest:1.05:gifs:agent.gif"
+  END_AGENT_ICON_INDEX
+
+  BEGIN_TASK_NAME_INDEX
+    AbstractTaskId6 lalala
+    AbstractTaskId5 Scoopbie
+    AbstractTaskId4 coopie
+    AbstractTaskId0 Nomboe
+  END_TASK_NAME_INDEX
+
+  BEGIN_AGENT_LIST
+    (:name AgentId0
+     :class ZeusAgent
+     :planner_width 1
+     :planner_length 20
+     :doublebook_fraction 0
+     :tasks (AbstractTaskId0
+             AbstractTaskId4
+             AbstractTaskId5
+             AbstractTaskId6
+            )
+    )
+  END_AGENT_LIST
+
+  BEGIN_TASK_LIST
+    (:Summary AbstractTaskId6
+     :is_autorun false
+     :time (1)
+     :cost (0)
+     :nodes ((:name begin
+              :is_conditional false
+              :consumed_facts ((:group default (
+                              ))
+                              )
+              :produced_facts ((:group default (
+                              ))
+                              )
+             )
+             (:name end
+              :is_conditional false
+              :consumed_facts ((:group default (
+                              ))
+                              )
+              :produced_facts ((:group default (
+                              ))
+                              )
+             )
+            )
+    )
+    (:Rulebase AbstractTaskId5
+       (Rule0
+          ?test <- (Entity (unit_cost ?var17) (number ?var18))
+          =>
+          (retract ?test)
+       )
+    )
+    (:Primitive AbstractTaskId4
+     :time (1)
+     :cost (0)
+     :consumed_facts ((:type Entity
+                       :id var1
+                       :modifiers 1
+                       :attributes ((unit_cost ?var2)
+                                    (number ?var3)
+                                   )
+                      )
+                      (:type Entity
+                       :id var4
+                       :modifiers 1
+                       :attributes ((unit_cost ?var5)
+                                    (number ?var6)
+                                   )
+                      )
+                     )
+     :produced_facts ((:type Entity
+                       :id var7
+                       :modifiers 1
+                       :attributes ((unit_cost ?var8)
+                                    (number ?var9)
+                                   )
+                      )
+                      (:type Entity
+                       :id var10
+                       :modifiers 1
+                       :attributes ((unit_cost ?var11)
+                                    (number ?var12)
+                                   )
+                      )
+                     )
+    )
+    (:Primitive AbstractTaskId0
+     :time (1)
+     :cost (0)
+    )
+  END_TASK_LIST
+
+  BEGIN_GENERATION_PLAN
+    BEGIN_PREAMBLE
+      :platform "Windows"
+      :directory "."
+    END_PREAMBLE
+    BEGIN_AGENT_LIST
+      (:id AgentId0
+       :generate false
+       :status Saved
+       :has_gui false
+       :dns_file "dns.db"
+      )
+    END_AGENT_LIST
+    BEGIN_TASK_LIST
+      (:id AbstractTaskId5
+       :generate false
+       :status Saved
+       :external null
+      )
+      (:id AbstractTaskId4
+       :generate false
+       :status Saved
+       :external test.capabilities.generator.taskwriter.TestExternal
+      )
+      (:id AbstractTaskId0
+       :generate false
+       :status Saved
+       :external null
+      )
+    END_TASK_LIST
+    BEGIN_NAMESERVER_LIST
+      (:name Nameserver3
+       :is_root false
+       :has_gui false
+       :dns_file "dns.db"
+      )
+    END_NAMESERVER_LIST
+    BEGIN_FACILITATOR_LIST
+      (:name Facilitator3
+       :period 5.00
+       :has_gui false
+       :dns_file "dns.db"
+      )
+    END_FACILITATOR_LIST
+    BEGIN_VISUALISER_LIST
+      (:name Visualiser3
+       :has_gui false
+       :dns_file "dns.db"
+      )
+    END_VISUALISER_LIST
+  END_GENERATION_PLAN
+END_GENERATOR

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="zeus/agents/" kind="src" path="src"/>
+	<classpathentry kind="src" path="src/zeus/agents"/>
+	<classpathentry kind="lib" path="lib/ant.jar"/>
+	<classpathentry kind="lib" path="lib/gnu-regexp.jar"/>
+	<classpathentry kind="lib" path="lib/icu4j.jar"/>
+	<classpathentry kind="lib" path="lib/jaxb-rt-1.0-ea.jar"/>
+	<classpathentry kind="lib" path="lib/jaxb-xjc-1.0-ea.jar"/>
+	<classpathentry kind="lib" path="lib/jena.jar"/>
+	<classpathentry kind="lib" path="lib/zeus.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="build"/>
+</classpath>

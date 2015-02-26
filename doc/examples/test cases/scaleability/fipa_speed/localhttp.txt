@@ -1,0 +1,10 @@
+<alias_address>
+<zeus_name>
+    ping_agent
+</zeus_name>
+<aid>
+(agent-identifier 
+     :name ping-agent@tb-toledo.futures.bt.co.uk
+     :addresses (sequence http://tb-toledo.futures.bt.co.uk:8001/acc))
+</aid>
+</alias_address>

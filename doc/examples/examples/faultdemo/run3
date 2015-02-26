@@ -1,0 +1,7 @@
+#!/usr/bin/csh
+#This script runs the task agents
+java WorldSimulator -o ./faultdemo.ont -s dns.db -e WorldSim & 
+java East -o ./faultdemo.ont -s dns.db & 
+java West -o ./faultdemo.ont -s dns.db -gui zeus.agentviewer.AgentViewer & 
+java South -o ./faultdemo.ont -s dns.db & 
+java North -o ./faultdemo.ont -s dns.db -gui zeus.agentviewer.AgentViewer & 

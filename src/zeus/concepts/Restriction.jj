@@ -1,0 +1,780 @@
+options {
+  STATIC = false;
+}
+
+PARSER_BEGIN(RestrictionParser)
+
+package zeus.concepts;
+
+import java.util.*;
+import java.io.*;
+import zeus.util.*;
+import zeus.concepts.fn.*;
+
+public class RestrictionParser {
+}
+
+PARSER_END(RestrictionParser)
+
+
+/* WHITE SPACE */
+
+SKIP :
+{
+  " "
+| "\t"
+| "\n"
+| "\r"
+| "\f"
+}
+
+/* OPERATORS AND SEPARATORS */
+
+TOKEN :
+{
+
+  < EQ: "==" >
+| < LE: "<=" >
+| < GE: ">=" >
+| < NE: "!=" >
+| < GT: ">" >
+| < LT: "<" >
+
+| < PLUS: "+" >
+| < MINUS: "-" >
+
+| < MULTIPLY: "*" >
+| < DIVIDE: "/" >
+| < REMAINDER: "%" >
+| < POWER: "^" >
+
+| < AND: "&&" >
+| < OR: "||" >
+| < NOT: "!" >
+
+| <UNOT: "~" >
+| <UAND: "&">
+| <UOR: "|">
+
+| < LBRACKET: "(" >
+| < RBRACKET: ")" >
+
+| < LCURLY: "{" >
+| < RCURLY: "}" >
+
+| <COMMA: "," >
+
+| < IF: "if" >
+| < THEN: "then" >
+| < ELSE: "else" >
+
+}
+
+/* LITERALS */
+
+TOKEN :
+{
+  < ID:      <LETTER> (<LETTER>|<DIGIT>|"$")* >
+| < BOOLEAN: ("true" | "false") >
+| < INTEGER: <DECIMAL> (["l","L"])? >
+| < REAL:
+        (["0"-"9"])+ "." (["0"-"9"])* (<EXPONENT>)? (["f","F","d","D"])?
+      | "." (["0"-"9"])+ (<EXPONENT>)? (["f","F","d","D"])?
+      | (["0"-"9"])+ <EXPONENT> (["f","F","d","D"])?
+      | (["0"-"9"])+ (<EXPONENT>)? ["f","F","d","D"]
+  >
+| < DATE: ( ("0")?["1"-"9"] | ["1"-"2"] ["0"-"9"] | "30" | "31" )
+            ["-","/"]
+          ( ("0")?["1"-"9"] | "10" | "11" | "12" )
+            ["-","/"]
+          ["0"-"9"] ["0"-"9"]
+  >
+| < TIME: ( ("0")?["0"-"9"] | "1" ["0"-"9"] | "2" ["0"-"3"] )
+            ":" ["0"-"5"]["0"-"9"]
+          ( ":" ["0"-"5"]["0"-"9"] )?
+  >
+| < LITERAL:
+      "\""
+      (   (~["\"","\\","\n","\r"])
+        | ("\\"
+            ( ["n","t","b","r","f","\\","'","\""]
+            | ["0"-"7"] ( ["0"-"7"] )?
+            | ["0"-"3"] ["0"-"7"] ["0"-"7"]
+            )
+          )
+      )*
+      "\""
+  >
+| < #EXPONENT: ["e","E"] (["+","-"])? (["0"-"9"])+ >
+| < #LETTER: ["a"-"z", "_", "A"-"Z"] >
+| < #DIGIT: ["0"-"9"] >
+| < #DECIMAL: "0" | ["1"-"9"] (["0"-"9"])* >
+}
+
+
+/*
+   String Expression syntax follows.
+*/
+
+ValueFunction StringExpression() :
+{ ValueFunction fn = null; }
+{
+  fn = OrString() <EOF>
+  { return fn; }
+}
+
+ValueFunction OrString() :
+{ ValueFunction x, y; }
+{
+  x = AndString()
+  (
+     <UOR> y = AndString()
+     {
+        x =  new OrFn(x,y);
+     }
+  )*
+  { return x; }
+}
+
+ValueFunction AndString() :
+{ ValueFunction x, y; }
+{
+  x = UnaryString()
+  (
+     <UAND> y = UnaryString()
+     {
+        x = new AndFn(x,y);
+     }
+  )*
+  { return x; }
+}
+
+
+ValueFunction UnaryString() :
+{ Token t;
+  ValueFunction x;
+}
+{
+(
+  ( t = <LE> | t = <GE> | t = <NE> | t = <GT> | t = <LT> | t = <UNOT> )
+  x = UnaryString()
+  {
+     x = new ConstraintFn(t.image,x);
+  }
+|
+  x = StringLiteral()
+|
+  <LBRACKET> x = OrString() <RBRACKET>
+)
+  { return x; }
+}
+
+ValueFunction StringLiteral() :
+{ Token t;
+  ValueFunction x = null;
+}
+{
+(
+  t = <LITERAL>
+  {
+     x = new IdFn(Misc.literalToString(t.image));
+  }
+|
+  LOOKAHEAD(2) x = Function()
+|
+  t = <ID>
+  {
+     x = new IdFn(t.image);
+  }
+)
+  { return x; }
+}
+
+/*
+   Boolean Expression syntax follows.
+*/
+
+ValueFunction BooleanLiteral() :
+{ Token t;
+  ValueFunction x = null;
+}
+{
+(
+  t = <BOOLEAN>
+  { x = BoolFn.newBoolFn(t.image); }
+|
+  x = Function()
+)
+  { return x; }
+}
+
+/*
+   Date Expression syntax follows.
+*/
+
+ValueFunction DateExpression() :
+{ ValueFunction x = null; }
+{
+  x = OrDate() <EOF>
+  { return x; }
+}
+
+ValueFunction OrDate() :
+{ ValueFunction x = null, y = null; }
+{
+  x = AndDate()
+  (
+     <UOR> y = AndDate()
+     {
+        x = new OrFn(x,y);
+     }
+  )*
+  {  return x; }
+}
+
+ValueFunction AndDate() :
+{ ValueFunction x = null, y = null; }
+{
+  x = UnaryDate()
+  (
+     <UAND> y = UnaryDate()
+     {
+        x = new AndFn(x,y);
+     }
+  )*
+  {  return x; }
+}
+
+
+ValueFunction UnaryDate() :
+{ Token t;
+  ValueFunction x = null;
+}
+{
+(
+  ( t = <LE> | t = <GE> | t = <NE> | t = <GT> | t = <LT> | t = <UNOT> )
+  x = UnaryDate()
+  {
+     x =  new ConstraintFn(t.image,x);
+  }
+| x = DateLiteral()
+| <LBRACKET> x = OrDate() <RBRACKET>
+)
+  { return x; }
+}
+
+ValueFunction DateLiteral() :
+{ Token t;
+  ValueFunction x = null;
+}
+{
+(
+  t = <DATE>
+  {
+     x = new DateFn(t.image);
+  }
+| 
+  x = Function()
+)
+  { return x; }
+}
+
+/*
+   Time Expression syntax follows.
+*/
+
+ValueFunction TimeExpression() :
+{ ValueFunction x = null; }
+{
+  x = OrTime() <EOF>
+  { return x; }
+}
+
+ValueFunction OrTime() :
+{ ValueFunction x = null, y = null; }
+{
+  x = AndTime()
+  (
+     <UOR> y = AndTime()
+     {
+        x = new OrFn(x,y);
+     }
+  )*
+  { return x; }
+}
+
+ValueFunction AndTime() :
+{ ValueFunction x = null, y = null; }
+{
+  x = UnaryTime()
+  (
+     <UAND> y = UnaryTime()
+     {
+        x = new AndFn(x,y);
+     }
+  )*
+  { return x; }
+}
+
+
+ValueFunction UnaryTime() :
+{ Token t;
+  ValueFunction x = null, y = null;
+}
+{
+(
+  ( t = <LE> | t = <GE> | t = <NE> | t = <GT> | t = <LT> | t = <UNOT> )
+  x = UnaryTime()
+  {
+     x =  new ConstraintFn(t.image,x);
+  }
+| x = TimeLiteral()
+| <LBRACKET> x = OrTime() <RBRACKET>
+)
+  { return x; }
+}
+
+ValueFunction TimeLiteral() :
+{ Token t;
+  ValueFunction x = null;
+}
+{
+(
+  t = <TIME>
+  {
+     x = new TimeFn(t.image);
+  }
+| 
+  x = Function()
+)
+  { return x; }
+}
+
+/*
+   Integer Expression syntax follows.
+*/
+
+ValueFunction IntegerExpression() :
+{ ValueFunction x = null; }
+{
+  x = OrInteger() <EOF>
+  {
+     return x;
+  }
+}
+
+ValueFunction OrInteger() :
+{ ValueFunction x = null, y = null; }
+{
+  x = AndInteger()
+  (
+     <UOR> y = AndInteger()
+     {
+        x = new OrFn(x,y);
+     }
+  )*
+  {  return x; }
+}
+
+
+ValueFunction AndInteger() :
+{ ValueFunction x = null, y = null; }
+{
+  x = AdditiveInteger()
+  (
+     <UAND> y = AdditiveInteger()
+     {
+        x = new AndFn(x,y);
+     }
+  )*
+  {  return x; }
+}
+
+ValueFunction AdditiveInteger() :
+{ Token t;
+  ValueFunction x = null, y = null;
+}
+{
+  x = MultiplicativeInteger()
+  (
+     ( t = <PLUS> | t = <MINUS> ) y = MultiplicativeInteger()
+     {
+        x = new ArithmeticFn(x,y,t.image);
+     }
+  )*
+  { return x; }
+}
+
+ValueFunction MultiplicativeInteger() :
+{ Token t;
+  ValueFunction x = null, y = null;
+}
+{
+  x = UnaryInteger()
+  (
+     ( t = <MULTIPLY> | t = <DIVIDE> | t = <REMAINDER> ) y = UnaryInteger()
+     {
+        x = new ArithmeticFn(x,y,t.image);
+     }
+  )*
+  { return x; }
+}
+
+ValueFunction UnaryInteger() :
+{ Token t;
+  ValueFunction x = null;
+}
+{
+(
+  ( t = <PLUS> | t = <MINUS> ) x = UnaryInteger()
+  {
+     x =  new ArithmeticFn(new IntFn("0"),x,t.image);
+  }
+|
+  ( t = <LE> | t = <GE> | t = <NE> | t = <GT> | t = <LT> | t = <UNOT> )
+  x = UnaryInteger()
+  {
+     x =  new ConstraintFn(t.image,x);
+  }
+| t = <INTEGER>
+  {
+     x = new IntFn(t.image);
+  }
+|
+  <LBRACKET> x = OrInteger() <RBRACKET>
+| 
+  x = Function()
+)
+  { return x; }
+}
+
+
+/*
+   Real Expression syntax follows.
+*/
+
+ValueFunction RealExpression() :
+{ ValueFunction x = null, y = null; }
+{
+  x = OrReal() <EOF>
+  {
+     return x;
+  }
+}
+
+ValueFunction OrReal() :
+{ ValueFunction x = null, y = null; }
+{
+  x = AndReal()
+  (
+     <UOR> y = AndReal()
+     {
+        x = new OrFn(x,y);
+     }
+  )*
+  {  return x; }
+}
+
+
+ValueFunction AndReal() :
+{ ValueFunction x = null, y = null; }
+{
+  x = AdditiveReal()
+  (
+     <UAND> y = AdditiveReal()
+     {
+        x = new AndFn(x,y);
+     }
+  )*
+  {  return x; }
+}
+
+ValueFunction AdditiveReal() :
+{ Token t;
+  ValueFunction x = null, y = null;
+}
+{
+  x = MultiplicativeReal()
+  (
+     ( t = <PLUS> | t = <MINUS> ) y = MultiplicativeReal()
+     {
+        x = new ArithmeticFn(x,y,t.image);
+     }
+  )*
+  {  return x; }
+}
+
+ValueFunction MultiplicativeReal() :
+{ Token t;
+  ValueFunction x = null, y = null;
+}
+{
+  x = UnaryReal()
+  (
+     ( t = <MULTIPLY> | t = <DIVIDE> | t = <REMAINDER> ) y = UnaryReal()
+     {
+        x = new ArithmeticFn(x,y,t.image);
+     }
+  )*
+  {  return x; }
+}
+
+ValueFunction UnaryReal() :
+{ Token t;
+  ValueFunction x = null;
+}
+{
+(
+  ( t = <PLUS> | t = <MINUS> ) x = UnaryReal()
+  {
+     x =  new ArithmeticFn(new IntFn("0"),x,t.image);
+  }
+|
+  ( t = <LE> | t = <GE> | t = <NE> | t = <GT> | t = <LT> | t = <UNOT> )
+  x = UnaryReal()
+  {
+     x = new ConstraintFn(t.image,x);
+  }
+| t = <INTEGER>
+  {
+     x = new RealFn(t.image);
+  }
+| t = <REAL>
+  {
+     x = new RealFn(t.image);
+  }
+|
+  <LBRACKET> x = OrReal() <RBRACKET>
+|
+  x = Function()
+)
+  { return x; }
+}
+
+/*
+   Vector Expression syntax follows.
+*/
+
+ValueFunction VectorLiteral() :
+{ Vector data = new Vector();
+  ValueFunction x = null;
+}
+{
+(
+  <LCURLY>  data = ExpressionList() <RCURLY>
+  { x = new VectorFn(data); }
+|
+  x = Function()
+)
+  { return x; }
+}
+
+
+/*
+   Functions
+*/
+
+Vector ExpressionList():
+{
+Vector data = new Vector();
+ValueFunction fn = null;
+}
+{
+  [
+    fn = Expression()
+    { data.addElement(fn); }
+    (
+      <COMMA>
+      fn = Expression()
+      { data.addElement(fn); }
+    )*
+  ]
+  { return data; }
+}
+
+ValueFunction Function():
+{
+Vector data = null;
+Token t;
+}
+{
+  t = <ID> <LBRACKET> data = ExpressionList() <RBRACKET>
+  {  return new DefinedFn(t.image,data); }
+}
+
+/*
+   Expression syntax
+*/
+
+ValueFunction Expression():
+{
+ValueFunction fn = null;
+}
+{
+  fn = ConditionalOrExpression() 
+  { return fn; }
+}
+
+ValueFunction ConditionalOrExpression():
+{
+ValueFunction x = null, y = null;
+}
+{
+x = ConditionalAndExpression()
+  (
+     LOOKAHEAD(<OR>)
+     <OR> y = ConditionalAndExpression()
+     {  x = new LogicalOrFn(x,y);  }
+  )*
+  { return x; }
+}
+
+ValueFunction ConditionalAndExpression():
+{
+ValueFunction x = null, y = null;
+}
+{
+x = InclusiveOrExpression()
+  (
+     LOOKAHEAD(<AND>)
+     <AND> y = InclusiveOrExpression()
+     {  x = new LogicalAndFn(x,y);  }
+  )*
+  { return x; }
+}
+
+ValueFunction InclusiveOrExpression():
+{
+ValueFunction x = null, y = null;
+}
+{
+x = AndExpression()
+  (
+     LOOKAHEAD(<UOR>)
+     <UOR> y = AndExpression()
+     {  x = new OrFn(x,y);  }
+  )*
+  { return x; }
+}
+
+ValueFunction AndExpression():
+{
+ValueFunction x = null, y = null;
+}
+{
+x = RelationalExpression()
+  (
+     LOOKAHEAD(<UAND>)
+     <UAND> y = RelationalExpression()
+     {  x = new AndFn(x,y);  }
+  )*
+  { return x; }
+}
+
+ValueFunction RelationalExpression():
+{
+ValueFunction x = null, y = null;
+Token t;
+}
+{
+x = AdditiveExpression()
+  (
+     LOOKAHEAD(2)
+     (t = <EQ> |  t = <NE> | t = <LT> | t = <GT> | t = <LE> | t = <GE>)
+     y = AdditiveExpression()
+     {  x= new ComparisonFn(x,y,t.image); }
+  )*
+  { return x; }
+}
+
+ValueFunction AdditiveExpression():
+{
+ValueFunction x = null, y = null;
+Token t;
+}
+{
+x = MultiplicativeExpression()
+  (  LOOKAHEAD(<PLUS>|<MINUS>)
+     ( t = <PLUS> | t = <MINUS> ) y = MultiplicativeExpression()
+     {  x = new ArithmeticFn(x,y,t.image);  }
+  )*
+  { return x; }
+}
+
+ValueFunction MultiplicativeExpression():
+{
+ValueFunction x = null, y = null;
+Token t;
+}
+{
+x = UnaryExpression()
+  (
+     LOOKAHEAD(<MULTIPLY>|<DIVIDE>|<REMAINDER>)
+     ( t = <MULTIPLY> | t = <DIVIDE> | t = <REMAINDER> )
+     y = UnaryExpression()
+     {  x = new ArithmeticFn(x,y,t.image); }
+  )*
+  { return x; }
+}
+
+ValueFunction UnaryExpression():
+{
+ValueFunction x = null, y = null;
+Token t;
+Fact f;
+}
+{
+(
+  ( t = <PLUS> | t = <MINUS> ) x = UnaryExpression()
+  {  x = new ArithmeticFn(new IntFn("0"),x,t.image); }
+|
+  <NOT> x = UnaryExpression()
+  {  x = new LogicalNotFn(x);  }
+|
+  ( t = <LE> | t = <GE> | t = <NE> | t = <GT> | t = <LT> | t = <UNOT> )
+  x = UnaryExpression()
+  {  x = new ConstraintFn(t.image,x);  }
+
+| x = Literal()
+| <IF>   x = ConditionalOrExpression()
+  <THEN> y = Expression()
+  {  x = new ImplyFn(x,y);  }
+  [
+     LOOKAHEAD(<ELSE>)
+     <ELSE> y = Expression()
+     {  x = new ElseFn(x,y); }
+  ]
+|
+  <LBRACKET> x = Expression() <RBRACKET>
+)
+  { return x; }
+}
+
+ValueFunction Literal():
+{
+Token t;
+ValueFunction x = null;
+Vector data = null;
+}
+{
+(
+  t = <INTEGER>
+  { x = new IntFn(t.image); }
+| t = <REAL>
+  { x = new RealFn(t.image); }
+| t = <DATE>
+  { x = new DateFn(t.image); }
+| t = <TIME>
+  { x = new TimeFn(t.image); }
+| t = <LITERAL>
+  { x = new IdFn(Misc.literalToString(t.image)); }
+| t = <BOOLEAN>
+  { x = BoolFn.newBoolFn(t.image); }
+| <LCURLY> data = ExpressionList() <RCURLY>
+  { x = new VectorFn(data); }
+| LOOKAHEAD(2) x = Function()
+| t = <ID>
+  { x = new IdFn(t.image); }
+)
+  { return x; }
+}

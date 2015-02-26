@@ -1,0 +1,314 @@
+body
+{
+  background-color: #ffffff;
+  font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+  margin-left: 8px;
+  margin-top: 4px;
+  margin-right: 8px;
+  margin-bottom: 4px;
+}
+
+a
+{
+  color: #3366cc;
+}
+
+a:active
+{
+  color: #000000;
+}
+
+a:visited
+{
+  color: #3366cc;
+}
+
+.line
+{
+  height: 1;
+  color: #3366cc;
+}
+
+P
+{
+  font-family: verdana, geneva, arial;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  color: #333333;
+  margin-top: 4px;
+  margin-bottom:14px;
+}
+
+
+OL
+{
+  font-family: verdana, geneva, arial;
+  font-size: 12px;
+  color: #666666;
+  font-style: normal;
+  font-weight: 500;
+  line-height : 16px;
+}
+
+UL
+{
+  font-family:  verdana, geneva, arial;
+  font-size: 12px;
+  color: #666666;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 16px;
+}
+
+b.nav
+{
+  font-family: verdana, geneva, arial;
+  font-size: 10px;
+  font-style: bold;
+  font-weight: 700;
+  color: #333333;
+  margin-top: 1px;
+  margin-bottom:1px;
+}
+
+a.v
+{
+  font-size: 10px;
+  font-family: verdana, geneva, arial;
+  color:#3366cc;
+  text-decoration:underline;
+}
+
+
+.subHeading
+{
+  font-family: verdana, geneva, arial;
+  font-size: 12px;
+  font-weight: bold;
+  color: #000000;
+}
+
+.navlink           { font-family: verdana, geneva, arial; color:#3366cc; text-decoration: none }
+.navlink:visited     { color: #3366cc; text-decoration : underline; font-style: normal; text-decoration: none }
+.navlink:hover     { color: #ff9900; text-decoration : underline; font-style: normal; text-decoration: none }
+
+.footnavlink       { font-family: verdana, geneva, arial; font-size: 10px; color: white; text-decoration: none; }
+.footnavlink:hover { color: #000000; text-decoration : underline; font-style: normal; text-decoration: none; }
+.footnavlink:visited { color: #ffffff; text-decoration : underline; font-style: normal; text-decoration: none; }
+
+.footerlink          { font-family: verdana, geneva, arial; font-size: 10px; color:#3366cc; text-decoration: none }
+.footerlink:visited     { color: #3366cc; font-size: 10px; font-style: verdana, geneva, arial; text-decoration: none }
+.footerlink:hover     { color: #000000; font-size: 10px; font-style: verdana, geneva, arial; text-decoration: none }
+
+.textLink           { font-family: verdana, geneva, arial;  font-size: 12px;  color: #3366cc;   font-weight: bold;  text-decoration: none }
+.textLink:active      { font-style: verdana, geneva, arial;   font-size: 12px;  color: #FF9900;   font-weight: bold;  text-decoration: none }
+.textLink:visited       { font-style: verdana, geneva, arial;   font-size: 12px;  color: #3366cc;   font-weight: bold;  text-decoration: none }
+.textLink:hover       { font-style: verdana, geneva, arial;   font-size: 12px;  color: #FF9900;   font-weight: bold;  text-decoration: none }
+
+.smalltextLink            { font-family: verdana, geneva, arial;  font-size: 10px;  color: #3366cc;   font-weight: bold;  text-decoration: none }
+.smalltextLink:active       { font-style: verdana, geneva, arial;   font-size: 10px;  color: #FF9900;   font-weight: bold;  text-decoration: none }
+.smalltextLink:visited      { font-style: verdana, geneva, arial;   font-size: 10px;  color: #3366cc;   font-weight: bold;  text-decoration: none }
+.smalltextLink:hover      { font-style: verdana, geneva, arial;   font-size: 10px;  color: #FF9900;   font-weight: bold;  text-decoration: none }
+
+.nounderline      { color: #3366cc; text-decoration: none }
+.glossary
+{
+  background-color: #ffffff;
+  font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+  margin-left: 0px;
+  margin-top: 0px;
+  margin-right: 0px;
+  margin-bottom: 0px;
+  leftmargin: 0px;
+  topmargin: 0px     
+}
+
+.header     
+{ 
+  font-family: verdana, geneva, arial; 
+  font-size: 18px;
+  font-style: bold;
+  font-weight: 500;
+  color: #333333; 
+  margin-bottom: 6px;
+}
+
+.tableheader    
+{ 
+  font-family: verdana, geneva, arial; 
+  font-size: 18px;
+  font-style: normal; 
+  font-weight: 500;
+  color: #000033; 
+  margin-bottom: 2px;
+}
+
+.tabletext
+{
+  font-family: verdana, geneva, arial;
+  font-size: 12px; font-style: normal;
+  font-weight: 500; color: #333333;
+  margin-top: 4px;
+  margin-bottom:1px;
+}
+
+.smalltabletext
+{
+  font-family: verdana, geneva, arial;
+  font-size: 10px; font-style: normal;
+  font-weight: 500; color: #333333;
+}
+
+.text
+{
+  font-family: verdana, geneva, arial;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  color: #000000;
+}
+
+.ebillHeading
+{
+  font-family: verdana, geneva, arial;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: bold;
+  color: #66cc00;
+}
+
+.ebillBlueHeading
+{
+  font-family: verdana, geneva, arial;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: bold;
+  color: #3366cc;
+}
+
+.greentext
+{
+  font-family: verdana, geneva, arial;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  color: #66cc00;
+  margin-top: 4px;
+  margin-bottom:1px;
+}
+
+.smalltext
+{
+  font-family: verdana, geneva, arial;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 300;
+  color: #000000;
+  margin-top: 4px;
+  margin-bottom:1px;
+}
+
+.smalltext2
+{
+  font-family: verdana, geneva, arial;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 300;
+  color: #000000;
+  margin-top: 4px;
+  margin-bottom:1px;
+  line-height: 15px
+}
+.smallBluetext
+{
+  font-family: verdana, geneva, arial;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 300;
+  color: #3366cc;
+  margin-top: 4px;
+  margin-bottom:1px;
+}
+
+.bluetext
+{
+  font-family: verdana, geneva, arial;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  color: #3366cc;
+  margin-top: 4px;
+  margin-bottom:1px;
+}
+
+.blacktext
+{
+  font-family: verdana, geneva, arial;
+  font-size: 12px;
+  font-style: bold;
+  font-weight: 500;
+  color: #000000;
+  margin-top: 4px;
+  margin-bottom:1px;
+}
+
+.orangetext
+{
+  font-family: verdana, geneva, arial;
+  font-size: 12px;
+  font-style: bold;
+  font-weight: 500;
+  color: #ff9a00;
+  margin-top: 4px;
+  margin-bottom:1px;
+}
+
+.orangebig
+{
+  font-family: verdana, geneva, arial;
+  font-size: 14px;
+  font-style: bold;
+  font-weight: 800;
+  color: #ff9a00;
+
+}
+
+.welcometext
+{
+  font-family: verdana, geneva, arial;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  color: #000000;
+}
+
+.formtable
+{
+  font-family: verdana, geneva, arial;
+  background-color: #ffffff;
+}
+
+.formtableheader
+{
+  font-family: verdana, geneva, arial;
+  background-color: #ccffcc;
+  font-size: 12px;
+  font-style: bold;
+  font-weight: 700;
+}
+
+.shoptable
+{
+  font-family: verdana, geneva, arial;
+  background-color: #ccffcc;
+}
+
+.servicenametext
+{
+  font-family: verdana, geneva, arial;
+  font-size: 14px;
+  font-style: bold;
+  font-weight: 800;
+  color: #000000;
+}

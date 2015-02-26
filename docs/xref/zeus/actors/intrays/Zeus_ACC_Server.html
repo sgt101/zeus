@@ -1,0 +1,534 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1" /><title>Zeus_ACC_Server xref</title>
+<link type="text/css" rel="stylesheet" href="../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../apidocs/zeus/actors/intrays/Zeus_ACC_Server.html">View Javadoc</a></div><pre>
+
+<a name="1" href="#1">1</a>   <em class="comment">/*</em>
+<a name="2" href="#2">2</a>   <em class="comment"> * The contents of this file are subject to the BT "ZEUS" Open Source</em>
+<a name="3" href="#3">3</a>   <em class="comment"> * Licence (L77741), Version 1.0 (the "Licence"); you may not use this file</em>
+<a name="4" href="#4">4</a>   <em class="comment"> * except in compliance with the Licence. You may obtain a copy of the Licence</em>
+<a name="5" href="#5">5</a>   <em class="comment"> * from $ZEUS_INSTALL/licence.html or alternatively from</em>
+<a name="6" href="#6">6</a>   <em class="comment"> * <a href="http://www.labs.bt.com/projects/agents/zeus/licence.htm" target="alexandria_uri">http://www.labs.bt.com/projects/agents/zeus/licence.htm</a></em>
+<a name="7" href="#7">7</a>   <em class="comment"> *</em>
+<a name="8" href="#8">8</a>   <em class="comment"> * Except as stated in Clause 7 of the Licence, software distributed under the</em>
+<a name="9" href="#9">9</a>   <em class="comment"> * Licence is distributed WITHOUT WARRANTY OF ANY KIND, either express or</em>
+<a name="10" href="#10">10</a>  <em class="comment"> * implied. See the Licence for the specific language governing rights and</em>
+<a name="11" href="#11">11</a>  <em class="comment"> * limitations under the Licence.</em>
+<a name="12" href="#12">12</a>  <em class="comment"> *</em>
+<a name="13" href="#13">13</a>  <em class="comment"> * The Original Code is within the package zeus.*.</em>
+<a name="14" href="#14">14</a>  <em class="comment"> * The Initial Developer of the Original Code is British Telecommunications</em>
+<a name="15" href="#15">15</a>  <em class="comment"> * public limited company, whose registered office is at 81 Newgate Street,</em>
+<a name="16" href="#16">16</a>  <em class="comment"> * London, EC1A 7AJ, England. Portions created by British Telecommunications</em>
+<a name="17" href="#17">17</a>  <em class="comment"> * public limited company are Copyright 1996-9. All Rights Reserved.</em>
+<a name="18" href="#18">18</a>  <em class="comment"> *</em>
+<a name="19" href="#19">19</a>  <em class="comment"> * THIS NOTICE MUST BE INCLUDED ON ANY COPY OF THIS FILE</em>
+<a name="20" href="#20">20</a>  <em class="comment"> */</em>
+<a name="21" href="#21">21</a>  
+<a name="22" href="#22">22</a>  <strong>package</strong> <a href="../../../zeus/actors/intrays/package-summary.html">zeus.actors.intrays</a>;
+<a name="23" href="#23">23</a>  
+<a name="24" href="#24">24</a>  <strong>import</strong> <a href="../../../zeus/actors/outtrays/package-summary.html">zeus.actors.outtrays</a>.*;
+<a name="25" href="#25">25</a>  <strong>import</strong> java.net.*;
+<a name="26" href="#26">26</a>  <strong>import</strong> java.io.*;
+<a name="27" href="#27">27</a>  <strong>import</strong> java.util.*;
+<a name="28" href="#28">28</a>  <strong>import</strong> <a href="../../../zeus/util/package-summary.html">zeus.util</a>.*;
+<a name="29" href="#29">29</a>  <strong>import</strong> <a href="../../../zeus/concepts/package-summary.html">zeus.concepts</a>.*;
+<a name="30" href="#30">30</a>  <strong>import</strong> <a href="../../../zeus/actors/package-summary.html">zeus.actors</a>.*;
+<a name="31" href="#31">31</a>  <strong>import</strong> <a href="../../../zeus/agents/package-summary.html">zeus.agents</a>.*;
+<a name="32" href="#32">32</a>  <strong>import</strong> javax.naming.*;
+<a name="33" href="#33">33</a>  <strong>import</strong> java.net.*;
+<a name="34" href="#34">34</a>  <strong>import</strong> java.io.*;
+<a name="35" href="#35">35</a>  <strong>import</strong> java.util.*;
+<a name="36" href="#36">36</a>  <strong>import</strong> <a href="../../../zeus/util/package-summary.html">zeus.util</a>.*;
+<a name="37" href="#37">37</a>  <strong>import</strong> <a href="../../../zeus/concepts/package-summary.html">zeus.concepts</a>.*;
+<a name="38" href="#38">38</a>  
+<a name="39" href="#39">39</a>  <strong>import</strong> javax.rmi.*;
+<a name="40" href="#40">40</a>  <strong>import</strong> java.rmi.*;
+<a name="41" href="#41">41</a>  
+<a name="42" href="#42">42</a>  
+<a name="43" href="#43">43</a>  <em>/**<em>*</em></em>
+<a name="44" href="#44">44</a>  <em> * Zeus_ACC_Server uses the FIPA_97_Server and FIPA_2000_Server classes to provide</em>
+<a name="45" href="#45">45</a>  <em> * a unified message reception and handleing service.On init this class will create</em>
+<a name="46" href="#46">46</a>  <em> * a FIPA_97_Server and a FIPA_2000_Server, using itself as a parameter.</em>
+<a name="47" href="#47">47</a>  <em> * When either of these intrays receives a message it will call back the appropiate</em>
+<a name="48" href="#48">48</a>  <em> * handle method in this class. The message will then be processed and placed on the</em>
+<a name="49" href="#49">49</a>  <em> * message handleing q in this instance. Finally this message will be handled and processed.</em>
+<a name="50" href="#50">50</a>  <em> * &lt;p></em>
+<a name="51" href="#51">51</a>  <em> * @author Simon Thompson</em>
+<a name="52" href="#52">52</a>  <em> * @since 1.1</em>
+<a name="53" href="#53">53</a>  <em> */</em>
+<a name="54" href="#54">54</a>  <strong>public</strong> <strong>class</strong> Zeus_ACC_Server <strong>extends</strong> <a href="../../../zeus/actors/Server.html">Server</a> implements InTray, FIPA_97_Handler, FIPA_2000_Handler {  <em class="comment">// the ACC agent should include code to set this.</em>
+<a name="55" href="#55">55</a>      
+<a name="56" href="#56">56</a>      <strong>public</strong>  String hostname = zeus.util.SystemProps.getProperty(<span class="string">"HAP_Address"</span>);
+<a name="57" href="#57">57</a>      
+<a name="58" href="#58">58</a>      <em>/**<em>*</em></em>
+<a name="59" href="#59">59</a>  <em>    iiop2000port is used to store the number of the port that the FIPA_2000 IIOP</em>
+<a name="60" href="#60">60</a>  <em>    listening service (the server) will use.</em>
+<a name="61" href="#61">61</a>  <em>    This is package protected so that subclasses can do as they will!</em>
+<a name="62" href="#62">62</a>  <em>    value is set to "2000" by default</em>
+<a name="63" href="#63">63</a>  <em>     */</em>
+<a name="64" href="#64">64</a>      <strong>protected</strong> String iiop2000Port = <span class="string">"2000"</span>;
+<a name="65" href="#65">65</a>      
+<a name="66" href="#66">66</a>      
+<a name="67" href="#67">67</a>      <em>/**<em>*</em></em>
+<a name="68" href="#68">68</a>  <em>     * iiop97port is used to store the number of the port that the FIPA_97 IIOP</em>
+<a name="69" href="#69">69</a>  <em>     * listening service (the server) will use.</em>
+<a name="70" href="#70">70</a>  <em>     * This is package protected so that subclasses can do as they will!</em>
+<a name="71" href="#71">71</a>  <em>     * value is set to "1097" by default.</em>
+<a name="72" href="#72">72</a>  <em>     */</em>
+<a name="73" href="#73">73</a>      <strong>protected</strong> String iiop97Port = <span class="string">"1097"</span>;
+<a name="74" href="#74">74</a>      
+<a name="75" href="#75">75</a>      
+<a name="76" href="#76">76</a>      <em>/**<em>*</em></em>
+<a name="77" href="#77">77</a>  <em>    httpPort is the number of the port that the FIPA_2000 HTTP service</em>
+<a name="78" href="#78">78</a>  <em>    will listenon.</em>
+<a name="79" href="#79">79</a>  <em>    This is package protected so that you can fiddle with it in subclasses.</em>
+<a name="80" href="#80">80</a>  <em>    value is set to "61000" by default</em>
+<a name="81" href="#81">81</a>  <em>     */</em>
+<a name="82" href="#82">82</a>      <strong>protected</strong> String httpPort = <span class="string">"61000"</span>;
+<a name="83" href="#83">83</a>      
+<a name="84" href="#84">84</a>      
+<a name="85" href="#85">85</a>      <em>/**<em>*</em></em>
+<a name="86" href="#86">86</a>  <em>    access to the context object is provided as protected as a convienience for</em>
+<a name="87" href="#87">87</a>  <em>    API programmers and future extentions, it is passed to the init() of this class</em>
+<a name="88" href="#88">88</a>  <em>     */</em>
+<a name="89" href="#89">89</a>      <strong>protected</strong> <a href="../../../zeus/actors/AgentContext.html">AgentContext</a> context = <strong>null</strong>;
+<a name="90" href="#90">90</a>      
+<a name="91" href="#91">91</a>      <strong>private</strong> <a href="../../../zeus/util/Queue.html">Queue</a>  msgQ = <strong>new</strong> Queue(<span class="string">"Zeus_ACC_In"</span>);
+<a name="92" href="#92">92</a>      <strong>private</strong> <a href="../../../zeus/concepts/ZeusParser.html">ZeusParser</a> parser = <strong>new</strong> <a href="../../../zeus/concepts/ZeusParser.html">ZeusParser</a>();
+<a name="93" href="#93">93</a>      
+<a name="94" href="#94">94</a>      
+<a name="95" href="#95">95</a>      <em>/**<em>*</em></em>
+<a name="96" href="#96">96</a>  <em>    name is set to "ACC" by default</em>
+<a name="97" href="#97">97</a>  <em>     */</em>
+<a name="98" href="#98">98</a>      <strong>protected</strong> String name = <span class="string">"ACC"</span>;
+<a name="99" href="#99">99</a>      
+<a name="100" href="#100">100</a>     <em>/**<em>*</em></em>
+<a name="101" href="#101">101</a> <em>    twoThousand_Server is the reference to the FIPA_2000_IIOP_Server that</em>
+<a name="102" href="#102">102</a> <em>    this class sets up and runs in it's init().</em>
+<a name="103" href="#103">103</a> <em>     */</em>
+<a name="104" href="#104">104</a>     <strong>protected</strong> FIPA_2000_IIOP_Server twoThousand_Server = <strong>null</strong> ;
+<a name="105" href="#105">105</a>     
+<a name="106" href="#106">106</a>     
+<a name="107" href="#107">107</a>     <em>/**<em>*</em></em>
+<a name="108" href="#108">108</a> <em>    ninetySeven_Server is the reference to the FIPA_97_Server that</em>
+<a name="109" href="#109">109</a> <em>    this class sets up and runs in it's init()</em>
+<a name="110" href="#110">110</a> <em>     */</em>
+<a name="111" href="#111">111</a>     <strong>protected</strong> FIPA_97_Server ninetySeven_Server = <strong>null</strong>;
+<a name="112" href="#112">112</a>     
+<a name="113" href="#113">113</a>     
+<a name="114" href="#114">114</a>     <em>/**<em>*</em></em>
+<a name="115" href="#115">115</a> <em>    httpServer is the reference to the FIPA_2000_HTTP_Server that</em>
+<a name="116" href="#116">116</a> <em>    this class sets up and runs in it's init()</em>
+<a name="117" href="#117">117</a> <em>     */</em>
+<a name="118" href="#118">118</a>     <strong>protected</strong> FIPA_2000_HTTP_Server httpServer = <strong>null</strong>;
+<a name="119" href="#119">119</a>     
+<a name="120" href="#120">120</a>     
+<a name="121" href="#121">121</a>     <em>/**<em>*</em></em>
+<a name="122" href="#122">122</a> <em>     host is protected to allow for interference by putative sub-classes</em>
+<a name="123" href="#123">123</a> <em>     */</em>
+<a name="124" href="#124">124</a>     <strong>protected</strong> String host = <strong>null</strong>;
+<a name="125" href="#125">125</a>     
+<a name="126" href="#126">126</a>     
+<a name="127" href="#127">127</a>     <em>/**<em>*</em></em>
+<a name="128" href="#128">128</a> <em>    class constructor that takes the AgentContext and registers this instance with it,</em>
+<a name="129" href="#129">129</a> <em>    and the MailBox and grabs the reference so that it can be used later. This also sets</em>
+<a name="130" href="#130">130</a> <em>    up the ServerThreads for the message transports that this Server is utilizing.</em>
+<a name="131" href="#131">131</a> <em>     */</em>
+<a name="132" href="#132">132</a>     <strong>public</strong> Zeus_ACC_Server(<a href="../../../zeus/actors/AgentContext.html">AgentContext</a> context, Zeus_ACC_MailBox mbox) {
+<a name="133" href="#133">133</a>         <strong>this</strong>.mbox = (MailBox) mbox;
+<a name="134" href="#134">134</a>         timeout = 10;
+<a name="135" href="#135">135</a>         Assert.notNull(context);
+<a name="136" href="#136">136</a>         <strong>this</strong>.context = context;
+<a name="137" href="#137">137</a>         <a href="../../../zeus/concepts/TransportConfig.html">TransportConfig</a> twoIIOPConf = SystemProps.getTransport(<span class="string">"FIPA_IIOP_2000"</span>);
+<a name="138" href="#138">138</a>         <strong>if</strong> (twoIIOPConf!=<strong>null</strong>) {
+<a name="139" href="#139">139</a>             debug(<span class="string">"setting iiop 2000 port to : "</span> + twoIIOPConf.getPort());
+<a name="140" href="#140">140</a>             iiop2000Port = twoIIOPConf.getPort(); }
+<a name="141" href="#141">141</a>         <a href="../../../zeus/concepts/TransportConfig.html">TransportConfig</a> twoHTTPConf = SystemProps.getTransport(<span class="string">"FIPA_HTTP_2000"</span>);
+<a name="142" href="#142">142</a>         <strong>if</strong> (twoHTTPConf != <strong>null</strong>) {
+<a name="143" href="#143">143</a>             debug(<span class="string">"setting http 2000 port to : "</span> + twoHTTPConf.getPort());
+<a name="144" href="#144">144</a>             httpPort = twoHTTPConf.getPort(); }
+<a name="145" href="#145">145</a>         <a href="../../../zeus/concepts/TransportConfig.html">TransportConfig</a> nineIIOPConf = SystemProps.getTransport(<span class="string">"FIPA_IIOP_1997"</span>);
+<a name="146" href="#146">146</a>         <strong>if</strong> (nineIIOPConf != <strong>null</strong>) {
+<a name="147" href="#147">147</a>             debug(<span class="string">"setting iiop 1997 port to : "</span> + nineIIOPConf.getPort());
+<a name="148" href="#148">148</a>             iiop97Port = nineIIOPConf.getPort(); }
+<a name="149" href="#149">149</a>         
+<a name="150" href="#150">150</a>         <strong>try</strong> {
+<a name="151" href="#151">151</a>             
+<a name="152" href="#152">152</a>             
+<a name="153" href="#153">153</a>             InetAddress ip = InetAddress.getLocalHost();
+<a name="154" href="#154">154</a>             host = ip.getHostAddress();
+<a name="155" href="#155">155</a>             <strong>if</strong> (hostname == <strong>null</strong> ) {
+<a name="156" href="#156">156</a>                 hostname = host; }
+<a name="157" href="#157">157</a>             twoThousand_Server = <strong>new</strong> FIPA_2000_IIOP_Server(<strong>this</strong>,host, iiop2000Port,name,<span class="string">"2000Connection"</span>);
+<a name="158" href="#158">158</a>             ninetySeven_Server = <strong>new</strong> FIPA_97_Server(<strong>this</strong>,host, iiop97Port,name,<span class="string">"97Connection"</span>);
+<a name="159" href="#159">159</a>             httpServer = <strong>new</strong> FIPA_2000_HTTP_Server(<strong>this</strong>,host,httpPort,name, <span class="string">"HTTPConnection"</span>);
+<a name="160" href="#160">160</a>             <em class="comment">// note to self - do http server here</em>
+<a name="161" href="#161">161</a>             <strong>this</strong>.start();
+<a name="162" href="#162">162</a>             <strong>this</strong>.setName(<span class="string">"Zeus_ACC_Server"</span>);}
+<a name="163" href="#163">163</a>         <strong>catch</strong> (Exception e ) {
+<a name="164" href="#164">164</a>             <em class="comment">// will only be called if local host is not set</em>
+<a name="165" href="#165">165</a>             <em class="comment">// very unlikely...</em>
+<a name="166" href="#166">166</a>             e.printStackTrace();
+<a name="167" href="#167">167</a>             System.out.println(<span class="string">"ERROR - probably localhost cannot be looked up!\n WARNING: attempting to continue, but likely fatal"</span>);
+<a name="168" href="#168">168</a>         }
+<a name="169" href="#169">169</a>     }
+<a name="170" href="#170">170</a>     
+<a name="171" href="#171">171</a>     
+<a name="172" href="#172">172</a>     
+<a name="173" href="#173">173</a>     <em>/**<em>*</em></em>
+<a name="174" href="#174">174</a> <em>    stopProcessing will cause the run loop of this class to stop</em>
+<a name="175" href="#175">175</a> <em>     */</em>
+<a name="176" href="#176">176</a>     <strong>public</strong> <strong>void</strong> stopProcessing() {
+<a name="177" href="#177">177</a>         processing = false;
+<a name="178" href="#178">178</a>     }
+<a name="179" href="#179">179</a>     
+<a name="180" href="#180">180</a>     
+<a name="181" href="#181">181</a>     <em>/**<em>*</em></em>
+<a name="182" href="#182">182</a> <em>    This is where the changes were needed. Instead of listening on a stupid socket ;-)</em>
+<a name="183" href="#183">183</a> <em>    we simply look in our message queue to see if any goodies have been put there by nice</em>
+<a name="184" href="#184">184</a> <em>    mr FIPA_97_Connection.</em>
+<a name="185" href="#185">185</a> <em>     */</em>
+<a name="186" href="#186">186</a>     <strong>public</strong> <strong>void</strong> run() {
+<a name="187" href="#187">187</a>         processing = <strong>true</strong>;
+<a name="188" href="#188">188</a>         <strong>while</strong> (processing) {
+<a name="189" href="#189">189</a>             <strong>try</strong> {<em class="comment">// robust!?</em>
+<a name="190" href="#190">190</a>                 Object obj = <strong>this</strong>.pop();
+<a name="191" href="#191">191</a>                 debug (<span class="string">"popped message off queue"</span>); 
+<a name="192" href="#192">192</a>                 <strong>if</strong> (obj instanceof String) {
+<a name="193" href="#193">193</a>                     String text =(String) obj;
+<a name="194" href="#194">194</a>                     debug(<span class="string">"message popped is: "</span> + text);
+<a name="195" href="#195">195</a>                     <em class="comment">//       try {</em>
+<a name="196" href="#196">196</a>                     text = Misc.unescape(text);<em class="comment">// swapped from underneath</em>
+<a name="197" href="#197">197</a>                     <em class="comment">//    text = text.replace('\n',' ');</em>
+<a name="198" href="#198">198</a>                     <em class="comment">//   text = text.replace('\r',' ');</em>
+<a name="199" href="#199">199</a>                     <em class="comment">//   text = text.replace('\t',' ');</em>
+<a name="200" href="#200">200</a>                     
+<a name="201" href="#201">201</a>                     forwardFIPAMessage(text);
+<a name="202" href="#202">202</a>                     
+<a name="203" href="#203">203</a>                 }
+<a name="204" href="#204">204</a>       
+<a name="205" href="#205">205</a>                 yield();}
+<a name="206" href="#206">206</a>             <strong>catch</strong> (Exception e ) {
+<a name="207" href="#207">207</a>                 e.printStackTrace();
+<a name="208" href="#208">208</a>                 System.out.println(<span class="string">"exception in ACC server - attempting to recover"</span>);
+<a name="209" href="#209">209</a>             }
+<a name="210" href="#210">210</a>             <strong>catch</strong> (Error er) {  
+<a name="211" href="#211">211</a>                 er.printStackTrace(); 
+<a name="212" href="#212">212</a>                 System.out.println(<span class="string">"error - attempting to recover"</span>); 
+<a name="213" href="#213">213</a>             }
+<a name="214" href="#214">214</a>             <strong>catch</strong> (Throwable tr) { 
+<a name="215" href="#215">215</a>                 tr.printStackTrace();
+<a name="216" href="#216">216</a>                 System.out.println(<span class="string">"throwable - attempting to recover"</span>); 
+<a name="217" href="#217">217</a>             }
+<a name="218" href="#218">218</a>         }
+<a name="219" href="#219">219</a>     }
+<a name="220" href="#220">220</a>     
+<a name="221" href="#221">221</a>     
+<a name="222" href="#222">222</a>     <em>/**<em>*</em></em>
+<a name="223" href="#223">223</a> <em>     * for now the behaviour is :-</em>
+<a name="224" href="#224">224</a> <em>     * get message, &lt;br></em>
+<a name="225" href="#225">225</a> <em>     * act surprised, &lt;br></em>
+<a name="226" href="#226">226</a> <em>     * then parse it into a FIPAPerformative, &lt;br></em>
+<a name="227" href="#227">227</a> <em>     * map that to a Performative, &lt;br></em>
+<a name="228" href="#228">228</a> <em>     * register self as alias in nameserver,&lt;br></em>
+<a name="229" href="#229">229</a> <em>     * add alias to FIPAAddressBook, &lt;br></em>
+<a name="230" href="#230">230</a> <em>     * stamp message with said alias,&lt;br></em>
+<a name="231" href="#231">231</a> <em>     * assert a messageHandleing rule to invoke forwarding behaviour when</em>
+<a name="232" href="#232">232</a> <em>     * a response is received</em>
+<a name="233" href="#233">233</a> <em>     * send message to Zeus agent, &lt;br</em>
+<a name="234" href="#234">234</a> <em>     * pray.&lt;p></em>
+<a name="235" href="#235">235</a> <em>     */</em>
+<a name="236" href="#236">236</a>     <strong>public</strong> <strong>void</strong> forwardFIPAMessage(String text) {
+<a name="237" href="#237">237</a>         <strong>try</strong> {
+<a name="238" href="#238">238</a>             debug (<span class="string">"forwarding"</span>); 
+<a name="239" href="#239">239</a>             FIPA_AddressBook addresses = ((FIPA_AddressBook)context.getAddressBook());
+<a name="240" href="#240">240</a>             <a href="../../../zeus/concepts/FIPAPerformative.html">FIPAPerformative</a> fmsg = parser.fipaPerformative(text);
+<a name="241" href="#241">241</a>             FIPA_AID_Address fAddress = fmsg.getSender_As_FIPA_AID();
+<a name="242" href="#242">242</a>             fAddress = addresses.checkAddress(fAddress);
+<a name="243" href="#243">243</a>             <strong>if</strong> (fAddress.getAlias() == <strong>null</strong>) {
+<a name="244" href="#244">244</a>                 registerAlias(fAddress); }
+<a name="245" href="#245">245</a>             <a href="../../../zeus/concepts/Performative.html">Performative</a> msg = fmsg.performative();
+<a name="246" href="#246">246</a>             String alias = fAddress.getAlias();
+<a name="247" href="#247">247</a>             msg.setSender(alias);
+<a name="248" href="#248">248</a>             debug (<span class="string">"setting send address to "</span> + alias); 
+<a name="249" href="#249">249</a>             msg.setReplyTo(alias);
+<a name="250" href="#250">250</a>             addresses.add(fAddress);
+<a name="251" href="#251">251</a>             setHandleMessage(fAddress, alias);
+<a name="252" href="#252">252</a>      
+<a name="253" href="#253">253</a>             debug(<span class="string">"Zeus content = "</span> + msg.getContent());
+<a name="254" href="#254">254</a>             mbox.sendMsg(msg); }
+<a name="255" href="#255">255</a>         <strong>catch</strong> (Exception e) {
+<a name="256" href="#256">256</a>             <strong>try</strong> {
+<a name="257" href="#257">257</a>                 java.io.File file = <strong>new</strong> java.io.File(<span class="string">"debug.out"</span>);
+<a name="258" href="#258">258</a>                 java.io.FileOutputStream fileout = <strong>new</strong> java.io.FileOutputStream(file);
+<a name="259" href="#259">259</a>                 java.io.PrintWriter fw= <strong>new</strong> java.io.PrintWriter(fileout);
+<a name="260" href="#260">260</a>                 e.printStackTrace(fw);
+<a name="261" href="#261">261</a>                 fw.flush();
+<a name="262" href="#262">262</a>                 fw.close();} <strong>catch</strong> (Exception ne) { ne.printStackTrace(); }
+<a name="263" href="#263">263</a>             
+<a name="264" href="#264">264</a>         }
+<a name="265" href="#265">265</a>         
+<a name="266" href="#266">266</a>     }
+<a name="267" href="#267">267</a>     
+<a name="268" href="#268">268</a>     
+<a name="269" href="#269">269</a>     <em>/**<em>*</em></em>
+<a name="270" href="#270">270</a> <em>     * set up a forwarding rule, if one is not already present.</em>
+<a name="271" href="#271">271</a> <em>     */</em>
+<a name="272" href="#272">272</a>     <strong>private</strong> <strong>void</strong> setHandleMessage(FIPA_AID_Address faddress, String alias) {
+<a name="273" href="#273">273</a>         <strong>if</strong> (!faddress.getForwardingRuleSet()) {
+<a name="274" href="#274">274</a>             <a href="../../../zeus/actors/MsgHandler.html">MsgHandler</a> handler = context.getMsgHandler();
+<a name="275" href="#275">275</a>             String msg_pattern[] = {<span class="string">"receiver"</span>,alias};
+<a name="276" href="#276">276</a>             handler.addRule(<strong>new</strong> <a href="../../../zeus/concepts/MessageRuleImpl.html">MessageRuleImpl</a>(context.<strong>new</strong>Id(<span class="string">"Rule"</span>),msg_pattern, <strong>this</strong>, <span class="string">"forward"</span>));
+<a name="277" href="#277">277</a>             faddress.setForwardingRuleSet(<strong>true</strong>);
+<a name="278" href="#278">278</a>         }
+<a name="279" href="#279">279</a>     }
+<a name="280" href="#280">280</a>     
+<a name="281" href="#281">281</a>     
+<a name="282" href="#282">282</a>     
+<a name="283" href="#283">283</a>     <em>/**<em>*</em></em>
+<a name="284" href="#284">284</a> <em>     * provides a basic mechanism for getting aliases for agents on other platforms</em>
+<a name="285" href="#285">285</a> <em>     * into the Zeus address space. If this method is called from the ACC agent</em>
+<a name="286" href="#286">286</a> <em>     * stub it can be used to setup zeus names and fipa forwarding in the ANServer and</em>
+<a name="287" href="#287">287</a> <em>     * in the ACC</em>
+<a name="288" href="#288">288</a> <em>     */</em>
+<a name="289" href="#289">289</a>     <strong>public</strong> <strong>void</strong> setFIPAAlias(String name, String address) {
+<a name="290" href="#290">290</a>         FIPA_AddressBook addresses = ((FIPA_AddressBook)context.getAddressBook());
+<a name="291" href="#291">291</a>         <a href="../../../zeus/concepts/FIPAPerformative.html">FIPAPerformative</a> fmsg = parser.fipaPerformative(address);
+<a name="292" href="#292">292</a>         FIPA_AID_Address fAddress = fmsg.getSender_As_FIPA_AID();
+<a name="293" href="#293">293</a>         fAddress = addresses.checkAddress(fAddress);
+<a name="294" href="#294">294</a>         <strong>if</strong> (fAddress.getAlias() == <strong>null</strong>){
+<a name="295" href="#295">295</a>             fAddress.setAlias(name);
+<a name="296" href="#296">296</a>             registerAlias(fAddress,name);
+<a name="297" href="#297">297</a>             setHandleMessage(fAddress,name);
+<a name="298" href="#298">298</a>             addresses.add(fAddress);
+<a name="299" href="#299">299</a>         }
+<a name="300" href="#300">300</a>         
+<a name="301" href="#301">301</a>         
+<a name="302" href="#302">302</a>     }
+<a name="303" href="#303">303</a>     
+<a name="304" href="#304">304</a>     
+<a name="305" href="#305">305</a>     <em>/**<em>*</em></em>
+<a name="306" href="#306">306</a> <em>     * provides a basic mechanism for getting aliases for agents on other platforms</em>
+<a name="307" href="#307">307</a> <em>     * into the Zeus address space. If this method is called from the ACC agent</em>
+<a name="308" href="#308">308</a> <em>     * stub it can be used to setup zeus names and fipa forwarding in the ANServer and</em>
+<a name="309" href="#309">309</a> <em>     * in the ACC</em>
+<a name="310" href="#310">310</a> <em>     */</em>
+<a name="311" href="#311">311</a>     <strong>public</strong>  <strong>void</strong> setFIPAAlias(String name, FIPA_AID_Address fAddress) {
+<a name="312" href="#312">312</a>         FIPA_AddressBook addresses = ((FIPA_AddressBook)context.getAddressBook());
+<a name="313" href="#313">313</a>         fAddress = addresses.checkAddress(fAddress);
+<a name="314" href="#314">314</a>         <strong>if</strong> (fAddress.getAlias() == <strong>null</strong>) {
+<a name="315" href="#315">315</a>         fAddress.setAlias(name);   
+<a name="316" href="#316">316</a>             registerAlias(fAddress,name);
+<a name="317" href="#317">317</a>             setHandleMessage(fAddress,name);
+<a name="318" href="#318">318</a>             addresses.add(fAddress);
+<a name="319" href="#319">319</a>         }
+<a name="320" href="#320">320</a>     }
+<a name="321" href="#321">321</a>     
+<a name="322" href="#322">322</a>     
+<a name="323" href="#323">323</a>     <em>/**<em>*</em></em>
+<a name="324" href="#324">324</a> <em>     * forward is the method called when the MsgHandler fires a MessageRule that is setup</em>
+<a name="325" href="#325">325</a> <em>     * by the setHandleMessage method.</em>
+<a name="326" href="#326">326</a> <em>     * It converts the Zeus Performative into a FIPA performative, does any address mapping</em>
+<a name="327" href="#327">327</a> <em>     * that is needed and sends the message to the FIPA_postman.</em>
+<a name="328" href="#328">328</a> <em>     */</em>
+<a name="329" href="#329">329</a>     <strong>public</strong> <strong>void</strong> forward(<a href="../../../zeus/concepts/Performative.html">Performative</a> perf) {
+<a name="330" href="#330">330</a>         <strong>if</strong> (perf.getSender().startsWith(<span class="string">"Nameserver"</span>)) <strong>return</strong>;
+<a name="331" href="#331">331</a>         <strong>if</strong> (perf.getSender().startsWith(<span class="string">"Facilitator"</span>)) <strong>return</strong>; <em class="comment">// god knows</em>
+<a name="332" href="#332">332</a>         <strong>try</strong> {
+<a name="333" href="#333">333</a>             <a href="../../../zeus/concepts/FIPAPerformative.html">FIPAPerformative</a> fPerf = <strong>new</strong> <a href="../../../zeus/concepts/FIPAPerformative.html">FIPAPerformative</a>(perf);
+<a name="334" href="#334">334</a>             FIPA_AddressBook addresses = ((FIPA_AddressBook)context.getAddressBook());
+<a name="335" href="#335">335</a>             String raddr =  perf.getReceiver();
+<a name="336" href="#336">336</a>             FIPA_AID_Address faddr = addresses.lookupAlias(raddr);
+<a name="337" href="#337">337</a>             Vector recs = <strong>new</strong> Vector();
+<a name="338" href="#338">338</a>             recs.addElement(faddr);
+<a name="339" href="#339">339</a>             fPerf.setReceivers(recs);
+<a name="340" href="#340">340</a>             String senderName = perf.getSender();
+<a name="341" href="#341">341</a>             <em class="comment">//  Envelope perf.getEnvelope();</em>
+<a name="342" href="#342">342</a>             InetAddress ip = InetAddress.getLocalHost();
+<a name="343" href="#343">343</a>             String localhost = hostname;
+<a name="344" href="#344">344</a>             FIPA_AID_Address sender = <strong>new</strong> FIPA_AID_Address(<span class="string">"(agent-identifier\n:name "</span> + senderName + <span class="string">"@"</span> + localhost + <span class="string">"\n:addresses (sequence "</span> + getResponseAddress()+<span class="string">"))"</span>);
+<a name="345" href="#345">345</a>             <em class="comment">//  sender.setName(perf.getSender());</em>
+<a name="346" href="#346">346</a>             fPerf.setSender(sender);
+<a name="347" href="#347">347</a>          
+<a name="348" href="#348">348</a>             FIPA_PostMan postey =((Zeus_ACC_MailBox) mbox).getFIPA_PostMan();
+<a name="349" href="#349">349</a>             postey.push(fPerf);
+<a name="350" href="#350">350</a>             <em class="comment">// set sender?}</em>
+<a name="351" href="#351">351</a>         }
+<a name="352" href="#352">352</a>         <strong>catch</strong> (Exception e) {
+<a name="353" href="#353">353</a>             e.printStackTrace();
+<a name="354" href="#354">354</a>         }
+<a name="355" href="#355">355</a>         
+<a name="356" href="#356">356</a>     }
+<a name="357" href="#357">357</a>     
+<a name="358" href="#358">358</a>     
+<a name="359" href="#359">359</a>     
+<a name="360" href="#360">360</a>     <em>/**<em>*</em></em>
+<a name="361" href="#361">361</a> <em>     * send a registration to the nameservers that we are using. &lt;br></em>
+<a name="362" href="#362">362</a> <em>     * @param sender is the name of the alias to use</em>
+<a name="363" href="#363">363</a> <em>     */</em>
+<a name="364" href="#364">364</a>     <strong>protected</strong> <strong>void</strong> registerAlias(FIPA_AID_Address sender) {
+<a name="365" href="#365">365</a>         System.out.println(<span class="string">"In register 1"</span>);
+<a name="366" href="#366">366</a>         String name = sender.getName()+sender.getHost();
+<a name="367" href="#367">367</a>         <a href="../../../zeus/concepts/AddressBook.html">AddressBook</a> addressBook = context.getAddressBook();
+<a name="368" href="#368">368</a>         <strong>for</strong>(<strong>int</strong> i = 0; i &lt; context.nameservers().size(); i++ ) {
+<a name="369" href="#369">369</a>             String key = sender.setAlias(name);
+<a name="370" href="#370">370</a>             <a href="../../../zeus/concepts/Address.html">Address</a> addr = (Address)context.nameservers().elementAt(i);
+<a name="371" href="#371">371</a>             addressBook.add(addr);
+<a name="372" href="#372">372</a>             <a href="../../../zeus/concepts/Performative.html">Performative</a> msg = <strong>new</strong> <a href="../../../zeus/concepts/Performative.html">Performative</a>(<span class="string">"request"</span>);
+<a name="373" href="#373">373</a>             msg.setReceiver(addr.getName());
+<a name="374" href="#374">374</a>             msg.setReplyWith(key);
+<a name="375" href="#375">375</a>             msg.setContent(<span class="string">"register"</span>);
+<a name="376" href="#376">376</a>             msg.setSender(key);
+<a name="377" href="#377">377</a>             System.out.println(<span class="string">"send message to nameserver"</span>);
+<a name="378" href="#378">378</a>             mbox.sendMsg(msg);
+<a name="379" href="#379">379</a>             System.out.println(<span class="string">"done message"</span>);
+<a name="380" href="#380">380</a>         }
+<a name="381" href="#381">381</a>     }
+<a name="382" href="#382">382</a>     
+<a name="383" href="#383">383</a>     
+<a name="384" href="#384">384</a>     <em>/**<em>*</em></em>
+<a name="385" href="#385">385</a> <em>        send a registration to the nameservers that we are using. &lt;br></em>
+<a name="386" href="#386">386</a> <em>        @param sender is the name of the alias to use</em>
+<a name="387" href="#387">387</a> <em>     */</em>
+<a name="388" href="#388">388</a>     <strong>protected</strong> <strong>void</strong> registerAlias(FIPA_AID_Address address, String name) {
+<a name="389" href="#389">389</a>         <a href="../../../zeus/concepts/AddressBook.html">AddressBook</a> addressBook = context.getAddressBook();
+<a name="390" href="#390">390</a>         <strong>for</strong>(<strong>int</strong> i = 0; i &lt; context.nameservers().size(); i++ ) {
+<a name="391" href="#391">391</a>             String key = address.setAlias(name);
+<a name="392" href="#392">392</a>             <a href="../../../zeus/concepts/Address.html">Address</a> addr = (Address)context.nameservers().elementAt(i);
+<a name="393" href="#393">393</a>             addressBook.add(addr);
+<a name="394" href="#394">394</a>             <a href="../../../zeus/concepts/Performative.html">Performative</a> msg = <strong>new</strong> <a href="../../../zeus/concepts/Performative.html">Performative</a>(<span class="string">"request"</span>);
+<a name="395" href="#395">395</a>             msg.setReceiver(addr.getName());
+<a name="396" href="#396">396</a>             msg.setReplyWith(key);
+<a name="397" href="#397">397</a>             msg.setContent(<span class="string">"register"</span>);
+<a name="398" href="#398">398</a>             msg.setSender(key);
+<a name="399" href="#399">399</a>             mbox.sendMsg(msg);
+<a name="400" href="#400">400</a>         }
+<a name="401" href="#401">401</a>     }
+<a name="402" href="#402">402</a>     
+<a name="403" href="#403">403</a>     
+<a name="404" href="#404">404</a>     <em>/**<em>*</em></em>
+<a name="405" href="#405">405</a> <em>        send a registration to the nameservers that we are using. &lt;br></em>
+<a name="406" href="#406">406</a> <em>        @param sender is the name of the alias to use</em>
+<a name="407" href="#407">407</a> <em>     */</em>
+<a name="408" href="#408">408</a>     <strong>protected</strong> <strong>void</strong> registerAlias(String name) {
+<a name="409" href="#409">409</a>         <a href="../../../zeus/concepts/AddressBook.html">AddressBook</a> addressBook = context.getAddressBook();
+<a name="410" href="#410">410</a>         <strong>for</strong>(<strong>int</strong> i = 0; i &lt; context.nameservers().size(); i++ ) {
+<a name="411" href="#411">411</a>             String key = name;
+<a name="412" href="#412">412</a>             <a href="../../../zeus/concepts/Address.html">Address</a> addr = (Address)context.nameservers().elementAt(i);
+<a name="413" href="#413">413</a>             addressBook.add(addr);
+<a name="414" href="#414">414</a>             <a href="../../../zeus/concepts/Performative.html">Performative</a> msg = <strong>new</strong> <a href="../../../zeus/concepts/Performative.html">Performative</a>(<span class="string">"request"</span>);
+<a name="415" href="#415">415</a>             msg.setReceiver(addr.getName());
+<a name="416" href="#416">416</a>             msg.setReplyWith(key);
+<a name="417" href="#417">417</a>             msg.setContent(<span class="string">"register"</span>);
+<a name="418" href="#418">418</a>             msg.setSender(key);
+<a name="419" href="#419">419</a>             mbox.sendMsg(msg);
+<a name="420" href="#420">420</a>         }
+<a name="421" href="#421">421</a>     }
+<a name="422" href="#422">422</a>     
+<a name="423" href="#423">423</a>     
+<a name="424" href="#424">424</a>     <em>/**<em>*</em></em>
+<a name="425" href="#425">425</a> <em>     * registerAgent is functionally identical to registerAlias, but</em>
+<a name="426" href="#426">426</a> <em>     * is semantically slightly different because in the one we are using</em>
+<a name="427" href="#427">427</a> <em>     * the agent name directly, while in the other we are trying to decouple</em>
+<a name="428" href="#428">428</a> <em>     */</em>
+<a name="429" href="#429">429</a>     <strong>public</strong> <strong>void</strong> registerAgent(FIPA_AID_Address address, String name) {
+<a name="430" href="#430">430</a>         <strong>this</strong>.registerAlias(address,name);
+<a name="431" href="#431">431</a>     }
+<a name="432" href="#432">432</a>     
+<a name="433" href="#433">433</a>     
+<a name="434" href="#434">434</a>     <strong>protected</strong> <strong>void</strong> finalize() {
+<a name="435" href="#435">435</a>         <strong>try</strong> {
+<a name="436" href="#436">436</a>             <strong>if</strong> ( listenSocket != <strong>null</strong> ) listenSocket.close();
+<a name="437" href="#437">437</a>             timeout = -1;
+<a name="438" href="#438">438</a>         }
+<a name="439" href="#439">439</a>         <strong>catch</strong>(IOException e) {
+<a name="440" href="#440">440</a>         }
+<a name="441" href="#441">441</a>     }
+<a name="442" href="#442">442</a>     
+<a name="443" href="#443">443</a>     
+<a name="444" href="#444">444</a>     <strong>public</strong> <a href="../../../zeus/concepts/Address.html">Address</a> getAddress() {
+<a name="445" href="#445">445</a>         <strong>return</strong> address;
+<a name="446" href="#446">446</a>     }
+<a name="447" href="#447">447</a>     
+<a name="448" href="#448">448</a>     
+<a name="449" href="#449">449</a>     <em>/**<em>*</em></em>
+<a name="450" href="#450">450</a> <em>    pull something off the ACC message processing queue</em>
+<a name="451" href="#451">451</a> <em>     */</em>
+<a name="452" href="#452">452</a>     <strong>public</strong> String pop() {
+<a name="453" href="#453">453</a>         <strong>return</strong> (String) msgQ.dequeue();
+<a name="454" href="#454">454</a>     }
+<a name="455" href="#455">455</a>     
+<a name="456" href="#456">456</a>     
+<a name="457" href="#457">457</a>     <em>/**<em>*</em></em>
+<a name="458" href="#458">458</a> <em>     * put something onto the ACC message processing queue</em>
+<a name="459" href="#459">459</a> <em>     */</em>
+<a name="460" href="#460">460</a>     <strong>public</strong> <strong>void</strong> push(String target) {
+<a name="461" href="#461">461</a>         debug (<span class="string">"enqueueing message "</span>); 
+<a name="462" href="#462">462</a>         msgQ.enqueue(target);
+<a name="463" href="#463">463</a>         
+<a name="464" href="#464">464</a>     }
+<a name="465" href="#465">465</a>     
+<a name="466" href="#466">466</a>     
+<a name="467" href="#467">467</a>     <em>/**<em>*</em></em>
+<a name="468" href="#468">468</a> <em>     * handle(String message) is called by the FIPA_97_Server which the init method of the Zeus_ACC_Server</em>
+<a name="469" href="#469">469</a> <em>     * class creates it is used as an interface to unify and collate the information</em>
+<a name="470" href="#470">470</a> <em>     * reception and processing for the ACC agent. &lt;p></em>
+<a name="471" href="#471">471</a> <em>     * implements the FIPA_97_Handler interface &lt;p></em>
+<a name="472" href="#472">472</a> <em>     * @param message - the message picked up from the fipa_97 transport</em>
+<a name="473" href="#473">473</a> <em>     */</em>
+<a name="474" href="#474">474</a>     <strong>public</strong> <strong>void</strong> handle(String message) {
+<a name="475" href="#475">475</a>         <em class="comment">// simply push this onto the message handling q.</em>
+<a name="476" href="#476">476</a>         push(message);
+<a name="477" href="#477">477</a>     }
+<a name="478" href="#478">478</a>     
+<a name="479" href="#479">479</a>     
+<a name="480" href="#480">480</a>     
+<a name="481" href="#481">481</a>     
+<a name="482" href="#482">482</a>     <em>/**<em>*</em></em>
+<a name="483" href="#483">483</a> <em>     * handle (FIPA.FipaMessage aMessage) is called by the FIPA_2000_server that the</em>
+<a name="484" href="#484">484</a> <em>     * init method of this class creates.</em>
+<a name="485" href="#485">485</a> <em>     * implements that FIPA_2000_Handler interface&lt;p></em>
+<a name="486" href="#486">486</a> <em>     * ISSUES &lt;br></em>
+<a name="487" href="#487">487</a> <em>     * ------ &lt;br></em>
+<a name="488" href="#488">488</a> <em>     * Envelopes - what should we do???</em>
+<a name="489" href="#489">489</a> <em>     *</em>
+<a name="490" href="#490">490</a> <em>     * @param aMessage - the message in FIPA 2000 object (java/idl) format</em>
+<a name="491" href="#491">491</a> <em>     * @see FIPA.FipaMessage</em>
+<a name="492" href="#492">492</a> <em>     */</em>
+<a name="493" href="#493">493</a>     <strong>public</strong> <strong>synchronized</strong> <strong>void</strong> handle(FIPA.FipaMessage aMessage) {
+<a name="494" href="#494">494</a>         byte body [] = aMessage.messageBody;
+<a name="495" href="#495">495</a>         String messageStr = <strong>new</strong> String(body);
+<a name="496" href="#496">496</a>         
+<a name="497" href="#497">497</a>         push(messageStr);
+<a name="498" href="#498">498</a>     }
+<a name="499" href="#499">499</a>     
+<a name="500" href="#500">500</a>     <em>/**<em>*</em></em>
+<a name="501" href="#501">501</a> <em>    return a string of addresses that this server is listening on</em>
+<a name="502" href="#502">502</a> <em>     */</em>
+<a name="503" href="#503">503</a>     <strong>public</strong> String getResponseAddress() {
+<a name="504" href="#504">504</a>         String httpAddress = httpServer.getResponseAddress();<em class="comment">//"http://" + host + ":" + http2000Port  + name</em>
+<a name="505" href="#505">505</a>         String iiop2000Address = twoThousand_Server.getResponseAddress(); <em class="comment">//"corbaname::" + host + ":" +iiop2000Port + "/NameService/" name</em>
+<a name="506" href="#506">506</a>         String iiop97Address = ninetySeven_Server.getResponseAddress();<em class="comment">//"iiop" + host + ":" + iiop97Port + name</em>
+<a name="507" href="#507">507</a>         String ior2000Address = twoThousand_Server.getIORAddress();
+<a name="508" href="#508">508</a>         <em class="comment">// removed corba addresses </em>
+<a name="509" href="#509">509</a>         String addressStr = <strong>new</strong> String(iiop2000Address +<span class="string">" "</span> + httpAddress );
+<a name="510" href="#510">510</a>         
+<a name="511" href="#511">511</a>         <strong>return</strong> (addressStr);
+<a name="512" href="#512">512</a>         
+<a name="513" href="#513">513</a>     }
+<a name="514" href="#514">514</a>     
+<a name="515" href="#515">515</a>     
+<a name="516" href="#516">516</a>     <strong>public</strong> <strong>void</strong> debug(String str) {
+<a name="517" href="#517">517</a>           System.out.println (<span class="string">"Zeus ACC server>> "</span> + str);
+<a name="518" href="#518">518</a>     }
+<a name="519" href="#519">519</a>     
+<a name="520" href="#520">520</a>     
+<a name="521" href="#521">521</a> }
+</pre>
+<hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
+</html>
+

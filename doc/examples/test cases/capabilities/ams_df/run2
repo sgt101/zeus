@@ -1,0 +1,4 @@
+#!/usr/bin/csh
+#This script runs the task agents
+java dummy -o ./test.ont -s dns.db & 
+java scheduler_agent -o ./test.ont -s dns.db & 

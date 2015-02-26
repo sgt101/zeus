@@ -1,0 +1,342 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1" /><title>OrganisationDb xref</title>
+<link type="text/css" rel="stylesheet" href="../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../apidocs/zeus/actors/OrganisationDb.html">View Javadoc</a></div><pre>
+
+<a name="1" href="#1">1</a>   <em class="comment">/*</em>
+<a name="2" href="#2">2</a>   <em class="comment">* The contents of this file are subject to the BT "ZEUS" Open Source </em>
+<a name="3" href="#3">3</a>   <em class="comment">* Licence (L77741), Version 1.0 (the "Licence"); you may not use this file </em>
+<a name="4" href="#4">4</a>   <em class="comment">* except in compliance with the Licence. You may obtain a copy of the Licence</em>
+<a name="5" href="#5">5</a>   <em class="comment">* from $ZEUS_INSTALL/licence.html or alternatively from</em>
+<a name="6" href="#6">6</a>   <em class="comment">* <a href="http://www.labs.bt.com/projects/agents/zeus/licence.htm" target="alexandria_uri">http://www.labs.bt.com/projects/agents/zeus/licence.htm</a></em>
+<a name="7" href="#7">7</a>   <em class="comment">* </em>
+<a name="8" href="#8">8</a>   <em class="comment">* Except as stated in Clause 7 of the Licence, software distributed under the</em>
+<a name="9" href="#9">9</a>   <em class="comment">* Licence is distributed WITHOUT WARRANTY OF ANY KIND, either express or </em>
+<a name="10" href="#10">10</a>  <em class="comment">* implied. See the Licence for the specific language governing rights and </em>
+<a name="11" href="#11">11</a>  <em class="comment">* limitations under the Licence.</em>
+<a name="12" href="#12">12</a>  <em class="comment">* </em>
+<a name="13" href="#13">13</a>  <em class="comment">* The Original Code is within the package zeus.*.</em>
+<a name="14" href="#14">14</a>  <em class="comment">* The Initial Developer of the Original Code is British Telecommunications</em>
+<a name="15" href="#15">15</a>  <em class="comment">* public limited company, whose registered office is at 81 Newgate Street, </em>
+<a name="16" href="#16">16</a>  <em class="comment">* London, EC1A 7AJ, England. Portions created by British Telecommunications </em>
+<a name="17" href="#17">17</a>  <em class="comment">* public limited company are Copyright 1996-9. All Rights Reserved.</em>
+<a name="18" href="#18">18</a>  <em class="comment">* </em>
+<a name="19" href="#19">19</a>  <em class="comment">* THIS NOTICE MUST BE INCLUDED ON ANY COPY OF THIS FILE</em>
+<a name="20" href="#20">20</a>  <em class="comment">*/</em>
+<a name="21" href="#21">21</a>  
+<a name="22" href="#22">22</a>  
+<a name="23" href="#23">23</a>  
+<a name="24" href="#24">24</a>  <em class="comment">/*</em>
+<a name="25" href="#25">25</a>  <em class="comment"> * @(#)OrganisationDb.java 1.00</em>
+<a name="26" href="#26">26</a>  <em class="comment"> */</em>
+<a name="27" href="#27">27</a>  
+<a name="28" href="#28">28</a>  <strong>package</strong> <a href="../../zeus/actors/package-summary.html">zeus.actors</a>;
+<a name="29" href="#29">29</a>  
+<a name="30" href="#30">30</a>  <strong>import</strong> java.util.*;
+<a name="31" href="#31">31</a>  <strong>import</strong> <a href="../../zeus/util/package-summary.html">zeus.util</a>.*;
+<a name="32" href="#32">32</a>  <strong>import</strong> <a href="../../zeus/concepts/package-summary.html">zeus.concepts</a>.*;
+<a name="33" href="#33">33</a>  <strong>import</strong> <a href="../../zeus/actors/event/package-summary.html">zeus.actors.event</a>.*;
+<a name="34" href="#34">34</a>  
+<a name="35" href="#35">35</a>  <em>/**<em>*</em></em>
+<a name="36" href="#36">36</a>  <em> * The Organisation Database stores the agent's beliefs about its organisational</em>
+<a name="37" href="#37">37</a>  <em> * relationships with other agents. Each relationship will be of one of the</em>
+<a name="38" href="#38">38</a>  <em> * following types:</em>
+<a name="39" href="#39">39</a>  <em> * &lt;ul></em>
+<a name="40" href="#40">40</a>  <em> * &lt;li> Peer	- which is the default relationship which entails no restrictions</em>
+<a name="41" href="#41">41</a>  <em> *              or assumptions about agent interaction</em>
+<a name="42" href="#42">42</a>  <em> * &lt;li> Superior - here the acquaintance is believed to possess higher authority</em>
+<a name="43" href="#43">43</a>  <em> *                 than this agent, and can issue orders that this agent must obey</em>
+<a name="44" href="#44">44</a>  <em> * &lt;li> Subordinate	- the acquaintance is believed to have less authority than</em>
+<a name="45" href="#45">45</a>  <em> *                    this agent, and can be issued orders that it must obey</em>
+<a name="46" href="#46">46</a>  <em> * &lt;li> Co-worker	- the acquaintance belongs to the same 'community' as this</em>
+<a name="47" href="#47">47</a>  <em> *                  agent, and will be asked before peers when any resources are required</em>
+<a name="48" href="#48">48</a>  <em> * &lt;/ul></em>
+<a name="49" href="#49">49</a>  <em> */</em>
+<a name="50" href="#50">50</a>  
+<a name="51" href="#51">51</a>  
+<a name="52" href="#52">52</a>  <strong>public</strong> <strong>class</strong> <a href="../../zeus/actors/OrganisationDb.html">OrganisationDb</a> <strong>extends</strong> <a href="../../zeus/actors/AbilityDb.html">AbilityDb</a> {
+<a name="53" href="#53">53</a>    <strong>protected</strong> <a href="../../zeus/util/HSet.html">HSet</a>[]  eventMonitor = <strong>new</strong> HSet[4];
+<a name="54" href="#54">54</a>  
+<a name="55" href="#55">55</a>    <strong>private</strong> <strong>static</strong> <strong>final</strong> <strong>int</strong> ADD    = 0;
+<a name="56" href="#56">56</a>    <strong>private</strong> <strong>static</strong> <strong>final</strong> <strong>int</strong> MODIFY = 1;
+<a name="57" href="#57">57</a>    <strong>private</strong> <strong>static</strong> <strong>final</strong> <strong>int</strong> DELETE = 2;
+<a name="58" href="#58">58</a>    <strong>private</strong> <strong>static</strong> <strong>final</strong> <strong>int</strong> ACCESS = 3;
+<a name="59" href="#59">59</a>  
+<a name="60" href="#60">60</a>    <strong>protected</strong> Hashtable relations = <strong>new</strong> Hashtable();
+<a name="61" href="#61">61</a>    <strong>protected</strong> String agentName = <span class="string">"null"</span>; 
+<a name="62" href="#62">62</a>  
+<a name="63" href="#63">63</a>  <em class="comment">// meaningless init  to allow rearch</em>
+<a name="64" href="#64">64</a>    <strong>public</strong> <a href="../../zeus/actors/OrganisationDb.html">OrganisationDb</a> () {
+<a name="65" href="#65">65</a>     <strong>super</strong>(); 
+<a name="66" href="#66">66</a>     <strong>for</strong>(<strong>int</strong> i = 0; i &lt; eventMonitor.length; i++ )
+<a name="67" href="#67">67</a>          eventMonitor[i] = <strong>new</strong> <a href="../../zeus/util/HSet.html">HSet</a>();
+<a name="68" href="#68">68</a>    }
+<a name="69" href="#69">69</a>  
+<a name="70" href="#70">70</a>    <strong>public</strong> <a href="../../zeus/actors/OrganisationDb.html">OrganisationDb</a>(<a href="../../zeus/actors/AgentContext.html">AgentContext</a> context) {
+<a name="71" href="#71">71</a>       <strong>super</strong>(context);
+<a name="72" href="#72">72</a>       agentName = context.whoami();
+<a name="73" href="#73">73</a>       context.set(<strong>this</strong>);
+<a name="74" href="#74">74</a>  
+<a name="75" href="#75">75</a>       <strong>for</strong>(<strong>int</strong> i = 0; i &lt; eventMonitor.length; i++ )
+<a name="76" href="#76">76</a>          eventMonitor[i] = <strong>new</strong> <a href="../../zeus/util/HSet.html">HSet</a>();
+<a name="77" href="#77">77</a>    }
+<a name="78" href="#78">78</a>  
+<a name="79" href="#79">79</a>    <strong>public</strong> <strong>void</strong> addRelation(Vector List) {
+<a name="80" href="#80">80</a>      <strong>for</strong>(<strong>int</strong> i = 0; i &lt; List.size(); i++ ) {
+<a name="81" href="#81">81</a>        String agent = (String) List.elementAt(i++);
+<a name="82" href="#82">82</a>        String relation = (String) List.elementAt(i);
+<a name="83" href="#83">83</a>        <strong>this</strong>.addRelation(agent,relation);
+<a name="84" href="#84">84</a>      }
+<a name="85" href="#85">85</a>    }
+<a name="86" href="#86">86</a>  
+<a name="87" href="#87">87</a>    
+<a name="88" href="#88">88</a>    <strong>public</strong> <strong>void</strong> modifyAgentRelation(String agent, String oldRelation,
+<a name="89" href="#89">89</a>                                    String newRelation) {
+<a name="90" href="#90">90</a>        removeRelation(agent,oldRelation);
+<a name="91" href="#91">91</a>        addRelation(agent,newRelation);
+<a name="92" href="#92">92</a>    }
+<a name="93" href="#93">93</a>  
+<a name="94" href="#94">94</a>    
+<a name="95" href="#95">95</a>    <strong>public</strong> Vector allRelations() {
+<a name="96" href="#96">96</a>      Vector result = <strong>new</strong> Vector();
+<a name="97" href="#97">97</a>  
+<a name="98" href="#98">98</a>      Vector peers = getPeers();
+<a name="99" href="#99">99</a>      String agent;
+<a name="100" href="#100">100</a>     <strong>for</strong>(<strong>int</strong> i = 0; i &lt; peers.size(); i++ ) {
+<a name="101" href="#101">101</a>        agent = (String)peers.elementAt(i);
+<a name="102" href="#102">102</a>        result.addElement(<strong>new</strong> <a href="../../zeus/concepts/Relationship.html">Relationship</a>(agent,<span class="string">"peer"</span>));
+<a name="103" href="#103">103</a>     }
+<a name="104" href="#104">104</a> 
+<a name="105" href="#105">105</a>     Enumeration enum = relations.keys();
+<a name="106" href="#106">106</a>     String relation;
+<a name="107" href="#107">107</a>     Vector List;
+<a name="108" href="#108">108</a>     <strong>while</strong>( enum.hasMoreElements() ) {
+<a name="109" href="#109">109</a>       relation = (String)enum.nextElement();
+<a name="110" href="#110">110</a>       List = (Vector)relations.get(relation);
+<a name="111" href="#111">111</a> 
+<a name="112" href="#112">112</a>       <strong>for</strong>(<strong>int</strong> i = 0; i &lt; List.size(); i++ ) {
+<a name="113" href="#113">113</a>          agent = (String)List.elementAt(i);
+<a name="114" href="#114">114</a>          notifyMonitors(agent,relation,ACCESS);
+<a name="115" href="#115">115</a>          result.addElement(<strong>new</strong> <a href="../../zeus/concepts/Relationship.html">Relationship</a>(agent,relation));
+<a name="116" href="#116">116</a>       }
+<a name="117" href="#117">117</a>     }
+<a name="118" href="#118">118</a>     <strong>return</strong> result;
+<a name="119" href="#119">119</a>   }
+<a name="120" href="#120">120</a> 
+<a name="121" href="#121">121</a> 
+<a name="122" href="#122">122</a>   <strong>public</strong> <strong>void</strong> addRelation(String agent, String relation) {
+<a name="123" href="#123">123</a>     addItem(agent,knownAgents);
+<a name="124" href="#124">124</a>     Vector List = (Vector)relations.get(relation);
+<a name="125" href="#125">125</a>     <strong>if</strong> ( List == <strong>null</strong> ) {
+<a name="126" href="#126">126</a>        List = <strong>new</strong> Vector();
+<a name="127" href="#127">127</a>        relations.put(relation,List);
+<a name="128" href="#128">128</a>     }
+<a name="129" href="#129">129</a>     <strong>if</strong> ( !List.contains(agent) ) {
+<a name="130" href="#130">130</a>        List.addElement(agent);
+<a name="131" href="#131">131</a>        notifyMonitors(agent,relation,ADD);
+<a name="132" href="#132">132</a>     }
+<a name="133" href="#133">133</a>   }
+<a name="134" href="#134">134</a> 
+<a name="135" href="#135">135</a>   
+<a name="136" href="#136">136</a>   <strong>public</strong> <strong>void</strong> removeRelation(String agent, String relation) {
+<a name="137" href="#137">137</a>     Vector List = (Vector)relations.get(relation);
+<a name="138" href="#138">138</a>     <strong>if</strong> ( List == <strong>null</strong> ) <strong>return</strong>;
+<a name="139" href="#139">139</a>     <strong>if</strong> ( List.contains(agent) ) {
+<a name="140" href="#140">140</a>        List.removeElement(agent);
+<a name="141" href="#141">141</a>        notifyMonitors(agent,relation,DELETE);
+<a name="142" href="#142">142</a>     }
+<a name="143" href="#143">143</a>   }
+<a name="144" href="#144">144</a>   
+<a name="145" href="#145">145</a>   
+<a name="146" href="#146">146</a>   <strong>public</strong> <strong>boolean</strong> hasRelation(String agent, String relation) {
+<a name="147" href="#147">147</a>     <strong>boolean</strong> result = false;
+<a name="148" href="#148">148</a>     <strong>if</strong> ( relation.equals(<span class="string">"peer"</span>) ) {
+<a name="149" href="#149">149</a>        Vector peers = getPeers();
+<a name="150" href="#150">150</a>        result = peers.contains(agent);
+<a name="151" href="#151">151</a>        notifyMonitors(agent,<span class="string">"peer"</span>,ACCESS);
+<a name="152" href="#152">152</a>     }
+<a name="153" href="#153">153</a>     <strong>else</strong> {
+<a name="154" href="#154">154</a>        Vector List = (Vector)relations.get(relation);
+<a name="155" href="#155">155</a>        <strong>if</strong> ( List == <strong>null</strong> ) <strong>return</strong> false;
+<a name="156" href="#156">156</a>        result = List.contains(agent);
+<a name="157" href="#157">157</a>        notifyMonitors(agent,<span class="string">"relation"</span>,ACCESS);
+<a name="158" href="#158">158</a>     }
+<a name="159" href="#159">159</a>     <strong>return</strong> result;
+<a name="160" href="#160">160</a>   }
+<a name="161" href="#161">161</a>   
+<a name="162" href="#162">162</a> 
+<a name="163" href="#163">163</a>   <strong>public</strong> <strong>boolean</strong> hasRelation(String relation) {
+<a name="164" href="#164">164</a>     <strong>boolean</strong> result = false;
+<a name="165" href="#165">165</a>     <strong>if</strong> ( relation.equals(<span class="string">"peer"</span>) ) {
+<a name="166" href="#166">166</a>        Vector peers = getPeers();
+<a name="167" href="#167">167</a>        result = !peers.isEmpty();
+<a name="168" href="#168">168</a>     }
+<a name="169" href="#169">169</a>     <strong>else</strong> {
+<a name="170" href="#170">170</a>        Vector List = (Vector)relations.get(relation);
+<a name="171" href="#171">171</a>        result = List != <strong>null</strong> &amp;&amp; !List.isEmpty();
+<a name="172" href="#172">172</a>     }
+<a name="173" href="#173">173</a>     <strong>return</strong> result;
+<a name="174" href="#174">174</a>   }
+<a name="175" href="#175">175</a> 
+<a name="176" href="#176">176</a>   
+<a name="177" href="#177">177</a>   <strong>public</strong> Vector anyAgent(<a href="../../zeus/concepts/Goal.html">Goal</a> goal, Vector ignore) {
+<a name="178" href="#178">178</a>     Core.DEBUG(4,<span class="string">"anyAgent() = "</span> + goal );
+<a name="179" href="#179">179</a> 
+<a name="180" href="#180">180</a>     <strong>if</strong> ( ignore == <strong>null</strong> )
+<a name="181" href="#181">181</a>        ignore = <strong>new</strong> Vector();
+<a name="182" href="#182">182</a> 
+<a name="183" href="#183">183</a>     Vector agents = Misc.difference(knownAgents,ignore);
+<a name="184" href="#184">184</a>     agents.removeElement(agentName);
+<a name="185" href="#185">185</a>     <strong>return</strong> _anyAgent(agents,goal);
+<a name="186" href="#186">186</a>   }
+<a name="187" href="#187">187</a> 
+<a name="188" href="#188">188</a>   
+<a name="189" href="#189">189</a>   <strong>private</strong> Vector getPeers() {
+<a name="190" href="#190">190</a>     Vector peers;
+<a name="191" href="#191">191</a>     Vector others = <strong>new</strong> Vector();
+<a name="192" href="#192">192</a>     Enumeration enum = relations.elements();
+<a name="193" href="#193">193</a>     <strong>while</strong>( enum.hasMoreElements() )
+<a name="194" href="#194">194</a>        others = Misc.union(others,(Vector)enum.nextElement());
+<a name="195" href="#195">195</a>     peers = Misc.difference(knownAgents,others);
+<a name="196" href="#196">196</a>     peers.removeElement(agentName);
+<a name="197" href="#197">197</a>     <strong>return</strong> peers;
+<a name="198" href="#198">198</a>   }
+<a name="199" href="#199">199</a> 
+<a name="200" href="#200">200</a>   
+<a name="201" href="#201">201</a>   <strong>protected</strong>  Vector _anyAgent(Vector agents, Goal goal) {
+<a name="202" href="#202">202</a>     <a href="../../zeus/concepts/AbilitySpec.html">AbilitySpec</a> ability;
+<a name="203" href="#203">203</a>     Vector can_<strong>do</strong> = <strong>null</strong>;
+<a name="204" href="#204">204</a>     String name;
+<a name="205" href="#205">205</a>     <a href="../../zeus/concepts/AbilityDbItem.html">AbilityDbItem</a> item;
+<a name="206" href="#206">206</a>     String key = <strong>null</strong>;
+<a name="207" href="#207">207</a>     Vector result = <strong>new</strong> Vector();
+<a name="208" href="#208">208</a> 
+<a name="209" href="#209">209</a>     ability = goal.getAbility();
+<a name="210" href="#210">210</a>     <strong>if</strong> ( (can_<strong>do</strong> = findAll(ability)) != <strong>null</strong> ) {
+<a name="211" href="#211">211</a>        Core.DEBUG(4,<span class="string">"anyAgent: "</span> + ability + <span class="string">"\nwith\n"</span> + can_<strong>do</strong>);
+<a name="212" href="#212">212</a>        <strong>for</strong>( <strong>int</strong> j = 0; j &lt; can_<strong>do</strong>.size(); j++ ) {
+<a name="213" href="#213">213</a>           item = (AbilityDbItem)can_<strong>do</strong>.elementAt(j);
+<a name="214" href="#214">214</a>           name = item.getAgent();
+<a name="215" href="#215">215</a>           Core.DEBUG(4,<span class="string">"anyAgent considering: "</span> + name);
+<a name="216" href="#216">216</a>           <strong>if</strong> ( agents.contains(name) &amp;&amp; !result.contains(name) ) {
+<a name="217" href="#217">217</a>              result.addElement(name);
+<a name="218" href="#218">218</a>              Core.DEBUG(4,<span class="string">"t"</span> + name + <span class="string">" selected"</span>);
+<a name="219" href="#219">219</a>           }
+<a name="220" href="#220">220</a>           <strong>else</strong> {
+<a name="221" href="#221">221</a>             Core.DEBUG(4,<span class="string">"t"</span> + name + <span class="string">" not selected"</span>);
+<a name="222" href="#222">222</a>           }
+<a name="223" href="#223">223</a>        }
+<a name="224" href="#224">224</a>     }
+<a name="225" href="#225">225</a>     Core.DEBUG(4,<span class="string">"anyAgent result = "</span> + result);
+<a name="226" href="#226">226</a>     <strong>return</strong> result;
+<a name="227" href="#227">227</a>   }
+<a name="228" href="#228">228</a> 
+<a name="229" href="#229">229</a> 
+<a name="230" href="#230">230</a>   <em>/**<em>*</em></em>
+<a name="231" href="#231">231</a> <em>   * If your code needs to react to changes in the agent's organisational beliefs</em>
+<a name="232" href="#232">232</a> <em>   * use this method to add a RelationMonitor to this component.</em>
+<a name="233" href="#233">233</a> <em>   */</em>
+<a name="234" href="#234">234</a>   <strong>public</strong> <strong>void</strong> addRelationMonitor(<a href="../../zeus/actors/event/RelationMonitor.html">RelationMonitor</a> monitor, <strong>long</strong> event_type,
+<a name="235" href="#235">235</a>                                  <strong>boolean</strong> notify_previous)  {
+<a name="236" href="#236">236</a>       addRelationMonitor(monitor,event_type);
+<a name="237" href="#237">237</a>       <strong>if</strong> ( !not<strong>if</strong>y_previous ) <strong>return</strong>;
+<a name="238" href="#238">238</a> 
+<a name="239" href="#239">239</a>       <a href="../../zeus/actors/event/RelationEvent.html">RelationEvent</a> event;
+<a name="240" href="#240">240</a>       <a href="../../zeus/concepts/Relationship.html">Relationship</a> data;
+<a name="241" href="#241">241</a>       Vector peers = getPeers();
+<a name="242" href="#242">242</a>       String agent;
+<a name="243" href="#243">243</a>       <strong>for</strong>(<strong>int</strong> i = 0; i &lt; peers.size(); i++ ) {
+<a name="244" href="#244">244</a>          agent = (String)peers.elementAt(i);
+<a name="245" href="#245">245</a>          data = <strong>new</strong> <a href="../../zeus/concepts/Relationship.html">Relationship</a>(agent,<span class="string">"peer"</span>);
+<a name="246" href="#246">246</a>          event = <strong>new</strong> <a href="../../zeus/actors/event/RelationEvent.html">RelationEvent</a>(<strong>this</strong>,data,RelationEvent.ACCESS_MASK);
+<a name="247" href="#247">247</a>          monitor.relationAccessedEvent(event);
+<a name="248" href="#248">248</a>          event = <strong>new</strong> <a href="../../zeus/actors/event/RelationEvent.html">RelationEvent</a>(<strong>this</strong>,data,RelationEvent.ADD_MASK);
+<a name="249" href="#249">249</a>          monitor.relationAddedEvent(event);
+<a name="250" href="#250">250</a>       }
+<a name="251" href="#251">251</a> 
+<a name="252" href="#252">252</a>       Enumeration enum = relations.keys();
+<a name="253" href="#253">253</a>       Vector List;
+<a name="254" href="#254">254</a>       String relation;
+<a name="255" href="#255">255</a>       <strong>while</strong>( enum.hasMoreElements() ) {
+<a name="256" href="#256">256</a>          relation = (String)enum.nextElement();
+<a name="257" href="#257">257</a>          List = (Vector)relations.get(relation);
+<a name="258" href="#258">258</a>          <strong>for</strong>(<strong>int</strong> i = 0; i &lt; List.size(); i++ ) {
+<a name="259" href="#259">259</a>             agent = (String)List.elementAt(i);
+<a name="260" href="#260">260</a>             data = <strong>new</strong> <a href="../../zeus/concepts/Relationship.html">Relationship</a>(agent,relation);
+<a name="261" href="#261">261</a>             event = <strong>new</strong> <a href="../../zeus/actors/event/RelationEvent.html">RelationEvent</a>(<strong>this</strong>,data,RelationEvent.ACCESS_MASK);
+<a name="262" href="#262">262</a>             monitor.relationAccessedEvent(event);
+<a name="263" href="#263">263</a>             event = <strong>new</strong> <a href="../../zeus/actors/event/RelationEvent.html">RelationEvent</a>(<strong>this</strong>,data,RelationEvent.ADD_MASK);
+<a name="264" href="#264">264</a>             monitor.relationAddedEvent(event);
+<a name="265" href="#265">265</a>          }
+<a name="266" href="#266">266</a>       }
+<a name="267" href="#267">267</a>    }
+<a name="268" href="#268">268</a> 
+<a name="269" href="#269">269</a>    <strong>public</strong> <strong>void</strong> addRelationMonitor(<a href="../../zeus/actors/event/RelationMonitor.html">RelationMonitor</a> monitor, <strong>long</strong> type) {
+<a name="270" href="#270">270</a>       <strong>if</strong> ( (type &amp; RelationEvent.ADD_MASK) != 0 )
+<a name="271" href="#271">271</a>          eventMonitor[ADD].add(monitor);
+<a name="272" href="#272">272</a>       <strong>if</strong> ( (type &amp; RelationEvent.MODIFY_MASK) != 0 )
+<a name="273" href="#273">273</a>          eventMonitor[MODIFY].add(monitor);
+<a name="274" href="#274">274</a>       <strong>if</strong> ( (type &amp; RelationEvent.DELETE_MASK) != 0 )
+<a name="275" href="#275">275</a>          eventMonitor[DELETE].add(monitor);
+<a name="276" href="#276">276</a>       <strong>if</strong> ( (type &amp; RelationEvent.ACCESS_MASK) != 0 )
+<a name="277" href="#277">277</a>          eventMonitor[ACCESS].add(monitor);
+<a name="278" href="#278">278</a>    }
+<a name="279" href="#279">279</a> 
+<a name="280" href="#280">280</a>    <strong>public</strong> <strong>void</strong> removeRelationMonitor(<a href="../../zeus/actors/event/RelationMonitor.html">RelationMonitor</a> monitor, <strong>long</strong> type) {
+<a name="281" href="#281">281</a>       <strong>if</strong> ( (type &amp; RelationEvent.ADD_MASK) != 0 )
+<a name="282" href="#282">282</a>          eventMonitor[ADD].remove(monitor);
+<a name="283" href="#283">283</a>       <strong>if</strong> ( (type &amp; RelationEvent.MODIFY_MASK) != 0 )
+<a name="284" href="#284">284</a>          eventMonitor[MODIFY].remove(monitor);
+<a name="285" href="#285">285</a>       <strong>if</strong> ( (type &amp; RelationEvent.DELETE_MASK) != 0 )
+<a name="286" href="#286">286</a>          eventMonitor[DELETE].remove(monitor);
+<a name="287" href="#287">287</a>       <strong>if</strong> ( (type &amp; RelationEvent.ACCESS_MASK) != 0 )
+<a name="288" href="#288">288</a>          eventMonitor[ACCESS].remove(monitor);
+<a name="289" href="#289">289</a>    }
+<a name="290" href="#290">290</a> 
+<a name="291" href="#291">291</a>    <strong>private</strong> <strong>void</strong> notifyMonitors(String agent, String relation, <strong>int</strong> type) {
+<a name="292" href="#292">292</a>       <strong>if</strong> ( eventMonitor[type].isEmpty() ) <strong>return</strong>;
+<a name="293" href="#293">293</a> 
+<a name="294" href="#294">294</a>       Enumeration enum = eventMonitor[type].elements();
+<a name="295" href="#295">295</a>       <a href="../../zeus/concepts/Relationship.html">Relationship</a> data = <strong>new</strong> <a href="../../zeus/concepts/Relationship.html">Relationship</a>(agent,relation);
+<a name="296" href="#296">296</a>       <a href="../../zeus/actors/event/RelationMonitor.html">RelationMonitor</a> monitor;
+<a name="297" href="#297">297</a>       <a href="../../zeus/actors/event/RelationEvent.html">RelationEvent</a> event;
+<a name="298" href="#298">298</a>       <strong>switch</strong>(type) {
+<a name="299" href="#299">299</a>          <strong>case</strong> ADD:
+<a name="300" href="#300">300</a>               event = <strong>new</strong> <a href="../../zeus/actors/event/RelationEvent.html">RelationEvent</a>(<strong>this</strong>,data,RelationEvent.ADD_MASK);
+<a name="301" href="#301">301</a>               <strong>while</strong>( enum.hasMoreElements() ) {
+<a name="302" href="#302">302</a>                  monitor = (RelationMonitor)enum.nextElement();
+<a name="303" href="#303">303</a>                  monitor.relationAddedEvent(event);
+<a name="304" href="#304">304</a>               }
+<a name="305" href="#305">305</a>               <strong>break</strong>;
+<a name="306" href="#306">306</a>          <strong>case</strong> MODIFY:
+<a name="307" href="#307">307</a>               event = <strong>new</strong> <a href="../../zeus/actors/event/RelationEvent.html">RelationEvent</a>(<strong>this</strong>,data,RelationEvent.MODIFY_MASK);
+<a name="308" href="#308">308</a>               <strong>while</strong>( enum.hasMoreElements() ) {
+<a name="309" href="#309">309</a>                  monitor = (RelationMonitor)enum.nextElement();
+<a name="310" href="#310">310</a>                  monitor.relationModifiedEvent(event);
+<a name="311" href="#311">311</a>               }
+<a name="312" href="#312">312</a>               <strong>break</strong>;
+<a name="313" href="#313">313</a>          <strong>case</strong> DELETE:
+<a name="314" href="#314">314</a>               event = <strong>new</strong> <a href="../../zeus/actors/event/RelationEvent.html">RelationEvent</a>(<strong>this</strong>,data,RelationEvent.DELETE_MASK);
+<a name="315" href="#315">315</a>               <strong>while</strong>( enum.hasMoreElements() ) {
+<a name="316" href="#316">316</a>                  monitor = (RelationMonitor)enum.nextElement();
+<a name="317" href="#317">317</a>                  monitor.relationDeletedEvent(event);
+<a name="318" href="#318">318</a>               }
+<a name="319" href="#319">319</a>               <strong>break</strong>;
+<a name="320" href="#320">320</a>          <strong>case</strong> ACCESS:
+<a name="321" href="#321">321</a>               event = <strong>new</strong> <a href="../../zeus/actors/event/RelationEvent.html">RelationEvent</a>(<strong>this</strong>,data,RelationEvent.ACCESS_MASK);
+<a name="322" href="#322">322</a>               <strong>while</strong>( enum.hasMoreElements() ) {
+<a name="323" href="#323">323</a>                  monitor = (RelationMonitor)enum.nextElement();
+<a name="324" href="#324">324</a>                  monitor.relationAccessedEvent(event);
+<a name="325" href="#325">325</a>               }
+<a name="326" href="#326">326</a>               <strong>break</strong>;
+<a name="327" href="#327">327</a>       }
+<a name="328" href="#328">328</a>    }
+<a name="329" href="#329">329</a> }
+</pre>
+<hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
+</html>
+

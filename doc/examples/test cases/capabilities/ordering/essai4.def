@@ -1,0 +1,129 @@
+BEGIN_GENERATOR
+  BEGIN_PREAMBLE
+    :system "ZEUS-Agent-Generator"
+    :version "1.2.2"
+    :ontology ".:essai4.ont"
+  END_PREAMBLE
+
+  BEGIN_AGENT_NAME_INDEX
+    AgentId0 unAgent
+  END_AGENT_NAME_INDEX
+
+  BEGIN_AGENT_ICON_INDEX
+    AgentId0 "..:..:gifs:agent.gif"
+  END_AGENT_ICON_INDEX
+
+  BEGIN_TASK_NAME_INDEX
+    AbstractTaskId0 laTache
+  END_TASK_NAME_INDEX
+
+  BEGIN_AGENT_LIST
+    (:name AgentId0
+     :class ZeusAgent
+     :planner_width 1
+     :planner_length 20
+     :doublebook_fraction 0
+     :tasks (AbstractTaskId0
+            )
+     :initial_facts ((:type consome
+                      :id fact299
+                      :modifiers 0
+                      :attributes ((Att1 lePar1)
+                                   (AttF3 leParF3)
+                                   (AttF2 leParF2)
+                                   (AttF1 leParF1)
+                                  )
+                     )
+                     (:type consomeTwo
+                      :id fact300
+                      :modifiers 0
+                      :attributes ((C2Ftwo ConsumeTwoFtwo)
+                                   (C2Fone ConsumeTwoFOne)
+                                   (Att1 ConsumeTwoAtt1)
+                                   (C2Fthree ConsumeTwoFThree)
+                                  )
+                     )
+                    )
+    )
+  END_AGENT_LIST
+
+  BEGIN_TASK_LIST
+    (:Primitive AbstractTaskId0
+     :time (1)
+     :cost (0)
+     :consumed_facts ((:type consome
+                       :id var323
+                       :modifiers 25
+                       :attributes ((Att1 ?c_Att1)
+                                    (AttF3 ?c_AttF3)
+                                    (AttF2 ?c_AttF2)
+                                    (AttF1 ?c_AttF1)
+                                   )
+                      )
+                      (:type consomeTwo
+                       :id var291
+                       :modifiers 25
+                       :attributes ((C2Ftwo ?var292)
+                                    (C2Fone ?var293)
+                                    (Att1 ?var294)
+                                    (C2Fthree ?var295)
+                                   )
+                      )
+                     )
+     :produced_facts ((:type produit
+                       :id var344
+                       :modifiers 1
+                       :attributes ((AttG1 ?var323.AttF1)
+                                    (Att1 ?var323.Att1)
+                                    (AttG3 ?var291.C2Fthree)
+                                    (AttG2 ?var291.C2Ftwo)
+                                   )
+                      )
+                     )
+    )
+  END_TASK_LIST
+
+  BEGIN_GENERATION_PLAN
+    BEGIN_PREAMBLE
+      :platform "Windows"
+      :directory "."
+    END_PREAMBLE
+    BEGIN_AGENT_LIST
+      (:id AgentId0
+       :generate false
+       :status Saved
+       :has_gui true
+       :zeus_external "DisplayerGui"
+       :dns_file "dns.db"
+      )
+    END_AGENT_LIST
+    BEGIN_TASK_LIST
+      (:id AbstractTaskId0
+       :generate false
+       :status Saved
+       :external null
+      )
+    END_TASK_LIST
+    BEGIN_NAMESERVER_LIST
+      (:name Nameserver0
+       :is_root true
+       :has_gui false
+       :address_output_file "dns.db"
+       :time_grain 0.5
+      )
+    END_NAMESERVER_LIST
+    BEGIN_FACILITATOR_LIST
+      (:name Facilitator0
+       :period 5.00
+       :has_gui false
+       :dns_file "dns.db"
+      )
+    END_FACILITATOR_LIST
+    BEGIN_VISUALISER_LIST
+      (:name Visualiser0
+       :has_gui false
+       :dns_file "dns.db"
+      )
+    END_VISUALISER_LIST
+  END_GENERATION_PLAN
+END_GENERATOR

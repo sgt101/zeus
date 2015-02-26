@@ -1,0 +1,3 @@
+REM This script runs the task agents
+start /min java  Target -o .\messageSpeedTest.ont -s dns.db -gui zeus.agentviewer.AgentViewer -e MessageSpeedTesterTarget
+start /min java -Xrunhprof:heap=sites,cpu=times,depth=2 Source -o .\messageSpeedTest.ont -s dns.db -gui zeus.agentviewer.AgentViewer -e MessageSpeedTesterSource

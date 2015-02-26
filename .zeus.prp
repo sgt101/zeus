@@ -1,0 +1,13 @@
+install.dir=C:\\Work\\Zeus archive\\1.2.1
+demo.version=false
+application.gif=gif_files.txt
+has.gui=true
+share.plan=true
+execute.earliest=true
+debug.on=false
+debug.level=2
+user.strategy.initiator=zeus.actors.graphs.LinearInitiatorEvaluator
+user.strategy.respondent=zeus.actors.graphs.LinearRespondentEvaluator
+friendly.name.zeus.actors.graphs.LinearInitiatorEvaluator=GrowthFunction
+friendly.name.zeus.actors.graphs.LinearRespondentEvaluator=DecayFunction
+HAP.address=shu.agentcities.net

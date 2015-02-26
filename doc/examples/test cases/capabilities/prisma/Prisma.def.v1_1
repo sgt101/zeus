@@ -1,0 +1,1645 @@
+BEGIN_GENERATOR
+  BEGIN_PREAMBLE
+    :system "ZEUS-Agent-Generator"
+    :version "1.1"
+    :ontology ".:Prisma.ont"
+  END_PREAMBLE
+
+  BEGIN_AGENT_NAME_INDEX
+    AgentId6 LoadForecastService
+    AgentId5 Logger
+    AgentId4 Grosshaendler
+    AgentId3 GAService
+    AgentId2 Eon
+    AgentId1 RWE
+    AgentId0 Boerse
+    AgentId10 Veba
+    AgentId9 Bewag
+    AgentId8 BoFiTService
+    AgentId7 LoadGenerator
+  END_AGENT_NAME_INDEX
+
+  BEGIN_AGENT_ICON_INDEX
+    AgentId6 "..:..lib:zeus:gifs:agent.gif"
+    AgentId5 "..:..zeus:gifs:agent.gif"
+    AgentId4 "..:..zeus:gifs:agent.gif"
+    AgentId3 "..:..zeus:gifs:agent.gif"
+    AgentId2 "..:gifs:eon.gif"
+    AgentId1 "..:gifs:rwe.gif"
+    AgentId0 "..:gifs:lpx.gif"
+    AgentId10 "..:..zeus:gifs:agent.gif"
+    AgentId9 "..:..zeus:gifs:agent.gif"
+    AgentId8 "..:..zeus:gifs:agent.gif"
+    AgentId7 "..:..lib:zeus:gifs:agent.gif"
+  END_AGENT_ICON_INDEX
+
+  BEGIN_TASK_NAME_INDEX
+    AbstractTaskId1 Handelsplatz
+    AbstractTaskId0 Registrierung
+    AbstractTaskId17 DummyForPX
+    AbstractTaskId16 OTCSteuerung
+    AbstractTaskId15 OTCBuying
+    AbstractTaskId14 MakeLoadForecast
+    AbstractTaskId13 MakeMargCost
+    AbstractTaskId12 MakePriceForecast
+    AbstractTaskId11 MakeSupply
+    AbstractTaskId10 OTCSelling
+    AbstractTaskId9 MakeJOLoadForecast
+    AbstractTaskId8 MakeJOPriceForecast
+    AbstractTaskId7 MakeJOMarginalCost
+    AbstractTaskId6 LoadForecasting
+    AbstractTaskId5 PopulationSending
+    AbstractTaskId4 RequestImprovement
+    AbstractTaskId3 MakeGebot
+    AbstractTaskId2 Handel
+  END_TASK_NAME_INDEX
+
+  BEGIN_AGENT_LIST
+    (:name AgentId6
+     :class ZeusAgent
+     :planner_width 7
+     :planner_length 20
+     :doublebook_fraction 0
+     :tasks (AbstractTaskId9
+             AbstractTaskId6
+            )
+     :protocols ((:name "zeus.actors.graphs.ContractNetRespondent"
+                  :type Respondent
+                  :constraints ((:fact (:type ZeusFact
+                                        :id var424
+                                        :modifiers 1
+                                       )
+                                 :type 0
+                                 :strategy "zeus.actors.graphs.DefaultRespondentEvaluator"
+                                )
+                               )
+                 )
+                )
+    )
+    (:name AgentId5
+     :class ZeusAgent
+     :planner_width 1
+     :planner_length 20
+     :doublebook_fraction 0
+    )
+    (:name AgentId4
+     :class ZeusAgent
+     :planner_width 7
+     :planner_length 20
+     :doublebook_fraction 0
+     :tasks (AbstractTaskId14
+             AbstractTaskId13
+             AbstractTaskId12
+             AbstractTaskId11
+             AbstractTaskId8
+             AbstractTaskId4
+             AbstractTaskId3
+             AbstractTaskId2
+             AbstractTaskId0
+            )
+     :initial_facts ((:type Interest
+                      :id interest
+                      :modifiers 0
+                      :attributes ((rate 0.06)
+                                   (toTime 8759)
+                                   (fromTime 0)
+                                  )
+                     )
+                     (:type KnownLoad
+                      :id fact764
+                      :modifiers 0
+                      :attributes ((name TestAgent)
+                                   (time 10)
+                                   (quantity 50)
+                                  )
+                     )
+                     (:type KnownLoad
+                      :id fact7642
+                      :modifiers 0
+                      :attributes ((name TestAgent)
+                                   (time 2)
+                                   (quantity 50)
+                                  )
+                     )
+                     (:type KnownLoad
+                      :id fact7643
+                      :modifiers 0
+                      :attributes ((name TestAgent)
+                                   (time 3)
+                                   (quantity 50)
+                                  )
+                     )
+                     (:type TradingQuantity
+                      :id fact771
+                      :modifiers 0
+                      :attributes ((name TestAgent)
+                                   (time 1)
+                                   (quantity 20)
+                                   (avgPrice 2.0)
+                                  )
+                     )
+                     (:type TradingQuantity
+                      :id fact7714
+                      :modifiers 0
+                      :attributes ((name TestAgent)
+                                   (time 2)
+                                   (quantity 20)
+                                   (avgPrice 2.0)
+                                  )
+                     )
+                     (:type TradingQuantity
+                      :id fact7715
+                      :modifiers 0
+                      :attributes ((name TestAgent)
+                                   (time 3)
+                                   (quantity 20)
+                                   (avgPrice 2.0)
+                                  )
+                     )
+                     (:type Capacity
+                      :id fact967
+                      :modifiers 0
+                      :attributes ((name TestAgent)
+                                   (toTime 8759)
+                                   (quantity 100)
+                                   (fromTime 0)
+                                  )
+                     )
+                     (:type myName
+                      :id myName
+                      :modifiers 0
+                      :attributes ((name TestAgent)
+                                  )
+                     )
+                     (:type Risk
+                      :id fact223
+                      :modifiers 0
+                      :attributes ((adding 0.04)
+                                   (maxVaR 0.16)
+                                   (minPaR 0.08)
+                                  )
+                     )
+                     (:type MarginalCost
+                      :id fact761
+                      :modifiers 0
+                      :attributes ((fromQuantity 0)
+                                   (name TestAgent)
+                                   (toQuantity 150)
+                                   (time 10)
+                                   (cost 40)
+                                  )
+                     )
+                     (:type PriceForecast
+                      :id fact801
+                      :modifiers 0
+                      :attributes ((expectedPrice 41)
+                                   (name TestAgent)
+                                   (time 10)
+                                  )
+                     )
+                    )
+     :protocols ((:name "zeus.actors.graphs.ContractNetRespondent"
+                  :type Respondent
+                  :constraints ((:fact (:type ZeusFact
+                                        :id var401
+                                        :modifiers 1
+                                       )
+                                 :type 0
+                                 :strategy "zeus.actors.graphs.DefaultRespondentEvaluator"
+                                )
+                               )
+                 )
+                 (:name "zeus.actors.graphs.ContractNetInitiator"
+                  :type Initiator
+                  :constraints ((:fact (:type ZeusFact
+                                        :id var400
+                                        :modifiers 1
+                                       )
+                                 :type 0
+                                 :strategy "zeus.actors.graphs.DefaultInitiatorEvaluator"
+                                )
+                               )
+                 )
+                )
+    )
+    (:name AgentId3
+     :class ZeusAgent
+     :planner_width 1
+     :planner_length 20
+     :doublebook_fraction 0
+     :tasks (AbstractTaskId5
+            )
+    )
+    (:name AgentId2
+     :class ZeusAgent
+     :planner_width 7
+     :planner_length 20
+     :doublebook_fraction 0
+     :tasks (AbstractTaskId14
+             AbstractTaskId13
+             AbstractTaskId12
+             AbstractTaskId11
+             AbstractTaskId8
+             AbstractTaskId4
+             AbstractTaskId3
+             AbstractTaskId2
+             AbstractTaskId0
+             AbstractTaskId15
+             AbstractTaskId10
+             AbstractTaskId16
+            )
+     :protocols ((:name "zeus.actors.graphs.ContractNetRespondent"
+                  :type Respondent
+                  :constraints ((:fact (:type ZeusFact
+                                        :id var399
+                                        :modifiers 1
+                                       )
+                                 :type 0
+                                 :strategy "zeus.actors.graphs.DefaultRespondentEvaluator"
+                                )
+                                (:fact (:type ZeusFact
+                                        :id var358
+                                        :modifiers 1
+                                       )
+                                 :type 0
+                                 :strategy "zeus.actors.graphs.LinearRespondentEvaluator"
+                                 :parameters ("no.quibblerange" "2" "step.default" "2" "max.percent" "104" "min.percent" "95")
+                                )
+                               )
+                 )
+                 (:name "zeus.actors.graphs.ContractNetInitiator"
+                  :type Initiator
+                  :constraints ((:fact (:type ZeusFact
+                                        :id var398
+                                        :modifiers 1
+                                       )
+                                 :type 0
+                                 :strategy "zeus.actors.graphs.DefaultInitiatorEvaluator"
+                                )
+                                (:fact (:type ZeusFact
+                                        :id var357
+                                        :modifiers 1
+                                       )
+                                 :type 0
+                                 :strategy "zeus.actors.graphs.LinearInitiatorEvaluator"
+                                 :parameters ("step.default" "2" "no.quibblerange" "2" "max.percent" "130" "min.percent" "96")
+                                )
+                               )
+                 )
+                )
+     :acquaintances ((:name AgentId1
+                      :relation peer
+                      :abilities ((:fact (:type OTCContract
+                                          :id var339
+                                          :modifiers 1
+                                          :attributes ((status ?var81)
+                                                       (name ?var340)
+                                                       (demandId ?var83)
+                                                       (price ?var341)
+                                                       (time ?var342)
+                                                       (quantity ?var343)
+                                                       (supplyId ?var87)
+                                                      )
+                                         )
+                                   :time 0
+                                   :cost 0.0
+                                  )
+                                 )
+                     )
+                     (:name AgentId10
+                      :relation peer
+                      :abilities ((:fact (:type OTCContract
+                                          :id var439
+                                          :modifiers 1
+                                          :attributes ((status ?var440)
+                                                       (name ?var441)
+                                                       (demandId ?var442)
+                                                       (price ?var443)
+                                                       (time ?var444)
+                                                       (quantity ?var445)
+                                                       (supplyId ?var446)
+                                                      )
+                                         )
+                                   :time 0
+                                   :cost 0.0
+                                  )
+                                 )
+                     )
+                    )
+    )
+    (:name AgentId1
+     :class ZeusAgent
+     :planner_width 7
+     :planner_length 20
+     :doublebook_fraction 0
+     :tasks (AbstractTaskId14
+             AbstractTaskId13
+             AbstractTaskId12
+             AbstractTaskId11
+             AbstractTaskId8
+             AbstractTaskId4
+             AbstractTaskId3
+             AbstractTaskId2
+             AbstractTaskId0
+             AbstractTaskId15
+             AbstractTaskId10
+             AbstractTaskId16
+            )
+     :protocols ((:name "zeus.actors.graphs.ContractNetRespondent"
+                  :type Respondent
+                  :constraints ((:fact (:type ZeusFact
+                                        :id var399
+                                        :modifiers 1
+                                       )
+                                 :type 0
+                                 :strategy "zeus.actors.graphs.DefaultRespondentEvaluator"
+                                )
+                                (:fact (:type ZeusFact
+                                        :id var358
+                                        :modifiers 1
+                                       )
+                                 :type 0
+                                 :strategy "zeus.actors.graphs.LinearRespondentEvaluator"
+                                 :parameters ("no.quibblerange" "2" "step.default" "2" "max.percent" "104" "min.percent" "95")
+                                )
+                               )
+                 )
+                 (:name "zeus.actors.graphs.ContractNetInitiator"
+                  :type Initiator
+                  :constraints ((:fact (:type ZeusFact
+                                        :id var398
+                                        :modifiers 1
+                                       )
+                                 :type 0
+                                 :strategy "zeus.actors.graphs.DefaultInitiatorEvaluator"
+                                )
+                                (:fact (:type ZeusFact
+                                        :id var357
+                                        :modifiers 1
+                                       )
+                                 :type 0
+                                 :strategy "zeus.actors.graphs.LinearInitiatorEvaluator"
+                                 :parameters ("step.default" "2" "no.quibblerange" "2" "max.percent" "130" "min.percent" "96")
+                                )
+                               )
+                 )
+                )
+     :acquaintances ((:name AgentId2
+                      :relation peer
+                      :abilities ((:fact (:type OTCContract
+                                          :id var349
+                                          :modifiers 1
+                                          :attributes ((status ?var105)
+                                                       (name ?var350)
+                                                       (demandId ?var111)
+                                                       (price ?var351)
+                                                       (time ?var352)
+                                                       (quantity ?var353)
+                                                       (supplyId ?var115)
+                                                      )
+                                         )
+                                   :time 0
+                                   :cost 0.0
+                                  )
+                                 )
+                     )
+                     (:name AgentId10
+                      :relation peer
+                      :abilities ((:fact (:type OTCContract
+                                          :id var431
+                                          :modifiers 1
+                                          :attributes ((status ?var432)
+                                                       (name ?var433)
+                                                       (demandId ?var434)
+                                                       (price ?var435)
+                                                       (time ?var436)
+                                                       (quantity ?var437)
+                                                       (supplyId ?var438)
+                                                      )
+                                         )
+                                   :time 0
+                                   :cost 0.0
+                                  )
+                                 )
+                     )
+                    )
+    )
+    (:name AgentId0
+     :class ZeusAgent
+     :planner_width 1
+     :planner_length 20
+     :doublebook_fraction 0
+     :tasks (AbstractTaskId1
+             AbstractTaskId17
+            )
+     :initial_facts ((:type AgentName
+                      :id Boersenname
+                      :modifiers 0
+                      :attributes ((name PrismaXchange)
+                                  )
+                     )
+                    )
+    )
+    (:name AgentId10
+     :class ZeusAgent
+     :planner_width 7
+     :planner_length 20
+     :doublebook_fraction 0
+     :tasks (AbstractTaskId14
+             AbstractTaskId13
+             AbstractTaskId12
+             AbstractTaskId11
+             AbstractTaskId8
+             AbstractTaskId4
+             AbstractTaskId3
+             AbstractTaskId2
+             AbstractTaskId0
+             AbstractTaskId15
+             AbstractTaskId10
+             AbstractTaskId16
+            )
+     :protocols ((:name "zeus.actors.graphs.ContractNetRespondent"
+                  :type Respondent
+                  :constraints ((:fact (:type ZeusFact
+                                        :id var399
+                                        :modifiers 1
+                                       )
+                                 :type 0
+                                 :strategy "zeus.actors.graphs.DefaultRespondentEvaluator"
+                                )
+                                (:fact (:type ZeusFact
+                                        :id var358
+                                        :modifiers 1
+                                       )
+                                 :type 0
+                                 :strategy "zeus.actors.graphs.LinearRespondentEvaluator"
+                                 :parameters ("no.quibblerange" "2" "step.default" "2" "max.percent" "104" "min.percent" "95")
+                                )
+                               )
+                 )
+                 (:name "zeus.actors.graphs.ContractNetInitiator"
+                  :type Initiator
+                  :constraints ((:fact (:type ZeusFact
+                                        :id var398
+                                        :modifiers 1
+                                       )
+                                 :type 0
+                                 :strategy "zeus.actors.graphs.DefaultInitiatorEvaluator"
+                                )
+                                (:fact (:type ZeusFact
+                                        :id var357
+                                        :modifiers 1
+                                       )
+                                 :type 0
+                                 :strategy "zeus.actors.graphs.LinearInitiatorEvaluator"
+                                 :parameters ("step.default" "2" "no.quibblerange" "2" "max.percent" "130" "min.percent" "96")
+                                )
+                               )
+                 )
+                )
+     :acquaintances ((:name AgentId2
+                      :relation peer
+                      :abilities ((:fact (:type OTCContract
+                                          :id var349
+                                          :modifiers 1
+                                          :attributes ((status ?var105)
+                                                       (name ?var350)
+                                                       (demandId ?var111)
+                                                       (price ?var351)
+                                                       (time ?var352)
+                                                       (quantity ?var353)
+                                                       (supplyId ?var115)
+                                                      )
+                                         )
+                                   :time 0
+                                   :cost 0.0
+                                  )
+                                 )
+                     )
+                     (:name AgentId1
+                      :relation peer
+                      :abilities ((:fact (:type OTCContract
+                                          :id var423
+                                          :modifiers 1
+                                          :attributes ((status ?var424)
+                                                       (name ?var425)
+                                                       (demandId ?var426)
+                                                       (price ?var427)
+                                                       (time ?var428)
+                                                       (quantity ?var429)
+                                                       (supplyId ?var430)
+                                                      )
+                                         )
+                                   :time 0
+                                   :cost 0.0
+                                  )
+                                 )
+                     )
+                    )
+    )
+    (:name AgentId9
+     :class ZeusAgent
+     :planner_width 7
+     :planner_length 20
+     :doublebook_fraction 0
+     :tasks (AbstractTaskId14
+             AbstractTaskId13
+             AbstractTaskId12
+             AbstractTaskId11
+             AbstractTaskId8
+             AbstractTaskId4
+             AbstractTaskId3
+             AbstractTaskId2
+             AbstractTaskId0
+             AbstractTaskId15
+             AbstractTaskId10
+             AbstractTaskId16
+            )
+     :protocols ((:name "zeus.actors.graphs.ContractNetRespondent"
+                  :type Respondent
+                  :constraints ((:fact (:type ZeusFact
+                                        :id var399
+                                        :modifiers 1
+                                       )
+                                 :type 0
+                                 :strategy "zeus.actors.graphs.DefaultRespondentEvaluator"
+                                )
+                                (:fact (:type ZeusFact
+                                        :id var358
+                                        :modifiers 1
+                                       )
+                                 :type 0
+                                 :strategy "zeus.actors.graphs.LinearRespondentEvaluator"
+                                 :parameters ("no.quibblerange" "2" "step.default" "2" "max.percent" "104" "min.percent" "95")
+                                )
+                               )
+                 )
+                 (:name "zeus.actors.graphs.ContractNetInitiator"
+                  :type Initiator
+                  :constraints ((:fact (:type ZeusFact
+                                        :id var398
+                                        :modifiers 1
+                                       )
+                                 :type 0
+                                 :strategy "zeus.actors.graphs.DefaultInitiatorEvaluator"
+                                )
+                                (:fact (:type ZeusFact
+                                        :id var357
+                                        :modifiers 1
+                                       )
+                                 :type 0
+                                 :strategy "zeus.actors.graphs.LinearInitiatorEvaluator"
+                                 :parameters ("step.default" "2" "no.quibblerange" "2" "max.percent" "130" "min.percent" "96")
+                                )
+                               )
+                 )
+                )
+     :acquaintances ((:name AgentId1
+                      :relation peer
+                      :abilities ((:fact (:type OTCContract
+                                          :id var359
+                                          :modifiers 1
+                                          :attributes ((status ?var132)
+                                                       (name ?var360)
+                                                       (demandId ?var142)
+                                                       (price ?var361)
+                                                       (time ?var362)
+                                                       (quantity ?var363)
+                                                       (supplyId ?var146)
+                                                      )
+                                         )
+                                   :time 0
+                                   :cost 0.0
+                                  )
+                                 )
+                     )
+                     (:name AgentId2
+                      :relation peer
+                      :abilities ((:fact (:type OTCContract
+                                          :id var364
+                                          :modifiers 1
+                                          :attributes ((status ?var142)
+                                                       (name ?var365)
+                                                       (demandId ?var154)
+                                                       (price ?var366)
+                                                       (time ?var367)
+                                                       (quantity ?var368)
+                                                       (supplyId ?var158)
+                                                      )
+                                         )
+                                   :time 0
+                                   :cost 0.0
+                                  )
+                                 )
+                     )
+                    )
+    )
+    (:name AgentId8
+     :class ZeusAgent
+     :planner_width 7
+     :planner_length 20
+     :doublebook_fraction 0
+     :tasks (AbstractTaskId7
+            )
+     :protocols ((:name "zeus.actors.graphs.ContractNetRespondent"
+                  :type Respondent
+                  :constraints ((:fact (:type ZeusFact
+                                        :id var425
+                                        :modifiers 1
+                                       )
+                                 :type 0
+                                 :strategy "zeus.actors.graphs.DefaultRespondentEvaluator"
+                                )
+                               )
+                 )
+                )
+    )
+    (:name AgentId7
+     :class ZeusAgent
+     :planner_width 1
+     :planner_length 20
+     :doublebook_fraction 0
+    )
+  END_AGENT_LIST
+
+  BEGIN_TASK_LIST
+    (:Rulebase AbstractTaskId1
+       (Registrierung
+          ?aN <- (Registriert (name ?Name))
+          =>
+          (send_message (type inform) (content ?aN) (receiver ?Name))
+          (retract ?aN)
+       )
+       (CFP
+          ?var <- (CFP (name ?agName))
+          =>
+          (send_message (type inform) (content ?var) (receiver ?agName))
+          (retract ?var)
+       )
+       (Abmeldung
+          ?aN <- (Abgemeldet (name ?Name))
+          =>
+          (send_message (type inform) (content ?aN) (receiver ?Name))
+          (retract ?aN)
+       )
+       (Ergebnis
+          ?aN <- (Ergebnis (name ?Name))
+          =>
+          (send_message (type inform) (content ?aN) (receiver ?Name))
+          (retract ?aN)
+       )
+    )
+    (:Rulebase AbstractTaskId0
+       (Anmelden
+          ?aN <- (AgentName (name ?var6))
+          =>
+          (send_message (type inform) (content ?aN) (receiver Boerse))
+          (retract ?aN)
+       )
+       (Abmelden
+          ?aN <- (Abmelden (name ?var6))
+          =>
+          (send_message (type inform) (content ?aN) (receiver Boerse))
+          (retract ?aN)
+       )
+    )
+    (:Primitive AbstractTaskId17
+     :time (1)
+     :cost (0)
+    )
+    (:Rulebase AbstractTaskId16
+       (ErreichenDerDeadlineS1
+          (GMT (time ?T))
+          ?tradingOpen <- (TradingOpen (deadline ?T) (time ?forTime))
+          (MyName (name ?MyName))
+          =>
+          (assert (TariffLoad (status requested) (time ?forTime) (forAgent ?MyName)))
+          (retract ?tradingOpen)
+       )
+       (NeueZeit
+          (GMT (time ?GmtTime))
+          ?old <- (GMT (time ?OldTime))
+          (test (?OldTime < ?GmtTime))
+          =>
+          (retract ?old)
+       )
+       (KostenaenderungswissenLoeschenS4
+          (Production (quantity ?ProdQty) (time ?T))
+          ?oldProd <- (ProductionCostOnChange (actualQuantity ?ActQty) (time ?T))
+          (test (?ActQty != ?ProdQty))
+          =>
+          (retract ?oldProd)
+       )
+       (ProduktionRealisiertS5
+          (TariffLoad (status asRequested) (quantity ?TariffQty) (time ?T))
+          (OTCTrading (quantity ?TradingQty) (time ?T))
+          (PXTrading (quantity ?PXQty) (time ?T))
+          =>
+          (assert (Production (status realised) (quantity ((?TariffQty + ?TradingQty) + ?PXQty)) (time ?T)))
+       )
+       (TariffLoadRequestS6
+          ?tl <- (TariffLoad (status requested) (time ?T))
+          ?lf <- (LoadForecast (time ?T))
+          (MyName (name ?MyName))
+          =>
+          (modify ?lf (forAgent ?MyName))
+          (send_message (type inform) (content ?lf) (receiver LoadForecastService))
+          (retract ?tl)
+       )
+    )
+    (:Rulebase AbstractTaskId15
+       (EinkaufangebotErstellen2a
+          (TradingOpen (time ?T))
+          (CapacityAt (quantity ?CapQty) (time ?T))
+          (Production (unitCost ?ProdUnitCost) (quantity ?ProdQty) (time ?T))
+          (ProductionCostOnChange (targetQuantity ?TargetQtyPlus) (targetQuantityUnitCost ?PlusUnitCost) (actualQuantity ?ProdQty) (time ?T))
+          (ProductionCostOnChange (targetQuantity ?TargetQtyMinus) (targetQuantityUnitCost ?MinusUnitCost) (actualQuantity ?ProdQty) (time ?T))
+          (PXMarketData (mcp ?Mcp) (time ?T))
+          (test (?ProdQty <= ?TargetQtyPlus))
+          (test (?ProdQty >= ?TargetQtyMinus))
+          (test (?CapQty >= ?ProdQty))
+          (test (((?Mcp - ?PlusUnitCost) * (?TargetQtyPlus - ?ProdQty)) <= (((?ProdUnitCost - ?Mcp) * ?ProdQty) + ((?Mcp - ?MinusUnitCost) * ?TargetQtyMinus))))
+          =>
+          (if (5 < (?ProdQty - ?TargetQtyMinus)) then
+ (bind ?demandQty 5)
+ else
+ (bind ?demandQty (?ProdQty - ?TargetQtyMinus)))
+          (assert (OTCDemand (status init) (time ?T) (quantity ?demandQty) (expectedCost ?PlusUnitCost)))
+       )
+       (EinkaufangebotErstellen2b
+          (TradingOpen (time ?T))
+          (CapacityAt (quantity ?CapQty) (time ?T))
+          (Production (unitCost ?ProdUnitCost) (quantity ?ProdQty) (time ?T))
+          (ProductionCostOnChange (targetQuantity ?TargetQtyMinus) (targetQuantityUnitCost ?MinusUnitCost) (actualQuantity ?ProdQty) (time ?T))
+          (SpinningReserve (price ?SprPrice) (time ?T))
+          (test (?ProdQty >= ?TargetQtyMinus))
+          (test (?CapQty < ?ProdQty))
+          =>
+          (if (5 < (?ProdQty - ?CapQty)) then
+ (bind ?demandQty 5)
+ else
+ (bind ?demandQty (?ProdQty - ?CapQty)))
+          (assert (OTCDemand (status init) (time ?T) (quantity ?demandQty) (expectedCost ?SprPrice)))
+       )
+       (EinkaufpreisFestlegen8a
+          ?demandInit <- (OTCDemand (status init) (time ?T) (quantity ?OtcQty) (expectedCost ?OtcExpCost) (id ?DemandId))
+          (MyName (name ?TheName))
+          (CapacityAt (quantity ?CapQty) (time ?T))
+          (Production (quantity ?ProdQty) (time ?T))
+          (PXMarketData (mcp ?Mcp) (time ?T))
+          (RiskAttitude (attitude friendly))
+          (test (?CapQty < ?ProdQty))
+          =>
+          (modify ?demandInit (status isOpen) (expectedCost (1.5 * ?Mcp)))
+       )
+       (EinkaufpreisFestlegen8b
+          ?demandInit <- (OTCDemand (status init) (time ?T) (quantity ?OtcQty) (expectedCost ?OtcExpCost) (id ?DemandId))
+          (MyName (name ?TheName))
+          (CapacityAt (quantity ?CapQty) (time ?T))
+          (Production (quantity ?ProdQty) (time ?T))
+          (SpinningReserve (price ?SprPrice) (time ?T))
+          (PXMarketData (mcp ?Mcp) (time ?T))
+          (not (RiskAttitude (attitude friendly)))
+          (test (?CapQty < ?ProdQty))
+          =>
+          (modify ?demandInit (status isOpen) (expectedCost (0.9 * ?SprPrice)))
+       )
+       (EinkaufpreisFestlegen8cUnd8d
+          ?demandInit <- (OTCDemand (status init) (time ?T) (quantity ?OtcQty) (expectedCost ?OtcExpCost) (id ?DemandId))
+          (MyName (name ?TheName))
+          (CapacityAt (quantity ?CapQty) (time ?T))
+          (Production (quantity ?ProdQty) (time ?T))
+          (UtilizationRate (rate ?IsRate) (time ?T))
+          (UtilizationTarget (rate ?TargetRate) (time ?T) (delta ?TargetDelta))
+          (PXMarketData (mcp ?Mcp) (time ?T))
+          (test (?CapQty >= ?ProdQty))
+          (test (?IsRate > (?TargetRate * (1 + ?TargetDelta))))
+          =>
+          (if (?OtcExpCost > ?Mcp) then
+ (bind ?myPrice ?Mcp)
+ else
+ (bind ?myPrice ?OtcExpCost))
+          (modify ?demandInit (status isOpen) (expectedCost ?myPrice))
+       )
+       (EinkaufpreisFestlegen8eUnd8f
+          ?demandInit <- (OTCDemand (status init) (time ?T) (quantity ?OtcQty) (expectedCost ?OtcExpCost) (id ?DemandId))
+          (MyName (name ?TheName))
+          (CapacityAt (quantity ?CapQty) (time ?T))
+          (Production (quantity ?ProdQty) (time ?T))
+          (UtilizationRate (rate ?IsRate) (time ?T))
+          (UtilizationTarget (rate ?TargetRate) (time ?T) (delta ?TargetDelta))
+          (PXMarketData (mcp ?Mcp) (time ?T))
+          (test (?CapQty >= ?ProdQty))
+          (test (?IsRate < (?TargetRate * (1 - ?TargetDelta))))
+          =>
+          (if (?OtcExpCost > ?Mcp) then
+ (bind ?myPrice ?Mcp)
+ else
+ (bind ?myPrice ?OtcExpCost))
+          (modify ?demandInit (status isOpen) (expectedCost ?myPrice))
+       )
+       (EinkaufpreisFestlegen8g
+          ?demandInit <- (OTCDemand (status init) (time ?T) (quantity ?OtcQty) (expectedCost ?OtcExpCost) (id ?DemandId))
+          (MyName (name ?TheName))
+          (CapacityAt (quantity ?CapQty) (time ?T))
+          (Production (quantity ?ProdQty) (time ?T))
+          (UtilizationRate (rate ?IsRate) (time ?T))
+          (UtilizationTarget (rate ?TargetRate) (time ?T) (delta ?TargetDelta))
+          (RiskAttitude (attitude friendly) (acceptableLoss ?AcceptableLoss))
+          (PXMarketData (mcp ?Mcp) (time ?T))
+          (test (?CapQty >= ?ProdQty))
+          (test (?IsRate <= (?TargetRate * (1 + ?TargetDelta))))
+          (test (?IsRate >= (?TargetRate * (1 - ?TargetDelta))))
+          (test (((?OtcExpCost / ?Mcp) - 1) > ?AcceptableLoss))
+          =>
+          (modify ?demandInit (status isOpen) (expectedCost ((1 - ?AcceptableLoss) * ?OtcExpCost)))
+       )
+       (EinkaufpreisFestlegen8hUnd8i
+          ?demandInit <- (OTCDemand (status init) (time ?T) (quantity ?OtcQty) (expectedCost ?OtcExpCost) (id ?DemandId))
+          (MyName (name ?TheName))
+          (CapacityAt (quantity ?CapQty) (time ?T))
+          (Production (quantity ?ProdQty) (time ?T))
+          (UtilizationRate (rate ?IsRate) (time ?T))
+          (UtilizationTarget (rate ?TargetRate) (time ?T) (delta ?TargetDelta))
+          (not (RiskAttitude (attitude friendly)))
+          (PXMarketData (mcp ?Mcp) (time ?T))
+          (test (?CapQty >= ?ProdQty))
+          (test (?IsRate <= (?TargetRate * (1 + ?TargetDelta))))
+          (test (?IsRate >= (?TargetRate * (1 - ?TargetDelta))))
+          (test (?OtcExpCost > ?Mcp))
+          =>
+          (if (?OtcExpCost > ?Mcp) then
+ (bind ?MyPrice ?Mcp)
+ else
+ (bind ?MyPrice ?OtcExpCost))
+          (modify ?demandInit (status isOpen) (expectedCost ?MyPrice))
+       )
+       (ErfolgreichenEinkaufVerbuchen6a
+          ?otcAvgPrice <- (OTCAveragePrice (avgprice ?AvgPrice) (time ?T))
+          ?otcDemand <- (OTCDemand (status isOpen) (quantity ?OtcQty) (time ?T) (id ?DemandId))
+          ?otcTrading <- (OTCTrading (quantity ?TradingQty) (time ?T))
+          ?production <- (Production (quantity ?ProdQty) (time ?T))
+          ?contract <- (OTCContract (status ?ContractStatus) (name ?OtherName) (price ?OtcPrice) (time ?T) (quantity ?OtcQty))
+          (test (?ContractStatus != accountedFor))
+          (not (MyName (name ?OtherName)))
+          (CapacityAt (quantity ?CapQty) (time ?T))
+          (TradingOpen (time ?T))
+          (test ((?ProdQty - ?OtcQty) >= 0))
+          =>
+          (modify ?otcAvgPrice (avgprice (((?AvgPrice * ?TradingQty) - (?OtcQty * ?OtcPrice)) / (?TradingQty - ?OtcQty))))
+          (modify ?otcDemand (status bought))
+          (modify ?otcTrading (quantity (?TradingQty - ?OtcQty)))
+          (modify ?production (quantity (?ProdQty - ?OtcQty)))
+          (modify ?contract (status accountedFor) (demandId ?DemandId))
+       )
+       (ErfolgreichenEinkaufVerbuchen6b
+          ?otcAvgPrice <- (OTCAveragePrice (avgprice ?AvgPrice) (time ?T))
+          ?otcDemand <- (OTCDemand (status isOpen) (quantity ?OtcQty) (time ?T) (id ?DemandId))
+          ?otcTrading <- (OTCTrading (quantity ?TradingQty) (time ?T))
+          ?production <- (Production (quantity ?ProdQty) (time ?T))
+          ?contract <- (OTCContract (status ?ContractStatus) (name ?OtherName) (price ?OtcPrice) (time ?T) (quantity ?OtcQty))
+          (test (?ContractStatus != accountedFor))
+          (not (MyName (name ?OtherName)))
+          (CapacityAt (quantity ?CapQty) (time ?T))
+          (TradingOpen (time ?T))
+          (test ((?ProdQty - ?OtcQty) < 0))
+          =>
+          (modify ?otcAvgPrice (avgprice (((?AvgPrice * ?TradingQty) - (?OtcQty * ?OtcPrice)) / (?TradingQty - ?OtcQty))))
+          (modify ?otcDemand (status bought))
+          (modify ?otcTrading (quantity (?TradingQty - ?OtcQty)))
+          (modify ?production (quantity (?ProdQty - ?OtcQty)))
+          (modify ?contract (status accountedFor) (demandId ?DemandId))
+       )
+    )
+    (:Primitive AbstractTaskId14
+     :time (1)
+     :cost (0)
+     :consumed_facts ((:type JOLoadForecast
+                       :id joLoadForecast
+                       :modifiers 5
+                       :attributes ((status ?var661)
+                                    (name ?knownLoad.name)
+                                    (className ?var663)
+                                    (expectedLoad ?var664)
+                                    (toTime >=?knownLoad.time)
+                                    (fromTime <=?knownLoad.time)
+                                   )
+                      )
+                      (:type KnownLoad
+                       :id var484
+                       :modifiers 3
+                       :attributes ((name ?knownLoad.name)
+                                    (time ?knownLoad.time)
+                                    (quantity ?var487)
+                                   )
+                      )
+                     )
+     :produced_facts ((:type KnownLoad
+                       :id knownLoad
+                       :modifiers 1
+                       :attributes ((name ?var561)
+                                    (time ?var563)
+                                    (quantity ?var142)
+                                   )
+                      )
+                     )
+    )
+    (:Primitive AbstractTaskId13
+     :time (1)
+     :cost (0)
+     :consumed_facts ((:type JOMarginalCostMatrix
+                       :id joMarginalCost
+                       :modifiers 5
+                       :attributes ((status ?var615)
+                                    (matrix ?var616)
+                                    (name ?myName.name)
+                                    (NumberOfRows ?var618)
+                                    (className ?var619)
+                                    (toTime >=?newMarginalCost.time)
+                                    (isQuadratic ?var621)
+                                    (fromTime <=?newMarginalCost.time)
+                                   )
+                      )
+                      (:type myName
+                       :id myName
+                       :modifiers 21
+                       :attributes ((name ?var445)
+                                   )
+                      )
+                     )
+     :produced_facts ((:type MarginalCost
+                       :id newMarginalCost
+                       :modifiers 1
+                       :attributes ((fromQuantity ?var133)
+                                    (name ?myName.name)
+                                    (toQuantity ?var135)
+                                    (time ?var581)
+                                    (cost ?var582)
+                                   )
+                      )
+                     )
+    )
+    (:Primitive AbstractTaskId12
+     :time (1)
+     :cost (0)
+     :produced_facts ((:type PriceForecast
+                       :id priceForecast
+                       :modifiers 1
+                       :attributes ((expectedPrice ?var128)
+                                    (name ?var557)
+                                    (time ?var559)
+                                   )
+                      )
+                     )
+    )
+    (:Primitive AbstractTaskId11
+     :time (1)
+     :cost (0)
+     :consumed_facts ((:type Capacity
+                       :id capacity
+                       :modifiers 21
+                       :attributes ((name ?supplyContract.name)
+                                    (toTime >=?supplyContract.time)
+                                    (quantity >=((?knownLoad.quantity + ?tradingQuantity.quantity) + ?supplyContract.quantity))
+                                    (fromTime <=?supplyContract.time)
+                                   )
+                      )
+                      (:type KnownLoad
+                       :id knownLoad
+                       :modifiers 5
+                       :attributes ((name ?supplyContract.name)
+                                    (time ?supplyContract.time)
+                                    (quantity ?var85)
+                                   )
+                      )
+                      (:type TradingQuantity
+                       :id tradingQuantity
+                       :modifiers 17
+                       :attributes ((name ?supplyContract.name)
+                                    (time ?supplyContract.time)
+                                    (quantity ?var90)
+                                    (avgPrice ?var459)
+                                   )
+                      )
+                      (:type MarginalCost
+                       :id marginalCost
+                       :modifiers 5
+                       :attributes ((fromQuantity <=(?knownLoad.quantity + ?tradingQuantity.quantity))
+                                    (name ?supplyContract.name)
+                                    (toQuantity >=((?knownLoad.quantity + ?tradingQuantity.quantity) + ?supplyContract.quantity))
+                                    (time ?supplyContract.time)
+                                    (cost ?var176)
+                                   )
+                      )
+                      (:type Interest
+                       :id interest
+                       :modifiers 21
+                       :attributes ((rate ?var623)
+                                    (toTime >=?supplyContract.time)
+                                    (fromTime <=?supplyContract.time)
+                                   )
+                      )
+                      (:type Risk
+                       :id risk
+                       :modifiers 21
+                       :attributes ((adding ?var627)
+                                    (maxVaR ?var628)
+                                    (minPaR ?var631)
+                                   )
+                      )
+                      (:type PriceForecast
+                       :id priceForecast
+                       :modifiers 5
+                       :attributes ((expectedPrice ?var112)
+                                    (name ?supplyContract.name)
+                                    (time ?supplyContract.time)
+                                   )
+                      )
+                     )
+     :produced_facts ((:type SupplyContract
+                       :id supplyContract
+                       :modifiers 1
+                       :attributes ((name ?var389)
+                                    (time ?var554)
+                                    (quantity ?var119)
+                                   )
+                      )
+                      (:type TradingQuantity
+                       :id newTradingQuantity
+                       :modifiers 33
+                       :attributes ((name ?supplyContract.name)
+                                    (time ?supplyContract.time)
+                                    (quantity (?tradingQuantity.quantity + ?supplyContract.quantity))
+                                    (avgPrice ?var553)
+                                   )
+                      )
+                     )
+    )
+    (:Rulebase AbstractTaskId10
+       (EingangDesBoersenergebnisses0
+          (PXTrading (time ?T) (quantity ?PxQty))
+          (PXMarketData (mcp ?Mcp) (time ?T))
+          ?money <- (Money (amount ?Amount))
+          (GMT (time ?GmtTime))
+          (CapacityAt (time ?T) (quantity ?CapQty))
+          (TradingPeriod (timeTicks ?TimeTicks))
+          (LoadForecast (expVal ?ExpLoad) (time ?T))
+          (not (TradingOpen (time ?T)))
+          (not (OTCTrading (time ?T)))
+          =>
+          (assert (TradingOpen (deadline (?GmtTime + ?TimeTicks)) (time ?T)))
+          (assert (OTCTrading (time ?T) (quantity 0)))
+          (assert (OTCAveragePrice (avgprice 0) (time ?T)))
+          (assert (Production (time ?T) (quantity (?ExpLoad + ?PxQty))))
+          (modify ?money (amount (?Amount + (?Mcp * ?PxQty))))
+       )
+       (VerkaufangebotErstellen1a
+          (TradingOpen (time ?T))
+          (CapacityAt (time ?T) (quantity ?CapQty))
+          (Production (time ?T) (quantity ?ProdQty) (unitCost ?ProdUnitCost))
+          (ProductionCostOnChange (targetQuantity ?TargetQtyPlus) (actualQuantity ?ProdQty) (targetQuantityUnitCost ?PlusUnitCost) (time ?T))
+          (ProductionCostOnChange (targetQuantity ?TargetQtyMinus) (actualQuantity ?ProdQty) (targetQuantityUnitCost ?MinusUnitCost) (time ?T))
+          (PXMarketData (mcp ?Mcp) (time ?T))
+          (test (?ProdQty <= ?TargetQtyPlus))
+          (test (?ProdQty >= ?TargetQtyMinus))
+          (test (?CapQty >= ?ProdQty))
+          (test (((?Mcp - ?PlusUnitCost) * (?TargetQtyPlus - ?ProdQty)) > (((?ProdUnitCost - ?Mcp) * ?ProdQty) + ((?Mcp - ?MinusUnitCost) * ?TargetQtyMinus))))
+          =>
+          (if (5 < (?TargetQtyPlus - ?ProdQty)) then
+ (bind ?supplyQty 5)
+ else
+ (bind ?supplyQty (?TargetQtyPlus - ?ProdQty)))
+          (assert (OTCSupply (status isOpen) (quantity ?supplyQty) (time ?T) (expectedCost ?PlusUnitCost)))
+       )
+       (VerkaufpreisFestlegen3a
+          (OTCSupply (status isOpen) (quantity ?SupQty) (time ?T) (expectedCost ?SupCost) (id ?SupplyId))
+          (not (OTCContract (supplyId ?SupplyId)))
+          (MyName (name ?TheName))
+          (UtilizationRate (rate ?IsRate) (time ?T))
+          (UtilizationTarget (rate ?TargetRate) (time ?T))
+          (PXMarketData (mcp ?Mcp) (time ?T))
+          (TradingOpen (time ?T))
+          (RiskAttitude (riskPremium ?RiskPremium))
+          (test (?IsRate >= ?TargetRate))
+          (test ((?SupCost * (1 + ?RiskPremium)) < ?Mcp))
+          =>
+          (assert (OTCContract (name ?TheName) (price ?Mcp) (time ?T) (quantity ?SupQty) (supplyId ?SupplyId)))
+       )
+       (VerkaufpreisFestlegen3b
+          (OTCSupply (status isOpen) (quantity ?SupQty) (time ?T) (expectedCost ?SupCost) (id ?SupplyId))
+          (not (OTCContract (supplyId ?SupplyId)))
+          (MyName (name ?TheName))
+          (UtilizationRate (rate ?IsRate) (time ?T))
+          (UtilizationTarget (rate ?TargetRate) (time ?T))
+          (PXMarketData (mcp ?Mcp) (time ?T))
+          (TradingOpen (time ?T))
+          (RiskAttitude (threshold ?Threshold) (riskPremium ?RiskPremium))
+          (test (?IsRate >= ?TargetRate))
+          (test ((?SupCost * (1 + ?RiskPremium)) >= ?Mcp))
+          (test (((?SupCost * (1 + ?RiskPremium)) / ?Mcp) <= (1 + ?Threshold)))
+          =>
+          (assert (OTCContract (name ?TheName) (price (?SupCost * (1 + ?RiskPremium))) (time ?T) (quantity ?SupQty) (supplyId ?SupplyId)))
+       )
+       (VerkaufpreisFestlegen3c
+          (OTCSupply (status isOpen) (quantity ?SupQty) (time ?T) (expectedCost ?SupCost) (id ?SupplyId))
+          (not (OTCContract (supplyId ?SupplyId)))
+          (MyName (name ?TheName))
+          (UtilizationRate (rate ?IsRate) (time ?T))
+          (UtilizationTarget (rate ?TargetRate) (time ?T))
+          (PXMarketData (mcp ?Mcp) (time ?T))
+          (TradingOpen (time ?T))
+          (RiskAttitude (threshold ?Threshold) (attitude ?Attitude) (extraPremium ?ExtraPremium) (riskPremium ?RiskPremium))
+          (test (?IsRate >= ?TargetRate))
+          (test (((?SupCost * (1 + ?RiskPremium)) / ?Mcp) > (1 + ?Threshold)))
+          (test (?Attitude != averse))
+          =>
+          (assert (OTCContract (name ?TheName) (price (?SupCost * (1 + ?ExtraPremium))) (time ?T) (quantity ?SupQty) (supplyId ?SupplyId)))
+       )
+       (VerkaufpreisFestlegen3d
+          (OTCSupply (status isOpen) (quantity ?SupQty) (time ?T) (expectedCost ?SupCost) (id ?SupplyId))
+          (not (OTCContract (supplyId ?SupplyId)))
+          (MyName (name ?TheName))
+          (UtilizationRate (rate ?IsRate) (time ?T))
+          (UtilizationTarget (rate ?TargetRate) (time ?T))
+          (PXMarketData (mcp ?Mcp) (time ?T))
+          (TradingOpen (time ?T))
+          (RiskAttitude (threshold ?Threshold) (riskPremium ?RiskPremium))
+          (test (?IsRate < ?TargetRate))
+          (test (?IsRate > 0))
+          (test (?SupCost < ?Mcp))
+          =>
+          (assert (OTCContract (name ?TheName) (price ?Mcp) (time ?T) (quantity ?SupQty) (supplyId ?SupplyId)))
+       )
+       (VerkaufpreisFestlegen3e
+          (OTCSupply (status isOpen) (quantity ?SupQty) (time ?T) (expectedCost ?SupCost) (id ?SupplyId))
+          (not (OTCContract (supplyId ?SupplyId)))
+          (MyName (name ?TheName))
+          (UtilizationRate (rate ?IsRate) (time ?T))
+          (UtilizationTarget (rate ?TargetRate) (time ?T))
+          (PXMarketData (mcp ?Mcp) (time ?T))
+          (TradingOpen (time ?T))
+          (RiskAttitude (threshold ?Threshold) (attitude friendly) (riskPremium ?RiskPremium) (acceptableLoss ?AcceptableLoss))
+          (test (?IsRate < ?TargetRate))
+          (test (?IsRate > 0))
+          (test (?SupCost >= ?Mcp))
+          (test (((?SupCost / ?Mcp) - 1) <= ?AcceptableLoss))
+          =>
+          (assert (OTCContract (name ?TheName) (price (?SupCost * (1 - ?AcceptableLoss))) (time ?T) (quantity ?SupQty) (supplyId ?SupplyId)))
+       )
+       (VerkaufpreisFestlegen3f
+          (OTCSupply (status isOpen) (quantity ?SupQty) (time ?T) (expectedCost ?SupCost) (id ?SupplyId))
+          (not (OTCContract (supplyId ?SupplyId)))
+          (MyName (name ?TheName))
+          (UtilizationRate (rate 0) (time ?T))
+          =>
+          (assert (OTCContract (name ?TheName) (price ?SupCost) (time ?T) (quantity ?SupQty) (supplyId ?SupplyId)))
+       )
+       (ErfolgreichenVerkaufVerbuchen4a
+          ?otcSupply <- (OTCSupply (status selling) (time ?T) (quantity ?SupQty) (expectedCost ?SupPrice) (id ?SupplyId))
+          ?utilization <- (UtilizationRate (rate ?IsRate) (time ?T))
+          ?production <- (Production (quantity ?ProdQty) (time ?T))
+          ?otcAveragePrice <- (OTCAveragePrice (avgprice ?AvgPrice) (time ?T))
+          ?otcTrading <- (OTCTrading (quantity ?TradingQty) (time ?T))
+          (MyName (name ?MyName))
+          (CapacityAt (time ?T) (quantity ?CapQty))
+          (not (RiskAttitude (attitude averse)))
+          (TradingOpen (time ?T))
+          (OTCContract (status sold) (time ?T) (quantity ?SupQty) (supplyId ?SupplyId))
+          (test (?CapQty >= (?ProdQty + ?SupQty)))
+          =>
+          (modify ?otcSupply (status sold))
+          (modify ?otcTrading (quantity (?TradingQty + ?SupQty)))
+          (modify ?otcAveragePrice (avgprice (((?AvgPrice * ?TradingQty) + (?SupQty * ?SupPrice)) / (?TradingQty + ?SupQty))))
+          (modify ?production (quantity (?ProdQty + ?SupQty)))
+       )
+       (ErfolgreichenVerkaufVerbuchen4b
+          ?otcSupply <- (OTCSupply (status selling) (time ?T) (quantity ?SupQty) (expectedCost ?SupPrice) (id ?supplyId))
+          ?utilization <- (UtilizationRate (rate ?IsRate) (time ?T))
+          ?production <- (Production (quantity ?ProdQty) (time ?T))
+          ?otcAveragePrice <- (OTCAveragePrice (avgprice ?AvgPrice) (time ?T))
+          ?otcTrading <- (OTCTrading (quantity ?TradingQty) (time ?T))
+          (MyName (name ?MyName))
+          (LoadForecast (time ?T) (stddev ?Stddev))
+          (CapacityAt (time ?T) (quantity ?CapQty))
+          (RiskAttitude (attitude averse))
+          (TradingOpen (time ?T))
+          (OTCContract (status sold) (time ?T) (quantity ?SupQty) (supplyId ?SupplyId))
+          (test (?CapQty >= ((?ProdQty + ?SupQty) + ?Stddev)))
+          =>
+          (modify ?otcSupply (status sold))
+          (modify ?otcTrading (quantity (?TradingQty + ?SupQty)))
+          (modify ?otcAveragePrice (avgprice (((?AvgPrice * ?TradingQty) + (?SupQty * ?SupPrice)) / (?TradingQty + ?SupQty))))
+          (modify ?production (quantity (?ProdQty + ?SupQty)))
+       )
+       (ErfolgreichenVerkaufVerbuchen4c
+          ?otcSupply <- (OTCSupply (status selling) (time ?T) (quantity ?SupQty) (expectedCost ?SupPrice) (id ?supplyId))
+          ?utilization <- (UtilizationRate (rate ?IsRate) (time ?T))
+          ?production <- (Production (quantity ?ProdQty) (time ?T))
+          ?otcAveragePrice <- (OTCAveragePrice (avgprice ?AvgPrice) (time ?T))
+          ?otcTrading <- (OTCTrading (quantity ?TradingQty) (time ?T))
+          (MyName (name ?MyName))
+          (CapacityAt (time ?T) (quantity ?CapQty))
+          (SpinningReserve (price ?SprPrice))
+          (not (RiskAttitude (attitude averse)))
+          (TradingOpen (time ?T))
+          (OTCContract (status sold) (time ?T) (quantity ?SupQty) (supplyId ?SupplyId))
+          (test (?CapQty < (?ProdQty + ?SupQty)))
+          =>
+          (assert (OTCDemand (status init) (quantity ((?ProdQty + ?SupQty) - ?CapQty)) (expectedCost ?SprPrice)))
+          (modify ?otcSupply (status sold))
+          (modify ?otcTrading (quantity (?TradingQty + ?SupQty)))
+          (modify ?otcAveragePrice (avgprice (((?AvgPrice * ?TradingQty) + (?SupQty * ?SupPrice)) / (?TradingQty + ?SupQty))))
+          (modify ?production (quantity (?ProdQty + ?SupQty)))
+       )
+       (ErfolgreichenVerkaufVerbuchen4d
+          ?otcSupply <- (OTCSupply (status selling) (time ?T) (quantity ?SupQty) (expectedCost ?SupPrice) (id ?supplyId))
+          ?utilization <- (UtilizationRate (rate ?IsRate) (time ?T))
+          ?production <- (Production (quantity ?ProdQty) (time ?T))
+          ?otcAveragePrice <- (OTCAveragePrice (avgprice ?AvgPrice) (time ?T))
+          ?otcTrading <- (OTCTrading (quantity ?TradingQty) (time ?T))
+          (MyName (name ?MyName))
+          (LoadForecast (time ?T) (stddev ?Stddev))
+          (CapacityAt (time ?T) (quantity ?CapQty))
+          (RiskAttitude (attitude averse))
+          (TradingOpen (time ?T))
+          (OTCContract (status sold) (time ?T) (quantity ?SupQty) (supplyId ?SupplyId))
+          (test (?CapQty < ((?ProdQty + ?SupQty) + ?Stddev)))
+          =>
+          (assert (OTCDemand (status init) (quantity ((?ProdQty + ?SupQty) - ?CapQty)) (expectedCost ?SprPrice)))
+          (modify ?otcSupply (status sold))
+          (modify ?otcTrading (quantity (?TradingQty + ?SupQty)))
+          (modify ?otcAveragePrice (avgprice (((?AvgPrice * ?TradingQty) + (?SupQty * ?SupPrice)) / (?TradingQty + ?SupQty))))
+          (modify ?production (quantity (?ProdQty + ?SupQty)))
+       )
+    )
+    (:Primitive AbstractTaskId9
+     :time (1)
+     :cost (0)
+     :produced_facts ((:type JOLoadForecast
+                       :id newLoadForecast
+                       :modifiers 1
+                       :attributes ((status ?var671)
+                                    (name ?var432)
+                                    (className ?var673)
+                                    (expectedLoad ?var674)
+                                    (toTime ?var440)
+                                    (fromTime ?var442)
+                                   )
+                      )
+                     )
+    )
+    (:Primitive AbstractTaskId8
+     :time (1)
+     :cost (0)
+     :produced_facts ((:type JOPriceForecast
+                       :id newJOPriceForecast
+                       :modifiers 1
+                       :attributes ((status ?var378)
+                                    (expectedPrice ?var379)
+                                    (name ?var380)
+                                    (className ?var381)
+                                    (toTime ?var382)
+                                    (fromTime ?var383)
+                                   )
+                      )
+                     )
+    )
+    (:Primitive AbstractTaskId7
+     :time (1)
+     :cost (0)
+     :produced_facts ((:type JOMarginalCostMatrix
+                       :id var629
+                       :modifiers 1
+                       :attributes ((status ?var630)
+                                    (matrix ?var631)
+                                    (name ?var632)
+                                    (NumberOfRows ?var633)
+                                    (className ?var634)
+                                    (toTime ?var635)
+                                    (isQuadratic ?var636)
+                                    (fromTime ?var637)
+                                   )
+                      )
+                     )
+    )
+    (:Rulebase AbstractTaskId6
+       (sendtoLoggerAndLoadGenerator
+          ?JOLF <- (JOLoadForecast (status ?var430) (name ?forAgent) (className ?var432) (expectedLoad ?var433) (toTime ?var434) (fromTime ?var435))
+          =>
+          (if (true == false) then
+ (send_message (type inform) (content ?JOLF) (receiver ?Logger)) (send_message (type inform) (content ?JOLF) (receiver ?LoadGenerator)))
+       )
+       (sendRealisedLoad
+          ?tl <- (TariffLoad (status asRequested) (forAgent ?Receiver))
+          =>
+          (send_message (type inform) (content ?tl) (receiver ?Receiver))
+       )
+    )
+    (:Rulebase AbstractTaskId5
+       (logging
+          ?var43 <- (JOPopulation (status unknown) (name ?forAgent) (className ?var46) (individuals ?var47))
+          ?var48 <- (JOPopulation (status improved) (name ?forAgent) (className ?var51) (individuals ?var52))
+          =>
+          (send_message (type inform) (content ?var43) (receiver Logger))
+          (send_message (type inform) (content ?var48) (receiver Logger))
+          (send_message (type inform) (content ?var48) (receiver ?forAgent))
+          (retract ?var43)
+          (retract ?var48)
+       )
+    )
+    (:Rulebase AbstractTaskId4
+       (SimpleSending
+          ?var64 <- (JOPopulation (status unknown) (name ?var66) (className ?var67) (individuals ?var68))
+          =>
+          (send_message (type inform) (content ?var64) (receiver GAService))
+       )
+    )
+    (:Primitive AbstractTaskId3
+     :time (1)
+     :cost (0)
+     :consumed_facts ((:type myName
+                       :id myName
+                       :modifiers 21
+                       :attributes ((name ?g.name)
+                                   )
+                      )
+                      (:type JOLoadForecast
+                       :id joLoadForecast
+                       :modifiers 5
+                       :attributes ((status ?var592)
+                                    (name ?gebot.name)
+                                    (className ?var594)
+                                    (expectedLoad ?var595)
+                                    (toTime >=?g.LastTimeUnit)
+                                    (fromTime <=?g.FirstTimeUnit)
+                                   )
+                      )
+                      (:type JOPriceForecast
+                       :id joPriceForecast
+                       :modifiers 5
+                       :attributes ((status ?var599)
+                                    (expectedPrice ?var600)
+                                    (name ?gebot.name)
+                                    (className ?var602)
+                                    (toTime >=?g.LastTimeUnit)
+                                    (fromTime <=?g.FirstTimeUnit)
+                                   )
+                      )
+                      (:type Risk
+                       :id risk
+                       :modifiers 21
+                       :attributes ((adding ?var332)
+                                    (maxVaR ?var333)
+                                    (minPaR ?var334)
+                                   )
+                      )
+                      (:type Interest
+                       :id interest
+                       :modifiers 21
+                       :attributes ((rate ?var336)
+                                    (toTime ?var337)
+                                    (fromTime ?var338)
+                                   )
+                      )
+                      (:type Capacity
+                       :id capacity
+                       :modifiers 5
+                       :attributes ((name ?myName.name)
+                                    (toTime >=?g.LastTimeUnit)
+                                    (quantity ?var342)
+                                    (fromTime <=?g.FirstTimeUnit)
+                                   )
+                      )
+                      (:type JOMarginalCostMatrix
+                       :id var402
+                       :modifiers 5
+                       :attributes ((status ?var403)
+                                    (matrix ?var404)
+                                    (name ?myName.name)
+                                    (NumberOfRows ?var406)
+                                    (className ?var407)
+                                    (toTime >=?g.LastTimeUnit)
+                                    (isQuadratic ?var409)
+                                    (fromTime <=?g.FirstTimeUnit)
+                                   )
+                      )
+                     )
+     :produced_facts ((:type Gebot
+                       :id g
+                       :modifiers 1
+                       :attributes ((tag ?var1038)
+                                    (verkauf_leistung ?var583)
+                                    (name ?myName.name)
+                                    (kauf_preis ?var585)
+                                    (FirstTimeUnit ?var1042)
+                                    (kauf_leistung ?var586)
+                                    (LastTimeUnit ?var1044)
+                                    (verkauf_preis ?var587)
+                                   )
+                      )
+                     )
+    )
+    (:Rulebase AbstractTaskId2
+       (sendGebot
+          ?gebot <- (Gebot (verkauf_leistung ?var93) (name ?agentName) (kauf_preis ?var91) (kauf_leistung ?var95) (verkauf_preis ?var92))
+          =>
+          (send_message (type inform) (content ?gebot) (receiver Boerse))
+          (retract ?gebot)
+       )
+    )
+  END_TASK_LIST
+
+  BEGIN_GENERATION_PLAN
+    BEGIN_PREAMBLE
+      :platform "Windows"
+      :directory "."
+    END_PREAMBLE
+    BEGIN_AGENT_LIST
+      (:id AgentId6
+       :generate false
+       :status Saved
+       :has_gui false
+       :dns_file "dns.db"
+      )
+      (:id AgentId5
+       :generate false
+       :status Saved
+       :has_gui false
+       :dns_file "dns.db"
+      )
+      (:id AgentId4
+       :generate false
+       :status Saved
+       :has_gui false
+       :dns_file "dns.db"
+      )
+      (:id AgentId3
+       :generate false
+       :status Saved
+       :has_gui false
+       :dns_file "dns.db"
+      )
+      (:id AgentId2
+       :generate false
+       :status Saved
+       :has_gui false
+       :dns_file "dns.db"
+      )
+      (:id AgentId1
+       :generate false
+       :status Saved
+       :has_gui true
+       :dns_file "dns.db"
+      )
+      (:id AgentId0
+       :generate false
+       :status Saved
+       :has_gui false
+       :dns_file "dns.db"
+      )
+      (:id AgentId10
+       :generate false
+       :status Saved
+       :has_gui false
+       :dns_file "dns.db"
+      )
+      (:id AgentId9
+       :generate false
+       :status Saved
+       :has_gui false
+       :dns_file "dns.db"
+      )
+      (:id AgentId8
+       :generate false
+       :status Saved
+       :has_gui false
+       :dns_file "dns.db"
+      )
+      (:id AgentId7
+       :generate false
+       :status Saved
+       :has_gui false
+       :dns_file "dns.db"
+      )
+    END_AGENT_LIST
+    BEGIN_TASK_LIST
+      (:id AbstractTaskId1
+       :generate false
+       :status Saved
+       :external null
+      )
+      (:id AbstractTaskId0
+       :generate false
+       :status Saved
+       :external null
+      )
+      (:id AbstractTaskId17
+       :generate false
+       :status Saved
+       :external null
+      )
+      (:id AbstractTaskId16
+       :generate false
+       :status Saved
+       :external null
+      )
+      (:id AbstractTaskId15
+       :generate false
+       :status Saved
+       :external null
+      )
+      (:id AbstractTaskId14
+       :generate false
+       :status Saved
+       :external null
+      )
+      (:id AbstractTaskId13
+       :generate false
+       :status Saved
+       :external null
+      )
+      (:id AbstractTaskId12
+       :generate false
+       :status Saved
+       :external null
+      )
+      (:id AbstractTaskId11
+       :generate false
+       :status Saved
+       :external null
+      )
+      (:id AbstractTaskId10
+       :generate false
+       :status Saved
+       :external null
+      )
+      (:id AbstractTaskId9
+       :generate false
+       :status Saved
+       :external null
+      )
+      (:id AbstractTaskId8
+       :generate false
+       :status Saved
+       :external null
+      )
+      (:id AbstractTaskId7
+       :generate false
+       :status Saved
+       :external null
+      )
+      (:id AbstractTaskId6
+       :generate false
+       :status Saved
+       :external null
+      )
+      (:id AbstractTaskId5
+       :generate false
+       :status Saved
+       :external null
+      )
+      (:id AbstractTaskId4
+       :generate false
+       :status Saved
+       :external null
+      )
+      (:id AbstractTaskId3
+       :generate false
+       :status Saved
+       :external null
+      )
+      (:id AbstractTaskId2
+       :generate false
+       :status Saved
+       :external null
+      )
+    END_TASK_LIST
+    BEGIN_NAMESERVER_LIST
+      (:name Nameserver2
+       :is_root false
+       :has_gui false
+       :dns_file "dns.db"
+      )
+    END_NAMESERVER_LIST
+    BEGIN_FACILITATOR_LIST
+      (:name Facilitator2
+       :period 5.00
+       :has_gui false
+       :dns_file "dns.db"
+      )
+    END_FACILITATOR_LIST
+    BEGIN_VISUALISER_LIST
+      (:name Visualiser2
+       :has_gui false
+       :dns_file "dns.db"
+      )
+    END_VISUALISER_LIST
+    BEGIN_DBPROXY_LIST
+      (:name DbProxy2
+       :has_gui false
+       :dns_file "dns.db"
+       :path "zeus.ext.FlatFile"
+      )
+    END_DBPROXY_LIST
+  END_GENERATION_PLAN
+END_GENERATOR

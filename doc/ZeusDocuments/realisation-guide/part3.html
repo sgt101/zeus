@@ -1,0 +1,1559 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>The Zeus Realisation Guide</title>
+<LINK REL="STYLESHEET" TYPE="text/css" HREF="zeusdoc.css">
+</head>
+
+<body>
+
+<table width=100% border=0>
+<tr>
+<td><h4>The Zeus Agent Building Toolkit </h4></td>
+<td align=right class="text">The Application Realisation Guide</td>
+</tr>
+</table>
+<br>
+<table border=1 cellspacing=0 width=100% class="smalltext">
+<tr>
+<td width=10%><a class="smalltextlink" href="TOC.html">Contents</a></td>
+<td width=15%><a class="smalltextlink" href="part1.html">Introduction</a></td>
+<td width=15%><a class="smalltextlink" href="part2.html">Ontologies</a></td>
+<td width=15%><b>Building<br> Task Agents</b></td>
+<td width=15%><a class="smalltextlink" href="part4.html">Utility Agents</a></td>
+<td width=15%><a class="smalltextlink" href="part5.html">Task Agent<br> Configuration</a></td>
+<td width=15%><a class="smalltextlink" href="part6.html">Agent Implementation</a></td>
+</tr>
+</table>
+<br>
+<br>
+
+<a name="1"></a><h3>3     The Agent Creation Stage</h3>
+
+<p class="text">During the agent creation stage the generic ZEUS agent is
+  configured to fulfil its application-specific responsibilities.  Thus by the
+  time this stage is attempted the following design decisions should have already
+  been taken: </p>
+<ul>
+<li><p class="text"> What is the granularity of time for the application?</p>
+<li><p class="text"> What agents exist?</p>
+<li><p class="text"> What activities will each agent perform?</p>
+<li><p class="text"> How will each agent interact with other agents?</p>
+<li><p class="text"> What strategies and expertise does each agent know?</p>
+</ul>
+
+<p class="text">Guidance for these agent design decisions is provided in
+  the Role Modelling guide and its case studies. This is intended to help the
+  developer decide which agent aspects need to be reconfigured, according to the
+  type of agent being created.</p>
+<br>
+
+
+<p class="text"><img width=25 height=32
+src="./gfx/image022.gif">
+<b>Choosing the Application Time-Grain</b>
+</p>
+<p class="text">
+  But before agents are defined the developer must decide on the application's granularity
+  of time.  The granularity refers to the smallest possible indivisible period
+  of time for the application: a period known the time-grain.  The time-grain
+  determines the period between ‘ticks’ of the application-wide clock that is
+  maintained by the Agent Name Servers.  This global clock acts like Greenwich
+  Mean Time (GMT), providing a standard time reference for all agents that is
+  independent of any one agent’s own local time.  It thus provides a means of
+  synchronising agents regardless of their physical distribution.</p>
+<p class="text">In ZEUS the duration of all agent activities is expressed
+  in time-grains rather than seconds or minutes, making the choice of time-grain
+  length a significant decision.  The key factor is how rapidly the agents’ environment
+  changes.  This is because new activities are started at the beginning of a time-grain,
+  meaning there will be a delay between an event occurring and the agent reacting.
+</p>
+<p class="text">So, for instance, if the time-grain is 1 minute in length,
+  and an event is detected 5 seconds after the time-grain begins, the agent will
+  not react for at least another 55 seconds.  There is another implication, if
+  an agent can perform one activity per time-grain, and this activity takes on
+  average 1 second to complete, it will be idle for 59 seconds in every minute.
+</p>
+<p class="text">From this discussion one might think that long time-grains
+  are best avoided.  However, because the time-grain is used for synchronisation
+  there are dangers in choosing too small a duration.  For instance, imagine that
+  the time-grain is set to 1 second, this will only give each agent 1 second to
+  observe its environment, make decisions and potentially perform actions.  This
+  may pose no problems for an agent on a fast machine that has no communication
+  latency, but such performance is difficult to guarantee.  The consequences of
+  agents slipping out of synchronisation can be quite serious.  Agents may begin
+  to unexpectedly miss deadlines and the application may cease working or behave
+  unpredictably, (and the cause may prove very difficult to undercover).</p>
+<p class="text">The choice of time-grain is thus dependent on factors like
+  the nature of the application, the reliability of the network and the speed
+  of the host machines that support the agents.  For instance, a value of 30 seconds
+  may be too slow for an application like network management, which tends to involve
+  a very dynamic environment, or where agents need to continually interact with
+  human users.  Likewise if agents were monitoring changes to a relatively static
+  subject, like a web site, a longer time-grain would probably be more efficient.     
+</p>
+<p class="text">The default value for ZEUS applications is 30 seconds, which
+  in our experience is long enough to allow several agents to run on the same
+  machine and still respond comfortably.</p>
+<p class="text">For instructions on how to change the time-grain for your
+  application see the section on <a href="part4.html" class="textlink">
+  Utility Agent Configuration</a>.</p>
+
+<br>
+<b>Getting Started</b> <br>
+<p>The agent creation options are accessible through the 'Agent Options' panel
+  of the ZEUS Agent Generator tool, which is illustrated in Figure 3.1.</p>
+
+<table cellpadding=1 cellspacing=1 width=75%>
+  <tr>
+    <td align="center"><img src="./gfx/figure3-1.gif"></td>
+  </tr>
+  <tr>
+    <td class="smalltext"><b>Figure 3.1</b>: A screenshot of the Agent Options Panel of the Generator tool.
+The Known Agent Table lists all the agents that have been defined in the current project.</td>
+  </tr>
+</table>
+<br> <br>
+
+<h4>How to Create an Agent</h4>
+<p class="text"><img width=32 height=32 src="./gfx/image010.gif"> &nbsp;
+  The Agent Generator tool does not treat agents as classes in the conventional object
+  oriented sense, where each class name refers to a template that can create as
+  many instances as needed at run-time.  Instead, each agent instance refers to
+  an individual entity, and must be given its own unique name when it is created. 
+  This is important to enable social relationships to be defined in terms of individuals,
+  rather than classes of agents. </p>
+<ul>
+<li><p class="text"> To create a new agent, select the New button from the Agent Options toolbar.  This will
+  create a new entry in the agent table using a temporary name.  </p>
+<li><p class="text"> <img width=33 height=31 src="./gfx/image026.gif"> &nbsp;
+  Give the agent a more informative name by selecting its entry in the table and clicking
+  on the Rename Agent button.  The agent's name field will be editable, type in
+  the new name and then press &lt;return&gt;.  </p>
+</ul>
+
+<br> <br>
+
+<h4>How to Clone an Agent</h4>
+<p class="text"> <img width=32 height=32 src="./gfx/image027.gif"> &nbsp;
+  If more than one agent shares the same expertise, abilities
+  and attributes the developer will have to create a separate entry for each. 
+  Rather than re-entering the same information, once an individual has been defined
+  it can be cloned as a separate individual and given its own unique name. </p>
+<p class="text"> This is achieved by selecting the agent to clone in the table and clicking on the Clone
+  Agent button from the Agent Options toolbar.  This creates a new entry in the
+  table using a temporary name, which can be renamed to something more appropriate.</p>
+
+<br> <br>
+
+<h4>How to Delete an Agent</h4>
+<p class="text">
+  <img width=32 height=32 src="./gfx/image028.gif"> &nbsp;
+  An agent entry can be deleted permanently from the project by selecting its entry and
+  clicking on the Delete button from the Agent Options toolbar.  If you are certain
+  you want to delete this agent, click 'OK' when the confirmation requester appears.</p>
+
+<br> <br>
+
+<h4>How to Save an Agent</h4>
+<p class="text"><img width=32 height=32 src="./gfx/image021.gif">In the
+  current version of the Generator there is no option to save agent definitions
+  separately, only as part of a project.  </p>
+<p class="text"> Saving the project is achieved by clicking on the Save button in the Project Options
+  toolbar, or by choosing the Save Project menu option. </p>
+
+<br> <br>
+
+<h4>How to Configure an Agent</h4>
+<p class="text">Once an agent has been created it can be configured to meet
+  the requirements of its intended role. </p>
+<ul>
+<li><p class="text"> <img width=32 height=32 src="./gfx/image009.gif"> &nbsp;
+  To edit an agent either double clicking on its name in the Agent Table, or selecting
+  its entry and click on the Edit button in the Agent Options toolbar.</p>
+<li><p class="text"> This opens a new window entitled 'Agent Editor' containing 3 separate tab-panes that each
+  facilitate the entry of information related to the methodology stage of the
+  same name.</p>
+</ul>
+<p class="text">The remainder of this section describes the different
+  sub-stages of the Agent Creation process, and how the Agent Editor supports them.</p>
+
+<br>
+<hr width="50%">
+<br> <br>
+
+<a name="31"></a><h3>3.1     The Agent Definition Stage</h3>
+<p class="text">This aspect of the methodology is performed through
+  the 'Agent Definition' panel of the Agent Editor. The Agent Definition Stage
+  consists of three main activities, these are:</p>
+<ol>
+<li><p class="text"> Configuring Planning Parameters, see activity <a class="textlink" href="#DEF1">DEF-1</a></p>
+<li><p class="text"> Task Identification, see activity <a class="textlink" href="#DEF2">DEF-2</a></p>
+<li><p class="text"> Initial Agent Resources, see activity <a class="textlink" href="#DEF3">DEF-3</a></p>
+</ol>
+
+<p class="text">A useful metaphor at this stage is to view the agent as a
+  manager in charge of a factory that comprises a number of production lines (of
+  identical machines), each of which can perform a number of different tasks. 
+  The manager possesses some resources, and the production of an item may consume
+  some of these resources, with the production process lasting for a finite time
+  interval.  </p>
+<p class="text">The role of the manager is to produce items at the request
+  of customers, in such a manner that idle time is minimised and profit is maximised. 
+  To achieve this, the manager has to schedule customer requests on the basis
+  of available resources, free machines and the cost and time of performing each
+  task.  Typical customer requests are of the form 'produce item <i>u</i> given
+  <i>v</i> by time <i>w</i> at cost <i>x</i>'. </p>
+<p class="text">To aid the manager’s scheduling process a diary is maintained
+  for its current commitments.  However, different applications will plan ahead
+  for different periods of time, and be able to handle a different number of current
+  tasks.  Hence the first activity involves setting the planning ability of the
+  agent. </p>
+
+<br> <br>
+<a name="DEF1"></a>
+<table cellpadding=0 cellspacing=0 border=0 width=100%>
+  <tr>
+    <td align=left valign=top><img width=92 height=89 src="./gfx/image030.gif"></td>
+    <td><h3>DEF-1: Configuring Planning Parameters</h3></td>
+  </tr>
+</table>
+<p class="text">This activity involves configuring the two parameters of
+  the agent's internal Planner and Scheduler, these are: </p>
+<ul>
+<li><p class="text"> <b>Maximum Number of Simultaneous Tasks</b> - enter into this field the number of tasks
+  the agent can perform concurrently, it is akin to the number of independent
+  production lines in our metaphorical factory.  The default value is 1 i.e. the
+  agent can only attempts one task at a time.  Whether or not this value needs
+  to be changed is totally dependent on the role the agent will fulfil.</p>
+<li><p class="text"> <b>Planner Length</b> - enter into this field the number of time-grains that the agent
+  will normally plan its activities, it is akin to the longest duration over which
+  our metaphorical factory manager will books requests.  The default value is
+  20, but the most appropriate value for any given agent will depend on the duration
+  chosen for the time-grain, and the policy of the agent in question.  For instance,
+  if an agent can only plan ahead for a short period it may be unable to undertake
+  long-term commitments, but may be more reactive to changing circumstances.</p>
+</ul>
+<p class="text"><i>Note</i>: unlike most other ZEUS agent attributes
+  these parameters can not be changed at run-time.</p>
+
+  <p class="text"><b>See also…</b></p>
+  <ul>
+  <li><p class="text"><a class="textlink" href="#3">Factors influencing the choice of time-grain</a></p>
+  <li><p class="text"><a class="textlink" href="../techmanual/planner.html">How the Planner/Scheduler works</a></p>
+  </ul>
+
+<br> <br>
+<a name="DEF2"></a>
+<table cellpadding=0 cellspacing=0 border=0 width=100%>
+  <tr>
+    <td align=left valign=top><img width=92 height=89 src="./gfx/image031.gif"></td>
+    <td><h3>DEF-2: Task Identification</h3></td>
+  </tr>
+</table>
+
+<p class="text">This activity involves naming (but not yet actually defining)
+  the application-specific tasks that this agent is capable of performing.  This
+  process by which this information is entered is illustrated in Figure 3.2. </p>
+<p align=center style='text-align:center'><img width=561 height=235
+ src="./gfx/image033.gif"><br clear=ALL>
+  <b>Figure 3.2</b>: Screenshot of the Task Identification Panel, and how to use
+  it</p>
+<br clear=ALL>
+<li><p class="text"> <img width=32 height=16 src="./gfx/image016.gif"> &nbsp; Clicking
+  on the toolbar’s New button provides the choice of entering either a new Primitive
+  task or new Summary task, or choosing a task that has already been entered.</p>
+<p class="text">A new entry will then appear in the table using a temporary
+  name. (You may also notice that the newly created fact will also appear in the
+  Task Table in the Generator’s main window).</p>
+<li><p class="text"> To rename
+  the task to something more meaningful, double click on its name field, edit
+  the name and then press &lt;return&gt;.</p>
+<br>
+
+<p class="text"><b>See also…</b></p>
+  <ul>
+  <li><p class="text"><a class="textlink" href="#32">The Task Definition Process</a></p>
+  <li><p class="text"><a class="textlink" href="../techmanual/tasks.html">The Characteristics of Primitive and Summary Tasks</a></p>
+  </ul>
+
+
+<br> <br>
+<a name="DEF3"></a>
+<table cellpadding=0 cellspacing=0 border=0 width=100%>
+  <tr>
+    <td align=left valign=top><img width=92 height=89 src="./gfx/image031.gif"></td>
+    <td><h3>DEF-3: Initial Agent Resource Allocation</h3></td>
+  </tr>
+</table>
+
+<p class="text">This activity involves listing the resources that the agent
+  will possess when it is initialised.  This activity takes place through the
+  'Initial Resources' panel where the upper table lists the facts owned, and the
+  lower table enables the facts' attributes to be edited, as shown in Figure 3.3.</p>
+<table cellpadding=0 cellspacing=0 align=left>
+  <tr>
+    <td><img width=516 height=344 src="./gfx/image036.gif"></td>
+  </tr>
+  <tr>
+    <td align=center class="smalltext"><b>Figure 3.3</b>:
+    The Initial Agent Resources panel, and how to use it</td>
+  </tr>
+</table>
+<br clear=ALL>
+<br>
+<p class="text">Naturally, before a resource can be allocated to an agent
+  it must first have been defined as part of the application ontology, (this should
+  have been done during the previous stage).</p>
+<ul>
+<li><p class="text"> <img width=32 height=16 src="./gfx/image016.gif"> &nbsp; To enter
+  a new initial resource click on the toolbar's New button, this opens a window
+  showing the fact hierarchy of the project ontology.  Select the appropriate
+  fact, and then press the OK button.</p>
+<li><p class="text"> A new entry will now appear in table, consisting of a Fact Type (which can not be changed),
+  and an Instance field that can be double-clicked to enter a more appropriate name.  </p>
+<p class="text"> Note that the @ character prefix indicates the resource is
+  an individual instance, (and not any instance, which would be prefixed by a
+  ? character). </p>
+<li><p class="text"> Because
+  initial resources are individual instances it will probably be necessary to
+  individualise their attributes.  Achieve this by selecting the fact in question
+  in the upper table and then double-clicking on the Value cells of the lower
+  table to open a panel where a new value can be entered.</p>
+<li><p class="text"> Press &lt;return&gt;
+  to enter the value and update the table. If the entered value appears in red
+  then it is either syntactically incorrect or of an incompatible type, and will
+  need to be changed.   </p>
+</ul>
+<p class="text"><i>Note</i>: Whenever attribute values are being edited and
+  another attribute needs to be referenced, right-click and a window showing the
+  ontology's fact/attribute hierarchy will appear - just select the appropriate
+  attribute and click OK.   </p>
+
+<br>
+<hr width="50%">
+<br> <br>
+
+<a name="32"></a><h3>3.2     The Task Definition Stage</h3>
+<p class="text">By the time this activity is attempted the developer
+  should have specified the list of tasks that the agent is capable of performing
+  (see Activity <a class="textlink" href="#DEF2">DEF-2</a>).  Likewise, as the preconditions and effects of
+  tasks are domain ontology concepts, the ontology should be comprehensively defined
+  by the time this stage is attempted.  If not, the developer may need to revisit
+  the ontology devising process, although by this point the developer may have
+  more focus and thus be better able to identify the appropriate application concepts.
+</p>
+<p class="text"> <img width=32 height=32 src="./gfx/image009.gif"> &nbsp; The
+  tool for this stage is the Task Editor, which can be launched by double clicking
+  on the task name in the Generator's Task Table, or selecting its entry in the
+  and clicking the Edit button.  </p>
+<p class="text">This will launch either the Primitive Task Editor
+  (described in activity <b>TASK-1</b>) or the Summary Task Editor (described
+  in <b>TASK-2</b>), depending on the underlying type of task.</p>
+
+<br> <br>
+<a name="TASK1"></a>
+<table cellpadding=0 cellspacing=0 border=0 width=100%>
+  <tr>
+    <td align=left valign=top><img src="./gfx/image037.gif"></td>
+    <td><h3>TASK-1: Using the Primitive Task Editor</h3></td>
+  </tr>
+</table>
+<p class="text">
+  In ZEUS, a primitive task is a representation of some atomic (non-divisible)
+  agent activity.  As can be seen in Figure 3.4 in the Primitive Task Editor (PTE)
+  depicts each task as a resource flow, where facts flow into a task, whereupon
+  they are transformed into new facts.   </p>
+
+<table cellpadding=0 cellspacing=0 border=0>
+  <tr>
+    <td><img src="./gfx/figure3-4.gif"></td>
+  </tr>
+  <tr><td align=center class='smalltext'><b>Figure 3.4</b>: A Screenshot of the
+  Primitive Task Editor with the main activities of the Task Definition Stage shown</td>
+  </tr>
+</table>
+<br>
+
+<p class="text">Using the PTE, the following aspects of a primitive
+  task can be configured:</p>
+<ul>
+<li><p class="text"> Preconditions - the resources needed for execution of the task</p>
+<li><p class="text"> Effects - the resources that will be produced upon execution of the task</p>
+<li><p class="text"> Cost - an expression given the cost of executing the task</p>
+<li><p class="text"> Duration - an expression giving the time taken to execute the task</p>
+<li><p class="text"> Precondition Ordering - the sequence in which preconditions should be achieved </p>
+<li><p class="text"> Constraints - applicability restrictions on executing the task</p>
+</ul>
+<p class="text">As some of these aspects are dependent on each other,
+  their definition is best attempted in the order listed above. </p>
+<br>
+
+<p class="text"><b>How to Enter a Task Precondition </b></p>
+<p class="text">A precondition is a fact that will be used (and
+  possibly consumed) by a task when it executes.  Preconditions are listed in
+  the top table in the 'Task Preconditions' panel, whilst their attributes are
+  listed in the bottom table. </p>
+
+<p class="text"> <img width=32 height=16 src="./gfx/image016.gif"> &nbsp; To add
+  a new precondition click on the toolbar's New button, this will open a pop-up
+  window listing all the facts in the currently loaded ontology.  Choose the appropriate
+  fact and then click the OK button, the selected fact will then appear in the
+  precondition table.</p>
+<p class="text">The instance name provides a handle for fact instances,
+  akin to a variable name in programming languages.  This can be edited and changed
+  to something more meaningful by double clicking on its name.  All names will
+  be prefixed by the ? character to indicate that they are variables (i.e. any
+  instance of that fact), rather than a specific instance. </p>
+<p class="text">
+  The Modifiers field describes how each precondition will be used.  To set a
+  modifier double click on this field, this will open a window listing the available
+  options - click on the check-box beside the one that is appropriate.</p>
+
+<p class="text">The modifiers applicable to preconditions are described in table 3.1.</p>
+<center>
+<table border=1 cellspacing=1 cellpadding=1 width=90%>
+  <tr>
+    <td width=114 valign=top>
+      <p class="text"><b>Modifier</b></p>
+    </td>
+    <td width=234 valign=top>
+      <p class="text"><b>Explanation </b></p>
+    </td>
+    <td width=204 valign=top>
+      <p class="text"><b>Examples of Use</b></p>
+    </td>
+  </tr>
+  <tr>
+    <td width=114 valign=top>
+      <p class="text"><b>Not</b></p>
+    </td>
+    <td width=234 valign=top>
+      <p class=MsoHeader>Task only performed if fact is not present in locally</p>
+    </td>
+    <td width=204 valign=top>
+      <p class=MsoHeader>For inhibitory factors, e.g. a produced fact that will
+        inhibit production until it is removed </p>
+    </td>
+  </tr>
+  <tr>
+    <td width=114 valign=top>
+      <p class="text"><b>Is Read Only</b></p>
+    </td>
+    <td width=234 valign=top>
+      <p>Fact is not consumed, i.e. it survives task execution, but during which
+        time it is not allocated exclusively to the task </p>
+    </td>
+    <td width=204 valign=top>
+      <p>For items of  information, e.g. an employee record  </p>
+    </td>
+  </tr>
+  <tr>
+    <td width=114 valign=top>
+      <p class="text"><b>Must be in Local Database</b></p>
+    </td>
+    <td width=234 valign=top>
+      <p class=MsoHeader>Fact must be in the agent's own local possession, prevents
+        agent obtaining it from another agent </p>
+    </td>
+    <td width=204 valign=top>
+      <p>For items that should not be bought in, e.g. drive to work if a car is
+        present, but don't buy one </p>
+    </td>
+  </tr>
+  <tr>
+    <td width=114 valign=top>
+      <p class="text"><b>Is Replaced after Use</b></p>
+    </td>
+    <td width=234 valign=top>
+      <p class=MsoHeader>Fact will be allocated to the task for the duration of
+        its execution, but will not be consumed</p>
+    </td>
+    <td width=204 valign=top>
+      <p>For persistent entities capable of serving one task at a time, e.g. employees
+        or vehicles</p>
+    </td>
+  </tr>
+</table>
+</center>
+<p align=center class="smalltext"><b>Table 3.1</b>: The Precondition Modifiers</p>
+<br>
+
+<p class="text">By default none of these modifiers are selected,
+  it is assumed that all preconditions are reserved for the task's exclusive use,
+  whereupon they will be consumed.  The other options in the pop-up window: 'Is
+  a Variable' and 'Is a Side-Effect only' are ghosted out, this is because preconditions
+  are always variables, and never side effects.</p>
+
+<br>
+<p class="text"><b>How to Enter a Task Effect </b></p>
+<p class="text">An effect is a fact that represents the result of a task
+  execution.  The effects are listed in the top table in the 'Task Effects' panel,
+  whilst their attributes are listed in the bottom table.  </p>
+<li><p class="text">
+  <img width=32 height=16 src="./gfx/image016.gif"> &nbsp; New
+  effects are added by clicking on the toolbar's New button, this opens a pop-up
+  window listing all the facts in the currently loaded ontology.  Choose the appropriate
+  fact and then click the OK button, the selected fact will then appear in the
+  effects table.</p>
+<p class="text">The name field provides a handle for particular groups of
+  effects, akin to a variable name in programming languages.  This can be edited
+  and changed to something more meaningful by double clicking on its name.  All
+  names will be prefixed by the ? character to indicate that they are variables
+  (i.e. any instance of that fact), rather than a specific instance. </p>
+<li><p class="text">
+  The Modifiers field for effects has a single option: 'Is a Side-Effect Only',
+  is this is selected this task will not be selected by the Planner/Scheduler
+  seeking to achieve this effect.  Double click on the Modifiers cell of an effect
+  to change this setting.</p>
+<p class="text">The difference between an effect and a side-effect
+  is subtle; for instance, &quot;lying on the ground&quot; could be the side-effect of
+  hitting someone, but if the intention is to merely to instruct someone to lie
+  on the ground, hitting them is a far from ideal way of achieving it. By default
+  effects are not marked as side effects.</p>
+<br>
+
+<p class="text"'><b>How to Enter the Task Cost</b></p>
+<p class="text">Each task can be given a numeric expression that
+  approximates the cost of invoking it.  The interpretation of this cost, and
+  the units in which it is expressed are application specific.</p>
+<li><p class="text"> The cost
+  is should be typed into the 'Cost' field of the lower 'Task Cost and Time' panel,
+  then press &lt;return&gt; to commit the changes.</p>
+<li><p class="text">
+  To refer to another attribute in a previously entered precondition or effect,
+  right-click to launch a window showing the ontology's fact/attribute hierarchy,
+  then select the appropriate attribute and click OK, and it will appear inside
+  the panel.   </p>
+<p class="text">The default cost value is 0, (i.e. cost is not significant). 
+  This only needs to be changed if the Planner/Scheduler is to base its decisions
+  on the cost of invoking tasks.</p>
+<br>
+
+<p class="text"><b>How to Enter the Task Duration</b></p>
+<p class="text">Each task can be given a numeric expression that
+  approximates the length of time taken for it to execute.  For consistency the
+  duration should be interpreted in terms of time-grain units.</p>
+<li><p class="text"> The duration
+  is should be typed into the 'Time' field of the lower 'Task Cost and Time' panel,
+  then press &lt;return&gt; to commit the changes.</p>
+<li><p class="text"> To refer to another attribute in a previously entered precondition or effect,
+  right-click to launch a window showing the ontology's fact/attribute hierarchy,
+  then select the appropriate attribute and click OK, and it will appear inside
+  the panel.   </p>
+<p class="text">The default duration is 1 time-grain, this is also
+  the minimum duration - even for tasks that are 'instantaneous'.  Whether this
+  value needs to be changed depends on the nature of the task concerned.</p>
+<br>
+<p class="text"><b>How to Constrain Task Attributes</b></p>
+<p class="text">The lower tables in the 'Task Preconditions' and
+  'Task Effects' panels enable the applicability of the task to be restricted. 
+  By default the value field of each attribute is empty, meaning that any variable
+  of that type can be used to satisfy the task's precondition.  If however a value
+  is entered into one these fields, the task will only be executed if a fact with
+  the appropriate attribute can be secured. </p>
+<li><p class="text"> To enter
+  an attribute constraint, select the fact concerned from the upper table and
+  then double-click on the Value cell of the relevant attribute in the lower table.
+</p>
+<li><p class="text"> This will
+  open a panel where a new value can be entered, press &lt;return&gt; to enter
+  the value and update the table. If the entered value appears in red then it
+  is either syntactically incorrect or of an incompatible type, and will need
+  to be changed.   </p>
+<li><p class="text">
+  To refer to another attribute in a previously entered precondition or effect,
+  right-click to launch a window showing the ontology's fact/attribute hierarchy,
+  then select the appropriate attribute and click OK, and it will appear inside
+  the panel. </p>
+<p class="text">Attribute constraints can either be literal values,
+  or expressions can be evaluated into a value - this value will be compared against
+  the corresponding attribute value of candidate facts at run-time to determine
+  whether the fact is suitable for use.</p>
+<p class="text"><b>See also…</b></p>
+  <ul>
+  <li><p class="text"><a class="textlink" href="../techmanual/constraints.html">The Constraint Satisfaction Process</a></p>
+  </ul>
+
+<br>
+<p class="text"><b>How to Order Preconditions</b></p>
+<p class="text">The precondition order of a task is a partial ordering
+  of its preconditions, constraining the sequence in which they must be achieved.  
+  By default it is assumed that they can be considered in any order, however,
+  sometimes certain resources should be considered before others.  </p>
+<p class="text">This is useful in cases where the domain realisation of one
+  precondition determines the acceptability of others.  For example, in a planning
+  a journey, there may be preconditions that a flight is booked and transportation
+  to the airport arranged.  Here we might want to state the flight should be booked
+  first, since arranging transportation to the airport requires foreknowledge
+  of the airport from which the flight departs.</p>
+<li><p class="text"> To specify
+  an ordering, move to the PTE's 'Constraints' pane, it will be entered through
+  its upper pane, the one labelled 'Preconditions Ordering Constraints'.   </p>
+<li><p class="text"> <img width=32 height=16 src="./gfx/image016.gif"> &nbsp;
+Click on the toolbar's New button, this opens an ordering window consisting of
+two panels.  Select the fact that should be secured first from the 'Before' column,
+and then select the fact it precedes from the 'After' column, i.e.: </p>
+
+<table cellpadding=0 cellspacing=0>
+  <tr>
+    <td><img width=418 height=234 src="./gfx/image041.gif"></td>
+  </tr>
+  <tr>
+    <td width=101 height=0></td>
+  </tr>
+</table>
+
+<li><p class="text"> As each ordering consists of a (before, after) pair, repeat
+ as necessary for each precondition whose ordering is significant. </p>
+<br>
+
+<p class="text"><b>How to Enter Task Constraints</b></p>
+<p class="text"> The 'Task Applicability Constraints' table is intended to enable the entry of constraints
+  that do not relate to any particular fact (see &quot;How to Constrain Task Attributes&quot;). 
+  For instance, such a constraint might be 'do not attempt this task if the agent
+  is unable to connect to the Internet'.  </p>
+<li><p class="text"> <img width=32 height=16 src="./gfx/image016.gif"> &nbsp; To enter
+  one of these constraints click on this panel's New button, this will create
+  a new entry in the constraints table.</p>
+<li><p class="text"> Then double
+  click on the new entry to edit it, the constraint should be added in the form
+  of an expression that will evaluate to true or false.      </p>
+<p class="text"><b>See also…</b></p>
+  <ul>
+  <li><p class="text"><a class="textlink" href="../techmanual/constraints.html">The Constraint Satisfaction Process</a></p>
+  </ul>
+
+
+<br> <br>
+<a name="TASK2"></a>
+<table cellpadding=0 cellspacing=0 border=0 width=100%>
+  <tr>
+    <td align=left valign=top><img src="./gfx/image042.gif"></td>
+    <td><h3>TASK-2: Using the Summary Task Editor</h3></td>
+  </tr>
+</table>
+<p class="text">In ZEUS, a summary task consists of a number of
+  primitive subtasks that need to be performed in some order to achieve its effects. 
+  Thus summary tasks are effectively mini-plans, which are useful for representational
+  and cognitive economy (and planning efficiency).  Summary Tasks are entered
+  through their own editor, which is shown in Figure 3.5. </p>
+<br>
+<table cellpadding=0 cellspacing=0>
+  <tr>
+    <td class="text">To appear<br></td>
+  </tr>
+  <tr>
+    <td align=center class="smalltext"><b>Figure 3.5</b>: A Screenshot of the Summary Task Editor (STE)</td>
+  </tr>
+</table>
+<br><br>
+<p class="text">Summary tasks are described in terms of a number
+  of nodes and effect-precondition (producer-consumer) links between the nodes. 
+  Just as with primitive tasks, each node is defined in terms of its preconditions
+  and effects.  However, each node is simply a placeholder that can be replaced
+  by any primitive or summary task with matching preconditions and effects. Like
+  primitive tasks, summary tasks also have associated duration, cost and constraints;
+  however, they lack a reference to an execution function since they cannot be
+  executed directly.</p>
+<p>This will be documented in a future release.</p>
+
+<br>
+<hr width="50%">
+<br> <br>
+
+<a name="33"></a><h3>3.3     The Agent Organisation Stage</h3>
+
+<p class="text">By the time this activity is attempted the application's
+  agents should already have been defined, along with the tasks they are capable
+  of performing.  This stage involves supplying this knowledge about agents and
+  abilities to the agents themselves, using the 'Agent Organisation' pane of the
+  Agent Editor.  </p>
+<p class="text">By default, agents are ignorant of names and the abilities
+  of their neighbours, so if an agent needs the service of another it will need
+  to contact a directory service to discover it.  However, agents may have prior
+  knowledge of other agents, especially if they interact with them on a regular
+  basis.  These known agents are called 'acquaintances'.  There are four different
+  types of relationships that can exist between agents, if they are acquainted
+  they can be superiors, subordinates or co-workers, otherwise they will be peers. 
+  These relationships are described in Table 3.2.     </p>
+
+<center>
+<table border=1 cellspacing=1 cellpadding=1 width=90%>
+  <tr>
+    <td width=114 valign=top class="text"><b>Relationship</b></td>
+    <td width=438 valign=top class="text"><b>Explanation </b></td>
+  </tr>
+  <tr>
+    <td width=114 valign=top class="text"><b>Peer</b></td>
+    <td width=438 valign=top class="text">The default relationship with no assumptions about agent interaction</td>
+  </tr>
+  <tr>
+    <td width=114 valign=top class="text"><b>Superior</b></td>
+    <td width=438 valign=top class="text">The acquaintance is possesses higher authority than this agent, and can
+        issue orders that this agent must obey</td>
+  </tr>
+  <tr>
+    <td width=114 valign=top class="text"><b>Subordinate</b></td>
+    <td width=438 valign=top class="text">
+    The acquaintance has less authority than this agent, and can be issued orders 
+    that it must obey</td>
+  </tr>
+  <tr>
+    <td width=114 valign=top class="text"><b>Co-worker</b></td>
+    <td width=438 valign=top class="text">
+    The acquaintance belongs to the same 'community' as this agent, and will
+    be asked before peers when any resources are required</td>
+  </tr>
+</table>
+</center>
+<p align=center class="smalltext"><b>Table 3.2</b>: The Acquaintance Relationship Types</p>
+<br>
+<p class="text">Entering acquaintances and their relationships is one of
+  the two activities of this stage, namely:</p>
+<ul>
+<li><p class="text"> <a class="textlink" href="#ORG1">Entering Known Acquaintances</a>, <b>(ORG-1)</b></p>
+<li><p class="text"> <a class="textlink" href="#ORG2">Entering Known Abilities</a>,<b>(ORG-2)</b></p>
+</ul>
+
+<br> <br>
+<a name="ORG1"></a>
+<table cellpadding=0 cellspacing=0 border=0 width=100%>
+  <tr>
+    <td align=left valign=top><img src="./gfx/image046.gif"></td>
+    <td><h3>ORG-1: Entering Known Acquaintances</h3></td>
+  </tr>
+</table>
+<p class="text">
+ Acquaintances are specified through the 'Known Acquaintances' panel, as
+ illustrated in Figure 3.6. </p>
+
+<table cellpadding=0 cellspacing=0>
+  <tr>
+    <td ><td align=left valign=top><img src="./gfx/image048.gif"></td>
+  </tr>
+  <tr>
+    <td align=center class="smalltext"><b>Figure 3.6</b>:
+  The Known Acquaintances panel, showing how to enter an acquaintance</td>
+  </tr>
+</table>
+
+<br>
+<ul>
+<li><p class="text"> <img width=32 height=16 src="./gfx/image016.gif"> &nbsp;
+  To enter a new acquaintance click on the toolbar's New button, this displays a list of
+  all created so far in the current project, (with the exception of the agent
+  being defined, of course). </p>
+<li><p class="text"> Select the agent that will be the acquaintance.  (If the acquaintance has not been
+  created yet select the 'Create New Acquaintance' option: this duplicates the
+  function of the 'Add New Agent' button of the Agent Generator window, so rename
+  the new agent as appropriate).     </p>
+<li><p class="text"> A new entry
+  for this agent will now appear in table with the relation field set to 'peer',
+  which is the default value.  To change this, double-click on the field, this
+  will display a list of the possible relationship types, choose the one which
+  is most appropriate.</p>
+<p class="text">Note: Organisational relationships are not bi-directional
+  by default; i.e. there is no need for the agents' beliefs about their relationships
+  with each other to be consistent.</p>
+<li><p class="text"> <img width=32 height=16 src="./gfx/image049.gif"> &nbsp; If an
+  agent has many acquaintances, entries in the table can be filtered by clicking
+  on the 'All', 'Peers' and 'Other' buttons: these will show only those acquaintances
+  with that relationship.   </p>
+<li><p class="text"> <img width=32 height=16 src="./gfx/image050.gif"> &nbsp; If,
+  at a later date, you want to remove the authority and co-worker relationships
+  from an agent, click on the 'Reset' button, this will retain all the acquaintances,
+  but set their relationship with the current agent to 'peer'. </p>
+</ul>
+
+<p class="text">Once acquaintances have been specified, you may want to specify
+  the abilities that this agent knows they can perform, this is achieved during
+  the next activity.</p>
+
+<br> <br>
+<a name="ORG2"></a>
+<table cellpadding=0 cellspacing=0 border=0 width=100%>
+  <tr>
+    <td align=left valign=top><img src="./gfx/image051.gif"></td>
+    <td><h3>ORG-2: Entering Known Abilities</h3></td>
+  </tr>
+</table>
+<p class="text">
+ Whereas the previous activity dealt with the identities and relationships of acquaintances,
+ this activity deals with their abilities.  This is particularly useful for setting
+ up preferred supply relationships, since if an agent knows an acquaintance can
+ provide a resource it contact it first before asking the directory service to
+ recommend a supplier. Abilities are specified through the 'Known Acquaintance
+ Abilities' panel, as illustrated in Figure 3.7. </p>
+
+<table cellpadding=0 cellspacing=0>
+  <tr>
+    <td ><td align=left valign=top><img src="./gfx/image053.gif"></td>
+  </tr>
+  <tr>
+    <td align=center class="smalltext"><b>Figure 3.7</b>: The Known Abilities Panel, showing how to
+  enter an acquaintance's ability</td>
+  </tr>
+</table>
+<br>
+<ul>
+<li><p class="text"> As abilities
+  are associated with acquaintances you must first choose the acquaintance that
+  will possess the ability: do this by clicking on the appropriate entry in the
+  'Known Acquaintances' table, (the table shown in Figure 3.6). </p>
+<li><p class="text"> <img width=32 height=16 src="./gfx/image016.gif"> &nbsp; You
+  can now enter abilities for the selected acquaintance by clicking on the New
+  button.  This opens a window listing all the facts in the currently loaded ontology. 
+  Choose the appropriate fact, click the OK button and an entry will appear in
+  the table.</p>
+<li><p class="text"> If the agent has any prior knowledge of the cost of invoking this ability, this can
+  be entered into the ability's 'Cost' field.  </p>
+<p class="text">This is analogous to the part of the Task Definition
+  stage where the cost of performing the task could be estimated.  Of course,
+  as this value is an estimate its primary purpose is to allow the agent to rank
+  potential suppliers. In practice the price charged by suppliers may vary depending
+  on circumstances.  The default value is 0, in which case the agent will not
+  have any preconceptions about price.</p>
+<li><p class="text"> If the agent has any prior knowledge about the duration of this ability, this can be
+  entered into the ability's 'Time' field.  </p>
+<p class="text">Again, this value only serves an estimate allowing
+  the agent to rank potential suppliers, and in practice the time taken to complete
+  the task may vary depending on circumstances.  The default value is 0, in which
+  case the agent will not have any preconceptions about the length of the task.</p>
+<li><p class="text"> When an
+  ability entry is selected in the table its attributes are shown in the table
+  below.  The values of these attributes can be edited to reflect the nature of
+  production.  For instance, if only one object is produced by this task's invocation
+  1 should be entered in the 'number' field.</p>
+</ul>
+
+<br>
+<hr width="50%">
+<br> <br>
+
+<a name="34"></a><h3>3.4     The Agent Co-ordination Stage</h3>
+<p class="text">This, the final stage of the Agent Creation process,
+  involves equipping the agent with the co-ordination protocols and expertise
+  required for social interaction with other agents.  This information is entered
+  through the 'Agent Co-ordination' pane of the Agent Editor.</p>
+
+<h4>An Insight into Agent Interactions</h4>
+<p class="text">But before attempting this stage the developer should have
+  a clear idea of how the agents will interact in the course of fulfilling their
+  roles.  All ZEUS agent interactions are variations on the multi-round contract-net,
+  [x], which involves one or more <i>Initiators</i> that issue a call for proposals
+  (CFP), and one or more <i>Respondents</i> that reply.  If you are unsure whether
+  a particular role is an Initiator or a Respondent consult the appropriate role
+  model for guidance.</p>
+<table cellpadding=0 cellspacing=0>
+  <tr>
+    <td><img width=531 height=367 src="./gfx/image055.gif"></td>
+  </tr>
+  <tr>
+    <td align=center class="smalltext">
+    <b>Figure 3.8:</b> A state-transition diagram of a typical contract net negotiation<p></p></td>
+  </tr>
+</table>
+<p class="text>
+ The key aspects of any agent interaction are the co-ordination protocol and the
+ negotiation strategies.  The co-ordination protocol is an agent conversation model
+ that describes when each party is expected to communicate, what messages will
+ be exchanged and the effect of receiving particular messages.  As the states assumed
+ by the Initiator and Respondent roles are different, the default co-ordination
+ protocol is described from both perspectives, as shown in Figure 3.8. </p>
+
+<p class="text">Figure 3.8 also illustrates the relationship between protocols
+  and interaction strategies.  At each state the agent may need to make decisions
+  about how to behave or respond to its current circumstances, these decisions
+  are decided by strategies.  This is best illustrated with an example.  </p>
+<p class="text">Consider an agent that needs to obtain a resource, because
+  it can not produce it locally it must contact another agent to supply it.  Hence
+  the Initiator begins in the <i>Initialisation</i> state by analysing its requirements
+  and determining how much it is willing to pay for the resource and how quickly
+  it needs it.  Using the expertise encoded into its tendering strategy it formulates
+  a <b>CFP</b> message containing its requirements, this is then broadcast to
+  all potentially interested parties and the agent moves into the <i>Negotiation</i>
+  state to await responses.</p>
+<p class="text">The arrival of a CFP message causes the Respondent to move
+  into its <i>Initialisation</i> state.  If the Respondent decides to reply (it
+  is under no obligation to do so) it will move into its <i>Negotiation</i> state. 
+  The Respondent will now use its evaluation strategy to formulate a counter-proposal
+  to the initial tender, which is then sent back to the Initiator in the form
+  of a <b>propose</b> message.  The Respondent then moves into a wait state for
+  a finite period of time to await a response, no response is assumed however,
+  and if nothing is received by the end of its time-out period the agent will
+  terminate its part of the conversation.  </p>
+<p class="text">When the Initiator receives a proposal it is analysed using
+  its own evaluation strategy, this can have three results: </p>
+
+<ol>
+<li><p class="text"> If the
+  proposal is acceptable the conversation ends.  The Initiator has not committed
+  itself however, and will send a message at some point in the future either accepting
+  or rejecting the offer.</p>
+<li><p class="text"> If the
+  proposal is not acceptable and the Initiator decides there is little point in
+  negotiating further it can end the conversation immediately.   </p>
+<li><p class="text"> If the
+  proposal is not acceptable the Initiator can send a new, modified CFP message
+  to the Respondent in question, whereupon it enters a wait state until a response
+  arrives or its time-out period passes. </p>
+</ol>
+
+<p class="text">In the latter case, the Respondent is awoken by the arrival
+  of a new CFP message, which is analysed using its local evaluation strategy. 
+  This will cause the Respondent to do one of the following:</p>
+<ul>
+<li><p class="text"> It will
+  decide not to bid again and end its side of the conversation.</p>
+<li><p class="text"> It will
+  formulate a new proposal message, return it to the Initiator, and move into
+  a wait state until a response arrives or it times out.</p>
+</ul>
+
+<p class="text">Having seen how agents interact, it is clear that the key
+  factors are the protocol and interaction strategy.  Hence the purpose of the
+  Agent Co-ordination stage is to both specify which aspects of the contract net
+  protocol will be available to the agent, and to choose the strategy that will
+  determine the agent's behaviour during interaction.  This is reflected in the
+  three activities that can be performed during this stage, namely:</p>
+<ul>
+<li><p class="text"> <a class="textlink" href="#COORD1">Equipping the agent with
+  a co-ordination protocol</a>, <b>(COORD-1)</b></p>
+<li><p class="text"> <a class="textlink" href="#COORD2">Equipping the agent with
+  an interaction strategy</a>, <b>(COORD-2)</b></p>
+<li><p class="text"> <a class="textlink" href="#COORD3">Adding new Interaction Protocols
+  and Strategies</a>, <b>(COORD-3)</b></p>
+</ul>
+
+<br> <br>
+<a name="COORD1"></a>
+<table cellpadding=0 cellspacing=0 border=0 width=100%>
+  <tr>
+    <td align=left valign=top><img src="./gfx/image056.gif"></td>
+    <td><h3>COORD-1: How to Equip an Agent with a Co-ordination Protocol</h3></td>
+  </tr>
+</table>
+<p class="text">
+ The ZEUS tool-kit provides pre-built co-ordination protocols that implement various
+ aspects of contract-net type conversations, and which are applicable for a variety
+ of agent applications.  The available protocols are listed in the 'Co-ordination
+ Protocols' panel, as shown in Figure 3.9. (Recent versions of Zeus use friendly names 
+ for protocols, so the names may appear slightly different).  </p>
+
+ <table cellpadding=0 cellspacing=0>
+  <tr>
+    <td><img width=582 height=189 src="./gfx/image058.gif"></td>
+  </tr>
+  <tr>
+    <td align=center class="smalltext">
+    <b>Figure 3.9</b>: The Co-ordination Protocol entry table, showing two typical ZEUS protocols<p></p></td>
+  </tr>
+</table>
+
+<p class="text">In Figure 3.9 the 'Protocol' field refers to the Java file
+  within the ZEUS class library that provides the implementation of that protocol. 
+  The 'Type' field refers to the nature of the protocol, which in keeping with
+  the model of interaction presented earlier, will be either <i>Initiator</i>
+  or <i>Respondent</i>.</p>
+<ul>
+<li><p class="text"> To equip
+  the agent with a protocol just click on the check-box beside its name, a tick
+  will appear to indicate its selection, clicking again will clear the selection.</p>
+<li><p class="text"> <img width=32 height=16 src="./gfx/image049.gif">
+  <img width=32 height=16 src="./gfx/image059.gif"> &nbsp; To select
+  all the protocols, click on the 'All' button in the toolbar. All the protocols
+  can be deselected by clicking on the 'Reset' button.</p>
+<li><p class="text"> Once a protocol has been selected an entry will appear in
+ the 'Co-ordination Strategies' table; (see the description of the
+ <a class="textlink" href="#COORD2">COORD-2 activity</a>).
+</ul>
+
+<p class="text"><b>See also…</b></p>
+  <ul>
+  <li><p class="text"><a class="textlink" href="../techmanual/protocols.html">Descriptions of the ZEUS Co-ordination Protocols</a></p>
+  <li><p class="text"><a class="textlink" href="../techmanual/coordination.html">How the Co-ordination Engine uses Protocols</a></p>
+  </ul>
+
+
+<br> <br>
+<a name="COORD2"></a>
+<table cellpadding=0 cellspacing=0 border=0 width=100%>
+  <tr>
+    <td align=left valign=top><img src="./gfx/image060.gif"></td>
+    <td><h3>COORD-2: How to Equip an Agent with an Interaction Strategy</h3></td>
+  </tr>
+</table>
+<p class="text">Whereas interaction protocols describe how agents interact,
+  it does not explain why.  This arises from each agent's intentions and motivations,
+  which are encoded into interaction strategies.  Agent developers can choose
+  an appropriate strategy from those supplied with the ZEUS toolkit or create
+  their own, (see activity <a class="textlink" href="#COORD3">COORD-3</a>). </p>
+
+<p class="text">
+  Interaction strategies refer to the protocol currently selected in Figure 3.9,
+  and are entered through the 'Co-ordination Strategies' panel, as shown in Figure
+  3.10.</p>
+
+<table cellpadding=0 cellspacing=0>
+  <tr>
+    <td><img src="./gfx/image062.gif"></td>
+  </tr>
+  <tr>
+    <td align=center class="smalltext">
+    <b>Figure 3.10</b>: The Co-ordination Strategy entry panel, and how to use it</td>
+  </tr>
+</table>
+<br>
+
+<p class="text">Basically, the objective of this activity is to specify what
+  strategies with what parameters are used to obtain particular facts from particular
+  agents. </p>
+<p class="text"> Before
+  entering a strategy ensure that the protocol to which it refers is the currently
+  selected entry in the 'Co-ordination Protocols' table (the table in Figure 3.9). 
+</p>
+<p class="text">On selecting a protocol a single entry will appear in the
+  Strategies table.  As the values of the fields suggest, this default strategy
+  can be used to obtain any type of fact from any agent regardless of its relationship.</p>
+
+<ul>
+<li><p class="text"> <img width=32 height=16 src="./gfx/image016.gif"> &nbsp; To add
+  a new strategy click on the toolbar's New button, this will create a new entry
+  in the strategies table.</p>
+<li><p class="text"> The default
+  setting for the Mode field is checked, indicating the strategy will be chosen
+  when negotiating for the fact type in question.  If the opposite is true and
+  this strategy will never be used to obtain that fact, click on this field to
+  deselect it. </p>
+<li><p class="text"> By default
+  the new entry refers to obtaining facts of any type, (which is why the Fact
+  Type field is set is to 'ZeusFact', the parent class of all facts).  If the
+  strategy is more specific, click on this field, this opens a fact hierarchy
+  window enabling a more appropriate fact type to be chosen.</p>
+<li><p class="text"> Specifying
+  the values of the expected attributes in the lower table can further refine
+  the fact obtained by this strategy.  By default no values are associated with
+  the fact attributes, meaning that the strategy can be used to obtain any fact
+  of that type.  If this is not the case, double click on the appropriate Value
+  field to restrict the strategy to facts that contain that value. </p>
+<li><p class="text"> If the
+  agent has acquaintances, the strategy can be modified so that it is only used
+  in for negotiations with named agents by double clicking on the Agents field,
+  and then choosing them from the list.  This field is empty by default, signifying
+  that it can be used with any agent.</p>
+<li><p class="text"> A strategy
+  can also be modified so that it is only used in conjunction with acquaintances
+  that have a certain relationship to this agent.  Specify this by double clicking
+  on the Relations field, and choosing the appropriate relationships.  By default
+  this field is empty, meaning the strategy will be used regardless of any relationships
+  that exist between agents.</p>
+</ul>
+<p class="text">A strategy can be specified as being applicable to only certain
+  agents <i>and</i> certain relationships.  An example would be interpreted as
+  'use this strategy only in conjunction with agent A if and only if you are A's
+  co-worker. </p>
+<p class="text"> The strategy itself is a body of procedural knowledge that will have been implemented as
+  a Java file and incorporated into one of the ZEUS packages, (see activity 
+  <a class="textlink" href="#COORD3">COORD-3</a>). 
+  By default new strategy entries will refer to zeus.actors.graphs.DefaultStrategy,
+  to select another double click on the Strategy field, this shows a list of all
+  currently loaded strategies, whereupon you can choose the one most appropriate.</p>
+
+<p class="text">
+The procedural nature of strategies means that they behaviour can be modified
+by passing different parameters.  By default no parameters are specified and so
+the Parameters field is empty; but if they are required, double clicking the field
+opens a window like this: </p>
+
+<table cellpadding=0 cellspacing=0>
+  <tr>
+    <td width=34 height=0></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td><img width=467 height=266
+   src="./gfx/image064.gif"></td>
+  </tr>
+</table>
+
+<p class="text"> Currently
+  the parameter entry window does not automatically parse the selected strategy
+  to identify the parameter names and their types, placing the onus on the developer
+  to refer back to the Java implementation of the selected strategy to identify
+  which parameters are required.  The parameters will be passed into the strategy
+  as a Java Hashtable object, hence the Key and Value fields map directly to the
+  key and value parts of Hashtable entries.  Note that no syntax checking is performed
+  upon entry, instead the values are passed to the strategy as strings and parsed
+  there. </p>
+<ul>
+<li><p class="text"> <img width=32 height=16 src="./gfx/image016.gif"> &nbsp;
+To enter a new key, press the New button, this creates a new key-value entry.  </p>
+<li><p class="text"> Double click on the Key field to rename it to the identifier that the strategy expects
+  to find in the Hashtable.  Then double click on the Value field and enter the
+  appropriate value.</p>
+</ul>
+<p class="text"><b>See also…</b></p>
+  <ul>
+  <li><p class="text"><a class="textlink" href="../techmanual/strategies.html">Descriptions of the ZEUS Co-ordination Strategies</a></p>
+  <li><p class="text"><a class="textlink" href="../techmanual/coordination.html">How the Co-ordination Engine uses Strategies</a></p>
+  </ul>
+
+<br> <br>
+<a name="COORD3"></a>
+<table cellpadding=0 cellspacing=0 border=0 width=100%>
+  <tr>
+    <td align=left valign=top><img src="./gfx/image065.gif"></td>
+    <td><h3>COORD-3: How to add new Interaction Protocols and Strategies</h3></td>
+  </tr>
+</table>
+<p class="text">The interaction strategies used by agents are very dependent
+  on the application being developed, as a consequence those supplied with the
+  ZEUS toolkit may not be appropriate.  To solve this problem the ZEUS toolkit
+  provides a framework around which new strategies can be created and integrated.</p>
+<p class="text">Currently adding a new strategy is not supported from within
+  the ZEUS Agent Generator tool, (although support may be added in future releases);
+  thus to add a strategy you should save your current project and quit from the Generator tool.</p>
+<p class="text">You will now need to edit the ZEUS toolkit properties file,
+  the name and location differ slightly depending on what operating system you
+  are using.</p>
+<li><p class="text"> If you are using Windows NT, look in the directory that holds your user profile, (this
+  is typically c:/winnt/profiles/&lt;your username&gt;/).  You should see a file
+  called zeus.prp - open it in your text editor. </p>
+<li><p class="text"> If you
+  are using Unix or its variants, you will need to edit the file called .zeus.prp;
+  you will find it in your root directory (just use the ~ shortcut).  </p>
+<p class="text">Once you have opened the ZEUS properties file you can add
+  edit to include the new strategy.  This process is analogous to the way in which
+  system variables are set, consequently entries in the properties file <u>must
+  be separated by colons</u>, (i.e. entry1:entry2:entry3).  </p>
+<p class="text"><img width=40 height=40
+src="./gfx/image066.gif" align=left hspace=12><b>Warning:</b>
+  If you alter the properties file you must adhere to the correct syntax, otherwise
+  you will not be able to restart the Agent Generator.  Consequently it might
+  be a good idea to create a back-up copy of the properties file before editing
+  it.</p>
+<li><p class="text"> If you are adding a new Initiator
+  protocol, locate the line that begins &quot;user.protocols.initiator=&quot;
+  and add the <b>full pathname</b> of the class that implements the protocol,
+  (not forgetting to separate it from any existing entries by colons). </p>
+<p class="text"> So, if you wanted to add
+  the protocol called myWay implemented in a file called myWay.java in the zeus.test.myapp
+  directory, you would add the entry: zeus.test.myapp.myWay</p>
+<li><p class="text"> If you are adding a new Respondent
+  protocol, locate the line that begins &quot;user.protocols.respondent=&quot;
+  and add the <b>full pathname</b> of the new protocol. </p>
+<li><p class="text"> If you are adding a new Initiator
+  strategy, locate the line that begins &quot;user.strategy.initiator=&quot; and
+  add the <b>full pathname</b> of the new strategy. </p>
+<li><p class="text"> If you are adding a new Respondent
+  strategy, locate the line that begins &quot;user.strategy.respondent=&quot;
+  and add the <b>full pathname</b> of the new strategy. </p>
+<p class="text">Once the new strategy entry has been added, you should save
+  the properties file and restart the Agent Generator.  If you go to the Agent
+  Co-ordination panel you should find that the new protocols or strategies are
+  present in the respective tables (the ones illustrated in Figure 3.9 and 3.10).
+</p>
+<p class="text">Obviously, this activity only makes the new strategy known
+  to the Agent Generator.  Before the application can use the new strategy it
+  must be implemented, this process is described in activity
+  <a class="textlink" href="part6.html#IMPL5">IMPL-5</a>.</p>
+
+<br>
+<hr width="50%">
+<br> <br>
+
+<a name="32"></a><h3>3.5     The Rulebase Creation Stage</h3>
+
+<p class="text">
+ This stage involves the definition of any rulebases named during the
+ <a class="textlink" href="#DEF2">Agent Definition process</a>. 
+</p>
+<p class="text">
+  <img width=32 height=32 src="./gfx/image009.gif"> &nbsp; 
+   The tool for this stage is the Rulebase Editor, which can be launched by double
+    clicking on the previously entered rulebase name in the Generator's Task Table, 
+    or selecting its entry and clicking the Edit button.  </p>
+  <p style='text-align:justify'>There is only one activity for creating rulebases, 
+    referred to in the case studies as <b>RULE-1</b>, which is described next.</p>
+
+<br> <br>
+<a name="RULE1"></a>
+<table cellpadding=0 cellspacing=0 border=0 width=100%>
+  <tr>
+    <td align=left valign=top><img src="./gfx/image067a.gif"></td>
+    <td><h3>RULE-1: Entering a Rulebase</h3></td>
+  </tr>
+</table>
+<p class="text">
+  In ZEUS, a rulebase is used to refer to a collection of precondition-action
+  rules.  The rulebase editor, illustrated in Figure 3.11, enables users to add
+  individual rules to a rulebase, and editing existing rules when necessary.</p>
+<br>
+<img width=698 height=453 src="./gfx/figure3-11.gif">
+<br>
+<p class="smalltext" align=center><b>Figure 3.11</b>: A Screenshot of the Rulebase Editor showing its main features</p>
+<br>
+
+<p style='text-align:justify'>Editing a rulebase typically involves the following
+  steps performed in the order list below.  These steps will be explained in the
+  course of this section:</p>
+  <ul>
+  <li><p class="text"> Enter a new rules  </p>
+  <li><p class="text"> Enter the rule's trigger conditions</p>
+  <li><p class="text"> Enter the rule's action consequences</p>
+  </ul>
+  <br>
+
+  <b>How to Enter a New Rule </b><br>
+  <p class="text"><img width=32 height=16 src="./gfx/image016.gif"> &nbsp; To
+    add a new rule click on the New button above the Rule table - this inserts 
+    a new entry into the table with a temporary name.  Then rename the newly created 
+    entry to reflect the function of this rule - this name will be used to identify 
+    the rule in future.  The newly created rule can now be edited, (providing 
+    its entry is the one selected in the rule table).</p>
+  
+  <b>How to Enter a Rule Condition </b><br>
+<p class=text>Rules provide a means of adding reactive behaviour to agents. 
+  Unlike tasks, which are invoked in order to acquire a particular fact, rules
+  are triggered in response to the detection of particular facts or variables. 
+  A rule can have one or more conditions, which are entered as separate lines
+  into the <b>Conditions</b> panel of the Rulebase editor.</p>
+<p class=text>The easiest way to enter a fact is to choose its name from
+  the fact tree shown in the Ontology panel on the bottom right-hand corner, then
+  click on the <b>Insert Fact</b> or <b>Insert with ID</b> buttons.  The Insert
+  Fact button will create a fact pattern of the following form: </p>
+  <p class="text">(factname (attribute1 value) (attribute2 value) ... ) </p>
+<p class="text">This option is used when the comparison with a fact pattern
+  does not need be stored in a variable for future reference.  If the Insert with
+  ID option is used instead, the fact pattern written looks like:</p>
+  <p class="text">?variable1 &lt;- (factname (attribute1 value) (attribute2
+    value) ... )</p>
+  <p class="text">The arrow (typed in as &lt;-) means that the pattern defined
+    on the right-hand side will be stored in the variable on the left-hand side,
+    (which can be renamed to something more appropriate).</p>
+<p class="text">In either case, the facts will be followed by attribute-value
+  pairs; these can be used to specialise the conditions so they only fire when
+  certain facts with particular values are detected.  So for instance, if the
+  rule needs to fire when any car with a petrol engine is detected, the condition
+  would look something like this (depending on the ontology definition used for
+  cars):</p>
+<p class="text">(car (usesPetrol true) (engineSize ?var1) (manufacturer ?var2)) 
+</p>
+  <p class="text">If the values are irrelevant they can be deleted from the
+    rule, and the rule will fire whenever any fact of that type is detected (the
+    equivalent of a file-system wildcard), such conditions look like:</p>
+<p class="text">(factname)                             or                          
+  ?var1 &lt;- (factname)   </p>
+<br>
+<b>How to Enter a Rule Action</b><br>
+<p class="text">A rule's actions occur when the all the rule's conditions
+  are satisfied.  The applicable actions can be chosen from the list on the right-hand
+  side of the editor and inserted by pressing the <b>Insert Action</b> button. 
+  The syntax and effects of the actions are explained in the following tables:</p>
+  
+<br><br>
+<p class="text"><b>Fact Manipulation Actions</b></p>
+<table border=1 cellspacing=0 cellpadding=0>
+  <tr>
+    <td width=104 valign=top bgcolor="silver" >
+        <p class="text"><b>Action</b></p>
+    </td>
+    <td width=454 valign=top bgcolor="silver" >
+        <p class="text"><b>Syntax and Effect</b></p>
+    </td>
+  </tr>
+  <tr>
+    <td width=104 valign=top >
+        <p class="text"><i>Assert</i></p>
+    </td>
+    <td width=454 valign=top >
+      <p class="text">(<b>assert</b> (fact (attribute value)<sup>*</sup>))  
+      </p>
+        <p class="text">Inserts the fact parameter into the agent's resource
+          database</p>
+    </td>
+  </tr>
+  <tr>
+    <td width=104 valign=top >
+        <p class="text"><i>Retract</i></p>
+    </td>
+    <td width=454 valign=top >
+      <p class="text">(<b>retract</b> ?factid1<sup>+</sup>))  </p>
+        <p class="text">Removes the fact parameter from the agent's resource
+          database</p>
+    </td>
+  </tr>
+  <tr>
+    <td width=104 valign=top >
+        <p class="text"><i>Modify</i></p>
+    </td>
+    <td width=454 valign=top >
+        <p class="text">(<b>modify</b> ?factid (attribute value)<sup>+</sup>
+          )</p>
+        <p class="text">Modifies the fact referenced by factid with the specified
+          attribute value settings</p>
+    </td>
+  </tr>
+  <tr>
+    <td width=104 valign=top >
+        <p class="text"><i>Bind</i></p>
+    </td>
+    <td width=454 valign=top >
+        <p class="text">(<b>bind</b> ?variable value)</p>
+        <p class="text">Assigns the information in value to some variable</p>
+    </td>
+  </tr>
+</table>
+<br><br>
+  <p class="text"><b>Activity Actions</b></p>
+<table border=1 cellspacing=0 cellpadding=0>
+  <tr>
+    <td width=104 valign=top bgcolor="silver" >
+        <p class="text"><b>Action</b></p>
+    </td>
+    <td width=454 valign=top bgcolor="silver" >
+        <p class="text"><b>Syntax and Effect</b></p>
+    </td>
+  </tr>
+  <tr>
+    <td width=104 valign=top >
+        <p class="text"><i>Send Message</i></p>
+    </td>
+    <td width=454 valign=top >
+        <p class="text">(<b>send_message</b> (recipient ?name) (content ?var)
+          (type inform))</p>
+        <p class="text">Sends a message containing the parameter to the recipient
+          agent</p>
+    </td>
+  </tr>
+  <tr>
+    <td width=104 valign=top >
+        <p class="text"><i>Execute</i></p>
+    </td>
+    <td width=454 valign=top >
+        <p class="text">(<b>execute</b> taskname) </p>
+        <p class="text">Invokes the plan script specified by taskname</p>
+    </td>
+  </tr>
+</table>
+<br><br>
+  <p class="text"><b>Control Actions</b></p>
+<table border=1 cellspacing=0 cellpadding=0>
+  <tr>
+    <td width=104 valign=top bgcolor="silver" >
+        <p class="text"><b>Action</b></p>
+    </td>
+    <td width=454 valign=top bgcolor="silver" >
+        <p class="text"><b>Syntax and Effect</b></p>
+    </td>
+  </tr>
+  <tr>
+    <td width=104 valign=top >
+        <p class="text"><i>If</i></p>
+    </td>
+    <td width=454 valign=top >
+      <p class="text">(<b>if</b>  logical_expression <b>then</b> action<sup>+</sup>
+        [<b>else</b> action<sup>+</sup> ])</p>
+        <p class="text">Evaluates a logical expression and performs the appropriate
+          action (where action is one of the action types in this table)</p>
+    </td>
+  </tr>
+  <tr>
+    <td width=104 valign=top >
+        <p class="text"><i>While</i></p>
+    </td>
+    <td width=454 valign=top >
+        <p class="text">(<b>while</b> expression <b>do</b> action<sup>+</sup>)</p>
+        <p class="text">Continues to perform action whilst logical expression
+          evaluates to true</p>
+    </td>
+  </tr>
+</table>
+<br><br>
+
+<p class="text"><b>Goal Related Actions</b></p>
+<table border=1 cellspacing=0 cellpadding=0>
+  <tr>
+    <td width=104 valign=top bgcolor="silver" >
+        <p class="text"><b>Action</b></p>
+    </td>
+    <td width=454 valign=top bgcolor="silver" >
+        <p class="text"><b>Syntax and Effect</b></p>
+    </td>
+  </tr>
+  <tr>
+    <td width=104 valign=top >
+        <p class="text"><i>Achieve</i></p>
+    </td>
+    <td width=454 valign=top >
+        <p class="text">(<b>achieve</b> (fact (attrs values) (end_time) (cost)
+          (confirm_time))</p>
+        <p class="text">Creates a new goal for the agent using the supplied
+          parameters (only the fact name is mandatory - the others are optional)
+        </p>
+    </td>
+  </tr>
+  <tr>
+    <td width=104 valign=top >
+        <p class="text"><i>Buy </i></p>
+    </td>
+    <td width=454 valign=top >
+        <p class="text">(<b>buy</b> (fact (attrs values) (end_time) (cost)
+          (confirm_time))</p>
+        <p class="text">Instructs the agent to acquire the fact specified by
+          the parameters (only the fact name is mandatory - the other parameters
+          are optional)</p>
+    </td>
+  </tr>
+  <tr>
+    <td width=104 valign=top >
+        <p class="text"><i>Sell</i></p>
+    </td>
+    <td width=454 valign=top >
+        <p class="text">(<b>sell</b> (fact (attrs values) (end_time) (cost)
+          (confirm_time))</p>
+        <p class="text">Instructs the agent to sell the fact specified by the
+          parameters (only the fact name is mandatory - the others parameters
+          are optional)</p>
+    </td>
+  </tr>
+</table>
+<br><br>
+
+  <p class="text"><b>Input and Output Actions</b></p>
+<table border=1 cellspacing=0 cellpadding=0>
+  <tr>
+    <td width=104 valign=top bgcolor="silver" >
+        <p class="text"><b>Action</b></p>
+    </td>
+    <td width=454 valign=top bgcolor="silver" >
+        <p class="text"><b>Syntax and Effect</b></p>
+    </td>
+  </tr>
+  <tr>
+    <td width=104 valign=top >
+        <p class="text"><i>Open </i></p>
+    </td>
+    <td width=454 valign=top >
+        <p class="text">(<b>open</b> logical_stream_name physical_file_name
+          file_settings)</p>
+        <p class="text">Associates a logical name with a physical file with
+          the specified settings [r,w,a], (read, write append), and opens it </p>
+    </td>
+  </tr>
+  <tr>
+    <td width=104 valign=top >
+        <p class="text"><i>Close</i></p>
+    </td>
+    <td width=454 valign=top >
+      <p class="text">(<b>close</b> logical_stream_name)  </p>
+        <p class="text">Closes the specified input or output stream </p>
+    </td>
+  </tr>
+  <tr>
+    <td width=104 valign=top >
+        <p class="text"><i>Read</i></p>
+    </td>
+    <td width=454 valign=top >
+        <p class="text">(<b>read</b> ?variable logical_stream_name)</p>
+        <p class="text">Reads input from the named stream into the specified
+          variable</p>
+    </td>
+  </tr>
+  <tr>
+    <td width=104 valign=top >
+        <p class="text"><i>Readln</i></p>
+    </td>
+    <td width=454 valign=top >
+        <p class="text">(<b>readln</b> ?variable logical_stream_name)</p>
+        <p class="text">Reads a line of input from the named stream into the
+          specified variable</p>
+    </td>
+  </tr>
+  <tr>
+    <td width=104 valign=top >
+        <p class="text"><i>Print</i></p>
+    </td>
+    <td width=454 valign=top >
+        <p class="text">(<b>print</b> logical_stream_name data*)</p>
+        <p class="text">Writes some data into the output stream referenced
+          by logical_stream_name</p>
+    </td>
+  </tr>
+  <tr>
+    <td width=104 valign=top >
+        <p class="text"><i>Println</i></p>
+    </td>
+    <td width=454 valign=top >
+        <p class="text">(<b>println</b> logical_stream_name data*)</p>
+        <p class="text">Writes data into the output stream, followed by a newline</p>
+    </td>
+  </tr>
+</table>
+<br><br>
+
+  <p class="text"><b>Java Runtime Actions</b></p>
+<table border=1 cellspacing=0 cellpadding=0>
+  <tr>
+    <td width=104 valign=top bgcolor="silver" >
+        <p class="text"><b>Action</b></p>
+    </td>
+    <td width=454 valign=top bgcolor="silver" >
+        <p class="text"><b>Syntax and Effect</b></p>
+    </td>
+  </tr>
+  <tr>
+    <td width=104 valign=top >
+        <p class="text"><i>System</i></p>
+    </td>
+    <td width=454 valign=top >
+        <p class="text">(<b>system</b> command)</p>
+        <p class="text">Sends command to be executed by the Java runtime System
+          object</p>
+    </td>
+  </tr>
+  <tr>
+    <td width=104 valign=top >
+        <p class="text"><i>Call</i></p>
+    </td>
+    <td width=454 valign=top >
+      <p class="text">(<b>call</b>  class method arguments)</p>
+        <p class="text">Uses the Java runtime's Classloader to invoke the method
+          of the named class with the specified parameters</p>
+    </td>
+  </tr>
+</table>
+<br><br>
+
+  <p class="text">For examples of how these actions are used inside rules,
+    see the sample rulebases used by some of the examples that are included with
+    the ZEUS toolkit.</p>
+  <p class="text"><img width=32 height=32 src="./gfx/image070.gif"> &nbsp; Once
+    the rules have been edited to your satisfaction, they can be saved to memory 
+    by clicking on the Save button in the Rule Editor's toolbar.  These changes 
+    will not be written to disk however until you select the Save Project option 
+    from the Generator's main window.</p>
+  <br
+clear=all style='page-break-before:always;'>
+  <br>
+<br>
+<table border=1 cellspacing=0 width=100% class="smalltext">
+<tr>
+<td width=10%><a class="smalltextlink" href="TOC.html">Contents</a></td>
+<td width=15%><a class="smalltextlink" href="part1.html">Introduction</a></td>
+<td width=15%><a class="smalltextlink" href="part2.html">Ontologies</a></td>
+<td width=15%><b>Building<br> Task Agents</b></td>
+<td width=15%><a class="smalltextlink" href="part4.html">Utility Agents</a></td>
+<td width=15%><a class="smalltextlink" href="part5.html">Task Agent<br> Configuration</a></td>
+<td width=15%><a class="smalltextlink" href="part6.html">Agent Implementation</a></td>
+</tr>
+</table>
+
+</body>
+</html>
+
+
+
+
+

@@ -1,0 +1,3 @@
+#!/usr/bin/csh
+#This script runs the task agents
+java Agent0 -o ./test.ont -s dns.db & 

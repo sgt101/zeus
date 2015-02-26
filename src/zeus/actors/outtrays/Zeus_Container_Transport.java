@@ -1,0 +1,75 @@
+/** property of BTexact Communications
+Not for public use or disclosure. 
+Research product only.
+
+*/
+package zeus.actors.outtrays;
+
+import javax.agent.service.*; 
+import javax.agent.*; 
+import FIPA.*; 
+import zeus.concepts.*;
+import zeus.actors.*;
+
+/** 
+    implementation of the OutTray interface that is used 
+when two agents in the same container attempt to communicate
+    */
+public class Zeus_Container_Transport implements OutTray { 
+        
+        
+    private ZeusAgentContext context = null;    
+//    private ContainerCommunicationIn otherAgent = null;    
+
+     
+    public Zeus_Container_Transport (ZeusAgentContext context) { 
+         this.context = context;
+    }
+    
+        
+        
+   public void send  (Object obj) throws UnsuitableMessageException { 
+    try { 
+        Performative  perf = (Performative) obj; 
+     // 	otherAgent.message(perf); 
+ 
+        } catch (ClassCastException cce) { 
+            throw new UnsuitableMessageException ("Must be Performative to work with this transport"); 
+        }catch (Exception e) { 
+            e.printStackTrace(); 
+            throw new UnsuitableMessageException ("Bad message in send() - unknown problem, Excepiton printed to sout"); 
+    
+    }
+    }
+        
+        
+        
+   public void send (Performative perf) { 
+	try {
+	    	//otherAgent.message(perf);}
+                ;
+                }
+	catch (Throwable tr) {
+		tr.printStackTrace(); 
+		System.out.println("Error in local container class");}
+   }
+   
+        
+   public void send (javax.agent.Envelope env) { 
+    try {
+        // very risky - is the object a performative, probably not.....
+        Performative perf = (Performative) env.getObject(); 
+      //  otherAgent.messsage(perf);
+    }
+       catch (ClassCastException cce) { 
+        cce.printStackTrace(); 
+        return; }
+	catch (Throwable tr) {
+		tr.printStackTrace();
+		System.out.println("Error in local container class");}
+        
+   }
+   
+   
+   
+ }

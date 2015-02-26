@@ -1,0 +1,501 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>The Zeus Technical Manual</title>
+<LINK REL="STYLESHEET" TYPE="text/css" HREF="zeusdoc.css">
+</head>
+
+<body>
+
+<table width=100% border=0>
+<tr>
+<td><h4>The Zeus Agent Building Toolkit </h4></td>
+<td align=right class="text">Technical Manual</td>
+</tr>
+</table>
+<br>
+<br>
+
+<table border=1 cellspacing=0 width=100% class="smalltext">
+<tr>
+<td width=10%><a class="smalltextlink" href="TOC.html">Contents</a></td>
+<td width=12%><a class="smalltextlink" href="part1.html">Introduction</a></td>
+<td width=12%><a class="smalltextlink" href="part2.html">Zeus Philosophy</a></td>
+<td width=12%><a class="smalltextlink" href="part3.html">Zeus Architecture</a></td>
+<td width=12%><a class="smalltextlink" href="part4.html">Communication</a></td>
+<td width=12%><a class="smalltextlink" href="part5.html">Coordination</a></td>
+<td width=12%><b>Planning and<br>Task Execution</b></td>
+<td width=13%><a class="smalltextlink" href="part7.html">External<br>Applications</a></td>
+</tr>
+</table>
+<br>
+<br>
+
+
+<h3><a name="1"></a>6  The Planner and Scheduler</h3>
+
+<p class="text">The role of the Planner/Scheduler is to construct action
+  sequences that achieve desired input goals. The Planner is under the control
+  of the Co-ordination Engine, which initiates planning and also manages the contracting
+  of any subgoals that the agent cannot achieve.</p>
+<h4>Plan Operator Representation</h4>
+<p class="text">Planning operators (actions or tasks) are represented in
+  the classical fashion as primitive or summary operators.  Primitive operators
+  are defined in terms of their preconditions, effects, cost, duration and constraints
+  and precondition order, while summary operators are defined in terms of an expansion
+  or mini-plan (of existing primitive tasks). </p>
+<p class="text">For planning efficiency, the preconditions and effects of
+  operators can be qualified, just as variables and methods can take modifiers
+  in programming languages).  Preconditions can be marked as:</p>
+<ul class="text">
+<li> <b>read-only</b>, implying the condition is not consumed by the operator on execution, but simply read.<br>
+<li> <b>local</b>, implying that the Planner can only apply the operator if it possesses the resource,
+  or it can produce the resource on its own.  This means the agent cannot delegate
+  production of the required resource to another agent. 
+</ul>
+<p class="text">Effect conditions can be marked as either public (the default)
+  or private.  The Planner will select an operator to produce a desired effect
+  only if that effect is marked public.  Hence side-effects should be marked as
+  private to prevent the Planner from selecting the operator in order to produce
+  such effects.  A good example is &quot;lying on the ground&quot; is a side-effect
+  of hitting someone, but if the intention is to merely to instruct someone to
+  lie on the ground, hitting them is a far from ideal way of achieving it. </p>
+
+<br>
+<br>
+
+<h4><a name="61"></a>6.1 Multi-agent Planning with Primitive Operators</h4>
+<p class="text">The Planner utilises classical partial order means end planning
+  in its plan construction process. (For a review of the planning literature see
+  [8]).  Thus, given a goal of the form of Figure 6.1(a), the Planner searches
+  its Plan Database for an operator with a public effect that unifies (with unification
+  bindings q) with the desired_effect of the goal.  If multiple operators are
+  found, they are ranked by cost, and then by duration. Next, the Planner selects
+  the first ranked operator, constrains its preconditions and effects with q,
+  and then attempts to schedule the operator into its diary.  If the operator
+  cannot be scheduled, the Planner backtracks and repeats the process with the
+  next applicable operator.</p>
+<p class="text">The Planner’s diary is a two-dimensional array, with time
+  on one dimension and processors on another, as depicted in Figure 6.1(b).  This
+  approach (also used in job-shop scheduling), uses the principle that an agent
+  will schedule its activities over a finite time period defined by the length
+  of its diary, and across a finite number of processors, given by the width of
+  the diary.  In the ZEUS implementation, processors are independent task execution
+  threads. </p>
+<p class="text">The scheduling of tasks into the plan diary is constrained
+  by the end_time, the reply_time and the confirm_time of the goal.  The end_time
+  specifies the latest time by which the desired_effect should be achieved; while
+  the reply_time specifies the latest time by which the agent planning the task
+  must inform the agent requesting the task whether it can perform the goal. The
+  confirm_time specifies the latest time by which the requesting agent will inform
+  the performing agent whether it has been awarded the contract.  </p>
+<p class="text">Thus, operator scheduling starts from the end_time and progresses
+  towards the confirm_time, utilising any free processors. Furthermore, the entire
+  planning process must be completed (or else aborted) by the reply_time.  (The
+  start_time is used in instances where a service agreement is being created.
+  In such cases, one agent is requesting that another agent plan a task that will
+  be executed <i>n</i> number of times at some future date, between some start_time
+  and some end_time.)</p>
+<table border=1 cellspacing=0 cellpadding=0>
+  <tr>
+    <td width=300 valign=top class="text">
+        Goal(</p>
+        &nbsp;&nbsp;&nbsp;&nbsp;Reference: <b>String</b><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;Required_resources: <b>Fact</b><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;Desired_by: <b>Agent</b><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;Supplied_resources: <b>Fact</b><sup>*</sup><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;Start_time: [<b>Time</b>]<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;End_time: <b>Time</b><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;Reply_time: <b>Time</b><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;Confirm_time: <b>Time</b><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;Max_cost: [<b>Cost</b>]<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;Max_invocations: <b>Integer</b><br>
+     )</p>
+    </td>
+    <td class="text"><img src="./gfx/diary.gif"></td>
+  </tr>
+</table>
+<p class="text" align=center style='text-align:center'><b>Figure 6.1: </b>(a) The goal data structure. (b) A plan
+  diary.</p>
+<p class="text">If an operator is successfully scheduled into the plan diary,
+  then the Planner will attempt to anchor all the preconditions of the operator,
+  in the order mandated by the operator’s precondition ordering constraint.  A
+  precondition can be anchored in one of four ways: </p>
+<p class="text">(a)&nbsp;&nbsp;&nbsp;&nbsp; a resource in the Resource Database
+  that unifies with the precondition can be reserved for it, or</p>
+<p class="text">(b)&nbsp;&nbsp;&nbsp;&nbsp; a matching unused effect (i.e.
+  a side effect) of a previously scheduled operator can be reserved for it, or
+</p>
+<p class="text">(c)&nbsp;&nbsp;&nbsp;&nbsp; an operator that produces the
+  required precondition can be scheduled into the diary, or</p>
+<p class="text">(d)&nbsp;&nbsp;&nbsp;&nbsp; an external agent can be found
+  to produce the precondition. In the latter three cases, care must be taken to
+  ensure that the required resource is produced before the operator needs it.</p>
+<p class="text">The anchoring process can be illustrated with an example;
+  assume an operator P has preconditions a, b, c, and d, and their order constraint
+  enforces the ordering [a] -> [b, c] -> [d].  Thus, firstly, the resource a is
+  checked against the Resource Database.  If a resource a* is found in the database
+  that unifies with a (with bindings j), then a* is reserved for a.  The reservation
+  process takes into account whether or not the operator P will consume the resource,
+  and if it does, when that is scheduled to happen.  Thus, multiple read-only
+  preconditions can reserve the same resource. </p>
+<p class="text">Once a reservation is made for the resource a, the other
+  preconditions and the effects of the operator P are constrained with the bindings
+  j, and the next set of preconditions in the sequence, b and c, checked against
+  the Resource Database.  Assume however that no resources matching b or c could
+  be found in the database.  Next, the Planner checks its diary for any scheduled
+  operators that produce b* or c* as unused side effects, and which are scheduled
+  to complete execution before the operator P is scheduled to start execution. 
+  Assume that a scheduled operator is found that produces b* within the required
+  time window, but none for c*.  Now, b* is unified with b, and the unification
+  bindings used to constrain further the operator P.  Also, the effect b* is reserved
+  for b.  To deal with the precondition c, the Planner searches its Plan Database
+  for any operators that produce c* as one of their public effects. If some operators
+  can be found, the planning process proceeds recursively as described above. 
+  If however, no applicable operators are available and the precondition c is
+  not marked as local, then the planner creates a new subgoal to achieve c and
+  adds the subgoal to a list of subgoals that must be achieved by other external
+  agents.  If in the sequence of preconditions [a] -> [b, c] -> [d], c must precede
+  d, and c has to be achieved externally, then planning is suspended for d until
+  c is successfully contracted out.</p>
+<p class="text">Thus, the planning process proceeds in the <b>backward chaining</b>
+  manner described until one or more of the following conditions apply: </p>
+<p class="text">(i)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  the scheduler runs out of available processor space; </p>
+<p class="text">(ii)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  all the preconditions in the plan either (a) have been allocated resources from
+  the Resource Database, or (b) have been allocated side effects of previously
+  scheduled operators, or (c) external subgoals have been created for them, or
+  (d) plan operators have been scheduled to produce their required conditions;
+</p>
+<p class="text">(iii)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  the planning process has been suspended until some external subgoals have been
+  contracted out. </p>
+<p class="text">In any case, if a partial plan has been constructed, the
+  planner will return to the Co-ordination Engine a list of subgoals that must
+  be contracted out to other agents.  Once the results of the contracting process
+  are returned to the Planner, it utilises them to progress the planning process
+  by backtracking on plan branches with subgoals that could not be contracted
+  out, and elaborating suspended branches that depended on successfully placed
+  external contracts. The planning process only successfully terminates when there
+  are no unanchored preconditions in the plan.</p>
+
+<br>
+<br>
+
+<a name="62"></a><h4>6.2 Multi-agent Planning with Summary Operators</a></h4>
+<p class="text">The plan construction process with summary operators differs
+  somewhat from the case with primitive operators.  For example, consider that
+  the summary operator of Figure&nbsp;6.2 is selected for inclusion in a plan
+  in order to produce the effect g.  The Planner traverses the operator specification
+  from right to left, following its precondition-effect links, and attempts to
+  replace each node with a concrete (i.e. eventually primitive) operator.  Thus,
+  it starts with node_4, and searches its Plan Database for other summary or primitive
+  operators that have preconditions and effects that are supersets of the node’s
+  preconditions and effects, respectively. </p>
+<p class="text">Next, it ranks the applicable operators found and then selects
+  the highest ranked one for inclusion in the plan; (the ranking criteria being
+  by summary operators first, then by cost, and finally by duration).  If the
+  selected operator is a summary operator, then this planning process is repeated
+  recursively on it.  If, however, the selected operator is primitive, then the
+  Planner attempts to schedule the operator into its plan diary.</p>
+<p class="text">Once all the nodes in a summary operator have been replaced
+  by primitive operators (either directly or by recursively expanding other child
+  summary operators), the Planner then attempts to enforce the effect-precondition
+  links between the nodes on their concrete images in its diary.  This serves
+  to anchor some of the preconditions of the concrete primitive operators that
+  form the expansion of the summary operator.  For example, the effect-precondition
+  link between node_2 and node_4 of Figure 6.2 anchors the precondition, e of
+  node_4.  Finally, the Planner attempts to anchor all remaining unanchored preconditions
+  in the expansion; e.g. the precondition, b of node_2 or a of node_1.</p>
+<p class=MsoBodyText align=center style='
+text-align:center'><img border=0 width=472 height=169
+src="./gfx/image034.gif" v:shapes="_x0000_i1035"></p>
+<p class=MsoBodyText align=center style='
+text-align:center'><b>Figure 6.2: </b>An example summary operator.</p>
+<p class="text">The summary operator expansion mechanism described above
+  is sufficient when a single agent is solely responsible for all operators in
+  a plan. When multiple agents are involved, care has to be taken to ensure the
+  correct routing of results that are produced by one agent but required by another. 
+  For example, if during expansion of a given node of a summary operator there
+  are no operators in the Plan Database that have preconditions and effects that
+  match those of the node, then the Planner has to create a subgoal to achieve
+  the required effects of the node externally.  For instance, if on expansion
+  of node_4 of the summary operator of Figure 16 no operators can be found in
+  the Plan Database that produce the effect, g, given inputs, e and f, then an
+  external subgoal to produce, g, given e and f is created.  Note that in the
+  case of subgoals for primitive operators, the subgoal statement was simply of
+  the form <i>produce </i>a, whereas for summary operator nodes, subgoal statements
+  are now of the form <i>produce </i>a<i> given </i>b.  Assume that the subgoal
+  to produce g, given e and f, is successfully delegated to some agent A.  Further,
+  assume that on expansion of node_3, again no operator could be found that produces
+  the required effect, f, given input, d.  Again, assume the subgoal for this
+  problem is successfully delegated to some other agent B.  Now, the planner has
+  to ensure that agent B has the required precondition, d, for its portion of
+  the task, and further, that agent B sends its result, f, to agent A, so that
+  agent A can perform its portion of the task.</p>
+
+
+<h4>Managing Resource Reservation Conflicts</h4>
+<p class="text">The planner possess a mechanism to ensure the coherence of
+  produced and supplied items when subgoals of the form <i>produce </i>a<i> given
+  </i>b occur within multi-agent problem solving.  Typical conflict situations
+  take one of two forms.  In the first case, consider that an agent A delegates
+  to another agent B the task to produce x given y and z.  Now, in creating a
+  plan to produce x, agent B makes a reservation of the expected supplied item
+  y. At this point in its planning process, agent B has not reserved the expected
+  input item z, and it cannot say whether it may need it in the future.  Further,
+  as part of the plan to produce x, agent B needs to delegate to agent C a task
+  to produce u, given v.  But, the item z is still available and conceivably,
+  agent C might need it whereas agent B might not.  Thus, agent B delegates to
+  agent C the task to produce u, given v and z. Now assume that in its plan to
+  produce u, agent C reserves both v and z.  This makes z unavailable to agent
+  B, and agent B must be notified of this.  Further, agent A must be notified
+  to supply the input y to agent B and z to agent C (although agent A has no direct
+  contract with agent C).</p>
+<p class="text">In conflicts of the second form, consider that an agent A
+  delegates to another agent B the task to produce x given y and z.  In creating
+  a plan to produce x, agent B decides to delegate to agent C the task to produce
+  u and to agent D the task to produce v.  At this point in its planning process,
+  agent B does not need the expected inputs y or z, and it cannot say whether
+  it may need either of them in the future.  So, because agents C or D might conceivably
+  need y or z, agent B decides to delegate to agent C the task to produce u, given
+  y and z, and to agent D the task to produce v, given the same y and z.  A conflict
+  emerges if both agents C and D reserve the same resource y, for example.  It
+  is the responsibility of agent B’s Planner to check the reservations made by
+  both agents C and D to ensure there is no conflict. If a conflict is detected,
+  only one of agents C or D is selected to perform its portion of the task, and
+  the other portion delegated again with a revised list of supplied items.</p>
+
+<br>
+<br>
+
+<a name="63"></a><h4>6.3     Execution Monitoring</h4>
+<p class="text">Once a plan is constructed and scheduled for execution, each
+  operator in the plan is executed in order at the operator’s scheduled execution
+  time, or alternatively, before the scheduled execution time if there is a free
+  processor available.  Operator execution, which is controlled by the Execution
+  Monitor component, involves an invocation of the domain function specified in
+  the operator’s specification.  The domain function, which is typically some
+  legacy process, is invoked with the operator’s preconditions as its input arguments,
+  and it is expected to return the declared effects of the operator.  The relevant
+  output of the domain function (i.e. the operator’s effects) are then passed
+  as input to the appropriate downstream operators in the plan sequence.</p>
+
+<br>
+<br>
+
+<h4>Plan Execution and Exception Handling</h4>
+<p class="text">An important role of the Execution Monitor is to detect failure
+  during the scheduled execution of a plan. This can occur for a number of reasons:
+</p>
+<p class="text">(i)&nbsp; a resource reserved by an operator might be deleted, </p>
+<p class="text">(ii)&nbsp; an operator might begin execution but fail to complete because of insufficient
+  scheduled time or some other reason, </p>
+<p class="text">(iii)&nbsp; an operator might successfully complete execution but return the wrong or incomplete
+  results, or</p>
+<p class="text">(iv)&nbsp; some promised resource from another agent might not arrive on time (or alternatively,
+  the other agent might notify our agent that it can no longer provide the promised
+  resource).  In either case, the net effect is that some precondition of an operator
+  in the plan would lose its anchor.  </p>
+<p class="text">In the case of the latter, if the Planner deems that it has
+  sufficient time to replan before the whole plan goes out of schedule, then it
+  initiates replanning.  Replanning essentially takes advantage of the Planner’s
+  normal planning and backtracking mechanisms.  The Planner attempts to anchor
+  the dangling precondition in one of four ways, either by:</p>
+<p class="text">(i)&nbsp; allocating a new resource to it – if one can be found, or</p>
+<p class="text">(ii)&nbsp; creating a new plan to produce the required resource, or</p>
+<p class="text">(iii)&nbsp; creating a sub-goal to produce the required resource and contracting out the
+  subgoal, or </p>
+<p class="text">(iv)&nbsp; backtracking on the plan branch containing the dangling precondition. </p>
+<p class="text">In the latter three methods, the replanning process may involve
+  the placement of new contracts with other agents.  Furthermore, in the fourth
+  method, some existing contracts might need to be cancelled if the new plan arrived
+  at by backtracking no longer requires the results of those contracts.  If all
+  four approaches fail, in which case the Planner cannot devise any plan to achieve
+  the desired goal, it will try to contract out the original root goal itself. 
+  If this also fails, the Planner is forced to report failure to the agent that
+  originally requested the root goal.  It is worth noting here that the whole
+  process of replanning and the potential costs of placing new contracts and cancelling
+  existing ones might end up being very unprofitable for the agent.<a href="#_ftn3" name="_ftnref3"
+title=""><sup>[3]</sup></a>  </p>
+<p class="text">Tables 6.1 and 6.2 present an example scenario illustrating
+  some of the mechanisms involved in the exception handling process (although
+  not included are situations where existing contracts need to be cancelled).</p>
+
+<center>
+<table border=1 cellspacing=0 cellpadding=0>
+  <tr>
+    <td width=123 valign=top class="text">&nbsp; </td>
+    <td width=135 valign=top class="text">
+      <p class=MsoTitle>Agent1</p>
+    </td>
+    <td width=135 valign=top class="text">
+      <p class=MsoTitle>Agent2</p>
+    </td>
+    <td width=152 valign=top class="text">
+      <p class=MsoTitle>Agent3</p>
+    </td>
+  </tr>
+  <tr>
+    <td width=123 valign=top class="text">
+      <p>Task Database</p>
+    </td>
+    <td width=135 valign=top class="text">
+      <p>{b}->Task1/10->{a}</p>
+      <p>{c}->Task2/20->{b}</p>
+      <p>{d}->Task3/30->{c}</p>
+      <p>{x}->Task6/60->{c}</p>
+      <p>{y}->Task7/70->{b}</p>
+      <p>{z}->Task8/80->{a}</p>
+    </td>
+    <td width=135 valign=top class="text">
+      <p>{c}->Task4/40->{b}</p>
+    </td>
+    <td width=152 valign=top class="text">
+      <p>{b}->Task4/40->{a}</p>
+    </td>
+  </tr>
+  <tr>
+    <td width=123 valign=top class="text">
+      <p>Resource Database</p>
+    </td>
+    <td width=135 valign=top class="text">
+      <p align=center style='
+  text-align:center'>{c,d,x,y,z}</p>
+    </td>
+    <td width=135 valign=top class="text">
+      <p align=center style='
+  text-align:center'>{c}</p>
+    </td>
+    <td width=152 valign=top class="text">
+      <p align=center style='
+  text-align:center'>{b}</p>
+    </td>
+  </tr>
+  <tr>
+    <td width=123 valign=top class="text">
+      <p>Key</p>
+    </td>
+    <td width=422 colspan=3 valign=top class="text">
+      <p align=center style='
+  text-align:center'>{Preconditions}->TaskID/Cost->{effects}</p>
+    </td>
+  </tr>
+</table>
+<br>
+<p class="text"><b>Table 6.1: </b>Initial states of the agents involved in
+  the exception handling scenario described in Table 6.2.</p>
+<br>
+<br>
+
+<table border=1 cellspacing=0 cellpadding=0>
+  <tr>
+    <td width=192 valign=top class="text">
+      <p class=MsoTitle>Action/Comments</p>
+    </td>
+    <td width=424 valign=top class="text">
+      <p class=MsoTitle>Results</p>
+    </td>
+  </tr>
+  <tr>
+    <td width=192 valign=top class="text">
+      <p>Achieve Agent1 a</p>
+      <p>The agents’ planners use a best-first selection policy with no lookahead
+        – thus given the goal to achieve a, the cheapest applicable task (Task1)
+        is selected first.</p>
+    </td>
+    <td width=424 valign=top class="text">
+      <p><img border=0 width=276 height=59 src="./gfx/image036.gif"></p>
+    </td>
+  </tr>
+  <tr>
+    <td width=192 valign=top class="text">
+      <p>Delete&nbsp;&nbsp;Agent1 c</p>
+      <p>Deletion of the database resource, c, leads to a new operator (Task3)
+        to anchor the precondition of Task2.</p>
+    </td>
+    <td width=424 valign=top class="text">
+      <p><img border=0 width=391 height=60 src="./gfx/image038.gif"></p>
+    </td>
+  </tr>
+  <tr>
+    <td width=192 valign=top class="text">
+      <p>Delete&nbsp;&nbsp;Agent1 d </p>
+      <p>Deletion of the resource, d, means Task3 loses its anchor. Hence, the
+        planner backtracks, and tries an alternative mechanism for achoring the
+        precondition, c, of Task2.</p>
+    </td>
+    <td width=424 valign=top class="text">
+      <p><img border=0 width=391 height=129 src="./gfx/image040.gif"></p>
+    </td>
+  </tr>
+  <tr>
+    <td width=192 valign=top class="text">
+      <p>Delete Agent1 x</p>
+      <p>Again, more backtracking.</p>
+    </td>
+    <td width=424 valign=top class="text">
+      <p><img border=0 width=386 height=181 src="./gfx/image042.gif"></p>
+    </td>
+  </tr>
+  <tr>
+    <td width=192 valign=top class="text">
+      <p>Delete&nbsp;&nbsp;Agent1 y</p>
+      <p>Deletion of the resource, y, leads to further backtracking and finally
+        an external contract placed with Agent2.  The best-first selection policy
+        implies that once Task1 had been selected to achieve a, all possible means
+        to anchor its preconditions will be tired, even if this involves an external
+        contract. So, an external contract is placed to anchor the precondition,
+        b, although the agent could have achieved the goal on its own if it used
+        Task8 to achieve a.</p>
+    </td>
+    <td width=424 valign=top class="text">
+      <p><img border=0 width=394 height=252 src="./gfx/image044.gif"></p>
+    </td>
+  </tr>
+  <tr>
+    <td width=192 valign=top class="text">
+      <p>Delete&nbsp;&nbsp;Agent2 c</p>
+      <p>Deletion of the resource, c, in Agent2, leads to the exception cascading
+        back to Agent1, which now tries a completely different means to achieve
+        the goal, a.</p>
+    </td>
+    <td width=424 valign=top class="text">
+      <p><img border=0 width=402 height=315 src="./gfx/image046.gif"></p>
+    </td>
+  </tr>
+  <tr>
+    <td width=192 valign=top class="text">
+      <p>Delete&nbsp;&nbsp;Agent1 z</p>
+      <p>Agent1 has now completely exhausted all possible ways of achieving the
+        goal, a. However, its commitment to the contract forces it to contract
+        out the entire goal to Agent3.</p>
+    </td>
+    <td width=424 valign=top class="text">
+      <p><img border=0 width=395 height=404
+  src="./gfx/image048.gif" v:shapes="_x0000_i1042"></p>
+    </td>
+  </tr>
+</table>
+<p class="text"><b>Table 6.2: </b>An exception handling scenario.</p>
+</center>
+
+<br>
+<br>
+
+<table border=1 cellspacing=0 width=100% class="smalltext">
+<tr>
+<td width=10%><a class="smalltextlink" href="TOC.html">Contents</a></td>
+<td width=12%><a class="smalltextlink" href="part1.html">Introduction</a></td>
+<td width=12%><a class="smalltextlink" href="part2.html">Zeus Philosophy</a></td>
+<td width=12%><a class="smalltextlink" href="part3.html">Zeus Architecture</a></td>
+<td width=12%><a class="smalltextlink" href="part4.html">Communication</a></td>
+<td width=12%><a class="smalltextlink" href="part5.html">Coordination</a></td>
+<td width=12%><b>Planning and<br>Task Execution</b></td>
+<td width=13%><a class="smalltextlink" href="part7.html">External<br>Applications</a></td>
+</tr>
+</table>
+
+</body>
+</html>

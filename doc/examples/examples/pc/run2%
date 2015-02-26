@@ -1,0 +1,4 @@
+#!/usr/bin/csh
+#This script runs the non-root servers and other utility agents
+java zeus.agents.Facilitator Facilitator -o ./pc.ont -s dns.db -t 2.0 & 
+java zeus.visualiser.Visualiser Visualiser -s dns.db -o ./pc.ont -quick & 

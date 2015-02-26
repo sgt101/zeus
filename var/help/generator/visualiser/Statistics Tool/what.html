@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+
+<html>
+
+<head>
+<title>Statistics Tool Help Pages</title>
+</head>
+
+
+<!-- DOCUMENT MAIN BODY -->
+<body>
+
+<h1>Statistics Tool On-Line Help</h1>
+
+<b>What is it?</b> <br>
+
+The Statistics Tool allows the user to analyse the behaviour of the agents, 
+either whilst the society is still running, or offline using previously
+saved agent activity sessions. It operates by collecting copies of inter-
+agent messages, which are then processed and displayed in one of the several
+available presentation formats. <p>
+
+<B>When should I use it?</B> <br>
+
+The Statistics Tool provides a means of investigating the behaviour of a multi-
+agent system. One application may be to learn about how the agents operate,
+and the type and frequency of the messages exchanged. Alternatively, it can
+function as a debugging aid, to determine why an agent system is not working
+as expected. <p>
+
+<B>How do I use it?</B>
+
+<ul>
+<li> Before using the Statistics Tool ensure the list of all known active agents
+has been obtained from the Agent Name Server. The instructions for this process
+can be found <a href="../common/ans.html">here</a>. <br>
+<li> To make the Visualiser aware of on-going agent tasks it must contact each
+known agent to request progress updates.  To do this, select the <b>Request
+Messages</b> option from the <b>Online</b> menu. This will bring up a dialog
+enabling you to choose which agents will be analysed by the Statistics Tool. <br>
+<li> With data now being streamed to the Visualiser you may choose which aspect 
+of the agent society to analyse. The supported perspectives can be selected
+from the <b>Statistics</b> menu. <br>
+<li> Once an aspect has been chosen, the format in which it is displayed on
+screen can be chosen from the <b>View</b> menu. <br>
+</ul>
+<br>
+
+<h4>Available Statistics</h4>
+
+<table>
+<tr>
+<td>Statistic</td>
+<td>Explanation</td>
+</tr>
+<tr>
+<td><i>Breakdown of Agent Types</i>
+<td> Shows the number of each type of agent known to the Visualiser. <br>
+</tr>
+<tr>
+<td><i>Traffic Volume by Type</i>
+<td> Shows the relative frequency of the different types of inter-agent message sent by all known agents.<br>
+</tr>
+<tr>
+<td><i>Traffic Volume by Agent</i>
+<td>Shows a histogram of the relative frequency of messages sent by each known agent.<br>
+</tr>
+<tr>
+<td><i>Inter Agent Traffic Volume</i>
+<td>Pending
+</tr>
+<tr>
+<td><i>Task Activity Level</i>
+<td>Pending 
+</tr>
+<tr>
+<td><i>Goal Completion Status</i>
+<td>Pending
+</tr>
+<tr>
+<td><i>Agent Efficiency Measure</i>
+<td>Pending 
+</tr>
+<tr>
+<td><i>Agent Monetary Statement</i>
+<td>Pending</tr>
+<tr>
+<td><i>Plan/Resources Ratio</i>
+<td>Pending </tr>
+<tr>
+<td><i>Average Goal Lapse Times</i>
+<td>Pending </tr>
+<tr>
+<td><i>Messages per Goal</i>
+<td>Pending</tr>
+</table>
+<p>
+<br>
+
+<h4>Available Presentation Formats</h4>
+
+Whilst some statistics can only be presented in certain formats, others have a
+choice of presentations. The available formats can be chosen from the toolbar or
+the <b>View</b> menu: <br>
+
+<img src="../../../gifs/visualiser/bar.gif"   hspace=16> <i>Histogram</i> <br>
+<img src="../../../gifs/visualiser/pie.gif"   hspace=16> <i>Pie Chart</i> <br>
+<img src="../../../gifs/visualiser/line.gif"  hspace=16> <i>Line Graph</i> <br>
+<img src="../../../gifs/visualiser/xy.gif"    hspace=16> <i>XY Cluster Graph</i> <br>
+<img src="../../../gifs/visualiser/table.gif" hspace=16> <i>Tabular Chart</i> <br>
+<p>
+
+<b>Other Menu Options</b>
+
+<ul>
+<li> The activities displayed live by the Report Tool can be saved to a file to
+be replayed later; this process is described <a href="../common/savetodb.html">
+here</a>. Instructions for loading a previously saved session are listed
+<a href="../common/loadfromdb.html">here</a>. <br>
+<li> The statistics obtained can be made more specific by ignoring particular
+received messages. This is achieved by choosing the <b>Filter Messages</b> 
+option from the <b>Options</b> menu, and then choosing which agents or which 
+messages to ignore.<br>
+<li> To stop receiving messages from any or all agents, select the
+<b>Unrequest Messages</b> option from the <b>Online</b> menu. <br>
+</ul>
+
+</body>
+
+</html>

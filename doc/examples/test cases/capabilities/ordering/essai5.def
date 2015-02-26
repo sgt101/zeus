@@ -1,0 +1,147 @@
+BEGIN_GENERATOR
+  BEGIN_PREAMBLE
+    :system "ZEUS-Agent-Generator"
+    :version "1.2.2"
+    :ontology ".:essai5.ont"
+  END_PREAMBLE
+
+  BEGIN_AGENT_NAME_INDEX
+    AgentId0 unAgent
+  END_AGENT_NAME_INDEX
+
+  BEGIN_AGENT_ICON_INDEX
+    AgentId0 "..:..:gifs:agent.gif"
+  END_AGENT_ICON_INDEX
+
+  BEGIN_TASK_NAME_INDEX
+    AbstractTaskId0 laTache
+  END_TASK_NAME_INDEX
+
+  BEGIN_AGENT_LIST
+    (:name AgentId0
+     :class ZeusAgent
+     :planner_width 1
+     :planner_length 20
+     :doublebook_fraction 0
+     :tasks (AbstractTaskId0
+            )
+     :initial_facts ((:type consome
+                      :id fact299
+                      :modifiers 0
+                      :attributes ((AttF16 leParF16)
+                                   (AttF15 leParF15)
+                                   (AttF14 leParF14)
+                                   (AttF13 leParF13)
+                                   (AttF12 leParF12)
+                                   (AttF11 leParF11)
+                                   (AttF9 leParF9)
+                                   (AttF10 leParF10)
+                                   (AttF8 leParF8)
+                                   (AttF7 leParF7)
+                                   (AttF6 leParF6)
+                                   (AttF5 leParF5)
+                                   (AttF4 leParF4)
+                                   (AttF3 leParF3)
+                                   (AttF2 leParF2)
+                                   (AttF1 leParF1)
+                                  )
+                     )
+                    )
+    )
+  END_AGENT_LIST
+
+  BEGIN_TASK_LIST
+    (:Primitive AbstractTaskId0
+     :time (1)
+     :cost (0)
+     :consumed_facts ((:type consome
+                       :id var323
+                       :modifiers 5
+                       :attributes ((AttF16 ?c_AttF16)
+                                    (AttF15 ?c_AttF15)
+                                    (AttF14 ?c_AttF14)
+                                    (AttF13 ?c_AttF13)
+                                    (AttF12 ?c_AttF12)
+                                    (AttF11 ?c_AttF11)
+                                    (AttF9 ?c_AttF9)
+                                    (AttF10 ?c_AttF10)
+                                    (AttF8 ?c_AttF8)
+                                    (AttF7 ?c_AttF7)
+                                    (AttF6 ?c_AttF6)
+                                    (AttF5 ?c_AttF5)
+                                    (AttF4 ?c_AttF4)
+                                    (AttF3 ?c_AttF3)
+                                    (AttF2 ?c_AttF2)
+                                    (AttF1 ?c_AttF1)
+                                   )
+                      )
+                     )
+     :produced_facts ((:type produit
+                       :id var344
+                       :modifiers 1
+                       :attributes ((AttG9 ?c_AttF9)
+                                    (AttG8 ?c_AttF8)
+                                    (AttG7 ?c_AttF7)
+                                    (AttG6 ?c_AttF6)
+                                    (AttG5 ?c_AttF5)
+                                    (AttG4 ?c_AttF4)
+                                    (AttG3 ?c_AttF3)
+                                    (AttG2 ?c_AttF2)
+                                    (AttG16 ?c_AttF16)
+                                    (AttG1 ?c_AttF1)
+                                    (AttG15 ?c_AttF15)
+                                    (AttG14 ?c_AttF14)
+                                    (AttG13 ?c_AttF13)
+                                    (AttG12 ?c_AttF12)
+                                    (AttG11 ?c_AttF11)
+                                    (AttG10 ?c_AttF10)
+                                   )
+                      )
+                     )
+    )
+  END_TASK_LIST
+
+  BEGIN_GENERATION_PLAN
+    BEGIN_PREAMBLE
+      :platform "Windows"
+      :directory "."
+    END_PREAMBLE
+    BEGIN_AGENT_LIST
+      (:id AgentId0
+       :generate false
+       :status Saved
+       :has_gui true
+       :zeus_external "DisplayerGui"
+       :dns_file "dns.db"
+      )
+    END_AGENT_LIST
+    BEGIN_TASK_LIST
+      (:id AbstractTaskId0
+       :generate false
+       :status Saved
+       :external null
+      )
+    END_TASK_LIST
+    BEGIN_NAMESERVER_LIST
+      (:name Nameserver0
+       :is_root true
+       :has_gui false
+       :address_output_file "dns.db"
+       :time_grain 0.5
+      )
+    END_NAMESERVER_LIST
+    BEGIN_FACILITATOR_LIST
+      (:name Facilitator0
+       :period 5.00
+       :has_gui false
+       :dns_file "dns.db"
+      )
+    END_FACILITATOR_LIST
+    BEGIN_VISUALISER_LIST
+      (:name Visualiser0
+       :has_gui false
+       :dns_file "dns.db"
+      )
+    END_VISUALISER_LIST
+  END_GENERATION_PLAN
+END_GENERATOR

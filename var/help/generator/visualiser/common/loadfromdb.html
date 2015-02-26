@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+
+<html>
+
+<head>
+<title>Loading Sessions</title>
+</head>
+
+
+<!-- DOCUMENT MAIN BODY -->
+<body>
+
+<h3>Replaying Saved Sessions</h3>
+
+<ul>
+<li> To replay a saved sessions the Visualiser must contact a DbProxy agent
+that has access to the saved file. See <a href="../common/savetodb.html">here</a>
+for instructions on how to start a DbProxy agent.<br>
+<li> Once the DbProxy is running a saved session can be loaded by selecting the
+<b>Load Session</b> option from the <b>Playback</b> menu. <br>
+<li> A dialog will now appear asking for the identifying name of the Proxy
+agent that will provide the session; enter its name in the <b>SelectDBProxy</b>
+field. <br>
+<li> The right-hand table will now list the saved sessions to which that Proxy
+has access. Select the session you want to restore and then click on the <b>
+OK</b> button. <br>
+<li> Once the session has been restored the Visualiser will cease displaying
+live events and operate in an 'off-line' mode. The loaded session can then be
+replayed using the video control buttons or the options of the <b>Playback</b>
+menu. <br>
+<li> The playback speed (the pause between screen updates during replay) can be 
+changed through the <b>Player Speed...</b> option of the <b>Options</b> menu.<br>
+<li> To revert to live visualisation, close the session using the <b>Close
+Session</b> option of the <b>Playback</b> menu.
+</ul>
+<p>
+
+<h3>The Video Control Buttons</h3>
+
+<img src="../../../gifs/visualiser/first.gif" hspace=16> <b>Beginning</b> - moves
+to the first frame of the session  <br>
+<img src="../../../gifs/visualiser/fbwd.gif" hspace=16>  <b>Fast Rewind</b> - steps
+backwards through the frames of the session  <br>
+<img src="../../../gifs/visualiser/bwd.gif" hspace=16>   <b>Rewind</b> - slowly steps
+backwards <br>
+<img src="../../../gifs/visualiser/prior.gif" hspace=16> <b>Prior Frame</b> - moves
+back to the previous frame <br>
+<img src="../../../gifs/visualiser/stop.gif" hspace=16>  <b>Stop</b> - halts any
+rewind or forward operation <br>
+<img src="../../../gifs/visualiser/next.gif" hspace=16>  <b>Next Frame</b> - moves
+forward to the next frame <br>
+<img src="../../../gifs/visualiser/fwd.gif" hspace=16>   <b>Forward</b> - slowly
+steps forwards <br>
+<img src="../../../gifs/visualiser/ffwd.gif" hspace=16>  <b>Fast Forward</b> - steps
+forwards through the frames of the session  <br>
+<img src="../../../gifs/visualiser/last.gif" hspace=16>  <b>End</b> - moves to the
+last frame of the session  <p>
+
+If these buttons are 'greyed out' and unselectable this is because the Visualiser
+is still in the live playback mode. Once a saved session has been successfully
+restored these buttons will become selectable, and the record button will be
+greyed out. <p>
+
+
+<h3>Related Options</h3>
+
+Instructions for saving a live session are listed <a href="../common/savetodb.html">
+here</a>. <p>
+
+Other options from the <b>Playback</b> menu enable previously saved sessions
+to be deleted through the <b>Delete Session</b> option. Alternatively, all the
+saved sessions stored by a particular agent can be cleared by selecting the
+<b>Purge Database</b> option. <p>
+
+
+</body>
+
+</html>

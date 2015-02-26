@@ -1,0 +1,396 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>The Zeus Technical Manual</title>
+<LINK REL="STYLESHEET" TYPE="text/css" HREF="zeusdoc.css">
+</head>
+
+<body>
+
+<table width=100% border=0>
+<tr>
+<td><h4>The Zeus Agent Building Toolkit </h4></td>
+<td align=right class="text">Technical Manual</td>
+</tr>
+</table>
+<br>
+<br>
+
+<table border=1 cellspacing=0 width=100% class="smalltext">
+<tr>
+<td width=10%><a class="smalltextlink" href="TOC.html">Contents</a></td>
+<td width=12%><a class="smalltextlink" href="part1.html">Introduction</a></td>
+<td width=12%><a class="smalltextlink" href="part2.html">Zeus Philosophy</a></td>
+<td width=12%><b>Zeus Architecture</b></td>
+<td width=12%><a class="smalltextlink" href="part4.html">Communication</a></td>
+<td width=12%><a class="smalltextlink" href="part5.html">Coordination</a></td>
+<td width=12%><a class="smalltextlink" href="part6.html">Planning and<br>Task Execution</a></td>
+<td width=13%><a class="smalltextlink" href="part7.html">External<br>Applications</a></td>
+</tr>
+</table>
+<br>
+<br>
+
+<h3><a name="1"></a>3 The Zeus Toolkit Architecture</a></h3>
+
+<p class="text" align=center>
+<img width=613 height=290 src="./gfx/components.gif"><br clear=ALL>
+<b>Figure 3.1:</b> Components of the ZEUS agent building toolkit.</p>
+
+<p class="text">
+  The ZEUS toolkit consists of a set of components, written in the Java programming
+  language, that can be categorised into three functional groups (or libraries)
+  as depicted in Figure 3.1: an agent component library, an agent building tool
+  and a suite of utility agents comprising nameserver, facilitator and visualiser
+  agents. In the following subsections, we describe in turn the ZEUS agent component
+  library, the agent building approach and its associated environment, and the
+  suite of utility agents.</p>
+
+<br>
+<br>
+
+<a name="31"></a><h4>3.1 The Agent Component Library</h4>
+<p class="text">The Agent Component Library is a collection of classes that
+  form the building blocks of individual agents.  Together these classes implement
+  the application-independent <i>agent-level</i> functionality required of collaborative
+  agents. The contents of this library address the issues identified in Section
+  1 including communication, ontology, co-ordination (or social interaction).
+</p>
+<p class="text">For <b>communication</b> the Agent Component Library provides:</p>
+<ol class="text">
+<li> a performative-based agent communication language, in our case KQML;
+<li> an asynchronous socket-based message passing system;
+<li> an editor for describing domain-specific ontologies and the domain concepts
+     that are defined using the ontology editor are used as part of the content
+     language within the ACL; and
+<li> a frame-based knowledge representation language for representing domain concepts.</p>
+</ol>
+<p class="text">Next, for <b>reasoning and multi-agent co-ordination</b>,
+  the Agent Component Library provides:</p>
+<ol class="text">
+<li> a general purpose planning and scheduling system suitable for typical task-oriented application
+  domains, and the co-operative problem-solving inherent to these applications
+  (see Section 3), and</p>
+<li> a co-ordination engine that controls the social behaviour of an agent, i.e. when and how it
+  interacts with other agents and the types of contracts it sets up with them.</p>
+</ol>
+
+<p class="text">The functioning of the planner and co-ordination engine are
+  influenced by the agent’s knowledge context, i.e. its available resources and
+  competencies, its organisational relationships with other agents and its available
+  co-operation strategies. Thus, to support these two components, the Agent Component
+  Library also provides:</p>
+<ol class="text">
+<li> a library of predefined re-usable co-ordination protocols, e.g. contract-net and various
+  auction protocols.</p>
+<li> a number
+  of predefined organisational relationships. The current set of relationships
+  includes <i>superior</i>, <i>subordinate</i>, <i>co-worker </i>and <i>peer</i>
+  relations. Agents that are defined as superior<b> </b>to other subordinates
+  agents can delegate tasks to their subordinates.  Agents that belong to the
+  same static ‘community’ can be declared as co-workers, meaning they prefer to
+  interact with one another. The peer relationship is the default, and it does
+  not impose any restrictions on interaction. (Remember, we noted in Section 1
+  that organisational structuring affects the co-ordination of a multi-agent set-up).</p>
+<li> knowledge representation mechanisms and databases for describing and storing 
+  the resources and competencies of an agent.
+</ol>
+
+<br>
+<br>
+
+<h4>The Generic ZEUS agent</h4>
+<p class="text">Together, the components of the Agent Component Library enable
+  the construction of an application-independent generic ZEUS agent that can be
+  customised for specific applications by imbuing it with problem-specific resources,
+  competencies, information, organisational relationships and co-ordination protocols. 
+  Figure 3.2 shows the architecture of the generic ZEUS agent that is not
+  too dissimilar from other collaborative agent architectures in the literature.</p>
+
+<p class="text" align=center>
+<img border=0 width=480 height=460 src="./gfx/internals.gif"><br><br>
+<b>Figure 3.2</b>: The Architecture of the generic ZEUS agent</p>
+<br>
+<p class="text">As Figure 3.2 depicts, the generic ZEUS agent includes the
+  following components:</p>
+<ol class="text">
+<li> a Mailbox that handles communications between the agent and other agents. </p>
+<li> a Message Handler that processes incoming messages from the Mailbox, dispatching them
+  to the relevant components of the agent. </p>
+<li> a Co-ordination Engine that makes decisions concerning the agent’s goals, e.g. how they should
+  be pursued, when to abandon them, etc.  It is also responsible for co-ordinating
+  the agent’s interactions with other agents using its known co-ordination protocols
+  and strategies, e.g. the various auction protocols or the contract net protocol.
+<li> an Acquaintance Database that describes the agent’s relationships with other agents in the society,
+  and its beliefs about the capabilities of those agents. The Co-ordination Engine
+  uses information contained in this database when making collaborative arrangements
+  with other agents.  </p>
+<li> a Planner and Scheduler that plans the agent’s tasks based on decisions taken by the Co-ordination
+  Engine and the resources and task specifications available to the agent.  </p>
+<li> a Resource Database that maintains a list of resources (referred to in this paper as <i>facts</i>)
+  that are owned by and available to the agent. The Resource Database also supports
+  a direct interface to external systems, which allows it to dynamically link
+  to and utilise proprietary databases.</p>
+<li> an Ontology Database that stores the logical definition of each fact type: its legal attributes,
+  the range of legal values for each attribute, any constraints between attribute
+  values, and any relationships between the attributes of the fact and other facts.
+<li> a Task/Plan Database that provides logical descriptions of planning operators (or tasks)
+  known to the agent. </p>
+<li> an Execution Monitor that maintains the agent’s internal clock, and starts, stops and monitors
+  tasks that have been scheduled for execution or termination by the Planner/Scheduler. 
+  It also informs the Planner of successful and exceptional terminating conditions
+  of the tasks it is monitoring.  In order to manage tasks, the Execution Monitor
+  also has a direct interface to external systems. It is assumed that the domain
+  realisations of tasks are external programs.
+</ol>
+<p class="text">In the next subsection, we describe a typical <i>use case
+  scenario</i> to illustrate the flow of information and control in the generic
+  ZEUS agent.</p>
+
+<br>
+<br>
+
+<h4>Information and control flow in the generic ZEUS agent</h4>
+<p class="text">Imagine a message from another agent is received by the agent’s
+  Mailbox, which passes the message to the Message Handler for processing. On
+  receipt of the message, the Message Handler interprets it as a request to achieve
+  a goal. Hence, it forwards the message to the Co-ordination Engine to determine
+  whether to achieve the goal and if so, to devise and co-ordinate an appropriate
+  plan of action. </p>
+<p class="text">The Co-ordination Engine decides to attempt the goal, and
+  invokes the Planner to construct a plan to achieve the goal. The Planner creates
+  a plan for the goal, utilising action descriptions from its Plan Database, and
+  reserving the resources that are required by the plan and available in its Resource
+  Database. However, the Planner finds that there are some other resources that
+  are required by the plan, but which are not available in its Resource Database,
+  and which it cannot produce.  Thus, it calls the Co-ordination Engine to seek
+  external assistance in producing those resources.</p>
+<p class="text">The Co-ordination Engine then begins to attempt to contract
+  out the task of providing the required resources at the required time.  To do
+  this, it checks its Acquaintance Database for the names of other agents that
+  it believes can produce the required resources.  Finding no acquaintance agents
+  with the appropriate abilities, the Engine uses the Mailbox to send a message
+  to a known facilitator, requesting a list of all “active” agents with the required
+  abilities. On receipt of a reply from the facilitator, the Mailbox forwards
+  the reply message to the Co-ordination Engine (through the Message Handler). </p>
+<p class="text">Now, given the list of agents with the needed abilities,
+  the Co-ordination Engine first stores this information in its Acquaintance Database,
+  and then proceeds to send messages to the agents, asking them to bid for a contract
+  to produce the required resource. Again the outgoing messages are sent through
+  the Mailbox and their replies returned to the Co-ordination Engine via the Mailbox
+  and Message Handler.</p>
+<p class="text">Once all contractor agents have returned their bids for the
+  tasks, or the reply deadline has expired, the Co-ordination Engine passes the
+  returned bids to the Planner, which selects suitable contractors for providing
+  the required resources. The suitability of each bid depends on factors such
+  as its cost, and how well it fits in with the overall plan to achieve the original
+  goal. With the bid selections made and the plan completed, the Planner returns
+  to the Co-ordination Engine a list contractor agents to whom send contract award
+  messages should be sent, and another list to whom the Engine should send bid
+  rejection messages.</p>
+<p class="text">However, before sending out the contract award and bid rejection
+  messages, the Co-ordination Engine first sends a message to the agent that originally
+  asked it to achieve the goal, informing the agent that it can perform the goal
+  and the cost of doing so.  Next, the Engine waits for a response to its bid. 
+  If a favourable response is received, it then sends out the contract award and
+  bid rejection messages to its own contractor agents and informs the Planner
+  that the plan for the goal should be executed when appropriate.  If, on the
+  other hand, an unfavourable response was received, bid rejection messages are
+  sent out to all contractor agents, and the Planner is told to cancel the plan.</p>
+<p class="text">Once a scheduled plan is ready for execution, the Execution
+  Monitor executes the actions specified in the plan by invoking the external
+  program declared in each action description. If the entire plan is successfully
+  executed, the final results are sent through the Co-ordination Engine and Mailbox
+  to the agent that requested the goal.</p>
+<p class="text">As can be seen from the use case scenario, the components
+  of the Agent Component Library work together to provide the necessary agent-level
+  functionality. For instance, the Mailbox and the Ontology Database facilitate
+  communication. The former provides agents with the ability to send and receive
+  messages in a ‘standard’ format, whilst the latter enables each agent to understand
+  what other agents communicate to it. Once agents can communicate, we can raise
+  the level of abstraction to the co-ordination level (or social interaction),
+  wherein bargaining and negotiating is possible. This is realised via the Co-ordination
+  Engine employing various defined co-ordination protocols.  It is also clear
+  from this example that co-operative problem solving between agents in task-oriented
+  domains requires some planning and scheduling capabilities.</p>
+
+<p class="text">In the next section, we describe the second major sub-library
+  of the ZEUS toolkit — the agent building software.</p>
+<br>
+<br>
+<a name="32"></a><h4>3.2     The ZEUS Agent Building Software</h4>
+<p class="text">The principle underlying the ZEUS toolkit is that application-specific
+  agents can be constructed by configuring the generic ZEUS agent, and equipping
+  it with the necessary application functionality.  To facilitate rapid development,
+  the ZEUS toolkit provides high-level agent development approach that hides the
+  complexities of the Agent Component Library from the agent developer.  This
+  approach has two key aspects:</p>
+<ol class="text">
+<li> an agent creation methodology, which guides the developer through the analysis and design
+     of the intended system, and</p>
+<li> a <i>visual</i> agent development environment that supports the creation methodology</p>
+</ol>
+
+<p class="text">
+  The Agent Creation Methodology is crucial to reducing the time taken to develop
+  agents with Zeus. It is described in two dedicated documents: the Role Modelling guide,
+  which deals with the preliminary analysis and design of an agent application,
+  and the Realisation guide, which describes how a design can be translated into
+  a working application using the Zeus tools. </p>
+
+<p class="text">This section will briefly mention the facilities of the ZEUS Agent 
+  Generator, the suite of integrated editors that support the ZEUS agent design approach. 
+  To facilitate ease of use, the editors have been designed to enable users to
+  interactively create agents by visually specifying their attributes.  The current
+  suite of editors includes:</p>
+<ol class="text">
+<li> An Ontology Editor for defining the ontology items in a domain. Concept categories 
+     (referred to as fact templates) can be created for application domains, with the 
+     concepts related to one another as appropriate through object-oriented style inheritance
+     and/or composition. Fact objects are defined in terms of their attributes and
+     the valid value ranges for each attribute. Attribute values can be primitive
+     types, lists, other facts or constraint expressions that should ultimately resolve
+     into a primitive type, list or fact.
+<li> A Fact/Variable Editor for describing specific instances of facts and variables, using the templates
+  created using the Ontology Editor.
+<li> An Agent Definition Editor for describing agents logically. This involves specifying
+  each agent’s tasks, its initial resources, and the dimensions of its plan diary.
+<li> A Task Description Editor for specifying the attributes of tasks and for graphically
+  composing summary tasks.
+<li> An Organisation Editor for defining the organisational relationships between agents, and agents’
+  beliefs about the abilities of other agents.
+<li> A Co-ordination Editor for selecting the set of co-ordination protocols with which each agent
+  will be equipped.
+</ol>
+<p class="text">Thus, in order to generate the code for a specific application,
+  the Generator tool <i>inherits</i> code from the Agent Component library, and
+  <i>integrates</i> it with the data from the various visual editors.  The resulting
+  programs can be compiled and executed normally.</p>
+<br>
+<br>
+<a name="33"></a><h4>3.3     The ZEUS Utility Agents</h3>
+<p class="text">It is standard practice for a distributed society of agents
+  to have an infrastructure of utility services.  The ZEUS suite of utility agents
+  consists of a <b>nameserver</b> and a <b>facilitator</b> agent that facilitate
+  information discovery, and a <b>visualiser</b> agent for visualising or debugging
+  societies of ZEUS agents.  A ZEUS agent society may contain any number of these
+  utility agents, with at least one nameserver agent.  All three utility agents
+  are constructed using the basic components of the Agent Component Library, and
+  are in fact simplifications of the generic ZEUS agent. </p>
+<p class="text">Nameserver agents have only a Mailbox and Message Handler,
+  the components needed for receiving and responding to agents’ requests for the
+  addresses of other agents.  In addition, nameserver agents maintain a society-wide
+  clock; thus, on initialisation, an agent registers with a nameserver and synchronises
+  its internal clock to that of the nameserver. However, although a society may
+  contain multiple nameserver agents, only the very first one defines <i>time-zero</i>.</p>
+<p class="text">Facilitator agents have a Mailbox and Message Handler for
+  receiving and responding to queries from agents about the abilities of other
+  agents, and an Acquaintance Database for storing the abilities of the agents. 
+  They function by periodically querying all the agents in the society about their
+  abilities, and storing the returned information in their Acquaintance Database.
+  Also, individual agents might advertise their abilities to facilitators.  Thus,
+  when an agent wants to find other agents that have a particular competence,
+  they can simply send an appropriate query message to a facilitator agent.</p>
+<p class="text">Visualiser agents can be used to view, analyse or debug societies
+  of ZEUS agents. They function by querying other agents about their states and
+  processes, and then collating and interpreting the replies to create an up-to-date
+  model of the agents’ collective behaviour.  This model can be viewed from different
+  perspectives through visualisation tools supported by the visualiser agents.
+  The current tools include:</p>
+<ol class="text">
+<li> a <b>Society Viewer</b> that shows all the agents in a society and their organisational
+  inter-relationships. It can also show the messages exchanged between the agents
+  during problem solving.
+<li> a <b>Reports Tool</b> that shows the society-wide decomposition/distribution
+  of active tasks and the execution states of the various tasks.
+<li> an<i> </i><b>Agent Viewer</b> that enables the internal states of agents to
+  be observed and monitored.
+<li> a <b>Control Tool</b> that is used to remotely review and/or modify the internal
+  states of individual agents. Thus, an agent’s behaviour can be redefined at
+  runtime by using this tool to modify its task, resource, or organisational databases,
+  or even by providing it with new message processing rules and/or co-ordination
+  graphs.  In this regard, the control tool is effectively an online version of
+  the Agent Building Software. This tool also facilitates administrative management
+  of agent societies, e.g. agents can be killed or suspended, they can be given
+  news goals, or their old goals can be modified.
+<li> a <b>Statistics Tool</b> that displays individual agent and society-wide statistics
+  in a variety of formats.
+</ol>
+<p class="text">The multi-perspective visualisation approach provided by
+  the visualisation tools gives users the flexibility to choose what is visualised,
+  how it is visualised and when it is visualised.  The visualisation tools are
+  generally used <i>online</i>, to visualise the interactions in a multi-agent
+  society live, as they happen.  However, the society, report and statistics tools
+  can also operate <i>off-line</i> by recording agents’ interaction sessions to
+  a database.  Once stored, recorded sessions can be replayed, video-recorder
+  style, using the forward and rewind buttons.</p>
+
+<p class="text"> 
+  The features of the visualisation tools, and how they can be used to analyse
+  and debug agent systems, are described in the Zeus Runtime Guide.</p>
+
+<br>
+<br>
+
+<h4>How Utility Agents Start Up</a></h4>
+
+<p class="text">
+ Consider a small agent society consisting of three ‘task’ agents and the standard
+ three ‘utility’ agents.  The interactions that occur between them at start-up
+ are shown in the interaction diagram of Figure 3.3, this shows how the agents,
+ (the vertical dashed lines), interact with each other, (shown by the horizontal
+ arrows).  All interactions are achieved through the standard ZEUS message passing
+ mechanism.  </p>
+
+<p class="text" align="center">
+<img width=504 height=400 src="./gfx/utilitystart.gif"><br><br>
+<b>Figure 3.3</b>: An interaction diagram of a newly created agent society</p>
+
+<p class="text">Figure 3.3 provides a useful insight into how the agents
+  function.  The interactions shown are time ordered, with those at the top occurring
+  before those further down.  The direction of the arrows is also significant,
+  as it shows which agent initiated interaction and who responded to it.  At this
+  point it may also be informative to consider the intra-agent interactions, i.e.
+  how the component parts of an agent work together.  So next we shall consider
+  the design and implementation of the main components of the generic ZEUS agent.</p>
+<br>
+<br>
+
+<h4>Coming up...</h4>
+<p class="text">
+ The remainder of this document concentrates on the details of the main 
+ processing components of the generic ZEUS agent:</p>
+<ol class="text">
+  <li> the communication mechanism,
+  <li> the co-ordination engine,
+  <li> the planner,
+  <li> the internal event model, and
+  <li> the connection mechanisms to external (legacy) systems.
+</ol>
+<p class="text">The main design principle underpinning the design of the
+  various components was that the components should permit some form of declarative
+  specification of message processing, co-ordination and planning behaviour. 
+  Thus, the behaviour appropriate to an agent should be specified declaratively
+  using the Generator tool and processed accordingly at runtime by the agent. 
+  As agent behaviour is declaratively specified, it can be modified dynamically,
+  even at runtime; as a result the generic ZEUS agent functions like an ‘interpreter’
+  of specified behaviour.  The subsequent subsections describe how.</p>
+
+<br>
+<br>
+
+<table border=1 cellspacing=0 width=100% class="smalltext">
+<tr>
+<td width=10%><a class="smalltextlink" href="TOC.html">Contents</a></td>
+<td width=12%><a class="smalltextlink" href="part1.html">Introduction</a></td>
+<td width=12%><a class="smalltextlink" href="part2.html">Zeus Philosophy</a></td>
+<td width=12%><b>Zeus Architecture</b></td>
+<td width=12%><a class="smalltextlink" href="part4.html">Communication</a></td>
+<td width=12%><a class="smalltextlink" href="part5.html">Coordination</a></td>
+<td width=12%><a class="smalltextlink" href="part6.html">Planning and<br>Task Execution</a></td>
+<td width=13%><a class="smalltextlink" href="part7.html">External<br>Applications</a></td>
+</tr>
+</table>
+
+</body>
+</html>

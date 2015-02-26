@@ -1,0 +1,1 @@
+java testFIPA 10

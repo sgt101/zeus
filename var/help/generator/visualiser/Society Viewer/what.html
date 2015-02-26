@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+
+<html>
+
+<head>
+<title>Society Viewer Help Pages</title>
+</head>
+
+
+<!-- DOCUMENT MAIN BODY -->
+<body>
+
+<h1>Society Viewer On-Line Help</h1>
+
+<b>What is it?</b> <br>
+
+The Society Viewer is a Visualiser component that displays all the agents
+known within a society, their relationships and the communication occurring
+between them. It operates by periodically querying agents about their
+acquaintances, and by collecting copies of any messages that are sent between
+agents. <p>
+
+<B>When should I use it?</B> <br>
+
+The Society Viewer's high level view of agents provides an ideal summary of a
+multi-agent system. It provides an 'at a glance' depiction of all the agents
+known to the Visualiser and the messages sent, as the agents send them.  The
+continual flow of messages can provide reassurance that the agents are still
+functioning, which otherwise may be difficult to verify given their potential
+distribution across a network. <p>
+
+<B>How do I use it?</B>
+
+<ul>
+<li> If you haven't yet connected to an Agent Name Server, no icons will be
+present in the main panel.  In which case, follow <a href="../common/ans.html">
+these instructions</a>, this will retrieve the list of known agents. <br>
+<li> There should now be at least two icons in the main window panel. The layout
+of these icons can be changed by dragging the icons, or choosing one of the
+options from the <b>Layout</b> list. <br>
+<li> To see messages exchanged by the agents the Visualiser must contact each
+known agent to request they send it a copy of every message sent.  To do this,
+select the <b>Request Messages</b> option from the <b>Online</b> menu. This will 
+bring up a dialog enabling you to choose which agents' messages are displayed. <br>
+<li> If you have requested messages from a Facilitator agent you should soon 
+see message icons moving between it and the other agents as it sends queries 
+to update its ability model.<br>
+<li> To see the inter-agent relationships click the appropriate
+<b>Relations</b> checkboxes, this will show relations as arrows between the
+agent icons. The viewer's relationship model can be updated by choosing the
+<b>Update Relations</b> option from the <b>Online</b> menu. <br>
+</ul>
+<p>
+
+<B>The Toolbar Options</B> <br>
+
+<img src="../../../gifs/generator/collapse.gif" hspace=16> <b>Collapse</b>
+- collapses the icons of a selected hierarchical relationship. <br>
+<img src="../../../gifs/generator/expand.gif" hspace=16> <b>Expand</b>
+- expands any previously collapsed relationships. <br>
+<img src="../../../gifs/generator/recompute.gif" hspace=16> <b>Recompute</b>
+- moves the icons according to the current layout setting.<br>
+<img src="../../../gifs/generator/redraw.gif" hspace=16> <b>Redraw</b>
+- refreshes the screen, useful if display is corrupted. <br>
+<img src="../../../gifs/generator/select.gif" hspace=16> <b>Select/Deselect</b>
+- changes the state of those nodes within a selected area. <br>
+<img src="../../../gifs/generator/selectall.gif" hspace=16> <b>Select All Icons</b>
+- marks all icons as selected.<br>
+<img src="../../../gifs/generator/hide.gif" hspace=16> <b>Hide Selected Icons</b>
+- removes the currently selected icons from the display. <br>
+<img src="../../../gifs/generator/show.gif" hspace=16> <b>Show Hidden Icons</b>
+- shows all previously hidden icons. <p>
+
+These options also have corresponding entries in the <b>View</b> menu.<p>
+
+<B>The Layout Options</B> <br>
+
+There are 4 possible arrangements for the agent icons, which can be selected
+from the <b>Layout</b> list below the video controls. The default is a horizontal
+arrangement, but this can be changed to one of the following:
+
+<ul>
+<li><b>Vertical</b> - this arranges the agents according to their hierarchical
+position, i.e. subordinates are shown underneath superiors.
+<li><b>H-Coworkers</b> - this arranges the agents so that those who are
+co-workers are horizontally aligned. It will have no effect if no co-worker
+relationships exist within the visualised society.
+<li><b>H-Peers</b> - this arranges the agents so that those who are peers
+are shown beside each other. It will have no effect if there are no peers within
+the visualised society.
+<li><b>Centered</b> - this will place the selected agent in the middle of the
+screen with the other agents arranged in a circle around it. If no agent has
+been selected the Visualiser will choose one.
+</ul>
+
+<i>Note:</i> As some of these layouts are dependent on agent relationships they
+will not function until the Visualiser is aware of each agents' relationship
+with others. This information is requested by choosing the <b>Update Relations</b>
+menu option. <p>
+
+<b>Other Menu Options</b>
+
+<ul>
+<li> The activity displayed live by the Society Viewer can be saved to a file to
+be replayed later; this process is described <a href="../common/savetodb.html">
+here</a>. <br>
+<li> Instructions for loading a previously saved session are listed
+<a href="../common/loadfromdb.html">here</a>. <br>
+<li> To stop receiving messages from any or all agents, select the <b>Unrequest
+Messages</b> option from the <b>Online</b> menu. Alternatively, the <b>Filter
+Messages</b> option can be chosen from the <b>Options</b> menu. <br>
+<li> The <b>Options</b> menu also has a <b>Speed...</b> option, which allows
+the speed at which the messages are animated to be set, (the smaller the value
+entered the faster they will be displayed). <br>
+<li> The <b>Animation Type...</b> menu option enables the on-screen
+representation of messages to be selected. There are three choices: as icons,
+colour-coded letters, or colour-coded lines. <br>
+</ul>
+
+</body>
+
+</html>

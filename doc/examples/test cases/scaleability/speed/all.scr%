@@ -1,0 +1,5 @@
+ns
+Target -o .\messageSpeedTest.ont -s dns.db -gui zeus.agentviewer.AgentViewer -e zeus.test.scaleability.speed.MessageSpeedTesterTarget
+Source -o .\messageSpeedTest.ont -s dns.db -gui zeus.agentviewer.AgentViewer -e zeus.test.scaleability.speed.MessageSpeedTesterSource
+yp
+vis

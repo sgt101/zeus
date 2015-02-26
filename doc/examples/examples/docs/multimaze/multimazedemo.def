@@ -1,0 +1,426 @@
+BEGIN_GENERATOR
+  BEGIN_PREAMBLE
+    :system "ZEUS-Agent-Generator"
+    :version "1.1"
+    :ontology ".:mazedemo.ont"
+  END_PREAMBLE
+
+  BEGIN_AGENT_NAME_INDEX
+    AgentId3 Red
+    AgentId2 Blue
+    AgentId1 Environment
+    AgentId0 Green
+  END_AGENT_NAME_INDEX
+
+  BEGIN_AGENT_ICON_INDEX
+    AgentId3 ".:gifs:navigator.gif"
+    AgentId2 ".:gifs:navigator.gif"
+    AgentId1 ".:gifs:maze.gif"
+    AgentId0 ".:gifs:navigator.gif"
+  END_AGENT_ICON_INDEX
+
+  BEGIN_TASK_NAME_INDEX
+    AbstractTaskId14 Navigate
+    AbstractTaskId1 Register
+    AbstractTaskId0 respondMove
+  END_TASK_NAME_INDEX
+
+  BEGIN_AGENT_LIST
+    (:name AgentId3
+     :class ZeusAgent
+     :planner_width 2
+     :planner_length 20
+     :doublebook_fraction 0
+     :tasks (AbstractTaskId1
+             AbstractTaskId14
+            )
+     :initial_facts ((:type thisMove
+                      :id fact39
+                      :modifiers 0
+                      :attributes ((west false)
+                                   (east false)
+                                   (south false)
+                                   (north false)
+                                   (id Red)
+                                  )
+                     )
+                    )
+     :acquaintances ((:name AgentId1
+                      :relation peer
+                     )
+                    )
+    )
+    (:name AgentId2
+     :class ZeusAgent
+     :planner_width 2
+     :planner_length 20
+     :doublebook_fraction 0
+     :tasks (AbstractTaskId1
+             AbstractTaskId14
+            )
+     :initial_facts ((:type thisMove
+                      :id fact39
+                      :modifiers 0
+                      :attributes ((west false)
+                                   (east false)
+                                   (south false)
+                                   (north false)
+                                   (id Blue)
+                                  )
+                     )
+                    )
+     :acquaintances ((:name AgentId1
+                      :relation peer
+                     )
+                    )
+    )
+    (:name AgentId1
+     :class ZeusAgent
+     :planner_width 2
+     :planner_length 20
+     :doublebook_fraction 0
+     :tasks (AbstractTaskId0
+            )
+     :initial_facts ((:type agentRegistered
+                      :id fact195
+                      :modifiers 0
+                      :attributes ((name Environment)
+                                  )
+                     )
+                    )
+    )
+    (:name AgentId0
+     :class ZeusAgent
+     :planner_width 2
+     :planner_length 20
+     :doublebook_fraction 0
+     :tasks (AbstractTaskId1
+             AbstractTaskId14
+            )
+     :initial_facts ((:type thisMove
+                      :id fact39
+                      :modifiers 0
+                      :attributes ((west false)
+                                   (east false)
+                                   (south false)
+                                   (north false)
+                                   (id Green)
+                                  )
+                     )
+                    )
+     :acquaintances ((:name AgentId1
+                      :relation peer
+                     )
+                    )
+    )
+  END_AGENT_LIST
+
+  BEGIN_TASK_LIST
+    (:Rulebase AbstractTaskId14
+       (start
+          ?obs <- (obstacle (west ?var180) (east ?var181) (south ?var182) (north ?var179))
+          ?lastMove <- (thisMove (west false) (east false) (south false) (north false))
+          ?agentReg <- (agentRegistered (name ?var15))
+          ?inMaze <- (inMaze (isInMaze true))
+          =>
+          (modify ?lastMove (west false) (east false) (south false) (north true))
+          (send_message (type inform) (content ?lastMove) (receiver ?var15))
+          (retract ?obs)
+       )
+       (followWall_east
+          ?obst <- (obstacle (east false) (north true))
+          ?agentReg <- (agentRegistered (name ?var15))
+          ?lastMove <- (thisMove (east true))
+          ?inMaze <- (inMaze (isInMaze true))
+          =>
+          (modify ?lastMove (west false) (east true) (south false) (north false))
+          (send_message (type inform) (content ?lastMove) (receiver ?var15))
+          (retract ?obst)
+       )
+       (followWall_north
+          ?obst <- (obstacle (west true) (north false))
+          ?agentReg <- (agentRegistered (name ?var15))
+          ?lastMove <- (thisMove (north true))
+          ?inMaze <- (inMaze (isInMaze true))
+          =>
+          (modify ?lastMove (west false) (east false) (south false) (north true))
+          (send_message (type inform) (content ?lastMove) (receiver ?var15))
+          (retract ?obst)
+       )
+       (followWall_west
+          ?obst <- (obstacle (west false) (south true))
+          ?agentReg <- (agentRegistered (name ?var15))
+          ?lastMove <- (thisMove (west true))
+          ?inMaze <- (inMaze (isInMaze true))
+          =>
+          (modify ?lastMove (west true) (east false) (south false) (north false))
+          (send_message (type inform) (content ?lastMove) (receiver ?var15))
+          (retract ?obst)
+       )
+       (followWall_south
+          ?obst <- (obstacle (east true) (south false))
+          ?agentReg <- (agentRegistered (name ?var15))
+          ?lastMove <- (thisMove (south true))
+          ?inMaze <- (inMaze (isInMaze true))
+          =>
+          (modify ?lastMove (west false) (east false) (south true) (north false))
+          (send_message (type inform) (content ?lastMove) (receiver ?var15))
+          (retract ?obst)
+       )
+       (going_east_blocked_east
+          ?obst <- (obstacle (east true) (south true))
+          ?agentReg <- (agentRegistered (name ?var15))
+          ?lastMove <- (thisMove (east true))
+          ?inMaze <- (inMaze (isInMaze true))
+          =>
+          (modify ?lastMove (west false) (east false) (south false) (north true))
+          (send_message (type inform) (content ?lastMove) (receiver ?var15))
+          (retract ?obst)
+       )
+       (going_east_blocked_east_openSouth
+          ?obst <- (obstacle (east true) (south false))
+          ?agentReg <- (agentRegistered (name ?var15))
+          ?lastMove <- (thisMove (east true))
+          ?inMaze <- (inMaze (isInMaze true))
+          =>
+          (modify ?lastMove (west false) (east false) (south true) (north false))
+          (send_message (type inform) (content ?lastMove) (receiver ?var15))
+          (retract ?obst)
+       )
+       (going_south_blocked_south
+          ?obst <- (obstacle (west true) (south true))
+          ?agentReg <- (agentRegistered (name ?var15))
+          ?lastMove <- (thisMove (south true))
+          ?inMaze <- (inMaze (isInMaze true))
+          =>
+          (modify ?lastMove (west false) (east true) (south false) (north false))
+          (send_message (type inform) (content ?lastMove) (receiver ?var15))
+          (retract ?obst)
+       )
+       (going_south_blocked_south_openWest
+          ?obst <- (obstacle (west false) (south true))
+          ?agentReg <- (agentRegistered (name ?var15))
+          ?lastMove <- (thisMove (south true))
+          ?inMaze <- (inMaze (isInMaze true))
+          =>
+          (modify ?lastMove (west true) (east false) (south false) (north false))
+          (send_message (type inform) (content ?lastMove) (receiver ?var15))
+          (retract ?obst)
+       )
+       (going_north_blocked_north
+          ?obst <- (obstacle (east true) (north true))
+          ?agentReg <- (agentRegistered (name ?var15))
+          ?lastMove <- (thisMove (north true))
+          ?inMaze <- (inMaze (isInMaze true))
+          =>
+          (modify ?lastMove (west true) (east false) (south false) (north false))
+          (send_message (type inform) (content ?lastMove) (receiver ?var15))
+          (retract ?obst)
+       )
+       (going_north_blocked_north_openEast
+          ?obst <- (obstacle (east false) (north true))
+          ?agentReg <- (agentRegistered (name ?var15))
+          ?lastMove <- (thisMove (north true))
+          ?inMaze <- (inMaze (isInMaze true))
+          =>
+          (modify ?lastMove (west false) (east true) (south false) (north false))
+          (send_message (type inform) (content ?lastMove) (receiver ?var15))
+          (retract ?obst)
+       )
+       (going_west_blocked_west
+          ?obst <- (obstacle (west true) (north true))
+          ?agentReg <- (agentRegistered (name ?var15))
+          ?lastMove <- (thisMove (west true))
+          ?inMaze <- (inMaze (isInMaze true))
+          =>
+          (modify ?lastMove (west false) (east false) (south true) (north false))
+          (send_message (type inform) (content ?lastMove) (receiver ?var15))
+          (retract ?obst)
+       )
+       (going_west_blocked_west_openNorth
+          ?obst <- (obstacle (west true) (north false))
+          ?agentReg <- (agentRegistered (name ?var15))
+          ?lastMove <- (thisMove (west true))
+          ?inMaze <- (inMaze (isInMaze true))
+          =>
+          (modify ?lastMove (west false) (east false) (south false) (north true))
+          (send_message (type inform) (content ?lastMove) (receiver ?var15))
+          (retract ?obst)
+       )
+       (junctionSouth_goingWest
+          ?obst <- (obstacle (south false))
+          ?agentReg <- (agentRegistered (name ?var15))
+          ?lastMove <- (thisMove (west true))
+          ?inMaze <- (inMaze (isInMaze true))
+          =>
+          (modify ?lastMove (west false) (east false) (south true) (north false))
+          (send_message (type inform) (content ?lastMove) (receiver ?var15))
+          (retract ?obst)
+       )
+       (junctionNorth_goingEast
+          ?obst <- (obstacle (north false))
+          ?agentReg <- (agentRegistered (name ?var15))
+          ?lastMove <- (thisMove (east true))
+          ?inMaze <- (inMaze (isInMaze true))
+          =>
+          (modify ?lastMove (west false) (east false) (south false) (north true))
+          (send_message (type inform) (content ?lastMove) (receiver ?var15))
+          (retract ?obst)
+       )
+       (junctionWest_goingNorth
+          ?obst <- (obstacle (west false))
+          ?agentReg <- (agentRegistered (name ?var15))
+          ?lastMove <- (thisMove (north true))
+          ?inMaze <- (inMaze (isInMaze true))
+          =>
+          (modify ?lastMove (west true) (east false) (south false) (north false))
+          (send_message (type inform) (content ?lastMove) (receiver ?var15))
+          (retract ?obst)
+       )
+       (junctionEast_goingSouth
+          ?obst <- (obstacle (east false))
+          ?agentReg <- (agentRegistered (name ?var15))
+          ?lastMove <- (thisMove (south true))
+          ?inMaze <- (inMaze (isInMaze true))
+          =>
+          (modify ?lastMove (west false) (east true) (south false) (north false))
+          (send_message (type inform) (content ?lastMove) (receiver ?var15))
+          (retract ?obst)
+       )
+    )
+    (:Rulebase AbstractTaskId1
+       (registerWithEnvironment
+          ?aN <- (agentsName (name ?var6))
+          =>
+          (send_message (type inform) (content ?aN) (receiver Environment))
+       )
+       (exitedMaze9
+          ?me <- (mazeExited (id ?var6))
+          ?obst <- (obstacle)
+          ?aR <- (agentRegistered (name ?var19))
+          ?tM <- (thisMove)
+          (agentsName (name ?var33))
+          =>
+          (retract ?me)
+          (retract ?obst)
+          (retract ?aR)
+          (retract ?tM)
+          (assert (thisMove (west false) (east false) (south false) (north false) (id ?var33)))
+       )
+    )
+    (:Rulebase AbstractTaskId0
+       (firstLegalMove
+          ?moveFlag <- (moveMade (moved true) (id ?agName))
+          ?obst <- (obstacle (west ?var177) (east ?var178) (south ?var179) (north ?var176) (id ?agName))
+          =>
+          (send_message (type inform) (content ?obst) (receiver ?agName))
+          (retract ?moveFlag)
+          (retract ?obst)
+       )
+       (illegalMove
+          ?moveFlag <- (moveMade (moved true) (id ?agName))
+          ?lastMove <- (thisMove (west ?var20) (east ?var21) (south ?var22) (north ?var19) (id ?agName))
+          ?obst <- (obstacle (west ?var177) (east ?var178) (south ?var179) (north ?var176) (id ?agName))
+          =>
+          (send_message (type inform) (content ?obst) (receiver ?agName))
+          (retract ?moveFlag)
+          (retract ?obst)
+          (retract ?lastMove)
+       )
+       (respondReg
+          (agentsName (name ?agName))
+          ?ar <- (agentRegistered (name ?envName))
+          =>
+          (send_message (type inform) (content ?ar) (receiver ?agName))
+          (assert (inMaze (isInMaze true) (name ?agName)))
+       )
+       (sendInMaze
+          ?im <- (inMaze (isInMaze true) (name ?var269))
+          =>
+          (send_message (type inform) (content ?im) (receiver ?var269))
+       )
+       (sendExited
+          ?ex <- (mazeExited (id ?varH))
+          =>
+          (send_message (type inform) (content ?ex) (receiver ?varH))
+       )
+    )
+  END_TASK_LIST
+
+  BEGIN_GENERATION_PLAN
+    BEGIN_PREAMBLE
+      :platform "Windows"
+      :directory "."
+    END_PREAMBLE
+    BEGIN_AGENT_LIST
+      (:id AgentId3
+       :generate false
+       :status Saved
+       :has_gui true
+       :zeus_external "navGUI"
+       :dns_file "dns.db"
+      )
+      (:id AgentId2
+       :generate false
+       :status Saved
+       :has_gui false
+       :zeus_external "navGUI"
+       :dns_file "dns.db"
+      )
+      (:id AgentId1
+       :generate false
+       :status Saved
+       :has_gui true
+       :host "127.0.0.1"
+       :zeus_external "mazeControl"
+       :dns_file "dns.db"
+      )
+      (:id AgentId0
+       :generate false
+       :status Saved
+       :has_gui false
+       :host "127.0.0.1"
+       :zeus_external "navGUI"
+       :dns_file "dns.db"
+      )
+    END_AGENT_LIST
+    BEGIN_TASK_LIST
+      (:id AbstractTaskId14
+       :generate false
+       :status Saved
+       :external null
+      )
+      (:id AbstractTaskId1
+       :generate false
+       :status Saved
+       :external null
+      )
+      (:id AbstractTaskId0
+       :generate false
+       :status Saved
+       :external null
+      )
+    END_TASK_LIST
+    BEGIN_NAMESERVER_LIST
+      (:name Nameserver2
+       :is_root true
+       :has_gui false
+       :address_output_file "dns.db"
+       :time_grain 0.1
+      )
+    END_NAMESERVER_LIST
+    BEGIN_FACILITATOR_LIST
+      (:name Facilitator2
+       :period 5.00
+       :has_gui false
+       :dns_file "dns.db"
+      )
+    END_FACILITATOR_LIST
+    BEGIN_VISUALISER_LIST
+      (:name Visualiser2
+       :has_gui false
+       :dns_file "dns.db"
+      )
+    END_VISUALISER_LIST
+  END_GENERATION_PLAN
+END_GENERATOR

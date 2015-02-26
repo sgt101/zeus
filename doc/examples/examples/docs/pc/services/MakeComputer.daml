@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='ISO-8859-1'?> 
+ <!DOCTYPE uridef[ 
+  <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+ <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY daml "http://www.daml.org/2001/03/daml+oil">
+  <!ENTITY process "http://www.daml.org/services/daml-s/2001/10/Process">
+  <!ENTITY service "http://www.daml.org/services/daml-s/2001/10/Service">
+  <!ENTITY profile "http://www.daml.org/services/daml-s/2001/10/Profile"> 
+  <!ENTITY country "http://www.daml.ri.cmu.edu/ont/Country.daml">
+  <!ENTITY concepts "http://www.daml.ri.cmu.edu/ont/DAML-S/concepts.daml">
+  <!ENTITY profile "http://www.daml.org/services/daml-s/2001/10/Profile"> 
+  <!ENTITY time "http://www.ai.sri.com/daml/ontologies/sri-basic/1-0/Time.daml">
+  <!ENTITY xsd "http://www.w3.org/2000/10/XMLSchema.xsd">
+  <!ENTITY DEFAULT "http:132.146.209.68\services\MakeComputer.daml">]> 
+<rdf:RDF 
+ xmlns:rdf ="&rdf;#" 
+ xmlns:profile="&profile;#"
+ xmlns:rdfs =    "&rdfs;#" 
+ xmlns:xsd =    "&xsd;#"
+  xmlns:daml =    "&daml;#"
+  xmlns:service = "&service;#"
+  xmlns:process = "&process;#">
+<daml:ontology rdf:about="http://132.146.209.68/ontologies/pc_ont.daml"/>
+<daml:versionInfo></daml:versionInfo>
+<profile:Profile rdf:ID="MakeComputer">
+<profile:textDescription>""</profile:textDescription>
+<profile:providedBy><profile:ServiceProvider rdf:ID="PCMaker">
+<profile:name> MakeComputer</profile:name>
+<profile:phone></profile:phone>
+<profile:fax></profile:fax>
+<profile:email></profile:email>
+<profile:physicalAddress></profile:physicalAddress>
+<profile:webURL>" http://132.146.209.68/services/AbstractTaskId0"</profile:webURL>
+</profile:ServiceProvider>
+</profile:providedBy>
+<profile:geographicRadius></profile:geographicRadius>
+ <daml:imports rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns" /> 
+  <daml:imports rdf:resource="http://www.w3.org/2000/01/rdf-schema" />
+  <daml:imports rdf:resource="http://www.daml.org/2001/03/daml+oil" /> 
+  <daml:imports rdf:resource="http://www.daml.org/services/daml-s/2001/10/Service" />
+  <daml:imports rdf:resource="http://www.daml.org/services/daml-s/2001/10/Process" /> 
+  <daml:imports rdf:resource="http://www.daml.org/services/daml-s/2001/10/Profile" />
+<profile:precondition> 
+<profile:ParameterDescription rdf:ID="cuisineType"> 
+<profile:parameterName>cuisineIn</profile:parameterName> 
+<profile:refersTo rdf:resource="http://www.adastralcity.co.uk/services/RestaurantProcess#Cusine" /> 
+<profile:restrictedTo> "*restaurantProcess#cusine" </profile:restrictedTo>
+</profile:ParameterDescription> 
+</profile:precondition> 
+</profile:Profile>
+
+
+
+<daml:Class rdf:ID="Cuisine"> 
+	<rdfs:subClassOf rdf:resource="http://www.adastralcity.co.uk/Services/AgentcitiesServices#AgentCondition" />
+	
+</daml:Class>
+
+<daml:DatatypeProperty rdf:ID="quality">
+		<rdfs:domain rdf:resource="#Cuisine" />
+		<daml:range rdf:resource="http://www.w3.org/2000/10/XMLSchema#string"/>
+</daml:DatatypeProperty> 
+<daml:DatatypeProperty rdf:ID="type"> 
+		<rdfs:domain rdf:resource="#Cuisine" />
+		<rdfs:range rdf:resource="http://www.adastralcity.co.uk/services/Restaurant#Type"/>
+</daml:DatatypeProperty>
+<daml:DatatypeProperty rdf:ID="condition"> 
+            <rdfs:domain rdf:resource="#Cuisine" /> 
+            <rdfs:range rdf:resource="http://www.adastralcity.co.uk/services/daml-s/extension#AgentCondition"/> 
+</daml:DatatypeProperty> 
+
+<daml:Class rdf:ID="SLAParam">
+</daml:Class>
+    <daml:DatatypeProperty rdf:ID="name">
+		<rdfs:domain rdf:resource="#SLAParam"/>
+		<rdfs:range rdf:resource="http://www.w3.org/2000/10/XMLschema.xsd#string"/>
+	</daml:DatatypeProperty> 
+	<daml:Property rdf:ID="description">
+		<daml:domain rdf:resource="#SLAParam"/>
+		<daml:range rdf:resource="http://www.w3.org/2000/10/XMLschema.xsd#string"/>
+	</daml:Property>
+	<daml:Property rdf:ID="metrics">
+                <daml:domain rdf:resource="#SLAParam"/>
+		<daml:range rdf:resource="http://www.w3.org/2000/10/XMLschema.xsd#string"/>
+	</daml:Property>
+	<daml:Property rdf:ID="rangeOfValues">
+		<daml:domain rdf:resource="#SLAParam"/>
+		<daml:range rdf:resource="http://www.w3.org/2000/10/XMLschema.xsd#string"/>
+	</daml:Property>
+	<daml:Property rdf:ID="evaluationFunction">
+                <daml:domain rdf:resource="#SLAParam"/>
+		<daml:range rdf:resource="http://www.w3.org/2000/10/XMLschema.xsd#string"/>
+	</daml:Property>
+
+
+
+
+</rdf:RDF>

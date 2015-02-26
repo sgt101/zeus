@@ -1,0 +1,213 @@
+DEBUG 1 Compiling msg processing rule ...
+	(:message_rule testForward_Rule1 :pattern ((type (?:request)) (content (?:^register$))) :action zeus.actors.MsgHandler$register)
+DEBUG 1 Compiling msg processing rule ...
+	(:message_rule testForward_Rule2 :pattern ((type (?:request)) (content (?:^deregister$))) :action zeus.actors.MsgHandler$deregister)
+DEBUG 1 Compiling msg processing rule ...
+	(:message_rule testForward_Rule3 :pattern ((type (?:subscribe)) (content (?:^log_message$))) :action zeus.actors.MsgHandler$log_message)
+DEBUG 1 Compiling msg processing rule ...
+	(:message_rule testForward_Rule4 :pattern ((type (?:subscribe)) (content (?:^log_report$))) :action zeus.actors.MsgHandler$log_report)
+DEBUG 1 Compiling msg processing rule ...
+	(:message_rule testForward_Rule5 :pattern ((type (?:subscribe)) (content (?:^log_address$))) :action zeus.actors.MsgHandler$log_address)
+DEBUG 1 Compiling msg processing rule ...
+	(:message_rule testForward_Rule6 :pattern ((type (?:cancel)) (content (?:^log_message$))) :action zeus.actors.MsgHandler$cancel_message)
+DEBUG 1 Compiling msg processing rule ...
+	(:message_rule testForward_Rule7 :pattern ((type (?:cancel)) (content (?:^log_report$))) :action zeus.actors.MsgHandler$cancel_report)
+DEBUG 1 Compiling msg processing rule ...
+	(:message_rule testForward_Rule8 :pattern ((type (?:cancel)) (content (?:^log_address$))) :action zeus.actors.MsgHandler$cancel_address)
+DEBUG 1 Compiling msg processing rule ...
+	(:message_rule testForward_Rule9 :pattern ((type (?:query-ref)) (content (?:^your_abilities$))) :action zeus.actors.MsgHandler$your_abilities)
+DEBUG 1 Compiling msg processing rule ...
+	(:message_rule testForward_Rule10 :pattern ((type (?:query-ref)) (content (?:^address_of(([:space:])+)([:alnum:])((.)*)$))) :action zeus.actors.MsgHandler$address_of)
+DEBUG 1 Compiling msg processing rule ...
+	(:message_rule testForward_Rule11 :pattern ((type (?:query-ref)) (content (?:^your_relations$))) :action zeus.actors.MsgHandler$your_relations)
+DEBUG 1 Compiling msg processing rule ...
+	(:message_rule testForward_Rule12 :pattern ((type (?:query-ref)) (content (?:^has_ability(([:space:])+)((.)*)$))) :action zeus.actors.MsgHandler$has_ability)
+DEBUG 1 Compiling msg processing rule ...
+	(:message_rule testForward_Rule13 :pattern ((type (?:inform)) (content (?:^isa_facilitator(([:space:])+)([:alnum:])((.)*)$))) :action zeus.actors.MsgHandler$isa_facilitator)
+DEBUG 1 Compiling msg processing rule ...
+	(:message_rule testForward_Rule14 :pattern ((type (?:request)) (content (?:^kill_yourself$))) :action zeus.actors.MsgHandler$kill_yourself)
+DEBUG 1 Compiling msg processing rule ...
+	(:message_rule testForward_Rule15 :pattern ((type (?:subscribe)) (content (?:^has_ability(([:space:])+)((.)*)$))) :action zeus.actors.MsgHandler$log_specified_ability)
+DEBUG 1 Compiling msg processing rule ...
+	(:message_rule testForward_Rule16 :pattern ((type (?:cancel)) (content (?:^has_ability(([:space:])+)((.)*)$))) :action zeus.actors.MsgHandler$cancel_specified_ability)
+DEBUG 1 Compiling msg processing rule ...
+	(:message_rule testForward_Rule17 :pattern ((type (?:inform)) (content (?:^my_abilities(([:space:])+)((.)*)$))) :action zeus.actors.MsgHandler$add_agents_abilities)
+DEBUG 1 Compiling msg processing rule ...
+	(:message_rule testForward_Rule18 :pattern ((type (?:inform)) (content (?:^data(([:space:])+)((.)*)$))) :action zeus.actors.MsgHandler$add_information)
+DEBUG 1 Compiling msg processing rule ...
+	(:message_rule testForward_Rule20 :pattern ((type (?:inform)) (in-reply-to (?:testForward19))) :action zeus.actors.MailBox$register)
+DEBUG 1 MsgHandler processing msg ...
+(inform
+ :sender Nameserver4
+ :receiver testForward
+ :in-reply-to testForward19
+ :content "979237762375 30000 979237767125"
+ :envelope ((address "(:name Nameserver4 :host \"132.146.209.68\" :port 6700 :type Nameserver)")(sendTime "0.15883333333333333")))
+
+DEBUG 2 Invoking method register of class zeus.actors.MailBox with parameter (inform
+ :sender Nameserver4
+ :receiver testForward
+ :in-reply-to testForward19
+ :content "979237762375 30000 979237767125"
+ :envelope ((address "(:name Nameserver4 :host \"132.146.209.68\" :port 6700 :type Nameserver)")(sendTime "0.15883333333333333")))
+
+DEBUG 1 Compiling msg processing rule ...
+	(:message_rule testForward_Rule21 :pattern ((type (?:cfp)) (in-reply-to (?:)) (reply-with (?:^([:alnum:])((.)*)$))) :action zeus.actors.rtn.Engine$new_dialogue)
+DEBUG 1 MsgHandler processing msg ...
+(inform
+ :sender Facilitator4
+ :receiver testForward
+ :content "isa_facilitator Facilitator4"
+ :envelope ((address "(:name Facilitator4 :host \"132.146.209.68\" :port 6703 :type Facilitator)")(sendTime "0.7256333333333334")(receiveTime "0.7256333333333334")))
+
+DEBUG 2 Invoking method isa_facilitator of class zeus.actors.MsgHandler with parameter (inform
+ :sender Facilitator4
+ :receiver testForward
+ :content "isa_facilitator Facilitator4"
+ :envelope ((address "(:name Facilitator4 :host \"132.146.209.68\" :port 6703 :type Facilitator)")(sendTime "0.7256333333333334")(receiveTime "0.7256333333333334")))
+
+DEBUG 1 MsgHandler processing msg ...
+(query-ref
+ :sender Facilitator4
+ :receiver testForward
+ :reply-with Facilitator421
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator4 :host \"132.146.209.68\" :port 6703 :type Facilitator)")(sendTime "0.7256333333333334")(receiveTime "0.7287666666666667")))
+
+DEBUG 2 Invoking method your_abilities of class zeus.actors.MsgHandler with parameter (query-ref
+ :sender Facilitator4
+ :receiver testForward
+ :reply-with Facilitator421
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator4 :host \"132.146.209.68\" :port 6703 :type Facilitator)")(sendTime "0.7256333333333334")(receiveTime "0.7287666666666667")))
+
+DEBUG 1 MsgHandler processing msg ...
+(request
+ :sender ACC
+ :receiver testForward
+ :reply-with ping-test
+ :ontology ping
+ :language zeus
+ :content "( :type information)"
+ :envelope ((address "(:name ACC :host \"132.146.209.68\" :port 6702 :type ACC)")(sendTime "2.5662666666666665")(receiveTime "2.5673")))
+
+DEBUG 1 MsgHandler processing msg ...
+(request
+ :sender ACC
+ :receiver testForward
+ :reply-with ping-test
+ :ontology ping
+ :language zeus
+ :content "( :type information)"
+ :envelope ((address "(:name ACC :host \"132.146.209.68\" :port 6702 :type ACC)")(sendTime "2.5662666666666665")(receiveTime "2.5688666666666666")))
+
+DEBUG 1 MsgHandler processing msg ...
+(request
+ :sender ACC
+ :receiver testForward
+ :reply-with ping-test
+ :ontology ping
+ :language zeus
+ :content "( :type information)"
+ :envelope ((address "(:name ACC :host \"132.146.209.68\" :port 6702 :type ACC)")(sendTime "2.5662666666666665")(receiveTime "2.572")))
+
+DEBUG 1 MsgHandler processing msg ...
+(request
+ :sender ACC
+ :receiver testForward
+ :reply-with ping-test
+ :ontology ping
+ :language zeus
+ :content "( :type information)"
+ :envelope ((address "(:name ACC :host \"132.146.209.68\" :port 6702 :type ACC)")(sendTime "2.5662666666666665")(receiveTime "2.575633333333333")))
+
+DEBUG 1 MsgHandler processing msg ...
+(request
+ :sender ACC
+ :receiver testForward
+ :reply-with ping-test
+ :ontology ping
+ :language zeus
+ :content "( :type information)"
+ :envelope ((address "(:name ACC :host \"132.146.209.68\" :port 6702 :type ACC)")(sendTime "2.5668")(receiveTime "2.5787666666666667")))
+
+DEBUG 1 MsgHandler processing msg ...
+(request
+ :sender ACC
+ :receiver testForward
+ :reply-with ping-test
+ :ontology ping
+ :language zeus
+ :content "( :type information)"
+ :envelope ((address "(:name ACC :host \"132.146.209.68\" :port 6702 :type ACC)")(sendTime "2.5668")(receiveTime "2.5824")))
+
+DEBUG 1 MsgHandler processing msg ...
+(request
+ :sender ACC
+ :receiver testForward
+ :reply-with ping-test
+ :ontology ping
+ :language zeus
+ :content "( :type information)"
+ :envelope ((address "(:name ACC :host \"132.146.209.68\" :port 6702 :type ACC)")(sendTime "2.5819")(receiveTime "2.5855333333333332")))
+
+DEBUG 1 MsgHandler processing msg ...
+(request
+ :sender ACC
+ :receiver testForward
+ :reply-with ping-test
+ :ontology ping
+ :language zeus
+ :content "( :type information)"
+ :envelope ((address "(:name ACC :host \"132.146.209.68\" :port 6702 :type ACC)")(sendTime "2.5819")(receiveTime "2.589166666666667")))
+
+DEBUG 1 MsgHandler processing msg ...
+(request
+ :sender ACC
+ :receiver testForward
+ :reply-with ping-test
+ :ontology ping
+ :language zeus
+ :content "( :type information)"
+ :envelope ((address "(:name ACC :host \"132.146.209.68\" :port 6702 :type ACC)")(sendTime "2.5819")(receiveTime "2.5923")))
+
+DEBUG 1 MsgHandler processing msg ...
+(request
+ :sender ACC
+ :receiver testForward
+ :reply-with ping-test
+ :ontology ping
+ :language zeus
+ :content "( :type information)"
+ :envelope ((address "(:name ACC :host \"132.146.209.68\" :port 6702 :type ACC)")(sendTime "2.5824333333333334")(receiveTime "2.5959666666666665")))
+
+DEBUG 1 MsgHandler processing msg ...
+(query-ref
+ :sender Facilitator4
+ :receiver testForward
+ :reply-with Facilitator421
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator4 :host \"132.146.209.68\" :port 6703 :type Facilitator)")(sendTime "2.7209666666666665")(receiveTime "2.7214666666666667")))
+
+DEBUG 2 Invoking method your_abilities of class zeus.actors.MsgHandler with parameter (query-ref
+ :sender Facilitator4
+ :receiver testForward
+ :reply-with Facilitator421
+ :content "your_abilities"
+ :envelope ((address "(:name Facilitator4 :host \"132.146.209.68\" :port 6703 :type Facilitator)")(sendTime "2.7209666666666665")(receiveTime "2.7214666666666667")))
+
+DEBUG 1 MsgHandler processing msg ...
+(request
+ :sender Visualiser4
+ :receiver testForward
+ :reply-with Visualiser4_Rule28
+ :content "kill_yourself"
+ :envelope ((address "(:name Visualiser4 :host \"132.146.209.68\" :port 6704 :type Visualiser)")(sendTime "4.370933333333333")(receiveTime "4.372")))
+
+DEBUG 2 Invoking method kill_yourself of class zeus.actors.MsgHandler with parameter (request
+ :sender Visualiser4
+ :receiver testForward
+ :reply-with Visualiser4_Rule28
+ :content "kill_yourself"
+ :envelope ((address "(:name Visualiser4 :host \"132.146.209.68\" :port 6704 :type Visualiser)")(sendTime "4.370933333333333")(receiveTime "4.372")))
+

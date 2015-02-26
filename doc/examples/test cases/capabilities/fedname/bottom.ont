@@ -1,0 +1,8 @@
+BEGIN_ONTOLOGY
+  BEGIN_PREAMBLE
+    :system ZEUS-Ontology-Editor
+    :version "1.2.2"
+  END_PREAMBLE
+  BEGIN_FACTS
+  END_FACTS
+END_ONTOLOGY

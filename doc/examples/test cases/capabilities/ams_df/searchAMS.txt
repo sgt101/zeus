@@ -1,0 +1,8 @@
+(action
+    (agent-identifier
+    :name ams@132.146.209.235
+    :addresses (sequence iiop://132.146.209.235:2000/acc))
+    (search 
+    (ams-agent-description )
+))))
+ 

@@ -1,0 +1,5 @@
+WorldSimulator = .:gifs:view.gif
+East = .:gifs:agent.gif
+West = .:gifs:agent.gif
+South = .:gifs:agent.gif
+North = .:gifs:agent.gif
