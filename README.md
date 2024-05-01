@@ -5,7 +5,7 @@ This toolkit was developed in 1996 until 2006 by various teams at BT. BT opensou
 
 The toolkit is documented in some papers by the lead authors 
 
-http://www.agent.ai/doc/upload/200302/nwan99_1.pdf
+https://www.tandfonline.com/doi/pdf/10.1080/088395199117513 
 
 and 
 
@@ -13,4 +13,5 @@ http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.127.5186&rep=rep1&type=
 
 and there is an application paper here :
 
-http://sei.pku.edu.cn/~jwp/courses/MultiAgentTechnology/references/Workflow/cross-organisational-workflow-co.pdf
+and https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&d...
+
